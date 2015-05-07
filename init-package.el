@@ -6,3 +6,9 @@
 	     '("marmalade" . "http://marmalade-repo.org/packages/") t)
 
 (package-initialize)
+
+
+(if (not (package-installed-p 'use-package))
+    (progn
+      (package-refresh-contents)
+      (package-install 'use-package)))

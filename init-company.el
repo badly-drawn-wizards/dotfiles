@@ -1,5 +1,6 @@
-(require 'company)
-
-(add-hook 'after-init-hook 'global-company-mode)
-(global-set-key (kbd "M-/") 'company-complete)
-(setq company-idle-delay 0.1)
+(require 'use-package)
+(use-package company
+	     :init (progn
+		     (global-company-mode 1)
+		     (setq company-idle-delay 0.1))
+	     :bind ("M-/" . company-complete))

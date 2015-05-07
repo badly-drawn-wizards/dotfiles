@@ -1,1 +1,3 @@
-;; Nothing here yet
+(require 'use-package)
+
+(use-package idris-mode)
