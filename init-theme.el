@@ -1,3 +1,3 @@
-(require 'solarized-theme)
-
-(load-theme 'solarized-dark t)
+(use-package solarized-theme
+  :ensure t
+  :config (load-theme 'solarized-dark t))
