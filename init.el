@@ -3,7 +3,6 @@
 
 (config "init-server")
 (config "init-package")
-;;(config "init-autocomplete")
 (config "init-company")
 (config "init-evil")
 (config "init-idris")
