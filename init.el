@@ -1,5 +1,7 @@
 (defun config (x) (load (concat "~/.emacs.d/" x)))
 
+
+(config "init-server")
 (config "init-package")
 ;;(config "init-autocomplete")
 (config "init-company")
