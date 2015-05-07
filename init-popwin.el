@@ -1,7 +1,8 @@
 (require 'use-package)
 
 (use-package popwin
-  :init (progn
+  :ensure t
+  :config (progn
 	  (require 'popwin)
 	  (push 'idris-compiler-notes-mode
 		popwin:special-display-config)
