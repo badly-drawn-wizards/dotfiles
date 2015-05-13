@@ -4,6 +4,7 @@
 
 (config "init-server")
 (config "init-company")
+(config "init-magit")
 (config "init-evil")
 (config "init-idris")
 (config "init-theme")
