@@ -9,4 +9,5 @@
 (config "init-evil")
 (config "init-idris")
 (config "init-haskell")
+(config "init-scala")
 (config "init-popwin")
