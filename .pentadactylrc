@@ -3,3 +3,7 @@ nmap -builtin j 5j
 nmap -builtin k 5k
 nmap <Up> k
 nmap <Down> j
+
+""Tabs
+nmap J gT
+nmap K gt
