@@ -10,3 +10,4 @@ nmap K gt
 
 ""Hints
 set hintkeys=asdfg;lkjh
+set followhints=1
