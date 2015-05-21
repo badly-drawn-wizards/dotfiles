@@ -3,6 +3,7 @@
 (config "init-package")
 (config "init-server")
 (config "deinit-annoyances")
+(config "init-powerline")
 (config "init-theme")
 (config "init-company")
 (config "init-magit")
