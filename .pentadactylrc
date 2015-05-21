@@ -7,3 +7,6 @@ nmap <Down> j
 ""Tabs
 nmap J gT
 nmap K gt
+
+""Hints
+set hintkeys=asdfg;lkjh
