@@ -1,0 +1,3 @@
+""Movement
+nmap -builtin j 5j
+nmap -builtin k 5k
