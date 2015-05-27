@@ -8,6 +8,11 @@ nmap <Down> j
 nmap J gT
 nmap K gt
 
+""Next/Prev
+nmap [ -js content.document.querySelector(".btnPrev,#btnPrev,[rel=prev]").click()
+nmap ] -js content.document.querySelector(".btnNext,#btnNext,[rel=next]").click()
+
 ""Hints
 set hintkeys=asdfg;lkjh
 set followhints=1
+
