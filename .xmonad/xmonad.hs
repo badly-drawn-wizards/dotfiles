@@ -9,7 +9,6 @@ main = do
        , manageHook = manageDocks <+> (isFullscreen --> doFullFloat) <+> manageHook defaultConfig
        , layoutHook = avoidStruts $ layoutHook defaultConfig}
 
-startup :: X ()
 startup = do
         spawn "xmobar"
         spawn "emacs --daemon"
