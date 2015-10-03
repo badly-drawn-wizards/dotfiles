@@ -67,7 +67,13 @@
 
 (use-package evil
   :ensure t
-  :config (evil-mode 1))
+  :init (progn
+	    (setq evil-want-C-u-scroll t)
+	    (setq evil-want-C-w-delete t)
+	  )
+  :config (progn 
+	    (evil-mode 1)
+		     ))
 
 (use-package evil-leader
   :ensure t
