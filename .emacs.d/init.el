@@ -1,3 +1,11 @@
+;;; init --- My init file
+
+
+;;; Commentary:
+; This is just to shut flycheck up
+
+;;; Code:
+
 ;;;;;;;;;;;;;;;;
 ;; Annoyances ;;
 ;;;;;;;;;;;;;;;;
@@ -16,24 +24,31 @@
 	     '("melpa-stable" . "http://stable.melpa.org/packages/") t)
 (add-to-list 'package-archives
 	     '("melpa" . "http://melpa.org/packages/") t)
-;; (add-to-list 'package-archives
-;; 	     '("marmalade" . "http://marmalade-repo.org/packages/") t)
+(add-to-list 'package-archives
+	     '("org" . "http://orgmode.org/elpa/") t)
 
 (setq package-pinned-packages
       '(
 	(powerline . "melpa-stable")
 	(moe-theme . "melpa")
-	(magit . "melpa-stable")
 	(evil . "melpa-stable")
 	(evil-leader . "melpa-stable")
 	(company . "melpa-stable")
+	(helm . "melpa-stable")
 	(flycheck . "melpa-stable")
+	(evil-org . "melpa-stable")
 	(ghc . "melpa-stable")
 	(haskell-mode . "melpa-stable")
+	(flycheck-haskell . "melpa-stable")
+	(clojure-mode . "melpa-stable")
+	(inf-clojure . "melpa-stable")
 	(scala-mode2 . "melpa-stable")
 	(sbt-mode . "melpa")
 	(ensime . "melpa")
-	(idris-mode . "melpa-stable")))
+	(idris-mode . "melpa-stable")
+	(coffee-mode . "melpa")
+	(company-coq . "melpa")
+	))
 
 (package-initialize)
 
@@ -48,17 +63,15 @@
 ;; Aesthetics ;;
 ;;;;;;;;;;;;;;;;
 
-;; (use-package solarized-theme
+;; Arrgh, curse that powerline bug
+;; (use-package powerline
 ;;   :ensure t)
-
-(use-package powerline
-  :ensure t)
 
 (use-package moe-theme
   :ensure t
   :config (progn
 	    (load-theme 'moe-dark t)
-	    (powerline-moe-theme)
+	    ;; (powerline-moe-theme)
 	    (moe-theme-random-color)))
 
 ;;;;;;;;;;;;;;;;;;;
@@ -68,21 +81,17 @@
 (use-package evil
   :ensure t
   :init (progn
-	    (setq evil-want-C-u-scroll t)
-	    (setq evil-want-C-w-delete t)
+	  (setq evil-want-C-u-scroll t)
+	  (setq evil-want-C-w-delete t)
 	  )
-  :config (progn 
-	    (evil-mode 1)
-		     ))
+  :config (evil-mode 1))
 
 (use-package evil-leader
   :ensure t
   :config (progn
 	    (evil-leader/set-leader "<SPC>")
 	    (evil-leader/set-key
-	      "s" 'ghc-case-split
-	      "c" 'comment-or-uncomment-region
-	      "a" 'align-regexp)
+	      "c" 'comment-or-uncomment-region)
 	    (global-evil-leader-mode)))
 
 ;;;;;;;;;;;;;;;;
@@ -95,6 +104,9 @@
   :config (global-company-mode 1)
   :bind ("M-/" . company-complete))
 
+(use-package helm
+  :ensure t)
+
 ;;;;;;;;;;;;;
 ;; Linting ;;
 ;;;;;;;;;;;;;
@@ -103,27 +115,38 @@
   :ensure t
   :init (global-flycheck-mode))
 
-;;;;;;;;;;;;;;;;
-;; Versioning ;;
-;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;
+;; Org mode ;;
+;;;;;;;;;;;;;;
 
-(use-package magit
-  :ensure t
-  :config (progn
-	    (setq magit-last-seen-setup-instructions "1.4.0")))
+(use-package org
+  :init (progn
+	 (setq org-directory "~/org")
+	 (setq org-mobile-directory "~/mobile-org")
 
-;;;;;;;;;;;;
-;; Server ;;
-;;;;;;;;;;;;
+	 (setq org-log-done 'time)
 
-;; (require 'server)
+	 (setq org-agenda-files (concat org-directory "/agenda-files.txt"))
 
-;; (unless (server-running-p)
-;;   (server-start))
+	 (setq org-default-notes-file (concat org-directory "/notes.org"))
+	 (setq org-refile-targets '((nil :maxlevel . 9)
+				    (org-agenda-files :maxlevel . 9)))
+
+	 (org-babel-do-load-languages
+	  'org-babel-load-languages
+	  '((haskell . t))
+	 ))
+  )
+
+(use-package evil-org
+  :ensure t)
 
 ;;;;;;;;;;;;;;;
 ;; Languages ;;
 ;;;;;;;;;;;;;;;
+
+
+
 
 ;; Haskell
 
@@ -135,13 +158,27 @@
 (use-package haskell-mode
   :ensure t
   :config (progn
+	    (require 'haskell-indentation)
 	    (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
 	    (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
-	    (setq haskell-indentation-show-indentations nil)
+	    (add-hook 'haskell-mode-hook 'haskell-indentation-disable-show-indentations)
 	    (setq haskell-process-type 'cabal-repl))
 	    (setq haskell-notify-p t)
 	    (setq haskell-tags-on-save t)
 	    (setq haskell-stylish-on-save t))
+
+(use-package flycheck-haskell
+  :ensure t
+  :config (progn
+	    (add-hook 'flycheck-mode-hook 'flycheck-haskell-setup)))
+
+;; Clojure
+
+(use-package clojure-mode
+  :ensure t)
+
+(use-package inf-clojure
+  :ensure t)
 
 ;; Scala
 
@@ -159,7 +196,35 @@
 (use-package ensime
   :ensure t)
 
+;; CoffeeScript
+
+(use-package coffee-mode
+  :config (progn
+	    (setq coffee-tab-width 4)
+	   )
+  :ensure t)
+
+(provide 'init)
+
 ;; Idris
 
 (use-package idris-mode
+  :init (progn
+	  (setq idris-mode-path "~/idris/Idris-dev/.cabal-sandbox/bin"))
   :ensure t)
+
+;; Proof General
+
+;; Requires proof general installation
+(use-package proof-site
+  :init (progn
+	  (setq proof-splash-display-screen nil)
+	  (setq proof-script-fly-past-comments t)
+	  ))
+
+;; Coq
+
+(use-package company-coq
+  :ensure t)
+
+;;; init.el ends here
