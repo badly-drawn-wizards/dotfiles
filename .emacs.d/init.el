@@ -225,6 +225,8 @@
 ;; Coq
 
 (use-package company-coq
+  :init (progn
+	  (add-hook 'coq-mode-hook #'company-coq-initialize))
   :ensure t)
 
 ;;; init.el ends here
