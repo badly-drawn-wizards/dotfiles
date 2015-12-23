@@ -29,6 +29,7 @@
 
 (setq package-pinned-packages
       '(
+	(unicode-fonts . "melpa-stable")
 	(powerline . "melpa-stable")
 	(moe-theme . "melpa")
 	(evil . "melpa-stable")
@@ -58,6 +59,17 @@
       (package-install 'use-package)))
 
 (require 'use-package)
+
+
+;;;;;;;;;;;
+;; Fonts ;;
+;;;;;;;;;;;
+
+(use-package unicode-fonts
+  :init (progn
+	  (unicode-fonts-setup)
+	  )
+  :ensure t)
 
 ;;;;;;;;;;;;;;;;
 ;; Aesthetics ;;
