@@ -231,7 +231,7 @@
 ;; Requires proof general installation
 (use-package proof-site
   :init (progn
-	  (setq proof-splash-display-screen nil)
+	  (setq proof-splash-enable nil)
 	  (setq proof-script-fly-past-comments t)
 	  ))
 
