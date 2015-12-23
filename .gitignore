@@ -1,0 +1,13 @@
+*
+!.gitignore
+!.i3/
+!.i3/**
+!.xmonad/
+!.xmonad/xmonad.hs
+!.emacs.d/
+!.emacs.d/**
+!.pentadactylrc
+!.vimperator/
+!.vimperator/**
+!.vimperatorrc
+
