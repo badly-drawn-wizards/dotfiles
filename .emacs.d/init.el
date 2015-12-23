@@ -103,6 +103,7 @@
   :config (progn
 	    (evil-leader/set-leader "<SPC>")
 	    (evil-leader/set-key
+	      "u" 'universal-argument
 	      "c" 'comment-or-uncomment-region)
 	    (global-evil-leader-mode)))
 
