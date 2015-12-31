@@ -12,7 +12,6 @@
     "percent": 1,
     "swallows": [
        {
-       "class": "^Emacs24$",
        "instance": "^org$"
        }
     ],
