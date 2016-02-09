@@ -68,6 +68,11 @@
 
 (require 'use-package)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Environment and Path ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(add-to-list 'exec-path "~/.local/bin")
 
 ;;;;;;;;;;;
 ;; Fonts ;;
