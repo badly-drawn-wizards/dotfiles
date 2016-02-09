@@ -182,27 +182,35 @@
 ;; Languages ;;
 ;;;;;;;;;;;;;;;
 
-
-
-
 ;; Haskell
 
 (use-package ghc
   :ensure t
   :config (progn
-	    (add-hook 'haskell-mode-hook (lambda () (ghc-init)))))
+	    (defun ghc-init-fun () (ghc-init))
+	    (add-hook 'haskell-mode-hook 'ghc-init-fun)))
 
 (use-package haskell-mode
   :ensure t
   :config (progn
+	    (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+
 	    (require 'haskell-indentation)
-	    (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
 	    (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
-	    (add-hook 'haskell-mode-hook 'haskell-indentation-disable-show-indentations)
-	    (setq haskell-process-type 'cabal-repl))
+
+	    (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+	    (setq haskell-process-type 'stack-ghci)
+	    (setq haskell-process-path-ghci "stack")
+	    (setq haskell-process-args-ghci "ghci")
+
+	    (add-hook 'haskell-mode-hook 'haskell-decl-scan-mode)
+
+	    ;; (defun flycheck-haskell-stack-init () (flycheck-select-checker 'haskell-stack-ghc))
+	    ;; (add-hook 'haskell-mode-hook 'flycheck-haskell-stack-init)
+
 	    (setq haskell-notify-p t)
 	    (setq haskell-tags-on-save t)
-	    (setq haskell-stylish-on-save t))
+	    (setq haskell-stylish-on-save t)))
 
 (use-package flycheck-haskell
   :ensure t
