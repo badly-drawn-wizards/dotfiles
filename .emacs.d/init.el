@@ -155,16 +155,25 @@
 	 (setq org-log-done 'time)
 
 	 (setq org-agenda-files (concat org-directory "/agenda-files.txt"))
-
-	 (setq org-default-notes-file (concat org-directory "/notes.org"))
 	 (setq org-refile-targets '((nil :maxlevel . 9)
 				    (org-agenda-files :maxlevel . 9)))
 
+	 (setq org-default-notes-file (concat org-directory "/notes.org"))
+
+	 (setq org-link-frame-setup
+	       '((vm . vm-visit-folder-other-frame)
+		 (vm-imap . vm-visit-imap-folder-other-frame)
+		 (gnus . org-gnus-no-new-news)
+		 (file . find-file)
+		 (wl . wl-other-frame)))
+
 	 (org-babel-do-load-languages
 	  'org-babel-load-languages
-	  '((haskell . t))
-	 ))
-  )
+	  '((haskell . t)
+	    (sh . t)
+	    (latex . t)))
+	 (add-to-list 'org-entities-user
+		      '("vdash" "\\vdash" nil nil nil nil "⊢"))))
 
 (use-package evil-org
   :ensure t)
