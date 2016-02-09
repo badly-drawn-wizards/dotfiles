@@ -14,6 +14,14 @@
 (toggle-tool-bar-mode-from-frame 0)
 (toggle-menu-bar-mode-from-frame 0)
 
+;;;;;;;;;;;;;
+;; Spacing ;;
+;;;;;;;;;;;;;
+
+(setq indent-tabs-mode nil)
+(setq tab-width 4)
+(setq tab-stop-list (number-sequence 4 120 4))
+
 ;;;;;;;;;;;;;;
 ;; Packages ;;
 ;;;;;;;;;;;;;;
