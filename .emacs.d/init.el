@@ -131,6 +131,8 @@
   :bind ("M-/" . company-complete))
 
 (use-package helm
+  :config (progn
+	    (helm-mode 1))
   :ensure t)
 
 ;;;;;;;;;;;;;
