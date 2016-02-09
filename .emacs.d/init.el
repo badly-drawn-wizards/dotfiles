@@ -49,6 +49,7 @@
 	(ghc . "melpa-stable")
 	(haskell-mode . "melpa-stable")
 	(flycheck-haskell . "melpa-stable")
+	(company-ghc . "melpa-stable")
 	(clojure-mode . "melpa-stable")
 	(inf-clojure . "melpa-stable")
 	(scala-mode2 . "melpa-stable")
@@ -216,6 +217,9 @@
   :ensure t
   :config (progn
 	    (add-hook 'flycheck-mode-hook 'flycheck-haskell-setup)))
+(use-package company-ghc
+  :ensure t
+  :config (add-to-list 'company-backends 'company-ghc))
 
 ;; Clojure
 
