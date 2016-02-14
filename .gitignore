@@ -1,5 +1,7 @@
 *
 !.gitignore
+!.zprofile
+!.zshrc
 !.i3/
 !.i3/**
 !.xmonad/

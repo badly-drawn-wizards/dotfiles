@@ -52,6 +52,8 @@
 	(company-ghc . "melpa-stable")
 	(clojure-mode . "melpa-stable")
 	(inf-clojure . "melpa-stable")
+	(rust-mode . "melpa")
+	(racer . "melpa")
 	(scala-mode2 . "melpa-stable")
 	(sbt-mode . "melpa")
 	(ensime . "melpa")
@@ -227,6 +229,17 @@
   :ensure t)
 
 (use-package inf-clojure
+  :ensure t)
+
+;; Rust
+
+(use-package rust-mode
+  :ensure t)
+
+(use-package racer
+  :init (progn
+	  (add-hook 'rust-mode-hook #'racer-mode)
+	  (add-hook 'racer-mode-hook #'eldoc-mode))
   :ensure t)
 
 ;; Scala
