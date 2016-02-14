@@ -45,6 +45,7 @@
 	(company . "melpa-stable")
 	(helm . "melpa-stable")
 	(flycheck . "melpa-stable")
+	(flycheck-pos-tip . "melpa")
 	(evil-org . "melpa-stable")
 	(ghc . "melpa-stable")
 	(haskell-mode . "melpa-stable")
@@ -142,6 +143,10 @@
 (use-package flycheck
   :ensure t
   :init (global-flycheck-mode))
+
+(use-package flycheck-pos-tip
+  :ensure t
+  :init (flycheck-pos-tip-mode))
 
 ;;;;;;;;;;;;;;
 ;; Org mode ;;
