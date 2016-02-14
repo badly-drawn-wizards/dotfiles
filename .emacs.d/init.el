@@ -130,8 +130,7 @@
 (use-package company
   :ensure t
   :init (setq company-idle-delay 0.1)
-  :config (global-company-mode 1)
-  :bind ("M-/" . company-complete))
+  :config (global-company-mode 1))
 
 (use-package helm
   :config (progn
