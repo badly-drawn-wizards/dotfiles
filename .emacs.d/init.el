@@ -103,6 +103,18 @@
 	    ;; (powerline-moe-theme)
 	    (moe-theme-random-color)))
 
+;;;;;;;;;
+;; IRC ;;
+;;;;;;;;;
+
+(use-package erc
+  :ensure t
+  :init (progn
+	  (setq erc-modules '(notifications pcomplete netsplit fill button match track completion readonly networks ring autojoin noncommands irccontrols move-to-prompt stamp menu list))
+	  (require 'erc-services)
+	  (setq erc-prompt-for-nickserv-password t)
+	  (setq erc-services-mode 1)))
+
 ;;;;;;;;;;;;;;
 ;; Document ;;
 ;;;;;;;;;;;;;;
