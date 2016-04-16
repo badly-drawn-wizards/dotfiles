@@ -163,8 +163,7 @@
   :ensure t
   :init (progn
 	  (setq evil-want-C-u-scroll t)
-	  (setq evil-want-C-w-delete t)
-	  )
+	  (setq evil-want-C-w-delete t))
   :config (evil-mode 1))
 
 (use-package evil-leader
@@ -200,11 +199,11 @@
 
 (use-package flycheck
   :ensure t
-  :init (global-flycheck-mode))
+  :config (global-flycheck-mode))
 
 (use-package flycheck-pos-tip
   :ensure t
-  :init (flycheck-pos-tip-mode))
+  :config (flycheck-pos-tip-mode))
 
 ;;;;;;;;;;;;;;
 ;; Org mode ;;
@@ -322,12 +321,10 @@
 ;; CoffeeScript
 
 (use-package coffee-mode
-  :config (progn
+  :init (progn
 	    (setq coffee-tab-width 4)
 	   )
   :ensure t)
-
-(provide 'init)
 
 ;; Idris
 
@@ -353,4 +350,5 @@
 	  (add-hook 'coq-mode-hook #'company-coq-initialize))
   :ensure t)
 
+(provide 'init)
 ;;; init.el ends here
