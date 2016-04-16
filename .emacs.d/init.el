@@ -74,7 +74,12 @@
 
 (require 'use-package)
 
+;;;;;;;;;;;;;;;;;;
+;; Benchmarking ;;
+;;;;;;;;;;;;;;;;;;
 
+(use-package esup
+  :ensure t)
 
 ;;;;;;;;;;;
 ;; Fonts ;;
