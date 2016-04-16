@@ -46,6 +46,7 @@
 	(helm . "melpa-stable")
 	(flycheck . "melpa-stable")
 	(flycheck-pos-tip . "melpa")
+	(pdf-tools . "melpa-stable")
 	(evil-org . "melpa-stable")
 	(ghc . "melpa-stable")
 	(haskell-mode . "melpa-stable")
@@ -101,6 +102,22 @@
 	    (load-theme 'moe-dark t)
 	    ;; (powerline-moe-theme)
 	    (moe-theme-random-color)))
+
+;;;;;;;;;;;;;;
+;; Document ;;
+;;;;;;;;;;;;;;
+
+;; PDF
+
+(defun pdf-view-fun ()
+    "Function to attach to the pdf-tools hook to enable evil-emacs-state."
+    (progn
+	 (evil-emacs-state)))
+(use-package pdf-tools
+  :ensure t
+  :config (progn
+	    (pdf-tools-install)
+	    (add-hook 'pdf-view-mode-hook #'pdf-view-fun)))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; Vim Emulation ;;
