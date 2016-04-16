@@ -44,6 +44,7 @@
 	(evil-leader . "melpa-stable")
 	(company . "melpa-stable")
 	(helm . "melpa-stable")
+	(projectile . "melpa-stable")
 	(flycheck . "melpa-stable")
 	(flycheck-pos-tip . "melpa")
 	(pdf-tools . "melpa-stable")
@@ -189,9 +190,14 @@
   :config (global-company-mode 1))
 
 (use-package helm
+  :ensure t
+  :config (helm-mode 1))
+
+(use-package projectile
+  :ensure t
   :config (progn
-	    (helm-mode 1))
-  :ensure t)
+	    (setq projectile-completion-system 'helm)
+	    (projectile-global-mode)))
 
 ;;;;;;;;;;;;;
 ;; Linting ;;
