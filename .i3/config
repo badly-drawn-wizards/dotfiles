@@ -152,6 +152,9 @@ bar {
         status_command i3status -c ~/.i3/i3status.conf
 }
 
+exec compton
+exec ~/.fehbg
+
 mouse_warping none
 
 # Media player controls
