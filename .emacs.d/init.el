@@ -85,11 +85,15 @@
 ;; Fonts ;;
 ;;;;;;;;;;;
 
+(prefer-coding-system 'utf-8)
+
 (use-package unicode-fonts
   :init (progn
 	  (unicode-fonts-setup)
 	  )
   :ensure t)
+
+(global-prettify-symbols-mode 1)
 
 ;;;;;;;;;;;;;;;;
 ;; Aesthetics ;;
