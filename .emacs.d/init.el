@@ -137,6 +137,24 @@
 	    (pdf-tools-install)
 	    (add-hook 'pdf-view-mode-hook #'pdf-view-fun)))
 
+;; Tex
+
+(use-package auctex
+  :mode ("\\.tex\\'" . latex-mode)
+  :commands (latex-mode LaTeX-mode plain-tex-mode)
+  :ensure t
+  :init (progn
+	  (add-hook 'LaTeX-mode-hook #'LaTeX-preview-setup)
+	  (setq TeX-auto-save t
+		TeX-parse-self t
+		TeX-save-query nil)
+	  (eval-after-load "preview"
+	    '(add-to-list 'preview-default-preamble "\\PreviewEnvironment{tikzpicture}" t))))
+
+(use-package preview
+  :commands LaTeX-preview-setup)
+
+
 ;;;;;;;;;;;;;;;;;;;
 ;; Vim Emulation ;;
 ;;;;;;;;;;;;;;;;;;;
