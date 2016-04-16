@@ -351,10 +351,59 @@
 
 ;; Coq
 
+(defvar-local coq-symbols
+  '((":=" ?≔)
+    ("forall" ?∀)
+    ("fun" ?λ)
+    ("->" ?→)
+    ("<->" ?↔)
+    ("exists" ?∃)
+    ("=>" ?⇒)
+    ("False" ?⊥)
+    ("True" ?⊤)
+    ("<>" ?≠)
+    ("~" ?¬)
+    ("/\\" ?∧)
+    ("\\/" ?∨)
+    ("||" ?∥)
+    ("|-" ?⊢)))
+
+(use-package coq-mode
+  :init (progn
+	  (add-hook 'coq-mode-hook
+		    (lambda ()
+		      (setq prettify-symbols-alist coq-symbols)))
+
+	  ;; Redefine coq checker to take arguments
+	  (flycheck-define-checker coq
+	    "A Coq syntax checker using the Coq compiler. See URL `http://coq.inria.fr/'."
+	    ;; We use coqtop in batch mode, because coqc is picky about file names.
+	    :command ("coqtop" (eval coq-prog-args) "-batch" "-load-vernac-source" source)
+	    :error-patterns
+	    ((error line-start "File \"" (file-name) "\", line " line
+		    ;; TODO: Parse the end column, once Flycheck supports that
+		    ", characters " column "-" (one-or-more digit) ":\n"
+		    (or "Syntax error:" "Error:")
+		    ;; Most Coq error messages span multiple lines, and end with a dot.
+		    ;; There are simple one-line messages, too, though.
+		    (message (or (and (one-or-more (or not-newline "\n")) ".")
+				 (one-or-more not-newline)))
+		    line-end))
+	    :error-filter
+	    (lambda (errors)
+	      (dolist (err (flycheck-sanitize-errors errors))
+		(setf (flycheck-error-message err)
+		      (replace-regexp-in-string (rx (1+ (syntax whitespace)) line-end)
+						"" (flycheck-error-message err)
+						'fixedcase 'literal)))
+	      (flycheck-increment-error-columns errors))
+	    :modes coq-mode)))
+
+(if (package-installed-p 'proof-site)
 (use-package company-coq
   :init (progn
 	  (add-hook 'coq-mode-hook #'company-coq-initialize))
-  :ensure t)
+  :ensure t))
 
 (provide 'init)
 ;;; init.el ends here
