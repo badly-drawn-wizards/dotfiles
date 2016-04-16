@@ -182,7 +182,11 @@
 
 (use-package company
   :ensure t
-  :init (setq company-idle-delay 0.1)
+  :init (progn
+	  (setq company-idle-delay 0.1)
+	  (setq company-minimum-prefix-length 3)
+	  (setq company-tooltip-align-annotations t))
+  
   :config (global-company-mode 1))
 
 (use-package helm
