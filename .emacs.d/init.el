@@ -99,15 +99,14 @@
 ;; Aesthetics ;;
 ;;;;;;;;;;;;;;;;
 
-;; Arrgh, curse that powerline bug
-;; (use-package powerline
-;;   :ensure t)
+(use-package powerline
+  :ensure t)
 
 (use-package moe-theme
   :ensure t
   :config (progn
 	    (load-theme 'moe-dark t)
-	    ;; (powerline-moe-theme)
+	    (powerline-moe-theme)
 	    (moe-theme-random-color)))
 
 ;;;;;;;;;
