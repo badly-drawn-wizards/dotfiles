@@ -51,10 +51,12 @@
 	(ghc . "melpa-stable")
 	(haskell-mode . "melpa-stable")
 	(company-ghc . "melpa-stable")
+	(tuareg . "melpa-stable")
 	(clojure-mode . "melpa-stable")
 	(inf-clojure . "melpa-stable")
 	(rust-mode . "melpa")
 	(racer . "melpa")
+	(company-racer . "melpa")
 	(scala-mode2 . "melpa-stable")
 	(sbt-mode . "melpa")
 	(ensime . "melpa")
@@ -250,6 +252,11 @@
 (use-package company-ghc
   :ensure t
   :config (add-to-list 'company-backends 'company-ghc))
+
+;; OCaml
+
+(use-package tuareg
+  :ensure t)
 
 ;; Clojure
 
