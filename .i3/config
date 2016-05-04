@@ -152,6 +152,10 @@ bar {
         status_command i3status -c ~/.i3/i3status.conf
 }
 
+exec compton
+exec ~/.fehbg
+exec emacs --daemon
+
 mouse_warping none
 
 # Media player controls
@@ -160,3 +164,4 @@ bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 
 bindsym $mod+o exec /home/reuben/.i3/switch-to-org-workspace.sh
+bindsym $mod+b exec ~/.local/bin/random-desktop
