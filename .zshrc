@@ -23,3 +23,6 @@ antigen theme candy
 antigen apply
 
 eval $(thefuck --alias)
+
+# Emacs prints the escape character
+unset zle_bracketed_paste
