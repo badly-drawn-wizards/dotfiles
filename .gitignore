@@ -10,7 +10,8 @@
 !.emacs.d/private
 !.pentadactylrc
 !.vimperator/
-!.vimperator/**
+!.vimperator/plugin/**
 !.vimperatorrc
 !.local/bin/**
+
 
