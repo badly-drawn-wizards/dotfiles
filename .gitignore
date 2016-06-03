@@ -2,12 +2,13 @@
 !.gitignore
 !.zprofile
 !.zshrc
+!.antigen/private/**
 !.i3/
 !.i3/**
 !.xmonad/
 !.xmonad/xmonad.hs
 !.spacemacs
-!.emacs.d/private
+!.emacs.d/private/**
 !.pentadactylrc
 !.vimperator/
 !.vimperator/plugin/**
