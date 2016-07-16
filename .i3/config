@@ -149,11 +149,11 @@ bindsym $mod+r mode "resize"
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-        status_command i3status -c ~/.i3/i3status.conf
+        status_command i3status -c $HOME/.i3/i3status.conf
 }
 
 exec compton
-exec ~/.fehbg
+exec $HOME/.fehbg
 exec emacs --daemon
 
 mouse_warping none
@@ -164,4 +164,4 @@ bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 
 bindsym $mod+o exec /home/reuben/.i3/switch-to-org-workspace.sh
-bindsym $mod+b exec ~/.local/bin/random-desktop
+bindsym $mod+b exec $HOME/.local/bin/random-desktop
