@@ -28,7 +28,8 @@ antigen apply
 
 eval $(thefuck --alias)
 
-# Emacs prints the escape character
+# Emacs
+export EDITOR=em
 unset zle_bracketed_paste
 
 # OPAM configuration
@@ -36,3 +37,6 @@ unset zle_bracketed_paste
 
 # virtualenvwrapper
 source /usr/bin/virtualenvwrapper.sh
+
+# NVM
+source /usr/share/nvm/init-nvm.sh

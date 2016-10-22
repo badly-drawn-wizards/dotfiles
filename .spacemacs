@@ -32,16 +32,23 @@ values."
      spell-checking
      syntax-checking
 
- (prettify :variables
-           prettify-symbols-major-mode-alist
-           `((coq-mode . ,coq-symbols-tables)
-             (coq-goals-mode . ,coq-symbols-tables)
-             (coq-response-mode . ,coq-symbols-tables)
-             ))
+     (erc :variables
+          erc-modules '(notifications pcomplete netsplit fill button match track completion readonly networks ring autojoin noncommands irccontrols move-to-prompt stamp menu list)
+          erc-prompt-for-nickserv-password t
+          )
 
-     (pdf-tools)
+     (prettify :variables
+               prettify-symbols-major-mode-alist
+               `((coq-mode . ,coq-symbols-tables)
+                 (coq-goals-mode . ,coq-symbols-tables)
+                 (coq-response-mode . ,coq-symbols-tables)
+                 ))
 
-     latex
+     pdf-tools
+
+
+     (latex :variables
+            TeX-view-program-selection '(((output-dvi has-no-display-manager) "dvi2tty") ((output-dvi style-pstricks) "dvips and gv") (output-dvi "xdvi") (output-pdf "mupdf") (output-html "xdg-open")))
      markdown
      (org :variables
           org-directory "~/org"
@@ -61,16 +68,40 @@ values."
                   (gnus . org-gnus-no-new-news)
                   (file . find-file)
                   (wl . wl-other-frame)))
+     (plantuml :variables
+               puml-plantuml-jar-path (expand-file-name "~/.emacs.d/private/plantuml.jar"))
+
+     (shell :variables
+            shell-default-term-shell "zsh"
+            shell-default-shell 'multiterm)
+
+
+     (java :variables
+           eclim-eclipse-dirs "/usr/lib/eclipse"
+           eclim-executable "/usr/lib/eclipse/eclim")
+
+     python
+     ipython-notebook
+
+     html
+     yaml
+     javascript
+     typescript
 
      emacs-lisp
-     haskell
+     (purescript :variables
+                 psci/file-path "pulp"
+                 ;; Bug in psci.el where first argument is actually the startfile argument for make-comint-in-buffer
+                 psci/arguments '(nil "psci"))
+
+     (haskell :variables
+              haskell-completion-backend 'ghc-mod)
      coq
 
-     (erc :variables
-          erc-modules '(notifications pcomplete netsplit fill button match track completion readonly networks ring autojoin noncommands irccontrols move-to-prompt stamp menu list)
-          erc-prompt-for-nickserv-password t
-          )
+     (c-c++ :variables c-c++-enable-clang-support t)
+     xc
 
+     shaders
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -99,9 +130,9 @@ values."
    ;; This variable has no effect if Emacs is launched with the parameter
    ;; `--insecure' which forces the value of this variable to nil.
    ;; (default t)
-   dotspacemacs-elpa-https t
+   dotspacemacs-elpa-https nil 
    ;; Maximum allowed time in seconds to contact an ELPA repository.
-   dotspacemacs-elpa-timeout 5
+   dotspacemacs-elpa-timeout 60
    ;; If non nil then spacemacs will check for updates at startup
    ;; when the current branch is not `develop'. (default t)
    dotspacemacs-check-for-update t
@@ -276,10 +307,6 @@ executes.
  This function is mostly useful for variables that need to be set
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
-
-  ;; Tramp
-  (setq tramp-ssh-controlmaster-options
-        "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
   )
 
 (defun dotspacemacs/user-config ()

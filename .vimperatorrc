@@ -1,8 +1,10 @@
 set gui=nonavigation
 set hintchars=asdfjkl;
+set editor=em
 
 nmap J <C-d>
 nmap K <C-u>
+
 
 "javascript to hide statusbar
 noremap <silent> <F8> :js toggle_bottombar()<CR>

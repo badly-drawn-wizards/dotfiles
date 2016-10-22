@@ -154,7 +154,6 @@ bar {
 
 exec compton
 exec $HOME/.fehbg
-exec emacs --daemon
 
 mouse_warping none
 
