@@ -5,6 +5,7 @@
 !.antigen/private/**
 !.i3/
 !.i3/**
+!.Xresources
 !.xmonad/
 !.xmonad/xmonad.hs
 !.spacemacs
