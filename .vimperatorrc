@@ -1,6 +1,7 @@
 set gui=nonavigation
 set hintchars=asdfjkl;
 set editor=em
+set titlestring=
 
 nmap J <C-d>
 nmap K <C-u>
