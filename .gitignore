@@ -9,6 +9,7 @@
 !.Xresources
 !.xmonad/
 !.xmonad/xmonad.hs
+!.emacs.d
 !.spacemacs
 !.spacemacs_layers/
 !.spacemacs_layers/**/*
