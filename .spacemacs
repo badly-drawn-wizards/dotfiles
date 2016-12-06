@@ -14,7 +14,7 @@ values."
    dotspacemacs-distribution 'spacemacs
    ;; List of additional paths where to look for configuration layers.
    ;; Paths must have a trailing slash (i.e. `~/.mycontribs/')
-   dotspacemacs-configuration-layer-path '()
+   dotspacemacs-configuration-layer-path '("~/.spacemacs_layers/")
    ;; List of configuration layers to load. If it is the symbol `all' instead
    ;; of a list then all discovered layers will be installed.
    dotspacemacs-configuration-layers
@@ -69,7 +69,7 @@ values."
                   (file . find-file)
                   (wl . wl-other-frame)))
      (plantuml :variables
-               puml-plantuml-jar-path (expand-file-name "~/.emacs.d/private/plantuml.jar"))
+               puml-plantuml-jar-path (expand-file-name "~/.spacemacs_layers/plantuml.jar"))
 
      (shell :variables
             shell-default-term-shell "zsh"
