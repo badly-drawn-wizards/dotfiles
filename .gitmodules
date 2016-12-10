@@ -2,5 +2,5 @@
 	path = .emacs.d
 	url = https://github.com/syl20bnr/spacemacs.git
 [submodule "dotfiles/zsh/.antigen"]
-	path = dotfiles/zsh/.antigen
+	path = zsh/.antigen
 	url = https://github.com/zsh-users/antigen
