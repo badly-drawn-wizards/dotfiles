@@ -1,0 +1,7 @@
+[user]
+	email = reuben.steenekamp@gmail.com
+	name = Reuben Steenekamp
+[push]
+	default = simple
+[core]
+	editor = emacsclient -c

@@ -1,2 +1,1 @@
-#!/bin/sh
-emacsclient -c -a "" $@
+../../dotfiles/spacemacs/.local/bin/em
