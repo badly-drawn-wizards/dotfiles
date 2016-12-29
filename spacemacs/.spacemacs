@@ -2,7 +2,6 @@
 ;; This file is loaded by Spacemacs at startup.
 ;; It must be stored in your home directory.
 
-(defvar-local coq-symbols-tables '(greek-symbols equality-symbols quantifier-symbols arrow-symbols truth-symbols logic-symbols lambda-symbols set-symbols coq-symbols))
 (defun dotspacemacs/layers ()
   "Configuration Layers declaration.
 You should not put any user code in this function besides modifying the variable
@@ -37,12 +36,7 @@ values."
           erc-prompt-for-nickserv-password t
           )
 
-     (prettify :variables
-               prettify-symbols-major-mode-alist
-               `((coq-mode . ,coq-symbols-tables)
-                 (coq-goals-mode . ,coq-symbols-tables)
-                 (coq-response-mode . ,coq-symbols-tables)
-                 ))
+     prettify
 
      pdf-tools
 
