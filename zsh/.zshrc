@@ -22,7 +22,7 @@ antigen bundle command-not-found
 antigen bundle zsh-users/zsh-completions
 antigen bundle zsh-users/zsh-syntax-highlighting
 
-antigen theme $HOME/.antigen/private/themes fino
+antigen theme candy
 
 antigen apply
 
