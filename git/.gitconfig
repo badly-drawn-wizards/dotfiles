@@ -5,3 +5,6 @@
 	default = simple
 [core]
 	editor = emacsclient -c
+[rebase]
+	autostash = true
+	autosquash = true
