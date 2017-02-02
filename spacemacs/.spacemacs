@@ -55,7 +55,7 @@ values."
           org-refile-targets '((nil :maxlevel . 9)
                                      (org-agenda-files :maxlevel . 9))
 
-          org-default-notes-file (concat org-directory "/notes.org")
+          org-default-notes-file (concat org-directory "/main.org")
 
           org-link-frame-setup
                 '((vm . vm-visit-folder-other-frame)
