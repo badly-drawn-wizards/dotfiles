@@ -1,0 +1,15 @@
+# Maintainer: Reuben Steenekamp <reuben.steenekamp@gmail.com>
+pkgname=usbip-client
+pkgver=1
+pkgrel=1
+pkgdesc="Load necesary module for using usbip on host side"
+arch=('any')
+license=('MIT')
+depends=('usbip')
+source=(usbip_client.conf)
+md5sums=('5091a719704580dfd2d16796b1c4f3b9')
+
+package() {
+  mkdir -p $pkgdir/etc/modules-load.d        
+	cp $srcdir/usbip_client.conf $pkgdir/etc/modules-load.d/
+}
