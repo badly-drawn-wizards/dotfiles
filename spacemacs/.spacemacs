@@ -89,6 +89,7 @@ values."
                  psci/arguments '(nil "psci"))
 
      (haskell :variables
+              haskell-process-args-stack-ghci '("--ghci-options=-ferror-spans")
               haskell-completion-backend 'ghc-mod)
      coq
 
