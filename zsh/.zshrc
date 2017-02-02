@@ -40,3 +40,8 @@ source /usr/bin/virtualenvwrapper.sh
 
 # NVM
 source /usr/share/nvm/init-nvm.sh
+
+# Aliases
+
+alias jap="env LC_ALL=\"ja_JP.UTF8\""
+alias wine-steam="wine ~/.wine/drive_c/Program\ Files\ \(x86\)/Steam/Steam.exe"
