@@ -11,5 +11,5 @@ md5sums=('7117b1395f2a4bb911871f905be15970')
 
 package() {
   mkdir -p $pkgdir/etc/udev/rules.d
-	cp $srcdir/99-saleae.rules $pkgdir/etc/udev/rules.d
+  cp $srcdir/99-saleae.rules $pkgdir/etc/udev/rules.d
 }
