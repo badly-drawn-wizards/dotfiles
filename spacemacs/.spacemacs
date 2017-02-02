@@ -29,6 +29,8 @@ values."
                       vc-follow-symlinks t)
      git
 
+     docker
+
      spell-checking
      syntax-checking
 
@@ -81,6 +83,7 @@ values."
      yaml
      javascript
      typescript
+     colors
 
      emacs-lisp
      (purescript :variables
