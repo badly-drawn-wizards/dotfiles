@@ -47,7 +47,6 @@ values."
      markdown
      (org :variables
           org-directory "~/org"
-          org-mobile-directory "~/mobile-org"
 
           org-log-done 'time
 
