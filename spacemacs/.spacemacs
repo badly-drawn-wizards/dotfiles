@@ -25,8 +25,9 @@ values."
      ;; ----------------------------------------------------------------
      auto-completion
 
+     (version-control :variables
+                      vc-follow-symlinks t)
      git
-     version-control
 
      spell-checking
      syntax-checking
