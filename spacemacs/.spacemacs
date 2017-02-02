@@ -325,7 +325,8 @@ you should place your code here."
   ;; Org-mode
   (org-babel-do-load-languages
    'org-babel-load-languages
-   '((haskell . t)
+   '((emacs-lisp . t)
+     (haskell . t)
      (sh . t)
      (latex . t)))
   )
