@@ -1,0 +1,5 @@
+#Saleae permissions
+SUBSYSTEM=="usb", ATTR{idVendor}=="0925", ATTR{idProduct}=="3881", MODE="0666"
+
+#ttyUSB permissions
+KERNEL=="ttyUSB[0-9]*",MODE="666"

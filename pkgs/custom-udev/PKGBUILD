@@ -1,0 +1,15 @@
+# Maintainer: Reuben Steenekamp <reuben.steenekamp@gmail.com>
+pkgname=custom-udev
+pkgver=1
+pkgrel=1
+pkgdesc="Custom udev rules"
+arch=('any')
+license=('MIT')
+depends=('usbip')
+source=(99-custom.rules)
+md5sums=('6b01d161c42aaf9bd4319c6062b0e641')
+
+package() {
+  mkdir -p $pkgdir/etc/udev/rules.d
+  cp $srcdir/99-custom.rules $pkgdir/etc/udev/rules.d
+}
