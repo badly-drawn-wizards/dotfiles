@@ -1,0 +1,9 @@
+[Unit]
+Description=led-ambient
+
+[Service]
+Type=simple
+ExecStart=/home/reuben/.virtualenvs/led-ambient/bin/python3 /home/reuben/.local/bin/led-ambient.py
+
+[Install]
+WantedBy=default.target

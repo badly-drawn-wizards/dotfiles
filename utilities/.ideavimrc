@@ -27,7 +27,6 @@ nmap <Space>bd :action CloseEditor<CR>
 nmap <Space>bp :action PreviousTab<CR>
 nmap <Space>bn :action NextTab<CR>
 
-
 nmap <Space>se :action RenameElement<CR>
 
 

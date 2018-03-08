@@ -3,13 +3,11 @@ HISTSIZE=1000
 SAVEHIST=1000
 setopt autocd
 
-bindkey -e
-bindkey "^P" history-search-backward
-bindkey "^N" history-search-forward
-
 source "$HOME/.antigen/antigen.zsh"
 
 antigen use oh-my-zsh
+
+antigen bundle lein
 
 antigen bundle git
 antigen bundle rsync
@@ -26,7 +24,15 @@ antigen theme candy
 
 antigen apply
 
+bindkey -v
+bindkey "^P" history-search-backward
+bindkey "^N" history-search-forward
+bindkey "^R" history-incremental-pattern-search-backward
+bindkey "^S" history-incremental-pattern-search-forward
+
 eval $(thefuck --alias)
+
+compdef gpg2=gpg
 
 # Emacs
 export EDITOR=em
@@ -45,3 +51,9 @@ source /usr/share/nvm/init-nvm.sh
 
 alias jap="env LC_ALL=\"ja_JP.UTF8\""
 alias wine-steam="wine ~/.wine/drive_c/Program\ Files\ \(x86\)/Steam/Steam.exe"
+alias t="tmux attach || tmux new"
+
+
+# tabtab source for yo package
+# uninstall by removing these lines or running `tabtab uninstall yo`
+[[ -f /home/reuben/.nvm/versions/node/v8.4.0/lib/node_modules/yo/node_modules/tabtab/.completions/yo.zsh ]] && . /home/reuben/.nvm/versions/node/v8.4.0/lib/node_modules/yo/node_modules/tabtab/.completions/yo.zsh
