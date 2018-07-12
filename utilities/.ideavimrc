@@ -29,4 +29,8 @@ nmap <Space>bn :action NextTab<CR>
 
 nmap <Space>se :action RenameElement<CR>
 
-
+nmap <Space>dn :action StepOver<CR>
+nmap <Space>di :action StepInto<CR>
+nmap <Space>do :action StepOut<CR>
+nmap <Space>dd :action RunToCursor<CR>
+nmap <Space>dc :action Resume<CR>
