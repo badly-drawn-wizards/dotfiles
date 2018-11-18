@@ -1,0 +1,2 @@
+#!/bin/sh
+dbus-send --dest=org.badlydrawnwizards.LedStrip /org/badlydrawnwizards/ledstrip org.badlydrawnwizards.LedStrip.$1

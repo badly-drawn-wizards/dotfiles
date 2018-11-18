@@ -41,18 +41,17 @@ unset zle_bracketed_paste
 # OPAM configuration
 . /home/reuben/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
 
-# virtualenvwrapper
-source /usr/bin/virtualenvwrapper.sh
-
 # NVM
 source /usr/share/nvm/init-nvm.sh
+
+# Python
+source /home/reuben/.local/bin/virtualenvwrapper.sh
 
 # Aliases
 
 alias jap="env LC_ALL=\"ja_JP.UTF8\""
 alias wine-steam="wine ~/.wine/drive_c/Program\ Files\ \(x86\)/Steam/Steam.exe"
 alias t="tmux attach || tmux new"
-
 
 # tabtab source for yo package
 # uninstall by removing these lines or running `tabtab uninstall yo`

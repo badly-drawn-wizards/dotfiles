@@ -1,2 +1,2 @@
 #!/bin/sh
-feh --bg-max "$(shuf -n1 -e ~/wallpapers/**/*)"
+feh --bg-max "$(shuf -n1 -e ~/wallpapers/*)"
