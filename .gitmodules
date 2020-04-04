@@ -1,6 +1,6 @@
-[submodule "submodules/spacemacs"]
-	path = spacemacs/.emacs.d
-	url = git@github.com:syl20bnr/spacemacs.git
 [submodule "submodules/antigen"]
 	path = zsh/.antigen
-	url = git@github.com:zsh-users/antigen.git
+	url = https://github.com:/zsh-users/antigen.git
+[submodule "emacs/.emacs.d"]
+	path = emacs/.emacs.d
+	url = https://github.com/hlissner/doom-emacs
