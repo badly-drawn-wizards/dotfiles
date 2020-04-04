@@ -40,9 +40,9 @@ def process_im(im):
     im = im[:,:,[1,0,2]] # Convert to GRB
     return im
 
-IP = "192.168.0.7"
+IP = "192.168.1.7"
 PORT = 4242
-SSID = "STEENEKAMP"
+SSID = "UrAWizardHarry"
 FPS = 5
 
 def at_home():

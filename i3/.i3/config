@@ -190,7 +190,7 @@ bar {
 # exec compton
 exec $HOME/.fehbg
 exec setxkbmap -option caps:swapescape
-exec cbatticon
+# exec cbatticon
 exec nm-applet
 exec xss-lock -- custom_i3lock
 exec dunst
