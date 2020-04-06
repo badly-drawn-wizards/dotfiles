@@ -6,7 +6,7 @@
 (setq doom-font (font-spec :family "monoid" :size 10))
 (setq doom-theme 'doom-one)
 
-(setq magit-git-executable "C:\\Program Files\\Git\\cmd\\git.exe")
+;; (setq magit-git-executable "C:\\Program Files\\Git\\cmd\\git.exe")
 (defvar git-bash-executable "C:\\Program Files\\Git\\git-bash.exe")
 (defun git-bash ()
   (interactive)
@@ -82,3 +82,7 @@
    #'evil-ex-nohighlight))
 
 (evil-snipe-mode 0)
+
+(set-popup-rule! "\\*Lean Goal\\*"
+  :side 'right
+  :size 50)
