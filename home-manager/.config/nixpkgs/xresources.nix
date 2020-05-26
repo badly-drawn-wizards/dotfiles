@@ -1,0 +1,3 @@
+{
+  extraConfig = builtins.readFile ./.Xresources;
+}
