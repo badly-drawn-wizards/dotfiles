@@ -70,6 +70,7 @@
        (eval +overlay)     ; run code, run (also, repls)
        (lookup           ; helps you navigate your code and documentation
         +docsets)        ; ...or in Dash docsets locally
+       direnv
        lsp
        magit             ; a git porcelain for Emacs
        make              ; run make tasks from Emacs
@@ -82,7 +83,7 @@
        csharp            ; unity, .NET, and mono shenanigans
        data              ; config/data formats
        emacs-lisp        ; drown in parentheses
-       (haskell +lsp)  ; a language that's lazier than I am
+       (haskell +dante)  ; a language that's lazier than I am
        (java +lsp) ; the poster child for carpal tunnel syndrome
        (javascript +lsp)        ; all(hope(abandon(ye(who(enter(here))))))
        lean

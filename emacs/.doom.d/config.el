@@ -57,11 +57,16 @@
 (after! magit
   (require 'forge))
 
-(after! lsp-haskell
-  (setq lsp-haskell-process-path-hie "ghcide")
-  (setq lsp-haskell-process-args-hie '())
-  (setq lsp-log-io t)
-  )
+(after! dante
+  (setq dante-methods '(new-build bare-ghci)))
+
+;; (after! lsp-haskell
+;;   (setq lsp-haskell-process-path-hie "ghcide")
+;;   (setq lsp-haskell-process-args-hie '())
+;;   (setq lsp-log-io t))
+
+(after! direnv
+  (direnv-mode))
 
 (map!
  :leader
@@ -69,6 +74,10 @@
  (:desc "M-x"
    "<SPC>"
    #'counsel-M-x)
+
+ (:desc "Comment"
+   ";"
+   #'evilnc-comment-operator)
 
  (:desc "Open git bash"
    "oog"
