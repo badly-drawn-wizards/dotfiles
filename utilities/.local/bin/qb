@@ -1,2 +1,0 @@
-#!/bin/sh
-EDITOR=em exec qutebrowser
