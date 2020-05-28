@@ -1,5 +1,7 @@
 { config, pkgs, lib, ... }:
-
+let
+  i3-config = import ./i3.nix pkgs;
+in
 {
   xsession = {
     enable = true;
@@ -12,7 +14,7 @@
       blueman-applet &
       dropbox &
     '';
-    windowManager.i3 = import ./i3.nix lib pkgs;
+    windowManager.i3 = i3-config;
   };
 
   programs = {
