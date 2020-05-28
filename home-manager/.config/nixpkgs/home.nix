@@ -1,10 +1,18 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   xsession = {
     enable = true;
     scriptPath = ".xinitrc";
-    windowManager.i3 = import ./i3.nix pkgs;
+    initExtra = ''
+      xrdb -merge .Xresources
+      udiskie &
+      cbatticon &
+      pasystray &
+      blueman-applet &
+      dropbox &
+    '';
+    windowManager.i3 = import ./i3.nix lib pkgs;
   };
 
   programs = {
@@ -17,6 +25,7 @@
     dunst = import ./dunst.nix pkgs;
     udiskie.enable = true;
     pasystray.enable = true;
+    blueman-applet.enable = true;
     network-manager-applet.enable = true;
     gpg-agent.enable = true;
   };
@@ -24,22 +33,56 @@
   home = {
     packages = with pkgs; [
       home-manager
-      emacs
+
+      # Yeet
       i3
-      git
-      libnotify
-      rxvt-unicode
-      mupdf
+
+      # Browser stuff
       firefox
-      calibre
-      less ranger thefuck
+
+      # Chat with some folks
       zoom-us discord
+
+      # Reading
+      mupdf
+      calibre
+
+      # Maybe I will actually end up using these
+      # xournal is very shitty on high DPI displays
+      # write_stylus is better, but still shitty
+      write_stylus xournal
+
+      # Shit that belongs in the system tray 
+      udiskie
+      pasystray
+      blueman
+      cbatticon
+      dropbox
+
+      # A marriage made in hell
+      emacs vim
+
+      # Terminal stuff
+      rxvt-unicode
+
+      # Misc utilites
+      git tree less ranger thefuck pulsemixer pciutils libnotify
+
+      # Gaaaaaaaaames
+      steam
     ];
     sessionVariables = {
       PAGER = "less";
       EDITOR = "vim";
     };
     file = {
+      ".vimrc".text = ''
+        set tabstop=2
+        set shiftwidth=2
+        set expandtab
+        set autochdir
+        set tags=./tags,tags
+      '';
       ".tmux.conf".text = ''
         set-window-option -g mode-keys vi 
       '';

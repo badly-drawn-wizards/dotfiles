@@ -3,6 +3,8 @@
   defaultKeymap = "viins";
   shellAliases = {
     t = "tmux attach || tmux new";
+    vnix = "vim ~/.config/nixpkgs/";
+    vnixos = "sudo vim /etc/nixos/";
   };
   oh-my-zsh = {
     enable = true;

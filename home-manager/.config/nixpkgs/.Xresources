@@ -41,3 +41,5 @@ URxvt*.font: xft:Monoid:size=8
 *color13:      base06
 *color14:      base0F
 *color15:      base07
+
+Xft.dpi: 220
