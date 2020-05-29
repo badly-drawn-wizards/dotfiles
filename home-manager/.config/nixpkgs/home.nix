@@ -38,7 +38,7 @@ in
 
   home = {
     packages = with pkgs; [
-      # Yeet
+      # Fuck da mouse
       i3
 
       # Browser stuff
@@ -70,9 +70,11 @@ in
       rxvt-unicode
 
       # Misc utilites
-      git tree less ranger thefuck pulsemixer pciutils libnotify
+      git ranger thefuck tree less pulsemixer
+      htop pciutils
 
-      # Gaaaaaaaaames
+      # Gaaaaaaaaames (HMU if you play Celeste)
+      # Right now steam doesn't like my laptop, but I will be back with a vengence.
       steam
     ];
     sessionVariables = {
