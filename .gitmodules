@@ -4,3 +4,6 @@
 [submodule "emacs/.emacs.d"]
 	path = emacs/.emacs.d
 	url = https://github.com/hlissner/doom-emacs
+[submodule "home-manager/home-manager"]
+	path = home-manager/home-manager
+	url = https://github.com/rycee/home-manager
