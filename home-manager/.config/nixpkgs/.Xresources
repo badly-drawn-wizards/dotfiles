@@ -1,5 +1,5 @@
 URxvt*scrollBar: false
-URxvt*.font: xft:Monoid:size=8
+URxvt*.font: xft:Fira Code:size=12
 
 #define base00 #292b2e
 #define dark00 #212026
