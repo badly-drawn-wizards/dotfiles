@@ -23,6 +23,7 @@ in
       path = "$HOME/dotfiles/home-manager/home-manager";
     };
     zsh = import ./zsh.nix { inherit pkgs; };
+    i3status = import ./i3status.nix;
   };
   
   xresources = import ./xresources.nix;
