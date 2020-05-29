@@ -24,7 +24,7 @@ in
   config = {
     fonts = [ "Monoid 8" ];
     modifier = mod;
-    # menu = dmenu-run;
+    menu = dmenu-run;
     focus = { mouseWarping = false; };
     keybindings = with lib.attrsets; let
 
