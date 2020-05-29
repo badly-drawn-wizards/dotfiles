@@ -1,6 +1,6 @@
-{ config, pkgs, lib, ... }:
+{ pkgs ? import <nixpkgs>, config, lib, ... }:
 let
-  i3-config = import ./i3.nix pkgs;
+  i3-config = import ./i3.nix { inherit pkgs; };
 in
 {
   xsession = {
@@ -18,13 +18,13 @@ in
   };
 
   programs = {
-    zsh = import ./zsh.nix;
+    zsh = import ./zsh.nix { inherit pkgs; };
   };
   
   xresources = import ./xresources.nix;
 
   services = {
-    dunst = import ./dunst.nix pkgs;
+    dunst = import ./dunst.nix { inherit pkgs; };
     udiskie.enable = true;
     pasystray.enable = true;
     blueman-applet.enable = true;

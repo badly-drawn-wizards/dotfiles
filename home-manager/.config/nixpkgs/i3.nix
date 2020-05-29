@@ -1,4 +1,4 @@
-pkgs:
+{ pkgs ? import <nixpkgs> }:
 with import ./spacemacs-colors.nix; 
 with builtins;
 let 

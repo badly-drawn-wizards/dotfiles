@@ -1,4 +1,4 @@
-pkgs: {
+{ pkgs ? import <nixpkgs> }: {
   enable = true;
   settings = {
     global = {

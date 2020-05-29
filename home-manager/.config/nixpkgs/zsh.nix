@@ -1,3 +1,4 @@
+{ pkgs ? import <nixpkgs> }:
 {
   enable = true;
   defaultKeymap = "viins";
