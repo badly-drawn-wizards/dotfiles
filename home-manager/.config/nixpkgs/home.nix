@@ -48,7 +48,7 @@ in
       # Chat with some folks
       zoom-us discord
 
-      # Reading
+      # Reading some mafths
       mupdf
       calibre
 
