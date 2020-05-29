@@ -18,6 +18,10 @@ in
   };
 
   programs = {
+    home-manager = {
+      enable = true;
+      path = "$HOME/dotfiles/home-manager/home-manager";
+    };
     zsh = import ./zsh.nix { inherit pkgs; };
   };
   
@@ -34,8 +38,6 @@ in
 
   home = {
     packages = with pkgs; [
-      home-manager
-
       # Yeet
       i3
 
