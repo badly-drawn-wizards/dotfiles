@@ -2,6 +2,8 @@ let
   cpu = "";
   memory = "";
   storage = "";
+  clock = "";
+  calendar = "";
 in
 {
   enable = true;
@@ -12,24 +14,24 @@ in
   modules = {
     load = {
       position = 1;
-      settings = { format = "%1min ${cpu}"; };
+      settings = { format = "${cpu} %1min "; };
     };
 
     memory = {
       position = 2;
       settings = {
-        format = "%used ${memory} %available";
+        format = " ${memory} %used + %available ";
       };
     };
 
     "disk /" = {
       position = 3;
-      settings = { format = "%avail ${storage} %total"; };
+      settings = { format = " ${storage} %avail / %total "; };
     };
 
     "tztime local" = {
       position = 4;
-      settings = { format = "%m-%d %H:%M"; };
+      settings = { format = " ${clock} %H:%M:%S ${calendar} %d/%m"; };
     };
   };
 }
