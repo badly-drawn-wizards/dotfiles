@@ -41,6 +41,7 @@
     fonts = with pkgs; [
       fira-code
       fira-code-symbols
+      font-awesome
       noto-fonts
       noto-fonts-emoji
     ];

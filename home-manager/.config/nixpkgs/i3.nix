@@ -21,11 +21,15 @@ let
 in
 {
   enable = true;
+  package = pkgs.i3-gaps;
   config = {
-    fonts = [ "Monoid 8" ];
+    fonts = [ "Font Awesome 8" "Fira Code 8" ];
     modifier = mod;
     menu = dmenu-run;
     focus = { mouseWarping = false; };
+    gaps = {
+      inner = 5;
+    };
     keybindings = with lib.attrsets; let
 
       # Usual i3 movement

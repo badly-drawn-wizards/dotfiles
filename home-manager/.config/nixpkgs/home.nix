@@ -13,6 +13,9 @@ in
       pasystray &
       blueman-applet &
       dropbox &
+      
+      # TODO find out why picom option doesn't work
+      picom &
     '';
     windowManager.i3 = i3-config;
   };
@@ -35,12 +38,17 @@ in
     blueman-applet.enable = true;
     network-manager-applet.enable = true;
     gpg-agent.enable = true;
+    random-background = { 
+      enable = true;
+      imageDirectory = "%h/backgrounds";
+    };
   };
 
   home = {
     packages = with pkgs; [
-      # Fuck da mouse
-      i3
+      # Lose da mouse with style
+      i3-gaps
+      picom
 
       # Browser stuff
       firefox

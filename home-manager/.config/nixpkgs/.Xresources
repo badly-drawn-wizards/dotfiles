@@ -1,5 +1,7 @@
 URxvt*scrollBar: false
 URxvt*.font: xft:Fira Code:size=12
+URxvt*depth: 32
+URxvt*background: rgba:2900/2b00/2e00/c800
 
 #define base00 #292b2e
 #define dark00 #212026
