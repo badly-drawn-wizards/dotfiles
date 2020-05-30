@@ -20,6 +20,10 @@ in
     windowManager.i3 = i3-config;
   };
 
+  wayland = {
+    windowManager.sway = i3-config;
+  };
+
   programs = {
     home-manager = {
       enable = true;
