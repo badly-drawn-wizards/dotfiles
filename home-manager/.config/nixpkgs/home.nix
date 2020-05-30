@@ -119,6 +119,13 @@ in
           autostash = true
           autosquash = true
       '';
+      ".ssh/config".text = ''
+        Host github
+          User git
+          HostName github.com
+
+        IdentityFile ~/.ssh/id_rsa
+      '';
     };
     stateVersion = "20.03";
   };
