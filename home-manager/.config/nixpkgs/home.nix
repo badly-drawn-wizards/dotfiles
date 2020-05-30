@@ -95,6 +95,10 @@ in
       EDITOR = "vim";
     };
     file = {
+      ".zprofile".text = ''
+        #!/bin/zsh
+        export PATH="$HOME/.local/bin:$PATH"
+      '';
       ".vimrc".text = ''
         set tabstop=2
         set shiftwidth=2
