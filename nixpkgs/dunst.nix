@@ -2,7 +2,7 @@
   enable = true;
   settings = {
     global = {
-      font = "Monoid 8";
+      font = "Fira Code 8";
       markup = true;
       plain_text = false;
       format = "<b>%s</b>\n%b";
@@ -36,21 +36,18 @@
       frame_color = "#3B7C87";
       foreground = "#3B7C87";
       background = "#191311";
-      #background = "#2B313C";
       timeout = 4;
     };
     urgency_normal = {
       frame_color = "#5B8234";
       foreground = "#5B8234";
       background = "#191311";
-      #background = "#2B313C";
       timeout = 6;
     };
     urgency_critical = {
       frame_color = "#B7472A";
       foreground = "#B7472A";
       background = "#191311";
-      #background = "#2B313C";
       timeout = 8;
     };
   };
