@@ -8,7 +8,10 @@
 (setq doom-font (font-spec :family "Source Code Pro" :size 30))
 (setq doom-theme 'doom-spacegrey)
 
-;; (setq magit-git-executable "C:\\Program Files\\Git\\cmd\\git.exe")
+(defconst my/opacity 99)
+(set-frame-parameter (selected-frame) 'alpha my/opacity)
+(add-to-list 'default-frame-alist `(alpha . ,my/opacity))
+
 (defvar git-bash-executable "C:\\Program Files\\Git\\git-bash.exe")
 (defun git-bash ()
   (interactive)
@@ -71,23 +74,23 @@
  :leader
 
  (:desc "M-x"
-   "<SPC>"
-   #'counsel-M-x)
+  "<SPC>"
+  #'counsel-M-x)
 
  (:desc "Comment"
-   ";"
-   #'evilnc-comment-operator)
+  ";"
+  #'evilnc-comment-operator)
 
  (:desc "Open git bash"
-   "oog"
-   #'git-bash)
+  "oog"
+  #'git-bash)
  (:desc "Open cmd"
-   "ooc"
-   #'cmd)
+  "ooc"
+  #'cmd)
 
  (:desc "Evil no highlight"
-   "sc"
-   #'evil-ex-nohighlight))
+  "sc"
+  #'evil-ex-nohighlight))
 
 (evil-snipe-mode 0)
 
