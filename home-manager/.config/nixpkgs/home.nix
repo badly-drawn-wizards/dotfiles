@@ -147,11 +147,11 @@ in
         #!/bin/zsh
         export PATH="$HOME/.local/bin:$PATH"
       '';
-      "./local/bin/ff".text = ''
+      "./.local/bin/ff".text = ''
         #!/bin/sh
         exec firefox
       '';
-      "./local/bin/em".text = ''
+      "./.local/bin/em".text = ''
         #!/bin/sh
         exec emacsclient -c -a "" $@
       '';
