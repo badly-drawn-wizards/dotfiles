@@ -5,7 +5,7 @@
   shellAliases = {
     t = "tmux attach || tmux new";
     vnix = "vim ~/.config/nixpkgs/";
-    vnixos = "sudo -E vim /etc/nixos/";
+    vnixos = "vim /etc/nixos/";
   };
   plugins = [
     {

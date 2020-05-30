@@ -48,6 +48,7 @@ in
     random-background = { 
       enable = true;
       imageDirectory = "%h/backgrounds";
+      interval = "20m";
     };
   };
 
@@ -72,7 +73,7 @@ in
       # write_stylus is better, but still shitty
       write_stylus xournal
 
-      # Plug n' play
+      # Plug 'n play
       udiskie
 
       # Charged with battery
