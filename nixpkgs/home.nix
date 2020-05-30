@@ -153,15 +153,9 @@ in
         #!/bin/zsh
         export PATH="$HOME/.local/bin:$PATH"
       '';
-      "./.local/bin/ff".text = ''
-        #!/bin/sh
-        exec firefox
-      '';
-      "./.local/bin/em".text = ''
-        #!/bin/sh
-        exec emacsclient -c -a "" $@
-      '';
-
+      "./.local/bin/ff".source = ./bin/ff;
+      "./.local/bin/em".source = ./bin/em;
+      "./.local/bin/random-background".source = ./bin/random-background;
     };
     stateVersion = "20.03";
   };
