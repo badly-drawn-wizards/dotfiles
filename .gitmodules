@@ -2,8 +2,8 @@
 	path = zsh/.antigen
 	url = https://github.com:/zsh-users/antigen.git
 [submodule "home-manager/home-manager"]
-	path = home-manager/home-manager
+	path = nixpkgs/home-manager
 	url = https://github.com/rycee/home-manager
 [submodule "home-manager/ohmyzsh"]
-	path = home-manager/.config/nixpkgs/ohmyzsh
+	path = nixpkgs/ohmyzsh
 	url = https://github.com/ohmyzsh/ohmyzsh.git

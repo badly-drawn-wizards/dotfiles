@@ -33,7 +33,7 @@ in
   programs = {
     home-manager = {
       enable = true;
-      path = "$HOME/dotfiles/home-manager/home-manager";
+      path = "${./home-manager}";
     };
     zsh = import ./zsh.nix { inherit pkgs; };
     i3status = import ./i3status.nix;
