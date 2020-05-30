@@ -75,11 +75,19 @@ in
       # write_stylus is better, but still shitty
       write_stylus xournal
 
-      # Shit that belongs in the system tray 
+      # Plug n' play
       udiskie
-      pasystray
-      blueman
+
+      # Charged with battery
       cbatticon
+
+      # I got the bluez
+      blueman
+
+      # Turn that dial to 11
+      pasystray pulsemixer
+
+      # Back that shit up
       dropbox
 
       # A marriage made in hell
@@ -90,7 +98,7 @@ in
       rxvt-unicode
 
       # Misc utilites
-      git ranger thefuck tree less pulsemixer
+      git ranger direnv thefuck tree less 
       htop pciutils
 
       # Gaaaaaaaaames (HMU if you play Celeste)

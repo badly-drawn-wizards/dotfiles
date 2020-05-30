@@ -38,8 +38,10 @@
   ];
   oh-my-zsh = {
     enable = true;
+    custom = "${./ohmyzsh}";
     theme = "candy";
     plugins = [ 
+      "direnv"
       "thefuck" 
       "git"
     ];
