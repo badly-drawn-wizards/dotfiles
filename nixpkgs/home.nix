@@ -1,12 +1,9 @@
-{ pkgs ? import <nixpkgs>, config, lib, ... }:
+{ pkgs ? import <nixpkgs>
+, config
+, lib
+, ... }:
 let
   i3-config = import ./i3.nix { inherit pkgs; };
-  doom-emacs = pkgs.callPackage 
-    (builtins.fetchTarball 
-      { 
-        url = https://github.com/vlaci/nix-doom-emacs/archive/master.tar.gz;
-      }) 
-    { doomPrivateDir = ./doom; };
 in
 {
   xsession = {
@@ -91,8 +88,8 @@ in
       dropbox
 
       # A marriage made in hell
-      #doom-emacs 
       vimHugeX
+      # doom-emacs is kept separately because of it's build time
 
       # Terminal stuff
       rxvt-unicode

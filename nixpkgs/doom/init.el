@@ -77,7 +77,9 @@
        pdf               ; pdf enhancements
 
        :lang
-       agda              ; types of types of types of types...
+       ;; These are currently failing with nix-doom-emacs
+       ;; agda              ; types of types of types of types...
+       ;; ocaml             ; an objective camel
        cc                ; C/C++/Obj-C madness
        clojure           ; java with a lisp
        csharp            ; unity, .NET, and mono shenanigans
@@ -90,7 +92,6 @@
        ledger            ; an accounting system in Emacs
        markdown          ; writing docs for people to ignore
        nix               ; I hereby declare "nix geht mehr!"
-       ocaml             ; an objective camel
        (org              ; organize your plain life in plain text
         +pomodoro        ; be fruitful with the tomato technique
         +present)        ; using org-mode for presentations

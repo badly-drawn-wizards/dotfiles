@@ -1,10 +1,12 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
+;;; Code:
+
 (setq user-full-name "Reuben Steenekamp"
       user-mail-address "reuben.steenekamp@smsportal.com")
 
-(setq doom-font (font-spec :family "monoid" :size 10))
-(setq doom-theme 'doom-one)
+(setq doom-font (font-spec :family "Source Code Pro" :size 30))
+(setq doom-theme 'doom-spacegrey)
 
 ;; (setq magit-git-executable "C:\\Program Files\\Git\\cmd\\git.exe")
 (defvar git-bash-executable "C:\\Program Files\\Git\\git-bash.exe")
@@ -53,9 +55,6 @@
 
 (after! editorconfig
   (editorconfig-mode 1))
-
-(after! magit
-  (require 'forge))
 
 (after! dante
   (setq dante-methods '(new-build bare-ghci)))

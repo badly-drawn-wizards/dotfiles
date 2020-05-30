@@ -1,6 +1,15 @@
 {
   allowUnfree = true;
   packageOverrides = pkgs: {
+    doom-emacs = pkgs.callPackage 
+      (builtins.fetchTarball 
+        { 
+          url = https://github.com/vlaci/nix-doom-emacs/archive/master.tar.gz;
+        }) 
+      { 
+        doomPrivateDir = ./doom; 
+        extraPackages = epkgs: [ epkgs.doom-themes ];
+      };
     calibre = pkgs.symlinkJoin {
       name = "calibre";
       paths = [ pkgs.calibre ];
