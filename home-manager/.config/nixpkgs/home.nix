@@ -109,6 +109,16 @@ in
       ".tmux.conf".text = ''
         set-window-option -g mode-keys vi 
       '';
+      ".gitconfig".text = ''
+        [user]
+          email = reuben.steenekamp@gmail.com
+          name = Reuben Steenekamp
+        [push]
+          default = simple
+        [rebase]
+          autostash = true
+          autosquash = true
+      '';
     };
     stateVersion = "20.03";
   };
