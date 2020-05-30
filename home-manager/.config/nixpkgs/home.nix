@@ -6,7 +6,7 @@ let
       { 
         url = https://github.com/vlaci/nix-doom-emacs/archive/master.tar.gz;
       }) 
-    { doomPrivateDir = ./doom.d; };
+    { doomPrivateDir = ./doom; };
 in
 {
   xsession = {
@@ -83,7 +83,8 @@ in
       dropbox
 
       # A marriage made in hell
-      emacs vim
+      #doom-emacs 
+      vimHugeX
 
       # Terminal stuff
       rxvt-unicode
@@ -95,6 +96,11 @@ in
       # Gaaaaaaaaames (HMU if you play Celeste)
       # Right now steam doesn't like my laptop, but I will be back with a vengence.
       steam
+
+      # *Stands on table* 
+      # OCaml, my caml
+      ocaml dune
+
     ];
     sessionVariables = {
       PAGER = "less";
