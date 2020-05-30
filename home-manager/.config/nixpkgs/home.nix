@@ -1,6 +1,12 @@
 { pkgs ? import <nixpkgs>, config, lib, ... }:
 let
   i3-config = import ./i3.nix { inherit pkgs; };
+  doom-emacs = pkgs.callPackage 
+    (builtins.fetchTarball 
+      { 
+        url = https://github.com/vlaci/nix-doom-emacs/archive/master.tar.gz;
+      }) 
+    { doomPrivateDir = ./doom.d; };
 in
 {
   xsession = {
@@ -95,10 +101,8 @@ in
       EDITOR = "vim";
     };
     file = {
-      ".zprofile".text = ''
-        #!/bin/zsh
-        export PATH="$HOME/.local/bin:$PATH"
-      '';
+
+
       ".vimrc".text = ''
         set tabstop=2
         set shiftwidth=2
@@ -106,6 +110,11 @@ in
         set autochdir
         set tags=./tags,tags
       '';
+      ".ideavimrc".source = ./.ideavimrc;
+      ".emacs.d/init.el".text = ''
+        (load "default.el")
+      '';
+
       ".tmux.conf".text = ''
         set-window-option -g mode-keys vi 
       '';
@@ -126,6 +135,21 @@ in
 
         IdentityFile ~/.ssh/id_rsa
       '';
+
+      
+      ".zprofile".text = ''
+        #!/bin/zsh
+        export PATH="$HOME/.local/bin:$PATH"
+      '';
+      "./local/bin/ff".text = ''
+        #!/bin/sh
+        exec firefox
+      '';
+      "./local/bin/em".text = ''
+        #!/bin/sh
+        exec emacsclient -c -a "" $@
+      '';
+
     };
     stateVersion = "20.03";
   };

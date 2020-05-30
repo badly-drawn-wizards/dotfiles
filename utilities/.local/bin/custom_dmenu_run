@@ -1,7 +1,0 @@
-#!/bin/sh
-
-dark00=212026
-dark02=444155
-base05=b8b8b8
-dmenu_run -p "❤ ☮" -fn "Source Code Pro" -nb "#$dark00" -nf "#$base05" -sb "#$dark02" -sf "#$base05"
-

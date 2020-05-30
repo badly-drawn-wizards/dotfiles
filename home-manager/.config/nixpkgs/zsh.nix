@@ -2,7 +2,6 @@
 {
   enable = true;
   enableAutosuggestions = true;
-  defaultKeymap = "viins";
   shellAliases = {
     t = "tmux attach || tmux new";
     vnix = "vim ~/.config/nixpkgs/";
@@ -50,6 +49,7 @@
   initExtra = ''
     stty -ixon
     zstyle ':completion:*' list-colors
+    bindkey -v
     bindkey "^P" history-search-backward
     bindkey "^N" history-search-forward
     bindkey "^R" history-incremental-pattern-search-backward
