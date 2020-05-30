@@ -17,7 +17,7 @@ let
   };
   mod = "Mod4";
   dmenu-run = 
-    ''${pkgs.dmenu}/bin/dmenu_run -p "❤ ☮" -fn "Source Code Pro" -nb "#${dark00}" -nf "#${base05}" -sb "#${dark02}" -sf "#${base05}"'';
+    ''${pkgs.dmenu}/bin/dmenu_run -p "❤ ☮" -fn "Fira Code 20" -nb "#${dark00}" -nf "#${base05}" -sb "#${dark02}" -sf "#${base05}"'';
 in
 {
   enable = true;
@@ -64,8 +64,12 @@ in
         (key: dir: 
           nameValuePair "${mod}+Ctrl+${key}" ''exec ${rotate-script}/bin/rotate-script ${dir} ${getAttr dir transform-xinput}'') 
         dir-xrandr;
+        
+      other-keybinds = {
+        "${mod}+b" = "exec random-background";
+      };
 
-    in lib.mkOptionDefault (focus-keybinds // move-keybinds // rotate-keybinds);
+    in lib.mkOptionDefault (focus-keybinds // move-keybinds // rotate-keybinds // other-keybinds);
     colors = {
       focused = mkColorSet base02 base05;
       focusedInactive = mkColorSet base00 base0E;

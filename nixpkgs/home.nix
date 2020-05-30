@@ -55,7 +55,7 @@ in
   home = {
     packages = with pkgs; [
       # Lose da mouse with style
-      i3-gaps
+      i3-gaps dmenu
       picom
 
       # Browser stuff
