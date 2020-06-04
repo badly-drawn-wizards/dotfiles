@@ -1,0 +1,3 @@
+[submodule "nixos/home-manager/ohmyzsh"]
+	path = nixos/home-manager/ohmyzsh
+	url = https://github.com/ohmyzsh/ohmyzsh.git
