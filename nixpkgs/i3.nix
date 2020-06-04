@@ -1,7 +1,12 @@
-{ pkgs ? import <nixpkgs> }:
-with import ./spacemacs-colors.nix; 
+{ pkgs ? import <nixpkgs>
+, config
+, ...
+}:
+startup-programs:
+with import ./spacemacs-colors.nix;
 with builtins;
-let 
+let
+  cfg = config.i3;
   inherit (pkgs) lib;
   mkColorSet = bg: txt: { 
     border = "#${bg}"; 
@@ -16,17 +21,29 @@ let
     text = "#${txt}"; 
   };
   mod = "Mod4";
+
   dmenu-run = 
     ''${pkgs.dmenu}/bin/dmenu_run -p "❤ ☮" -fn "Fira Code 20" -nb "#${dark00}" -nf "#${base05}" -sb "#${dark02}" -sf "#${base05}"'';
+
+  rofi-run = modi:
+    ''${pkgs.rofi}/bin/rofi -show ${modi}'';
+
+  rename-workspace = ''i3-input -F "rename workspace to %s"'';
+  move-to-workspace = ''i3-input -F "move %s"'';
+
 in
 {
   enable = true;
   package = pkgs.i3-gaps;
   config = {
+    startup = map (command: { inherit command; }) startup-programs;
     fonts = [ "Font Awesome 8" "Fira Code 8" ];
     modifier = mod;
-    menu = dmenu-run;
-    focus = { mouseWarping = false; };
+    menu = rofi-run "run";
+    focus = {
+      mouseWarping = false;
+      followMouse = false;
+    };
     gaps = {
       inner = 5;
     };
@@ -54,11 +71,18 @@ in
         "inverted" = "-1 0 1 0 -1 1 0 0 1";
         "normal" = "1 0 0 0 1 0 0 0 1";
       };
-      touchscreen = "pointer:ELAN2514:00 04F3:29F5";
+      rotated-inputs = [
+        "pointer:ELAN2514:00 04F3:29F5"
+        "pointer:ELAN2514:00 04F3:29F5 Pen (0)"
+      ];
+      xinput-commands =
+        lib.concatMapStrings
+          (input: "echo $@ | xargs xinput set-prop ${input} 'Coordinate Transformation Matrix'")
+          rotated-inputs;
       rotate-script = pkgs.writeScriptBin "rotate-script" ''
         xrandr -o $1
         shift
-        echo $@ | xargs xinput set-prop "${touchscreen}" 'Coordinate Transformation Matrix'
+        ${xinput-commands}
       '';
       rotate-keybinds = mapAttrs' 
         (key: dir: 
@@ -66,7 +90,15 @@ in
         dir-xrandr;
         
       other-keybinds = {
-        "${mod}+b" = "exec random-background";
+        "${mod}+Shift+-" = "move scratchpad";
+        "${mod}+-" = "scratchpad show";
+
+        "${mod}+r" = "exec ${rename-workspace}";
+        "${mod}+m" = "exec ${move-to-workspace}";
+        "${mod}+i" = "exec em";
+        "${mod}+o" = "exec ${rofi-run "workspace"}";
+        "${mod}+p" = "exec ${rofi-run "window"}";
+
       };
 
     in lib.mkOptionDefault (focus-keybinds // move-keybinds // rotate-keybinds // other-keybinds);

@@ -1,11 +1,26 @@
 { config, pkgs, ... }:
 
+let
+  sources = import ./nix/sources.nix;
+in
 {
   imports =
     [
       ./cachix.nix
       ./custom-hardware-configuration.nix
     ];
+
+  nixpkgs = {
+    config = {
+      allowUnfree = true;
+      packageOverrides = pkgs: {
+        # From https://nixos.wiki/wiki/Accelerated_Video_Playback
+        vaapiIntel = pkgs.vaapiIntel.override {
+          enableHybridCodec = true;
+        };
+      };
+    };
+  };
 
   boot = {
     loader = {
@@ -14,8 +29,13 @@
     };
 
     kernelPackages = pkgs.linuxPackagesFor pkgs.linux_latest;
-    kernelModules = [ "wl" ];
+    kernelModules = [ "wl" "kvm-intel" ];
     initrd.kernelModules = [ "wl" "dm-raid" "dm-snapshot" ];
+
+    # TODO Determine whether this actually does anything
+    extraModprobeConfig = ''
+      option snd_hda_intel enable=true model=laptop-amic
+    '';
     
     extraModulePackages = [ ];
     cleanTmpDir = true;
@@ -23,9 +43,16 @@
     supportedFilesystems = [ "ntfs" ];
   };
 
+  virtualisation = {
+    libvirtd.enable = true;
+    virtualbox.host.enable = true;
+  };
+
   networking = {
     hostName = "noobnoob";
     networkmanager.enable = true;
+    extraHosts =
+      import ./spotify-sinkhole-hosts.nix;
   };
 
   i18n.defaultLocale = "en_US.UTF-8";
@@ -62,6 +89,10 @@
       zsh
       direnv
     ];
+    variables = {
+      MESA_LOADER_DRIVER_OVERRIDE = "iris";
+    };
+    pathsToLink = [ "/" ];
   };
 
   sound.enable = true;
@@ -78,17 +109,55 @@
     sensor = {
       iio.enable = true;
     };
+    # From
+    # https://nixos.wiki/wiki/Intel_Graphics 
+    opengl = {
+      enable = true;
+      driSupport32Bit = true;
+      extraPackages = with pkgs; [
+        vaapiIntel
+        vaapiVdpau
+        libvdpau-va-gl
+        intel-media-driver
+      ];
+      package = (pkgs.mesa.override {
+        galliumDrivers = [ "nouveau" "virgl" "swrast" "iris" ];
+      }).drivers;
+    };
+  };
+
+  security.sudo = {
+    enable = true;
+    # This doesn't take precedence, I need to investigate.
+    extraRules = [
+      {
+        groups = [ "wheel" ];
+        commands = [{ command = "ALL"; options = ["SETENV" "NOPASSWD"]; }];
+      }
+    ];
+  };
+
+  users = {
+    users.reuben = {
+      isNormalUser = true;
+      extraGroups = [ "wheel" "networkmanager" "audio" "video" "systemd-journal" ];
+    };
+    defaultUserShell = "/run/current-system/sw/bin/zsh";
   };
 
   services = {
     lorri.enable = true;
-    printing.enable = true;
     devmon.enable = true;
     blueman.enable = true;
+    printing = {
+      enable = true;
+      drivers = with pkgs; [
+        gutenprint
+        gutenprintBin
+      ];
+    };
     xserver = {
       enable = true;
-
-      videoDrivers = [ "intel" ];
 
       displayManager.startx.enable = true;
 
@@ -104,32 +173,13 @@
       enable = true;
       packages = with pkgs; [ blueman ];
     };
-  };
-
-  virtualisation = {
-    virtualbox.host.enable = true;
-  };
-
-  security.sudo = {
-    enable = true;
-    # This doesn't take precedence, I need to investigate.
-    extraRules = [
-      { 
-        groups = [ "wheel" ];
-        commands = [{ command = "ALL"; options = ["SETENV" "NOPASSWD"]; }];
-      }
-    ];
-  };
-
-  users = {
-    users.reuben = {
-      isNormalUser = true;
-      extraGroups = [ "wheel" "networkmanager" "audio" "video" "systemd-journal" ];
+    udev = {
+      extraHwdb = ''
+       evdev:input:b0018v04F3p29F5e0100*
+        KEYBOARD_KEY_141=f12
+      '';
     };
-    defaultUserShell = "/run/current-system/sw/bin/zsh";
   };
-
-  nixpkgs.config.allowUnfree = true;
 
   # Remember to check docs before considering changing this
   system.stateVersion = "20.03";

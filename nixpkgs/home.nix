@@ -1,25 +1,23 @@
-{ pkgs ? import <nixpkgs>
+{ pkgs
 , config
 , lib
-, ... }:
+, ...
+}@args:
+with builtins;
 let
-  i3-config = import ./i3.nix { inherit pkgs; };
+  startup-programs = with pkgs; [
+    "${pkgs.pasystray}/bin/pasystray"
+    "${pkgs.blueman}/bin/blueman-applet"
+    "${pkgs.dropbox}/bin/dropbox"
+  ];
+  i3-config = import ./i3.nix args startup-programs;
+  load-xresources = "xrdb -merge .Xresources";
 in
 {
   xsession = {
     enable = true;
     scriptPath = ".xinitrc";
-    initExtra = ''
-      xrdb -merge .Xresources
-      udiskie &
-      cbatticon &
-      pasystray &
-      blueman-applet &
-      dropbox &
-      
-      # TODO find out why picom option doesn't work
-      picom &
-    '';
+    initExtra = load-xresources;
     windowManager.i3 = i3-config;
   };
 
@@ -30,54 +28,80 @@ in
   programs = {
     home-manager = {
       enable = true;
-      path = "${./home-manager}";
+      #path = sources.home-manager.outPath;
     };
-    zsh = import ./zsh.nix { inherit pkgs; };
+
+    firefox = import ./firefox.nix;
+
+    zsh = import ./zsh.nix args;
+    rofi = import ./rofi.nix args;
+
     i3status = import ./i3status.nix;
   };
   
   xresources = import ./xresources.nix;
 
   services = {
-    dunst = import ./dunst.nix { inherit pkgs; };
-    udiskie.enable = true;
-    pasystray.enable = true;
-    blueman-applet.enable = true;
+    # Give me those notifications
+    dunst = import ./dunst.nix args;
+
+    # Transparent windows and free of artifacts
+    picom.enable = true;
+
+    # Screensavers so interesting they
+    # make me not want to use my laptop
+    xscreensaver = {
+      enable = true;
+    };
+
+    udiskie = {
+      enable = true;
+      tray = "always";
+    };
+
     network-manager-applet.enable = true;
     gpg-agent.enable = true;
     random-background = { 
       enable = true;
+      
       imageDirectory = "%h/backgrounds";
       interval = "20m";
     };
   };
 
+  nixpkgs = {
+    config = {
+      # Yes, I am an unprincipled swine. Fight me RMS.
+      allowUnfree = true;
+
+      firefox = {
+        enableTridactylNative = true;
+        ffmpegSupport = true;
+      };
+    };
+  };
+
   home = {
     packages = with pkgs; [
+      # Information super highway
+      firefox
+
       # Lose da mouse with style
       i3-gaps dmenu
       picom
 
-      # Browser stuff
-      firefox
-
       # Chat with some folks
-      zoom-us discord
+      zoom-us discord riot-desktop slack
 
       # Reading some mafths
       mupdf
       calibre
 
-      # Maybe I will actually end up using these
-      # xournal is very shitty on high DPI displays
-      # write_stylus is better, but still shitty
-      write_stylus xournal
+      # Write some mafths
+      write_stylus xournal dia
 
       # Plug 'n play
       udiskie
-
-      # Charged with battery
-      cbatticon
 
       # I got the bluez
       blueman
@@ -90,27 +114,34 @@ in
 
       # A marriage made in hell
       vimHugeX
-      # doom-emacs is kept separately because of it's build time
 
       # Terminal stuff
-      rxvt-unicode
+      rxvt-unicode tmux
 
       # Misc utilites
-      git ranger direnv thefuck tree less 
+      git ranger direnv thefuck tree less jq
       htop pciutils
 
       # Gaaaaaaaaames (HMU if you play Celeste)
-      # Right now steam doesn't like my laptop, but I will be back with a vengence.
       steam
+
+      # 12k skips / hour = 3.5 skips / second
+      # Impressive if wasn't grating to my ears.
+      spotify
 
       # *Stands on table* 
       # OCaml, my caml
       ocaml dune
 
+      # A window into windows
+      virt-viewer
+
+      # Streaming my life
+      obs-studio
     ];
     sessionVariables = {
       PAGER = "less";
-      EDITOR = "vim";
+      EDITOR = "em";
     };
     file = {
 
@@ -148,14 +179,21 @@ in
         IdentityFile ~/.ssh/id_rsa
       '';
 
-      
-      ".zprofile".text = ''
-        #!/bin/zsh
-        export PATH="$HOME/.local/bin:$PATH"
-      '';
-      "./.local/bin/ff".source = ./bin/ff;
-      "./.local/bin/em".source = ./bin/em;
+      ".profile".source = ./.profile;
+      ".zprofile".source = ./.profile;
       "./.local/bin/random-background".source = ./bin/random-background;
+
+      "./.local/bin/em".source =
+        let
+          em-path =
+            pkgs.writeScriptBin "em" ''
+              #!/bin/sh
+              ${pkgs.emacs}/bin/emacsclient -c -a "" $@
+            '';
+        in
+        "${em-path}/bin/em";
+      
+      ".xscreensaver".source = ./.xscreensaver;
     };
     stateVersion = "20.03";
   };

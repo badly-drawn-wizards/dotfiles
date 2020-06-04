@@ -1,0 +1,50 @@
+{
+    "home-manager": {
+        "branch": "master",
+        "description": "Manage a user environment using Nix",
+        "homepage": "https://rycee.gitlab.io/home-manager/",
+        "owner": "rycee",
+        "repo": "home-manager",
+        "rev": "a21c97d0113ebc43983ff688b2d9abddd07d6f6e",
+        "sha256": "0bqbpp1k5a8wws8ls3hi32pmm9flbjnffgjkr5lb654nwib8ifxl",
+        "type": "tarball",
+        "url": "https://github.com/rycee/home-manager/archive/a21c97d0113ebc43983ff688b2d9abddd07d6f6e.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "niv": {
+        "branch": "master",
+        "description": "Easy dependency management for Nix projects",
+        "homepage": "https://github.com/nmattia/niv",
+        "owner": "nmattia",
+        "repo": "niv",
+        "rev": "f73bf8d584148677b01859677a63191c31911eae",
+        "sha256": "0jlmrx633jvqrqlyhlzpvdrnim128gc81q5psz2lpp2af8p8q9qs",
+        "type": "tarball",
+        "url": "https://github.com/nmattia/niv/archive/f73bf8d584148677b01859677a63191c31911eae.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "nixpkgs": {
+        "branch": "master",
+        "description": "Nix Packages collection",
+        "homepage": null,
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "4f9053c6050e958205be41a6cd3a71a279ef5fa5",
+        "sha256": "0znnm1ws126xmr07n8b0bb1zjmk2b3wpys2k4yxw9phl41zd044z",
+        "type": "tarball",
+        "url": "https://github.com/NixOS/nixpkgs/archive/4f9053c6050e958205be41a6cd3a71a279ef5fa5.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "pkgs-forked": {
+        "branch": "master",
+        "description": "A read-only mirror of NixOS/nixpkgs tracking the released channels. Send issues and PRs to",
+        "homepage": "https://github.com/NixOS/nixpkgs",
+        "owner": "badly-drawn-wizards",
+        "repo": "nixpkgs",
+        "rev": "052fa90e82d01e866c9a130d58f1a72fc007c4ac",
+        "sha256": "1s3bydlj1nccyqq2vmi0qgh5sjr0pqvikk3q3s1bf95r9mhmcfy9",
+        "type": "tarball",
+        "url": "https://github.com/badly-drawn-wizards/nixpkgs/archive/052fa90e82d01e866c9a130d58f1a72fc007c4ac.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    }
+}

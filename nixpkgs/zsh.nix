@@ -1,11 +1,13 @@
-{ pkgs ? import <nixpkgs> }:
+{ pkgs ? import <nixpkgs>
+, ... 
+}:
 {
   enable = true;
   enableAutosuggestions = true;
   shellAliases = {
     t = "tmux attach || tmux new";
     vnix = "ranger $HOME/.config/nixpkgs/";
-    vnixos = "ranger /etc/nixos/";
+    vnixos = "vim /etc/nixos/configuration.nix";
     doom-install = "nix-env -iA nixos.doom-emacs";
   };
   plugins = [
