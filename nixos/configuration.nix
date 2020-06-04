@@ -28,6 +28,7 @@ in
       efi.canTouchEfiVariables = true;
     };
 
+    kernelParams = [ "intel_iommu=on" ];
     kernelPackages = pkgs.linuxPackagesFor pkgs.linux_latest;
     kernelModules = [ "wl" "kvm-intel" ];
     initrd.kernelModules = [ "wl" "dm-raid" "dm-snapshot" ];
@@ -90,13 +91,14 @@ in
       direnv
     ];
     variables = {
-      MESA_LOADER_DRIVER_OVERRIDE = "iris";
+      #MESA_LOADER_DRIVER_OVERRIDE = "iris";
     };
     pathsToLink = [ "/" ];
   };
 
   sound.enable = true;
   hardware = {
+    cpu.intel.updateMicrocode = true;
     pulseaudio = {
       enable = true;
       extraModules = [ pkgs.pulseaudio-modules-bt ];
@@ -115,14 +117,17 @@ in
       enable = true;
       driSupport32Bit = true;
       extraPackages = with pkgs; [
+        libva-full
+        intel-media-driver
+        intel-compute-runtime
+
         vaapiIntel
         vaapiVdpau
         libvdpau-va-gl
-        intel-media-driver
       ];
-      package = (pkgs.mesa.override {
-        galliumDrivers = [ "nouveau" "virgl" "swrast" "iris" ];
-      }).drivers;
+      # package = (pkgs.mesa.override {
+      #   galliumDrivers = [ "nouveau" "virgl" "swrast" "iris" ];
+      # }).drivers;
     };
   };
 
@@ -165,6 +170,7 @@ in
       xkbOptions = "caps:swapescape";
       libinput.enable = true;
 
+      useGlamor = true;
     };
     logind.extraConfig = ''
       HandlePowerKey=ignore
