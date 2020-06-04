@@ -2,87 +2,30 @@
 
 let
   sources = import ./nix/sources.nix;
+  home-manager = import ./home-manager;
 in
 {
   imports =
     [
       ./cachix.nix
-      ./custom-hardware-configuration.nix
+      ./hardware
+      ./graphics
+      ./audio
+      ./networking
+      ./fonts
+      ./overrides
+      "${sources.home-manager}/nixos"
     ];
 
-  nixpkgs = {
-    config = {
-      allowUnfree = true;
-      packageOverrides = pkgs: {
-        # From https://nixos.wiki/wiki/Accelerated_Video_Playback
-        vaapiIntel = pkgs.vaapiIntel.override {
-          enableHybridCodec = true;
-        };
-      };
-    };
-  };
-
-  boot = {
-    loader = {
-      systemd-boot.enable = true;
-      efi.canTouchEfiVariables = true;
-    };
-
-    kernelParams = [ "intel_iommu=on" ];
-    kernelPackages = pkgs.linuxPackagesFor pkgs.linux_latest;
-    kernelModules = [ "wl" "kvm-intel" ];
-    initrd.kernelModules = [ "wl" "dm-raid" "dm-snapshot" ];
-
-    # TODO Determine whether this actually does anything
-    extraModprobeConfig = ''
-      option snd_hda_intel enable=true model=laptop-amic
-    '';
-    
-    extraModulePackages = [ ];
-    cleanTmpDir = true;
-
-    supportedFilesystems = [ "ntfs" ];
-  };
+  # Yes, I'm an unprincipled swine. Fight me RMS.
+  nixpkgs.config.allowUnfree = true;
 
   virtualisation = {
     libvirtd.enable = true;
-    virtualbox.host.enable = true;
-  };
-
-  networking = {
-    hostName = "noobnoob";
-    networkmanager.enable = true;
-    extraHosts =
-      import ./spotify-sinkhole-hosts.nix;
   };
 
   i18n.defaultLocale = "en_US.UTF-8";
 
-  console = {
-    packages = with pkgs; [ terminus_font ];
-    keyMap = "us";
-    font = "ter-i32b";
-    earlySetup = true;
-  };
-
-  fonts = {
-    fonts = with pkgs; [
-      fira-code
-      fira-code-symbols
-      font-awesome
-      emacs-all-the-icons-fonts
-      source-code-pro
-      noto-fonts
-      noto-fonts-emoji
-    ];
-    enableDefaultFonts = true;
-    fontconfig = {
-      defaultFonts = {
-        monospace = [ "Fira Code" ];
-      };
-    };
-  };
-    
   time.timeZone = "Africa/Johannesburg";
 
   environment = {
@@ -90,50 +33,11 @@ in
       zsh
       direnv
     ];
-    variables = {
-      #MESA_LOADER_DRIVER_OVERRIDE = "iris";
-    };
-    pathsToLink = [ "/" ];
-  };
-
-  sound.enable = true;
-  hardware = {
-    cpu.intel.updateMicrocode = true;
-    pulseaudio = {
-      enable = true;
-      extraModules = [ pkgs.pulseaudio-modules-bt ];
-      package = pkgs.pulseaudioFull;
-      support32Bit = true;
-    };
-    bluetooth = {
-      enable = true;
-    };
-    sensor = {
-      iio.enable = true;
-    };
-    # From
-    # https://nixos.wiki/wiki/Intel_Graphics 
-    opengl = {
-      enable = true;
-      driSupport32Bit = true;
-      extraPackages = with pkgs; [
-        libva-full
-        intel-media-driver
-        intel-compute-runtime
-
-        vaapiIntel
-        vaapiVdpau
-        libvdpau-va-gl
-      ];
-      # package = (pkgs.mesa.override {
-      #   galliumDrivers = [ "nouveau" "virgl" "swrast" "iris" ];
-      # }).drivers;
-    };
   };
 
   security.sudo = {
     enable = true;
-    # This doesn't take precedence, I need to investigate.
+    # TODO This doesn't take precedence, I need to investigate.
     extraRules = [
       {
         groups = [ "wheel" ];
@@ -149,11 +53,14 @@ in
     };
     defaultUserShell = "/run/current-system/sw/bin/zsh";
   };
+  home-manager.users.reuben = home-manager;
 
   services = {
     lorri.enable = true;
     devmon.enable = true;
     blueman.enable = true;
+
+    # TODO Get printing with Pixma G4411
     printing = {
       enable = true;
       drivers = with pkgs; [
@@ -161,6 +68,7 @@ in
         gutenprintBin
       ];
     };
+
     xserver = {
       enable = true;
 
@@ -170,8 +78,10 @@ in
       xkbOptions = "caps:swapescape";
       libinput.enable = true;
 
+      # TODO Find out what this is
       useGlamor = true;
     };
+
     logind.extraConfig = ''
       HandlePowerKey=ignore
     '';
@@ -180,6 +90,7 @@ in
       packages = with pkgs; [ blueman ];
     };
     udev = {
+      # TODO Get HP Active Pen rubber button working
       extraHwdb = ''
        evdev:input:b0018v04F3p29F5e0100*
         KEYBOARD_KEY_141=f12
