@@ -22,10 +22,34 @@
   (let ((proc (start-process "cmd" nil "cmd.exe" "/C" "start" "cmd.exe")))
     (set-process-query-on-exit-flag proc nil)))
 
+(defvar pomodoro-espeak--compliments
+  '("you sexy beast"
+    "you coding machine"
+    "you beautiful mind"
+    "now have some fun"
+    "have a break"))
+
+(defun pomodoro-espeak/speak (msg)
+  (start-process "pomodoro-espeak" nil "espeak" msg))
+
+(defun pomodoro-espeak/pomodoro-over ()
+  (let*
+      ((compliment (seq-random-elt pomodoro-espeak--compliments))
+       (msg (format "Pomodoro is over %s" compliment)))
+    (pomodoro-espeak/speak msg)))
+
+(defun pomodoro-espeak/pomodoro-break-over ()
+  (pomodoro-espeak/speak "Break is over. Back to work."))
+
+(after! org-pomodoro
+  (setq org-pomodoro-play-sounds nil)
+  (add-hook 'org-pomodoro-finished-hook #'pomodoro-espeak/pomodo-over)
+  (add-hook 'org-pomodoro-break-finished-hook #'pomodoro-espeak/pomodoro-break-over))
+
 (after! org
   (setq org-directory "~/org/")
   (setq org-capture-templates
-      '(("t" "Personal todo" entry
+        '(("t" "Personal todo" entry
            (file+headline +org-capture-todo-file "Inbox")
            "* TODO %?\n%i" :prepend t)
           ("n" "Personal notes" entry
@@ -80,6 +104,13 @@
  (:desc "Comment"
   ";"
   #'evilnc-comment-operator)
+
+ (:desc "jump"
+  "j")
+ ("jj"
+  #'evil-ace-jump-char-mode)
+ ("jl"
+  #'evil-ace-jump-line-mode)
 
  (:desc "Open git bash"
   "oog"

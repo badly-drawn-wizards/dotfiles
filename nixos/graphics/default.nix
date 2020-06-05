@@ -1,28 +1,30 @@
 { config, lib, pkgs, ... }:
 
+# This whole thing is just me throw shit at the wall
+# and seeing what sticks.
+#
+# Later I'll get into understanding MESA better.
+
 {
-    # From
     # https://nixos.wiki/wiki/Intel_Graphics
     # TODO Get vainfo to work with iris
     hardware.opengl = {
       enable = true;
       driSupport32Bit = true;
       extraPackages = with pkgs; [
-        libva-full
-        intel-media-driver
-        intel-compute-runtime
-
-        vaapiVdpau
         vaapiIntel
-        vaapi-intel-hybrid
+        vaapiVdpau
         libvdpau-va-gl
       ];
-      package = (pkgs.mesa.override {
-        galliumDrivers = [ "nouveau" "virgl" "swrast" "iris" ];
-      }).drivers;
+      extraPackages32 = with pkgs.pkgsi686Linux; [
+        vaapiIntel
+        vaapiVdpau
+        libvdpau-va-gl
+      ];
     };
 
     environment.variables = {
-      MESA_LOADER_DRIVER_OVERRIDE = "iris";
+      # # TODO Figure out how to get mesa iris drivers working.
+      # MESA_LOADER_DRIVER_OVERRIDE = "iris";
     };
 }

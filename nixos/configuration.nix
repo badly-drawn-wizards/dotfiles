@@ -13,7 +13,6 @@ in
       ./audio
       ./networking
       ./fonts
-      ./overrides
       "${sources.home-manager}/nixos"
     ];
 
@@ -85,16 +84,18 @@ in
     logind.extraConfig = ''
       HandlePowerKey=ignore
     '';
+
     dbus = {
       enable = true;
       packages = with pkgs; [ blueman ];
     };
+
     udev = {
       # TODO Get HP Active Pen rubber button working
-      extraHwdb = ''
-       evdev:input:b0018v04F3p29F5e0100*
-        KEYBOARD_KEY_141=f12
-      '';
+      # extraHwdb = ''
+      #  evdev:input:b0018v04F3p29F5e0100*
+      #   KEYBOARD_KEY_141=f12
+      # '';
     };
   };
 

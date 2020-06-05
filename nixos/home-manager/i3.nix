@@ -3,6 +3,7 @@
 , ...
 }:
 startup-programs:
+wm-name:
 with import ./spacemacs-colors.nix;
 with builtins;
 let
@@ -29,14 +30,42 @@ let
     ''${pkgs.rofi}/bin/rofi -show ${modi}'';
 
   rename-workspace = ''i3-input -F "rename workspace to %s"'';
-  move-to-workspace = ''i3-input -F "move %s"'';
+  assigns = {
+    " web" = [
+      { class = "^Firefox$"; }
+    ];
+    " read" = [
+      { class = "^calibre$"; }
+      { class = "^MuPdf$"; }
+      { class = "^okular$"; }
+    ];
+    " chat" = [
+      { class = "^discord$"; }
+      { class = "^Riot$"; }
+      { class = "^Slack$"; }
+    ];
+    " music" = [
+      { instance = "^spotify$"; }
+    ];
+    " write" = [
+      { class = "^Write$"; }
+      { class = "^Xournal$"; }
+      { class = "^Dia$"; }
+    ];
+  };
 
 in
 {
   enable = true;
   package = pkgs.i3-gaps;
   config = {
-    startup = map (command: { inherit command; }) startup-programs;
+    startup = map
+      (command: {
+        inherit command;
+      } // lib.optionalAttrs (wm-name == "i3") {
+        notification = false;
+      })
+      startup-programs;
     fonts = [ "Font Awesome 8" "Fira Code 8" ];
     modifier = mod;
     menu = rofi-run "run";
@@ -47,6 +76,7 @@ in
     gaps = {
       inner = 5;
     };
+    inherit assigns;
     keybindings = with lib.attrsets; let
 
       # Usual i3 movement
@@ -75,9 +105,10 @@ in
         "pointer:ELAN2514:00 04F3:29F5"
         "pointer:ELAN2514:00 04F3:29F5 Pen (0)"
       ];
+      matrix-prop = "Coordinate Transformation Matrix";
       xinput-commands =
         lib.concatMapStrings
-          (input: "echo $@ | xargs xinput set-prop '${input}' 'Coordinate Transformation Matrix'\n")
+          (input: "echo $@ | xargs xinput set-prop \"${input}\" \"${matrix-prop}\"\n")
           rotated-inputs;
       rotate-script = pkgs.writeScriptBin "rotate-script" ''
         xrandr -o $1
@@ -94,9 +125,9 @@ in
         "${mod}+-" = "scratchpad show";
 
         "${mod}+r" = "exec ${rename-workspace}";
-        "${mod}+m" = "exec ${move-to-workspace}";
         "${mod}+i" = "exec em";
         "${mod}+o" = "exec ${rofi-run "workspace"}";
+        "${mod}+Shift+o" = "exec ${rofi-run "move"}";
         "${mod}+p" = "exec ${rofi-run "window"}";
 
       };

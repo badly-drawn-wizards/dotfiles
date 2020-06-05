@@ -6,6 +6,17 @@
 with builtins;
 let
   startup-programs = with pkgs; [
+
+    "${pkgs.firefox}/bin/firefox"
+
+    "${pkgs.calibre}/bin/calibre"
+
+    "${pkgs.write_stylus}/bin/Write"
+
+    "${pkgs.riot-desktop}/bin/riot-desktop"
+    "${pkgs.discord}/bin/Discord"
+    "${pkgs.slack}/bin/slack"
+
     "${pkgs.pasystray}/bin/pasystray"
     "${pkgs.blueman}/bin/blueman-applet"
     "${pkgs.dropbox}/bin/dropbox"
@@ -14,15 +25,16 @@ let
   load-xresources = "xrdb -merge .Xresources";
 in
 {
+
   xsession = {
     enable = true;
     scriptPath = ".xinitrc";
     initExtra = load-xresources;
-    windowManager.i3 = i3-config;
+    windowManager.i3 = i3-config "i3";
   };
 
   wayland = {
-    windowManager.sway = i3-config;
+    windowManager.sway = i3-config "sway";
   };
 
   programs = {
@@ -69,17 +81,31 @@ in
     };
   };
 
-  # nixpkgs = {
-  #   config = {
-  #     # Yes, I am an unprincipled swine. Fight me RMS.
-  #     allowUnfree = true;
+  nixpkgs = {
+    overlays = [
+      (_:_: {
+      doom-emacs = pkgs.callPackage
+        (builtins.fetchTarball
+          {
+            url = https://github.com/vlaci/nix-doom-emacs/archive/master.tar.gz;
+          })
+        {
+          doomPrivateDir = ./doom;
+          extraPackages = epkgs: [ epkgs.doom-themes ];
+        };
+      })
+    ];
 
-  #     firefox = {
-  #       enableTridactylNative = true;
-  #       ffmpegSupport = true;
-  #     };
-  #   };
-  # };
+    config = {
+      # Yes, I am an unprincipled swine. Fight me RMS.
+      allowUnfree = true;
+
+      firefox = {
+        enableTridactylNative = true;
+        ffmpegSupport = true;
+      };
+    };
+  };
 
   home = {
     packages = with pkgs; [
@@ -138,14 +164,19 @@ in
 
       # Streaming my life
       obs-studio
+
+      # Tell me how it is
+      espeak
     ];
+
     sessionVariables = {
       PAGER = "less";
       EDITOR = "em";
+      MOZ_USE_XINPUT2 = "1";
+      CALIBRE_USE_DARK_PALETTE = "1";
     };
+
     file = {
-
-
       ".vimrc".text = ''
         set tabstop=2
         set shiftwidth=2
@@ -192,7 +223,7 @@ in
             '';
         in
         "${em-path}/bin/em";
-      
+
       ".xscreensaver".source = ./.xscreensaver;
     };
     stateVersion = "20.03";
