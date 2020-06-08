@@ -6,6 +6,7 @@
 with builtins;
 let
   startup-programs = with pkgs; [
+    "${pkgs.picom}/bin/picom --experimental-backends"
 
     "${pkgs.firefox}/bin/firefox"
 
@@ -17,9 +18,12 @@ let
     "${pkgs.discord}/bin/Discord"
     "${pkgs.slack}/bin/slack"
 
+    "${pkgs.onboard}/bin/onboard"
     "${pkgs.pasystray}/bin/pasystray"
     "${pkgs.blueman}/bin/blueman-applet"
     "${pkgs.dropbox}/bin/dropbox"
+
+    "$HOME/.local/bin/random-background"
   ];
   i3-config = import ./i3.nix args startup-programs;
   load-xresources = "xrdb -merge .Xresources";
@@ -40,7 +44,6 @@ in
   programs = {
     home-manager = {
       enable = true;
-      #path = sources.home-manager.outPath;
     };
 
     firefox = import ./firefox.nix;
@@ -50,21 +53,24 @@ in
 
     i3status = import ./i3status.nix;
   };
+
+  xdg = {
+    mimeApps = {
+      enable = true;
+      associations.added = {
+        "application/pdf" = [ "mupdf" ];
+      };
+      defaultApplications = {
+        "application/pdf" = [ "firefox.desktop" ];
+      };
+    };
+  };
   
   xresources = import ./xresources.nix;
 
   services = {
     # Give me those notifications
     dunst = import ./dunst.nix args;
-
-    # Transparent windows and free of artifacts
-    picom.enable = true;
-
-    # Screensavers so interesting they
-    # make me not want to use my laptop
-    xscreensaver = {
-      enable = true;
-    };
 
     udiskie = {
       enable = true;
@@ -82,6 +88,7 @@ in
   };
 
   nixpkgs = {
+
     overlays = [
       (_:_: {
       doom-emacs = pkgs.callPackage
@@ -109,9 +116,6 @@ in
 
   home = {
     packages = with pkgs; [
-      # Information super highway
-      firefox
-
       # Lose da mouse with style
       i3-gaps dmenu
       picom

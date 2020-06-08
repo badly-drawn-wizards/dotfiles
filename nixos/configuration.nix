@@ -16,10 +16,23 @@ in
       "${sources.home-manager}/nixos"
     ];
 
-  # Yes, I'm an unprincipled swine. Fight me RMS.
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs =  {
+    overlays = [
+      (_:_: {
+        niv-pkgs = import sources.nixpkgs {};
+      })
+    ];
+
+    # Yes, I'm an unprincipled swine. Fight me RMS.
+    config.allowUnfree = true;
+  };
 
   virtualisation = {
+    docker = {
+      enable = true;
+      enableOnBoot = true;
+    };
+
     libvirtd.enable = true;
   };
 
@@ -30,8 +43,8 @@ in
   environment = {
     systemPackages = with pkgs; [ 
       zsh
-      direnv
     ];
+    pathsToLink = [ "/" ];
   };
 
   security.sudo = {
@@ -48,7 +61,7 @@ in
   users = {
     users.reuben = {
       isNormalUser = true;
-      extraGroups = [ "wheel" "networkmanager" "audio" "video" "systemd-journal" ];
+      extraGroups = [ "wheel" "networkmanager" "audio" "video" "systemd-journal" "docker" ];
     };
     defaultUserShell = "/run/current-system/sw/bin/zsh";
   };
@@ -77,8 +90,6 @@ in
       xkbOptions = "caps:swapescape";
       libinput.enable = true;
 
-      # TODO Find out what this is
-      useGlamor = true;
     };
 
     logind.extraConfig = ''

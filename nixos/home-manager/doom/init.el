@@ -78,7 +78,7 @@
 
        :lang
        ;; These are currently failing with nix-doom-emacs
-       ;; agda              ; types of types of types of types...
+       agda              ; types of types of types of types...
        ;; ocaml             ; an objective camel
        cc                ; C/C++/Obj-C madness
        clojure           ; java with a lisp

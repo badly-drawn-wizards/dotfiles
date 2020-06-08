@@ -43,7 +43,7 @@
 
 (after! org-pomodoro
   (setq org-pomodoro-play-sounds nil)
-  (add-hook 'org-pomodoro-finished-hook #'pomodoro-espeak/pomodo-over)
+  (add-hook 'org-pomodoro-finished-hook #'pomodoro-espeak/pomodoro-over)
   (add-hook 'org-pomodoro-break-finished-hook #'pomodoro-espeak/pomodoro-break-over))
 
 (after! org
@@ -128,3 +128,5 @@
 (set-popup-rule! "\\*Lean Goal\\*"
   :side 'right
   :size 50)
+
+(setq tab-width 2)

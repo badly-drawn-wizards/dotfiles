@@ -44,9 +44,6 @@ let
       { class = "^Riot$"; }
       { class = "^Slack$"; }
     ];
-    " music" = [
-      { instance = "^spotify$"; }
-    ];
     " write" = [
       { class = "^Write$"; }
       { class = "^Xournal$"; }

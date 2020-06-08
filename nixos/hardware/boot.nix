@@ -19,9 +19,10 @@
     kernelModules = [ "wl" "kvm-intel" ];
 
     # TODO Determine whether this actually does anything
-    # extraModprobeConfig = ''
-    #   option snd_hda_intel enable=true model=laptop-amic
-    # '';
+    # options snd_hda_intel index=0 model=alc285-hp-x360
+    extraModprobeConfig = ''
+      options snd-intel-dspcfg dsp_driver=0
+    '';
 
     cleanTmpDir = true;
 
