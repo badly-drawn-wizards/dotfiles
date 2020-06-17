@@ -1,5 +1,5 @@
 URxvt*scrollBar: false
-URxvt*.font: xft:Fira Code:size=12
+URxvt*.font: xft:Fira Code:size=8
 URxvt*depth: 32
 URxvt*background: rgba:2900/2b00/2e00/fe00
 
@@ -47,4 +47,4 @@ Emacs*menuBar: 0
 *color14:      base0F
 *color15:      base07
 
-Xft.dpi: 220
+Xft.dpi: 96

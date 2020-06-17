@@ -55,6 +55,7 @@ in
 {
   enable = true;
   package = pkgs.i3-gaps;
+
   config = {
     startup = map
       (command: {
@@ -72,6 +73,17 @@ in
     };
     gaps = {
       inner = 5;
+    };
+    input = {
+      "1:1:AT_Translated_Set_2_keyboard" = {
+        xkb_layout = "us";
+        xkb_options = "caps:swapescape";
+      };
+    };
+    output = {
+      "eDP-1" = {
+        bg = "$HOME/backgrounds/megumin.jpg fill";
+      };
     };
     inherit assigns;
     keybindings = with lib.attrsets; let
@@ -118,10 +130,11 @@ in
         dir-xrandr;
         
       other-keybinds = {
-        "${mod}+Shift+-" = "move scratchpad";
-        "${mod}+-" = "scratchpad show";
+        "${mod}+Shift+minus" = "move scratchpad";
+        "${mod}+minus" = "scratchpad show";
 
         "${mod}+r" = "exec ${rename-workspace}";
+        "${mod}+Shift+r" = "reload";
         "${mod}+i" = "exec em";
         "${mod}+o" = "exec ${rofi-run "workspace"}";
         "${mod}+Shift+o" = "exec ${rofi-run "move"}";
@@ -137,6 +150,7 @@ in
     };
     bars = [{
       position = "top";
+      command = "${pkgs.sway}/bin/swaybar";
       colors = {
         background = "#${base00}";
         statusline = "#${base04}";

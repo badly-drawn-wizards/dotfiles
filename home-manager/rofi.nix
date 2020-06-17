@@ -26,7 +26,7 @@ let
 in
 {
   enable = true;
-  font = "Fira Code 20";
+  font = "Fira Code 8";
   terminal = "${pkgs.rxvt-unicode}/bin/urxvt";
   extraConfig = ''
     rofi.modi: run#window#workspace:${rofi-workspace}#move:${rofi-move}

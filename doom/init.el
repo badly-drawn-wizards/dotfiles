@@ -66,7 +66,7 @@
        syntax              ; tasing you for every semicolon you forget
 
        :tools
-       editorconfig      ; let someone else argue about tabs vs spaces
+       ;; editorconfig      ; let someone else argue about tabs vs spaces
        (eval +overlay)     ; run code, run (also, repls)
        (lookup           ; helps you navigate your code and documentation
         +docsets)        ; ...or in Dash docsets locally
@@ -78,8 +78,8 @@
 
        :lang
        ;; These are currently failing with nix-doom-emacs
-       agda              ; types of types of types of types...
-       ;; ocaml             ; an objective camel
+       ;; agda              ; types of types of types of types...
+       ocaml             ; an objective camel
        cc                ; C/C++/Obj-C madness
        clojure           ; java with a lisp
        csharp            ; unity, .NET, and mono shenanigans
@@ -87,7 +87,7 @@
        emacs-lisp        ; drown in parentheses
        (haskell +dante)  ; a language that's lazier than I am
        (java +lsp) ; the poster child for carpal tunnel syndrome
-       (javascript +lsp)        ; all(hope(abandon(ye(who(enter(here))))))
+       ;; (javascript +lsp)        ; all(hope(abandon(ye(who(enter(here))))))
        lean
        ledger            ; an accounting system in Emacs
        markdown          ; writing docs for people to ignore
@@ -96,7 +96,7 @@
         +pomodoro        ; be fruitful with the tomato technique
         +present)        ; using org-mode for presentations
        plantuml          ; diagrams for confusing people more
-       purescript        ; javascript, but functional
+       (purescript +lsp)        ; javascript, but functional
        python            ; beautiful is better than ugly
        racket            ; a DSL for DSLs
        rust              ; Fe2O3.unwrap().unwrap().unwrap().unwrap()

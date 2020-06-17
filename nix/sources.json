@@ -1,0 +1,74 @@
+{
+    "doom-emacs": {
+        "branch": "develop",
+        "description": "An Emacs framework for the stubborn martian hacker",
+        "homepage": "",
+        "owner": "hlissner",
+        "repo": "doom-emacs",
+        "rev": "847bbf380c25418de1c3cbe4db35c43697f8b052",
+        "sha256": "1bra9pb9v8jvwzqvqcnvgg941a2c1nvpx988krzm7kifmq2zxh07",
+        "type": "tarball",
+        "url": "https://github.com/hlissner/doom-emacs/archive/847bbf380c25418de1c3cbe4db35c43697f8b052.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "emacs-overlay": {
+        "branch": "master",
+        "description": "Bleeding edge emacs overlay [maintainer=@adisbladis] ",
+        "homepage": "",
+        "owner": "nix-community",
+        "repo": "emacs-overlay",
+        "rev": "a0db410ed1e196471d6935a702440710f7513bf7",
+        "sha256": "0ckqpwkar07z7z50swwwbrn08vqvkk4x39c6fnxshy5n5nmqw8wk",
+        "type": "tarball",
+        "url": "https://github.com/nix-community/emacs-overlay/archive/a0db410ed1e196471d6935a702440710f7513bf7.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "home-manager": {
+        "branch": "master",
+        "description": "Manage a user environment using Nix",
+        "homepage": "https://rycee.gitlab.io/home-manager/",
+        "owner": "rycee",
+        "repo": "home-manager",
+        "rev": "507e4464751b86b24e435bc8f178942f7d0de101",
+        "sha256": "1dmnwpaqi2wa5ham1dn0w4l4gsaiifcgj322gbm45ciikyg2dbi6",
+        "type": "tarball",
+        "url": "https://github.com/rycee/home-manager/archive/507e4464751b86b24e435bc8f178942f7d0de101.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "niv": {
+        "branch": "master",
+        "description": "Easy dependency management for Nix projects",
+        "homepage": "https://github.com/nmattia/niv",
+        "owner": "nmattia",
+        "repo": "niv",
+        "rev": "f73bf8d584148677b01859677a63191c31911eae",
+        "sha256": "0jlmrx633jvqrqlyhlzpvdrnim128gc81q5psz2lpp2af8p8q9qs",
+        "type": "tarball",
+        "url": "https://github.com/nmattia/niv/archive/f73bf8d584148677b01859677a63191c31911eae.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "nix-doom-emacs": {
+        "branch": "master",
+        "description": "doom-emacs packaged for Nix",
+        "homepage": "",
+        "owner": "vlaci",
+        "repo": "nix-doom-emacs",
+        "rev": "9337a8741ea79084642a430c4b01814377530424",
+        "sha256": "0zk0d1f8z8z7v5ys012yq6qg3wy92a72hma588p5bvrwvsbkk0mf",
+        "type": "tarball",
+        "url": "https://github.com/vlaci/nix-doom-emacs/archive/9337a8741ea79084642a430c4b01814377530424.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "nixpkgs": {
+        "branch": "master",
+        "description": "Nix Packages collection",
+        "homepage": null,
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "cdfb8286d93a073fba893a2b187ecfcb89888092",
+        "sha256": "18hqi0s257y8qpdpgggncx66maf19l1dcy692g59xcy53jz9vmki",
+        "type": "tarball",
+        "url": "https://github.com/NixOS/nixpkgs/archive/cdfb8286d93a073fba893a2b187ecfcb89888092.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    }
+}

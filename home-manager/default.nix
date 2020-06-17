@@ -6,8 +6,7 @@
 with builtins;
 let
   startup-programs = with pkgs; [
-    "${pkgs.picom}/bin/picom --experimental-backends"
-
+    "${pkgs.mako}/bin/mako"
     "${pkgs.firefox}/bin/firefox"
 
     "${pkgs.calibre}/bin/calibre"
@@ -23,33 +22,22 @@ let
     "${pkgs.blueman}/bin/blueman-applet"
     "${pkgs.dropbox}/bin/dropbox"
 
-    "$HOME/.local/bin/random-background"
+    "xrdb -merge $HOME/.Xresources"
   ];
   i3-config = import ./i3.nix args startup-programs;
-  load-xresources = "xrdb -merge .Xresources";
 in
 {
-
-  xsession = {
-    enable = true;
-    scriptPath = ".xinitrc";
-    initExtra = load-xresources;
-    windowManager.i3 = i3-config "i3";
-  };
 
   wayland = {
     windowManager.sway = i3-config "sway";
   };
 
   programs = {
-    home-manager = {
-      enable = true;
-    };
+    mako.enable = true;
 
     firefox = import ./firefox.nix;
 
     zsh = import ./zsh.nix args;
-    rofi = import ./rofi.nix args;
 
     i3status = import ./i3status.nix;
   };
@@ -79,28 +67,11 @@ in
 
     network-manager-applet.enable = true;
     gpg-agent.enable = true;
-    random-background = { 
-      enable = true;
-      
-      imageDirectory = "%h/backgrounds";
-      interval = "20m";
-    };
   };
 
   nixpkgs = {
 
     overlays = [
-      (_:_: {
-      doom-emacs = pkgs.callPackage
-        (builtins.fetchTarball
-          {
-            url = https://github.com/vlaci/nix-doom-emacs/archive/master.tar.gz;
-          })
-        {
-          doomPrivateDir = ./doom;
-          extraPackages = epkgs: [ epkgs.doom-themes ];
-        };
-      })
     ];
 
     config = {
@@ -117,7 +88,7 @@ in
   home = {
     packages = with pkgs; [
       # Lose da mouse with style
-      i3-gaps dmenu
+      sway i3-gaps dmenu
       picom
 
       # Chat with some folks
@@ -170,7 +141,7 @@ in
       obs-studio
 
       # Tell me how it is
-      espeak
+      libnotify espeak
     ];
 
     sessionVariables = {
@@ -189,9 +160,6 @@ in
         set tags=./tags,tags
       '';
       ".ideavimrc".source = ./.ideavimrc;
-      ".emacs.d/init.el".text = ''
-        (load "default.el")
-      '';
 
       ".tmux.conf".text = ''
         set-window-option -g mode-keys vi 

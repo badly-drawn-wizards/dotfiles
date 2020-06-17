@@ -5,22 +5,12 @@
 (setq user-full-name "Reuben Steenekamp"
       user-mail-address "reuben.steenekamp@smsportal.com")
 
-(setq doom-font (font-spec :family "Source Code Pro" :size 30))
+(setq doom-font (font-spec :family "Fira Code" :size 16))
 (setq doom-theme 'doom-spacegrey)
 
 (defconst my/opacity 99)
 (set-frame-parameter (selected-frame) 'alpha my/opacity)
 (add-to-list 'default-frame-alist `(alpha . ,my/opacity))
-
-(defvar git-bash-executable "C:\\Program Files\\Git\\git-bash.exe")
-(defun git-bash ()
-  (interactive)
-  (start-process "git-bash" nil git-bash-executable))
-
-(defun cmd ()
-  (interactive)
-  (let ((proc (start-process "cmd" nil "cmd.exe" "/C" "start" "cmd.exe")))
-    (set-process-query-on-exit-flag proc nil)))
 
 (defvar pomodoro-espeak--compliments
   '("you sexy beast"
@@ -41,6 +31,27 @@
 (defun pomodoro-espeak/pomodoro-break-over ()
   (pomodoro-espeak/speak "Break is over. Back to work."))
 
+
+(after! alert
+  (setq alert-default-style 'libnotify))
+
+(require 'org-alert)
+(defun my/org-alert--get-headlines ()
+  "Return the current org agenda as text only."
+  (with-temp-buffer
+    (let ((org-agenda-sticky nil)
+          (org-agenda-buffer-tmp-name (buffer-name)))
+      (ignore-errors (org-agenda-list nil nil nil 1))
+      (org-alert--unique-headlines org-alert-headline-regexp
+           (buffer-substring-no-properties (point-min) (point-max))))))
+
+(after! org-alert
+  (advice-add 'org-alert--get-headlines :override #'my/org-alert--get-headlines)
+  (setq org-alert-interval 120)
+  (org-alert-enable))
+
+
+
 (after! org-pomodoro
   (setq org-pomodoro-play-sounds nil)
   (add-hook 'org-pomodoro-finished-hook #'pomodoro-espeak/pomodoro-over)
@@ -48,6 +59,7 @@
 
 (after! org
   (setq org-directory "~/org/")
+  (setq org-refile-targets '((nil :maxlevel . 3) (org-agenda-files :maxlevel . 9)))
   (setq org-capture-templates
         '(("t" "Personal todo" entry
            (file+headline +org-capture-todo-file "Inbox")
@@ -57,39 +69,23 @@
            "* %u %?\n%i" :prepend t)
           ("j" "Journal" entry
            (file+olp+datetree +org-capture-journal-file)
-           "* %U %?\n%i" :prepend t)
-
-          ;; Will use {project-root}/{todo,notes,changelog}.org, unless a
-          ;; {todo,notes,changelog}.org file is found in a parent directory.
-          ;; Uses the basename from `+org-capture-todo-file',
-          ;; `+org-capture-changelog-file' and `+org-capture-notes-file'.
-          ("p" "Templates for projects")
-          ("pt" "Project-local todo" entry  ; {project-root}/todo.org
-           (file+headline +org-capture-project-todo-file "Inbox")
-           "* TODO %?\n%i" :prepend t)
-          ("pn" "Project-local notes" entry  ; {project-root}/notes.org
-           (file+headline +org-capture-project-notes-file "Inbox")
-           "* %U %?\n%i" :prepend t)
-          ("pc" "Project-local changelog" entry  ; {project-root}/changelog.org
-           (file+headline +org-capture-project-changelog-file "Unreleased")
            "* %U %?\n%i" :prepend t))))
 
-(add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
 
 (after! web-mode
-  ;(add-hook 'web-mode-hook #'lsp)
+  (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
   (setq web-mode-code-indent-offset 2))
+
+(after! lean-mode
+  (set-popup-rule! "\\*Lean Goal\\*"
+    :side 'right
+    :size 50))
 
 (after! editorconfig
   (editorconfig-mode 1))
 
 (after! dante
   (setq dante-methods '(new-build bare-ghci)))
-
-;; (after! lsp-haskell
-;;   (setq lsp-haskell-process-path-hie "ghcide")
-;;   (setq lsp-haskell-process-args-hie '())
-;;   (setq lsp-log-io t))
 
 (after! direnv
   (direnv-mode))
@@ -105,6 +101,7 @@
   ";"
   #'evilnc-comment-operator)
 
+ ;; TODO Figure out why this doesn't work
  (:desc "jump"
   "j")
  ("jj"
@@ -112,21 +109,10 @@
  ("jl"
   #'evil-ace-jump-line-mode)
 
- (:desc "Open git bash"
-  "oog"
-  #'git-bash)
- (:desc "Open cmd"
-  "ooc"
-  #'cmd)
-
  (:desc "Evil no highlight"
   "sc"
   #'evil-ex-nohighlight))
 
 (evil-snipe-mode 0)
-
-(set-popup-rule! "\\*Lean Goal\\*"
-  :side 'right
-  :size 50)
 
 (setq tab-width 2)

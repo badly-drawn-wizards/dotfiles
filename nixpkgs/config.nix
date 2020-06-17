@@ -1,19 +1,19 @@
 let
-  sources = import /workspace/dotfiles/nixos/nix/sources.nix;
+  sources = import /workspace/dotfiles/nix/sources.nix;
+  niv-pkgs = import sources.nixpkgs {};
+  # nix-doom-emacs = import sources.nix-doom-emacs;
+  nix-doom-emacs = import /workspace/nix-doom-emacs;
 in
 {
   allowUnfree = true;
 
   packageOverrides = pkgs: {
-    niv-pkgs = import sources.nixpkgs {};
-    doom-emacs = pkgs.callPackage
-      (builtins.fetchTarball
-        {
-          url = https://github.com/vlaci/nix-doom-emacs/archive/master.tar.gz;
-        })
-      {
-        doomPrivateDir = /workspace/dotfiles/nixos/home-manager/doom;
-        extraPackages = epkgs: [ epkgs.doom-themes ];
+    inherit niv-pkgs;
+    doom-emacs = pkgs.callPackage nix-doom-emacs {
+      doomPrivateDir = /workspace/dotfiles/doom;
+      dependencyOverrides = {
+        inherit (sources) emacs-overlay doom-emacs;
       };
+    };
   };
 }

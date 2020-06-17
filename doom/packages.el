@@ -51,5 +51,6 @@
 ;(package! builtin-package :recipe (:branch "develop"))
 
 
-(package! web-mode)
+;; (package! web-mode)
 (package! editorconfig)
+(package! org-alert)

@@ -1,8 +1,8 @@
 { config, pkgs, ... }:
 
 let
-  sources = import ./nix/sources.nix;
-  home-manager = import ./home-manager;
+  sources = import /workspace/dotfiles/nix/sources.nix;
+  home-manager = import /workspace/dotfiles/home-manager;
 in
 {
   imports =
@@ -68,7 +68,6 @@ in
   home-manager.users.reuben = home-manager;
 
   services = {
-    lorri.enable = true;
     devmon.enable = true;
     blueman.enable = true;
 
@@ -89,6 +88,7 @@ in
       layout = "us";
       xkbOptions = "caps:swapescape";
       libinput.enable = true;
+      wacom.enable = true;
 
     };
 
