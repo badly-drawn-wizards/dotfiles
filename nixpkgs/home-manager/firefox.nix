@@ -1,8 +1,14 @@
+{ pkgs
+, config
+, lib
+, ...
+}@args:
 {
-  enable = true;
-  profiles."default" = {
-    path = "lly2q038.default";
-    userChrome = ''
+  programs.firefox = {
+    enable = true;
+    profiles."default" = {
+      path = "lly2q038.default";
+      userChrome = ''
       /*
       * Do not remove the @namespace line -- it's required for correct functioning
       */
@@ -17,5 +23,8 @@
       /* #navigator-toolbox {visibility: collapse;} */
       /* browser {margin-right: -14px; margin-bottom: -14px;} */
     '';
+    };
   };
+
+  home.sessionVariables.MOZ_USE_XINPUT2 = "1";
 }

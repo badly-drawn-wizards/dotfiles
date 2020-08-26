@@ -5,10 +5,10 @@
         "homepage": "",
         "owner": "hlissner",
         "repo": "doom-emacs",
-        "rev": "847bbf380c25418de1c3cbe4db35c43697f8b052",
-        "sha256": "1bra9pb9v8jvwzqvqcnvgg941a2c1nvpx988krzm7kifmq2zxh07",
+        "rev": "46d6d0b586b868c21a534bacd6650a4ff0f753c3",
+        "sha256": "1x2y5m3hh82d4q54cc6pps6j0cg6bw8gzpg7gj7sxy040j7qcgp6",
         "type": "tarball",
-        "url": "https://github.com/hlissner/doom-emacs/archive/847bbf380c25418de1c3cbe4db35c43697f8b052.tar.gz",
+        "url": "https://github.com/hlissner/doom-emacs/archive/46d6d0b586b868c21a534bacd6650a4ff0f753c3.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "emacs-overlay": {
@@ -29,10 +29,10 @@
         "homepage": "https://rycee.gitlab.io/home-manager/",
         "owner": "rycee",
         "repo": "home-manager",
-        "rev": "507e4464751b86b24e435bc8f178942f7d0de101",
-        "sha256": "1dmnwpaqi2wa5ham1dn0w4l4gsaiifcgj322gbm45ciikyg2dbi6",
+        "rev": "1f174f668109765183f96b43d56ee24ab02c1c05",
+        "sha256": "06ba3nxkzva9q6dxzymyy62x75kf1qf7y8x711jwjravgda14bsq",
         "type": "tarball",
-        "url": "https://github.com/rycee/home-manager/archive/507e4464751b86b24e435bc8f178942f7d0de101.tar.gz",
+        "url": "https://github.com/rycee/home-manager/archive/1f174f668109765183f96b43d56ee24ab02c1c05.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "niv": {
@@ -53,10 +53,10 @@
         "homepage": "",
         "owner": "vlaci",
         "repo": "nix-doom-emacs",
-        "rev": "9337a8741ea79084642a430c4b01814377530424",
-        "sha256": "0zk0d1f8z8z7v5ys012yq6qg3wy92a72hma588p5bvrwvsbkk0mf",
+        "rev": "2c1bf99ddfddb32d39e85772548aa3f993484f82",
+        "sha256": "0x03hpscczfv5hsa6rspvfqfqhqnmivbd5d0h97l1f0rz4m605ab",
         "type": "tarball",
-        "url": "https://github.com/vlaci/nix-doom-emacs/archive/9337a8741ea79084642a430c4b01814377530424.tar.gz",
+        "url": "https://github.com/vlaci/nix-doom-emacs/archive/2c1bf99ddfddb32d39e85772548aa3f993484f82.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "nixpkgs": {
@@ -69,6 +69,18 @@
         "sha256": "18hqi0s257y8qpdpgggncx66maf19l1dcy692g59xcy53jz9vmki",
         "type": "tarball",
         "url": "https://github.com/NixOS/nixpkgs/archive/cdfb8286d93a073fba893a2b187ecfcb89888092.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "nixpkgs-mozilla": {
+        "branch": "master",
+        "description": "mozilla related nixpkgs (extends nixos/nixpkgs repo)",
+        "homepage": null,
+        "owner": "mozilla",
+        "repo": "nixpkgs-mozilla",
+        "rev": "e912ed483e980dfb4666ae0ed17845c4220e5e7c",
+        "sha256": "08fvzb8w80bkkabc1iyhzd15f4sm7ra10jn32kfch5klgl0gj3j3",
+        "type": "tarball",
+        "url": "https://github.com/mozilla/nixpkgs-mozilla/archive/e912ed483e980dfb4666ae0ed17845c4220e5e7c.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     }
 }

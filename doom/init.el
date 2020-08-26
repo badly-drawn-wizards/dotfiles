@@ -88,6 +88,7 @@
        (haskell +dante)  ; a language that's lazier than I am
        (java +lsp) ; the poster child for carpal tunnel syndrome
        ;; (javascript +lsp)        ; all(hope(abandon(ye(who(enter(here))))))
+       (latex +viewers +ref)
        lean
        ledger            ; an accounting system in Emacs
        markdown          ; writing docs for people to ignore

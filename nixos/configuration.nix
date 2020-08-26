@@ -2,7 +2,6 @@
 
 let
   sources = import /workspace/dotfiles/nix/sources.nix;
-  home-manager = import /workspace/dotfiles/home-manager;
 in
 {
   imports =
@@ -13,18 +12,20 @@ in
       ./audio
       ./networking
       ./fonts
-      "${sources.home-manager}/nixos"
     ];
+
+  nix.nixPath = [
+    "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
+    "nixos-config=/etc/nixos/configuration.nix"
+    "nixpkgs-overlays=/workspace/dotfiles/overlays"
+    "/nix/var/nix/profiles/per-user/root/channels"
+  ];
 
   nixpkgs =  {
-    overlays = [
-      (_:_: {
-        niv-pkgs = import sources.nixpkgs {};
-      })
-    ];
-
     # Yes, I'm an unprincipled swine. Fight me RMS.
-    config.allowUnfree = true;
+    config = {
+      allowUnfree = true;
+    };
   };
 
   virtualisation = {
@@ -65,7 +66,6 @@ in
     };
     defaultUserShell = "/run/current-system/sw/bin/zsh";
   };
-  home-manager.users.reuben = home-manager;
 
   services = {
     devmon.enable = true;
@@ -82,32 +82,15 @@ in
 
     xserver = {
       enable = true;
-
       displayManager.startx.enable = true;
-
-      layout = "us";
-      xkbOptions = "caps:swapescape";
-      libinput.enable = true;
-      wacom.enable = true;
-
     };
 
     logind.extraConfig = ''
       HandlePowerKey=ignore
     '';
 
-    dbus = {
-      enable = true;
-      packages = with pkgs; [ blueman ];
-    };
+    dbus.enable = true;
 
-    udev = {
-      # TODO Get HP Active Pen rubber button working
-      # extraHwdb = ''
-      #  evdev:input:b0018v04F3p29F5e0100*
-      #   KEYBOARD_KEY_141=f12
-      # '';
-    };
   };
 
   # Remember to check docs before considering changing this

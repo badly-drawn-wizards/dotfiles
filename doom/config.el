@@ -35,30 +35,15 @@
 (after! alert
   (setq alert-default-style 'libnotify))
 
-(require 'org-alert)
-(defun my/org-alert--get-headlines ()
-  "Return the current org agenda as text only."
-  (with-temp-buffer
-    (let ((org-agenda-sticky nil)
-          (org-agenda-buffer-tmp-name (buffer-name)))
-      (ignore-errors (org-agenda-list nil nil nil 1))
-      (org-alert--unique-headlines org-alert-headline-regexp
-           (buffer-substring-no-properties (point-min) (point-max))))))
-
-(after! org-alert
-  (advice-add 'org-alert--get-headlines :override #'my/org-alert--get-headlines)
-  (setq org-alert-interval 120)
-  (org-alert-enable))
-
-
-
 (after! org-pomodoro
   (setq org-pomodoro-play-sounds nil)
   (add-hook 'org-pomodoro-finished-hook #'pomodoro-espeak/pomodoro-over)
   (add-hook 'org-pomodoro-break-finished-hook #'pomodoro-espeak/pomodoro-break-over))
 
+(defvar my/org-drill-file nil)
 (after! org
-  (setq org-directory "~/org/")
+  (setq org-directory "~/org")
+  (setq my/org-drill-file (concat org-directory "/drill/main.org"))
   (setq org-refile-targets '((nil :maxlevel . 3) (org-agenda-files :maxlevel . 9)))
   (setq org-capture-templates
         '(("t" "Personal todo" entry
@@ -69,7 +54,16 @@
            "* %u %?\n%i" :prepend t)
           ("j" "Journal" entry
            (file+olp+datetree +org-capture-journal-file)
-           "* %U %?\n%i" :prepend t))))
+           "* %U %?\n%i" :prepend t)
+
+          ("d" "Drill")
+          ("dd" "Drill" entry
+           (file+headline my/org-drill-file "Drill")
+           "* Card :drill: \n\n%?" :prepend t)
+          ("dq" "Question" entry
+           (file+headline my/org-drill-file "Drill")
+           "* Card :drill: \n\n%?\n\n** Answer" :prepend t)))
+  (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5)))
 
 
 (after! web-mode
@@ -85,7 +79,7 @@
   (editorconfig-mode 1))
 
 (after! dante
-  (setq dante-methods '(new-build bare-ghci)))
+  (setq dante-methods '(impure-nix new-build bare-ghci)))
 
 (after! direnv
   (direnv-mode))

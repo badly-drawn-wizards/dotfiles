@@ -53,4 +53,5 @@
 
 ;; (package! web-mode)
 (package! editorconfig)
-(package! org-alert)
+(package! futhark-mode)
+(package! org-drill)

@@ -8,12 +8,15 @@
 {
   # https://nixos.wiki/wiki/Intel_Graphics
 
+  environment.variables = {
+    MESA_LOADER_DRIVER_OVERRIDE = "iris";
+  };
   hardware.opengl = {
     enable = true;
     driSupport32Bit = true;
-    # package = pkgs.mesa.override {
-    #   galliumDrivers = [ "nouveau" "virgl" "swrast" "iris" ];
-    # };
+    package = (pkgs.mesa.override {
+      galliumDrivers = [ "nouveau" "virgl" "swrast" "iris" ];
+    }).drivers;
     extraPackages = with pkgs; [
       vaapiIntel
       vaapiVdpau
