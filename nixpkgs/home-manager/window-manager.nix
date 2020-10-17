@@ -55,9 +55,9 @@ let
         #!/bin/sh
         if test -z $@
         then
-          i3-msg -t get_workspaces | ${pkgs.jq}/bin/jq -r ".[].name" | { cat; ${rofi-startup-workspaces} } | sort | uniq
+          swaymsg -t get_workspaces | ${pkgs.jq}/bin/jq -r ".[].name" | { cat; ${rofi-startup-workspaces} } | sort | uniq
         else
-          i3-msg "${cmd'}" >/dev/null
+          swaymsg "${cmd'}" >/dev/null
         fi
       '';
     in pkgs.writeScriptBin name script;
@@ -67,17 +67,15 @@ let
   rofi-move = rofi-workspace-cmd "rofi-move" (ws: "move window to workspace ${ws}");
 
 in {
-  options = with lib; {
-    window-manager = with types; submodule {
-      options = {
-        startupPrograms = mkOption {
-          type = listOf str;
-          default = [];
-        };
-        extraBinds = mkOption {
-          type = attrsOf str;
-          default = {};
-        };
+  options = with lib; with types; {
+    window-manager = {
+      startupPrograms = mkOption {
+        type = listOf str;
+        default = [];
+      };
+      extraBinds = mkOption {
+        type = attrsOf str;
+        default = {};
       };
     };
   };
@@ -110,7 +108,7 @@ in {
           (command: {
             inherit command;
           })
-          (trace config.window-manager.startupPrograms config.window-manager.startupPrograms);
+          config.window-manager.startupPrograms;
         fonts = [ "Font Awesome 8" "Fira Code 8" ];
         modifier = mod;
         menu = rofi-run "run";
@@ -162,8 +160,8 @@ in {
         in lib.mkOptionDefault (
           focusKeybinds //
           moveKeybinds //
-          otherKeybinds #//
-        #  config.window-manager.extraBinds
+          otherKeybinds //
+          config.window-manager.extraBinds
         );
         colors = {
           focused = mkColorSet base02 base05;

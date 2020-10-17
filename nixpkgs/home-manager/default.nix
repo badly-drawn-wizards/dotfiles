@@ -27,19 +27,19 @@ in {
      ./xresources.nix
   ];
 
-  # window-manager.startupPrograms = with pkgs; [
-  #   "${pkgs.mako}/bin/mako"
-  #   "${pkgs.firefox}/bin/firefox"
+  window-manager.startupPrograms = with pkgs; [
+    "${pkgs.mako}/bin/mako"
+    "${pkgs.firefox}/bin/firefox"
 
-  #   "${pkgs.write_stylus}/bin/Write"
+    "${pkgs.write_stylus}/bin/Write"
 
-  #   "${pkgs.onboard}/bin/onboard"
-  #   "${pkgs.pasystray}/bin/pasystray"
-  #   "${pkgs.blueman}/bin/blueman-applet"
-  #   "${pkgs.dropbox}/bin/dropbox"
+    "${pkgs.onboard}/bin/onboard"
+    "${pkgs.pasystray}/bin/pasystray"
+    "${pkgs.blueman}/bin/blueman-applet"
+    "${pkgs.dropbox}/bin/dropbox"
 
-  #   "${pkgs.rot8}/bin/rot8"
-  # ];
+    "${pkgs.rot8}/bin/rot8"
+  ];
 
 
   programs = {
@@ -76,10 +76,8 @@ in {
 
   home = {
     packages = with pkgs; [
-      rot8
-
       # Chat with some folks
-      zoom-us discord riot-desktop slack
+      zoom-us discord element-desktop slack
 
       # Reading some mafths
       mupdf

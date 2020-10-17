@@ -5,8 +5,10 @@ in
 self: super: {
   doom-emacs = super.callPackage nix-doom-emacs {
     doomPrivateDir = /workspace/dotfiles/doom;
+    /*
     dependencyOverrides = {
       inherit (sources) emacs-overlay doom-emacs;
     };
+    */
   };
 }

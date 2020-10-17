@@ -7,8 +7,8 @@
       let
         em-path =
           pkgs.writeScriptBin "em" ''
-            #!/bin/sh
-            ${pkgs.emacs}/bin/emacsclient -c -a "" $@
+            #!/usr/bin/env /bin/sh
+            emacsclient -c -a "" $@
           '';
       in
       "${em-path}/bin/em";

@@ -110,3 +110,4 @@
 (evil-snipe-mode 0)
 
 (setq tab-width 2)
+(setq evil-shift-width 2)
