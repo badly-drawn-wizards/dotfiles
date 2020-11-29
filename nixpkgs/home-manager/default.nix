@@ -76,6 +76,9 @@ in {
 
   home = {
     packages = with pkgs; [
+      # Ah yes, I am doing things
+      thunderbird
+
       # Chat with some folks
       zoom-us discord element-desktop slack
 
@@ -84,7 +87,7 @@ in {
       # calibre
 
       # Write some mafths
-      write_stylus xournal dia
+      write_stylus dia
 
       # Plug 'n play
       udiskie

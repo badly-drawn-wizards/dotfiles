@@ -55,3 +55,4 @@
 (package! editorconfig)
 (package! futhark-mode)
 (package! org-drill)
+(package! dhall-mode)

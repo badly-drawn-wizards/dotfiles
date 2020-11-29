@@ -36,7 +36,8 @@
         +defaults)       ; default popup rules
        ;;pretty-code       ; replace bits of code with pretty symbols
        treemacs          ; a project drawer, like neotree but cooler
-       ;;unicode           ; extended unicode support for various languages
+       unicode           ; extended unicode support for various languages
+       (ligatures fira)
        vc-gutter         ; vcs diff in the fringe
        vi-tilde-fringe   ; fringe tildes to mark beyond EOB
        window-select     ; visually switch windows
@@ -77,8 +78,7 @@
        pdf               ; pdf enhancements
 
        :lang
-       ;; These are currently failing with nix-doom-emacs
-       ;; agda              ; types of types of types of types...
+       agda              ; types of types of types of types...
        ocaml             ; an objective camel
        cc                ; C/C++/Obj-C madness
        clojure           ; java with a lisp
@@ -87,11 +87,13 @@
        emacs-lisp        ; drown in parentheses
        (haskell +dante)  ; a language that's lazier than I am
        (java +lsp) ; the poster child for carpal tunnel syndrome
+       (web +lsp)
        (javascript +lsp)        ; all(hope(abandon(ye(who(enter(here))))))
        json
        (latex +viewers +ref)
        lean
        ledger            ; an accounting system in Emacs
+       (lua +lsp)
        markdown          ; writing docs for people to ignore
        nix               ; I hereby declare "nix geht mehr!"
        (org              ; organize your plain life in plain text
@@ -99,7 +101,7 @@
         +present)        ; using org-mode for presentations
        plantuml          ; diagrams for confusing people more
        (purescript +lsp)        ; javascript, but functional
-       python            ; beautiful is better than ugly
+       (python +lsp)            ; beautiful is better than ugly
        racket            ; a DSL for DSLs
        rust              ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
        sh                ; she sells {ba,z,fi}sh shells on the C xor

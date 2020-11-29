@@ -84,6 +84,40 @@
 (after! direnv
   (direnv-mode))
 
+(after! python
+  (defadvice +eval/send-region-to-repl (around micropython-send-to-repl (&rest arg) activate)
+    (let ((should-run (equal python-shell-interpreter "mpfshell"))
+          (python-process (get-buffer-process "*Python*")))
+      (if should-run
+        (comint-send-string python-process ""))
+      ad-do-it
+      (if should-run
+        (comint-send-string python-process "")))))
+
+
+(after! lsp-python-ms
+  ;; Defer for use with direnv
+  (add-hook
+   'python-mode-hook
+   (lambda ()
+     (setq lsp-python-ms-executable (executable-find "python-language-server")))))
+
+(after! lsp-purescript
+  (add-hook
+   'purescript-mode-hook
+   (lambda ()
+     (setq lsp-purescript-server-executable (executable-find "purescript-language-server")))))
+
+(after! lsp-lua
+  (lsp-register-client
+   (make-lsp-client
+    :new-connection (lsp-stdio-connection (lambda () (executable-find "lua-lsp")))
+
+    :major-modes '(lua-mode)
+    :priority -3
+    :server-id 'lsp-lua-lsp)))
+
+
 (map!
  :leader
 
@@ -99,9 +133,9 @@
  (:desc "jump"
   "j")
  ("jj"
-  #'evil-ace-jump-char-mode)
+  #'avy-goto-char)
  ("jl"
-  #'evil-ace-jump-line-mode)
+  #'avy-goto-line)
 
  (:desc "Evil no highlight"
   "sc"

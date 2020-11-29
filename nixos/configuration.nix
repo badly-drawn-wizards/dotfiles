@@ -14,12 +14,12 @@ in
       ./fonts
     ];
 
-  nix.nixPath = [
-    "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
-    "nixos-config=/etc/nixos/configuration.nix"
-    "nixpkgs-overlays=/workspace/dotfiles/overlays"
-    "/nix/var/nix/profiles/per-user/root/channels"
-  ];
+  nix = {
+    package = pkgs.nixFlakes;
+    extraOptions = ''
+      experimental-features = nix-command flakes
+    '';
+  };
 
   nixpkgs =  {
     # Yes, I'm an unprincipled swine. Fight me RMS.
@@ -44,6 +44,7 @@ in
   environment = {
     systemPackages = with pkgs; [ 
       zsh
+      lxqt.lxqt-policykit
     ];
     pathsToLink = [ "/" ];
   };
@@ -60,9 +61,12 @@ in
   };
 
   users = {
+    groups = {
+      lpadmin = {};
+    };
     users.reuben = {
       isNormalUser = true;
-      extraGroups = [ "wheel" "networkmanager" "audio" "video" "systemd-journal" "docker" ];
+      extraGroups = [ "wheel" "networkmanager" "audio" "video" "systemd-journal" "docker" "lpadmin" "dialout" ];
     };
     defaultUserShell = "/run/current-system/sw/bin/zsh";
   };
@@ -70,6 +74,7 @@ in
   services = {
     devmon.enable = true;
     blueman.enable = true;
+    gvfs.enable = true;
 
     # TODO Get printing with Pixma G4411
     printing = {
@@ -77,6 +82,7 @@ in
       drivers = with pkgs; [
         gutenprint
         gutenprintBin
+        canon-cups-ufr2
       ];
     };
 
@@ -90,6 +96,12 @@ in
     '';
 
     dbus.enable = true;
+
+    udev = {
+      extraRules = ''
+        KERNEL=="ttyUSB*", MODE="0777"
+      '';
+    };
 
   };
 
