@@ -2,8 +2,7 @@
 
 {
   imports =
-    [ <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
-      ./filesystems.nix
+    [ ./filesystems.nix
       ./boot.nix
     ];
 

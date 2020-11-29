@@ -4,9 +4,7 @@
 , ...
 }@args:
 with builtins;
-let
-  sources = import /workspace/dotfiles/nix/sources.nix;
-in {
+{
   imports = [
      ./theme.nix
      ./window-manager.nix
@@ -43,11 +41,6 @@ in {
 
 
   programs = {
-    home-manager = {
-      enable = true;
-      path = "${sources.home-manager.outPath}";
-    };
-
     mako.enable = true;
   };
 
