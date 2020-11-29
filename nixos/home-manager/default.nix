@@ -1,28 +1,26 @@
 { pkgs
-, config
-, lib
 , ...
-}@args:
+}:
 with builtins;
 {
   imports = [
-     ./theme.nix
-     ./window-manager.nix
-     ./i3status.nix
+    ./theme.nix
+    ./window-manager.nix
+    ./i3status.nix
 
-     ./zsh.nix
+    ./zsh.nix
 
-     ./firefox.nix
-     ./obs-studio.nix
+    ./firefox.nix
+    ./obs-studio.nix
 
-     ./vim.nix
-     ./emacs.nix
+    ./vim.nix
+    ./emacs.nix
 
-     ./calibre.nix
+    ./calibre.nix
 
-     ./git.nix
+    ./git.nix
 
-     ./xresources.nix
+    ./xresources.nix
   ];
 
   window-manager.startupPrograms = with pkgs; [

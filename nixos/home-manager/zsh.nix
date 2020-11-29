@@ -1,4 +1,4 @@
-{ pkgs ? import <nixpkgs>
+{ pkgs
 , config
 , lib
 , ...
@@ -44,7 +44,6 @@
     ];
     oh-my-zsh = {
       enable = true;
-      custom = "${./ohmyzsh}";
       theme = "candy";
       plugins = [
         "direnv"

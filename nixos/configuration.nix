@@ -20,6 +20,7 @@
 
   nixpkgs =  {
     # Yes, I'm an unprincipled swine. Fight me RMS.
+    overlays = import ./overlays;
     config = {
       allowUnfree = true;
     };

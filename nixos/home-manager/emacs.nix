@@ -13,6 +13,7 @@
       in
       "${em-path}/bin/em";
   };
+
   home.packages = with pkgs; [
     # So emacs can compliment me
     espeak
