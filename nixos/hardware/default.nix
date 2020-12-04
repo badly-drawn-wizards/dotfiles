@@ -2,7 +2,8 @@
 
 {
   imports =
-    [ ./filesystems.nix
+    [ pkgs.nixosModules.notDetected
+      ./filesystems.nix
       ./boot.nix
     ];
 

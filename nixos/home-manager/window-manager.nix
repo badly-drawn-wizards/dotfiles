@@ -39,6 +39,7 @@ let
       { class = "^discord$"; }
       { class = "^Riot$"; }
       { class = "^Slack$"; }
+      { class = "^Thunderbird$"; }
     ];
     " write" = [
       { class = "^Write$"; }

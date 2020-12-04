@@ -12,7 +12,8 @@
       kernelModules = [ "wl" "dm-raid" "dm-snapshot" ];
     };
 
-    kernelPackages = pkgs.linuxPackagesFor pkgs.linux_latest;
+    kernelPackages = pkgs.linuxPackages_latest;
+
     kernelModules = [ "wl" "kvm-intel" ];
 
     cleanTmpDir = true;

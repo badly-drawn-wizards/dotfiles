@@ -16,11 +16,13 @@
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
+    registry.nixpkgs.flake = pkgs;
   };
 
   nixpkgs =  {
+    overlays = pkgs.callPackage (import ./overlays) {};
+
     # Yes, I'm an unprincipled swine. Fight me RMS.
-    overlays = import ./overlays;
     config = {
       allowUnfree = true;
     };

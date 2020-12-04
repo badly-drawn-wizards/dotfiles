@@ -1,6 +1,8 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, nix-doom-emacs, ... }:
 
 {
+  imports = [nix-doom-emacs.hmModule];
+
   home.sessionVariables.EDITOR = "em";
   home.file = {
     ".local/bin/em".source =
@@ -12,6 +14,12 @@
           '';
       in
       "${em-path}/bin/em";
+  };
+
+  programs.doom-emacs = {
+    enable = true;
+    doomPrivateDir = ./doom;
+    emacsPackage = pkgs.emacsGit;
   };
 
   home.packages = with pkgs; [

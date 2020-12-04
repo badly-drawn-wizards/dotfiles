@@ -117,6 +117,9 @@
     :priority -3
     :server-id 'lsp-lua-lsp)))
 
+(after! agda2
+  (add-to-list 'auto-mode-alist '("\\.agda\\'" . agda2-mode))
+  (add-to-list 'auto-mode-alist '("\\.lagda.md\\'" . agda2-mode)))
 
 (map!
  :leader

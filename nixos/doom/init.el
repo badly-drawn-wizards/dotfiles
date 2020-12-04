@@ -78,7 +78,7 @@
        pdf               ; pdf enhancements
 
        :lang
-       agda              ; types of types of types of types...
+       (agda +local)              ; types of types of types of types...
        ocaml             ; an objective camel
        cc                ; C/C++/Obj-C madness
        clojure           ; java with a lisp
