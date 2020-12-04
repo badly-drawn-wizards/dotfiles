@@ -9,22 +9,23 @@
     nix-doom-emacs.inputs.nixpkgs.follows = "/nixpkgs";
     nix-doom-emacs.inputs.emacs-overlay.follows = "/emacs-overlay";
   };
-  outputs = { nixpkgs, ... }@inputs: {
-    nixosConfigurations.noobnoob = nixpkgs.lib.nixosSystem {
+  outputs = inputs: {
+    nixosConfigurations.noobnoob = inputs.nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = {
         inherit inputs;
       };
       modules = [
-        {
+        ({pkgs, ...}: {
           nix = {
-            package = nixpkgs.nixFlakes;
+            package = pkgs.nixFlakes;
             extraOptions = ''
               experimental-features = nix-command flakes
             '';
             registry.nixpkgs.flake = inputs.nixpkgs;
           };
-        }
+        })
+
         ./configuration.nix
       ];
     };
