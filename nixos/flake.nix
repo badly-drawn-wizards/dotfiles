@@ -17,6 +17,12 @@
       };
       modules = [
         ./configuration.nix
+        ./home-manager
+        ({...}: {
+          home-manager.users.reuben.config = {
+            _module.args.inputs = inputs;
+          };
+        })
       ];
     };
   };

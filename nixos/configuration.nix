@@ -10,7 +10,6 @@
       ./networking
       ./fonts
       ./overlays
-      ./home-manager
     ];
 
   nix = {
