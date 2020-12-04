@@ -1,23 +1,15 @@
 { pkgs, ... }:
 
+
 {
   imports =
     [
-      ./cachix.nix
       ./hardware
       ./graphics
       ./audio
       ./networking
       ./fonts
     ];
-
-  nix = {
-    package = pkgs.nixFlakes;
-    extraOptions = ''
-      experimental-features = nix-command flakes
-    '';
-    registry.nixpkgs.flake = pkgs;
-  };
 
   nixpkgs =  {
     overlays = pkgs.callPackage (import ./overlays) {};

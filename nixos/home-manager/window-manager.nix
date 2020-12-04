@@ -1,12 +1,12 @@
 { pkgs
+, lib
 , config
 , ...
 }:
 with builtins;
 with config.theme;
 let
-  inherit (pkgs) lib;
-  mkColorSet = bg: txt: { 
+  mkColorSet = bg: txt: {
     border = "#${bg}"; 
     childBorder = "#${bg}"; 
     background = "#${bg}"; 
