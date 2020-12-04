@@ -1,7 +1,8 @@
-{ config, lib, pkgs, nix-doom-emacs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 
+builtins.seq inputs
 {
-  imports = [nix-doom-emacs.hmModule];
+  # imports = [inputs.nix-doom-emacs.hmModule];
 
   home.sessionVariables.EDITOR = "em";
   home.file = {
@@ -16,11 +17,11 @@
       "${em-path}/bin/em";
   };
 
-  programs.doom-emacs = {
-    enable = true;
-    doomPrivateDir = ./doom;
-    emacsPackage = pkgs.emacsGit;
-  };
+  # programs.doom-emacs = {
+  #   enable = true;
+  #   doomPrivateDir = ./doom;
+  #   emacsPackage = pkgs.emacsGit;
+  # };
 
   home.packages = with pkgs; [
     # So emacs can compliment me

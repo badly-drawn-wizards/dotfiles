@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 
 
 {
@@ -9,11 +9,19 @@
       ./audio
       ./networking
       ./fonts
+      ./overlays
+      ./home-manager
     ];
 
-  nixpkgs =  {
-    overlays = pkgs.callPackage (import ./overlays) {};
+  nix = {
+    package = pkgs.nixFlakes;
+    extraOptions = ''
+      experimental-features = nix-command flakes
+    '';
+    registry.nixpkgs.flake = inputs.nixpkgs;
+  };
 
+  nixpkgs =  {
     # Yes, I'm an unprincipled swine. Fight me RMS.
     config = {
       allowUnfree = true;

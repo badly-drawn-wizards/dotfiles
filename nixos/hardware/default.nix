@@ -2,7 +2,7 @@
 
 {
   imports =
-    [ pkgs.nixosModules.notDetected
+    [
       ./filesystems.nix
       ./boot.nix
     ];
@@ -11,6 +11,7 @@
   powerManagement.cpuFreqGovernor = "powersave";
 
   hardware = {
+    enableRedistributableFirmware = true;
     cpu.intel.updateMicrocode = true;
 
     bluetooth = {

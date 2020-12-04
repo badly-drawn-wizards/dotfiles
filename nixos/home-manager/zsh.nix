@@ -9,9 +9,6 @@
     enableAutosuggestions = true;
     shellAliases = {
       t = "tmux attach || tmux new";
-      vnix = "ranger $HOME/.config/nixpkgs/";
-      vnixos = "vim /etc/nixos/configuration.nix";
-      doom-install = "nix-env -iA nixos.doom-emacs";
     };
     plugins = [
       {

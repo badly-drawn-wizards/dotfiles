@@ -15,10 +15,6 @@
     enable = true;
   };
 
-  nixpkgs.overlays = [(self: super: {
-    # inherit (pkgs.niv-pkgs) alsaLib;
-  })];
-
   hardware.pulseaudio = {
     enable = true;
     extraModules = [ pkgs.pulseaudio-modules-bt ];

@@ -1,7 +1,13 @@
-{ home-manager }:
+{ inputs, ... }:
 {
-  imports = [home-manager.nixosModules.home-manager];
+  imports = [
+    inputs.home-manager.nixosModules.home-manager
+  ];
+
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
-  home-manager.users.reuben = import ./home-manager;
+  home-manager.users.reuben = {
+    imports = [ ./home-manager.nix ];
+    _module.args.inputs = inputs;
+  };
 }
