@@ -1,8 +1,6 @@
 { config, lib, pkgs, inputs, ... }:
 
 {
-  imports = [inputs.nix-doom-emacs.hmModule];
-
   home.sessionVariables.EDITOR = "em";
   home.file = {
     ".local/bin/em".source =
