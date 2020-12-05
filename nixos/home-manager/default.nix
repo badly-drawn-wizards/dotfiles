@@ -6,7 +6,7 @@
   home-manager.users.reuben = {
     imports = [
       inputs.nix-doom-emacs.hmModule
-      ./home-manager.nix
+      ./home.nix
     ];
   };
 }

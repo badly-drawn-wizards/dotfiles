@@ -44,15 +44,16 @@ with builtins;
   };
 
   xdg = {
-    # mimeApps = {
-    #   enable = true;
-    #   associations.added = {
-    #     "application/pdf" = [ "mupdf" ];
-    #   };
-    #   defaultApplications = {
-    #     "application/pdf" = [ "firefox.desktop" ];
-    #   };
-    # };
+    mime.enable = true;
+    mimeApps = {
+      enable = true;
+      associations.added = {
+        "application/pdf" = [ "mupdf" ];
+      };
+      defaultApplications = {
+        "application/pdf" = [ "firefox.desktop" ];
+      };
+    };
   };
 
   services = {
