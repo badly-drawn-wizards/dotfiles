@@ -4,8 +4,19 @@
 , ...
 }@args:
 {
+
+  programs.chromium.enable = true;
+
   programs.firefox = {
     enable = true;
+
+    package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
+      # extraPolicies = {
+      #   ExtensionSettings = {};
+      # };
+    };
+
+    extensions = [];
     profiles."default" = {
       path = "lly2q038.default";
       userChrome = ''
