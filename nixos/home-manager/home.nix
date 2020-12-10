@@ -7,19 +7,13 @@ with builtins;
     ./theme.nix
     ./window-manager.nix
     ./i3status.nix
-
     ./zsh.nix
-
     ./firefox.nix
     ./obs-studio.nix
-
     ./vim.nix
     ./emacs.nix
-
     ./calibre.nix
-
     ./git.nix
-
     ./xresources.nix
     ./networking.nix
     ./steam.nix
@@ -47,15 +41,6 @@ with builtins;
 
   xdg = {
     mime.enable = true;
-    mimeApps = {
-      enable = true;
-      associations.added = {
-        "application/pdf" = [ "mupdf" ];
-      };
-      defaultApplications = {
-        "application/pdf" = [ "firefox.desktop" ];
-      };
-    };
   };
 
   services = {
@@ -79,7 +64,6 @@ with builtins;
 
       # Reading some mafths
       mupdf
-      # calibre
 
       # Write some mafths
       xournalpp dia
@@ -118,10 +102,17 @@ with builtins;
       (agda.withPackages [ agdaPackages.standard-library ])
 
       # A window into windows
-      virt-viewer
+      virt-viewer wine-staging
 
       # Tell me how it is
       libnotify
+
+      # MESA work FFS.
+      libva-utils glxinfo
+
+      # Nix tools
+      # nix-prefetch-github
+
     ];
 
     sessionVariables = {

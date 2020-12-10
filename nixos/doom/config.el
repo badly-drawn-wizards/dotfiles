@@ -121,6 +121,9 @@
   (add-to-list 'auto-mode-alist '("\\.agda\\'" . agda2-mode))
   (add-to-list 'auto-mode-alist '("\\.lagda.md\\'" . agda2-mode)))
 
+(after! prettier-js
+  (add-hook 'typescript-mode-hook 'prettier-js-mode))
+
 (map!
  :leader
 

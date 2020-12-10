@@ -2,7 +2,6 @@
 
 {
   home.packages = with pkgs; [
-      # A marriage made in hell
       vimHugeX
   ];
   home.file = {

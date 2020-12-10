@@ -56,3 +56,4 @@
 (package! futhark-mode)
 (package! org-drill)
 (package! dhall-mode)
+(package! prettier-js)

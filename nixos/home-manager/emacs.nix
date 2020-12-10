@@ -3,17 +3,16 @@
 {
   home.sessionVariables.EDITOR = "em";
   home.file = {
-    ".local/bin/em".source =
-      let
-        em-path =
-          pkgs.writeScriptBin "em" ''
-            #!/usr/bin/env /bin/sh
-            emacsclient -c -a "" $@
-          '';
-      in
-      "${em-path}/bin/em";
+    ".local/bin/em" = {
+      text = ''
+        #!/usr/bin/env /bin/sh
+        emacsclient -c -a "" $@
+      '';
+      executable = true;
+    };
   };
 
+  # A marriage made in hell
   programs.doom-emacs = {
     enable = true;
     doomPrivateDir = ../doom;
@@ -23,5 +22,6 @@
   home.packages = with pkgs; [
     # So emacs can compliment me
     espeak
+    ripgrep
   ];
 }
