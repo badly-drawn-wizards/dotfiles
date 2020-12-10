@@ -43,6 +43,7 @@ let
     ];
     " write" = [
       { class = "^Write$"; }
+      { app_id = "^com.github.xournalpp.xournalpp"; }
     ];
   };
 
