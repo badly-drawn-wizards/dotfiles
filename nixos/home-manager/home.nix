@@ -21,6 +21,7 @@ with builtins;
     ./git.nix
 
     ./xresources.nix
+    ./networking.nix
   ];
 
   window-manager.startupPrograms = with pkgs; [
