@@ -9,6 +9,9 @@
         nixpkgs.follows = "/nixpkgs";
       };
     };
+    nur = {
+      url = "github:nix-community/NUR";
+    };
     emacs-overlay = {
       url = "github:nix-community/emacs-overlay";
       inputs = {
