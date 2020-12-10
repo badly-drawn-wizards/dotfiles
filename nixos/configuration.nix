@@ -11,6 +11,7 @@
       ./fonts
       ./overlays
       ./home-manager
+      ./cachix.nix
     ];
 
   nix = {
