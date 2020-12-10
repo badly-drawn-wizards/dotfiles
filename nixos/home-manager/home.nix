@@ -22,6 +22,7 @@ with builtins;
 
     ./xresources.nix
     ./networking.nix
+    ./steam.nix
   ];
 
   window-manager.startupPrograms = with pkgs; [
@@ -104,9 +105,6 @@ with builtins;
       # Misc utilites
       ranger direnv thefuck tree less jq
       htop pciutils
-
-      # Gaaaaaaaaames (HMU if you play Celeste)
-      steam
 
       # 12k skips / hour = 3.3 skips / second
       # Impressive if wasn't grating to my ears.
