@@ -79,6 +79,7 @@
 
        :lang
        (agda +local)              ; types of types of types of types...
+       coq
        ocaml             ; an objective camel
        cc                ; C/C++/Obj-C madness
        clojure           ; java with a lisp

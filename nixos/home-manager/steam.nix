@@ -5,7 +5,10 @@
   home.packages = with pkgs; [
     # Gaaaaaaaaames (HMU if you play Celeste)
     steam
-    steam-run
+    steam-run-native
+
+    # For proton
+    python3
   ];
 
   home.file = {

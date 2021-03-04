@@ -46,7 +46,8 @@
   '';
   };
 
-  home.packages = [
-    pkgs.zsh-syntax-highlighting
+  home.packages = with pkgs; [
+    zsh-syntax-highlighting
+    thefuck
   ];
 }

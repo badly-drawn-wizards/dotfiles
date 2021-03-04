@@ -75,6 +75,17 @@
     :side 'right
     :size 50))
 
+
+(after! coq-mode
+  (set-popup-rule! "\\*goals\\*"
+    :side 'right
+    :vslot 1
+    :size 50)
+  (set-popup-rule! "\\*response\\*"
+    :side 'right
+    :vslot 1
+    :size 50))
+
 (after! editorconfig
   (editorconfig-mode 1))
 

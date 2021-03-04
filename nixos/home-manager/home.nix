@@ -8,7 +8,7 @@ with builtins;
     ./window-manager.nix
     ./i3status.nix
     ./zsh.nix
-    ./firefox.nix
+    ./browsers.nix
     ./obs-studio.nix
     ./vim.nix
     ./emacs.nix
@@ -20,18 +20,18 @@ with builtins;
   ];
 
   window-manager.startupPrograms = with pkgs; [
-    "${pkgs.mako}/bin/mako"
-    "${pkgs.firefox}/bin/firefox"
-    "${pkgs.thunderbird}/bin/thunderbird"
-    "${pkgs.xournalpp}/bin/xournalpp"
+    "${mako}/bin/mako"
+    "${firefox}/bin/firefox"
+    "${thunderbird}/bin/thunderbird"
+    "${xournalpp}/bin/xournalpp"
 
-    "${pkgs.onboard}/bin/onboard"
-    "${pkgs.pasystray}/bin/pasystray"
-    "${pkgs.blueman}/bin/blueman-applet"
-    "${pkgs.dropbox}/bin/dropbox"
+    "${onboard}/bin/onboard"
+    "${pasystray}/bin/pasystray"
+    "${blueman}/bin/blueman-applet"
+    "${dropbox}/bin/dropbox"
 
-    "${pkgs.rot8}/bin/rot8"
-    "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
+    "${rot8}/bin/rot8"
+    "${polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
   ];
 
 
@@ -60,7 +60,7 @@ with builtins;
       thunderbird
 
       # Chat with some folks
-      zoom-us discord element-desktop slack
+      teams zoom-us discord element-desktop slack
 
       # Reading some mafths
       mupdf
@@ -87,8 +87,8 @@ with builtins;
       rxvt-unicode tmux
 
       # Misc utilites
-      ranger direnv thefuck tree less jq
-      htop pciutils
+      ranger direnv tree less jq
+      htop pciutils postman
 
       # 12k skips / hour = 3.3 skips / second
       # Impressive if wasn't grating to my ears.
@@ -98,11 +98,13 @@ with builtins;
       # OCaml, my caml
       ocaml dune
 
-      # PLFA my dudes
-      (agda.withPackages [ agdaPackages.standard-library ])
+      # PLF & PLFA my dudes
+      coq
+      # (agda.withPackages [ agdaPackages.standard-library ])
+
 
       # A window into windows
-      virt-viewer wine-staging
+      virt-manager virt-viewer wineWowPackages.staging winetricks
 
       # Tell me how it is
       libnotify
@@ -111,8 +113,14 @@ with builtins;
       libva-utils glxinfo
 
       # Nix tools
-      # nix-prefetch-github
+      nix-prefetch-github
+      cachix
 
+      teeworlds
+
+      gnome3.adwaita-icon-theme
+
+      minecraft
     ];
 
     sessionVariables = {

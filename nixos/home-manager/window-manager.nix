@@ -31,7 +31,7 @@ let
       { class = "^Firefox$"; }
     ];
     " read" = [
-      { class = "^calibre$"; }
+      { app_id = "^calibre-gui$"; }
       { class = "^MuPdf$"; }
       { class = "^okular$"; }
     ];
@@ -82,6 +82,22 @@ in {
     };
   };
   config = {
+
+    # window-manager.startupPrograms = with pkgs; [
+      # "${xdg-desktop-portal-wlr}/libexec/xdg-desktop-portal-wlr"
+      # "${xdg-desktop-portal}/libexec/xdg-desktop-portal -r"
+    # ];
+
+    home.sessionVariables = {
+      XDG_SESSION_TYPE="wayland";
+      XDG_CURRENT_DESKTOP="sway";
+    };
+
+    # home.packages = with pkgs; [
+    #   xdg-desktop-portal
+    #   xdg-desktop-portal-wlr
+    # ];
+
     programs.rofi = {
       enable = true;
       font = "Fira Code 8";

@@ -83,8 +83,15 @@
       drivers = with pkgs; [
         gutenprint
         gutenprintBin
-        canon-cups-ufr2
       ];
+    };
+    avahi = {
+      enable = true;
+      nssmdns = true;
+      publish = {
+        enable = true;
+        userServices = true;
+      };
     };
 
     xserver = {
@@ -104,7 +111,14 @@
       '';
     };
 
+    flatpak.enable = true;
   };
+
+  xdg.portal = {
+    enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-wlr ];
+  };
+
 
   # Remember to check docs before considering changing this
   system.stateVersion = "20.03";

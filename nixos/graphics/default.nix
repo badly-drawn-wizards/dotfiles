@@ -1,8 +1,6 @@
 { config, lib, pkgs, ... }:
 
 {
-  # https://nixos.wiki/wiki/Intel_Graphics
-
   environment.variables = {
     MESA_LOADER_DRIVER_OVERRIDE = "iris";
   };

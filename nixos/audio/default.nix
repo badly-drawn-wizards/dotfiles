@@ -1,16 +1,6 @@
 { config, lib, pkgs, ... }:
 
 {
-
-  # Try get internal microphone working
-  # boot.kernelPatches = [{
-  #   name = "skylake-hdaudio-codec";
-  #   patch = null;
-  #   extraConfig = ''
-  #     SND_SOC_INTEL_SKYLAKE_HDAUDIO_CODEC y
-  #   '';
-  # }];
-
   sound = {
     enable = true;
   };
@@ -22,5 +12,5 @@
     support32Bit = true;
   };
 
-
+  services.pipewire.enable = true;
 }

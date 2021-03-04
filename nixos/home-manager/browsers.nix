@@ -10,11 +10,7 @@
   programs.firefox = {
     enable = true;
 
-    package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
-      # extraPolicies = {
-      #   ExtensionSettings = {};
-      # };
-    };
+    package = pkgs.firefox-wayland;
 
     extensions = [];
     profiles."default" = {
@@ -30,5 +26,7 @@
 
   home.packages = with pkgs; [
     tridactyl-native
+
+    tor-browser-bundle-bin
   ];
 }
