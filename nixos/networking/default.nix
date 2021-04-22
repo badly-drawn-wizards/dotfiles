@@ -9,7 +9,7 @@
 
     firewall = {
       enable = true;
-      allowedTCPPorts = [ 8080 8303 ];
+      allowedTCPPorts = [ 8080 1883 8303 ];
       allowedUDPPorts = [ 8303 ];
     };
   };

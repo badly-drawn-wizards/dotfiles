@@ -102,16 +102,16 @@ in {
       enable = true;
       font = "Fira Code 8";
       terminal = "${pkgs.rxvt-unicode}/bin/urxvt";
-      extraConfig = ''
-        rofi.modi: run#window#workspace:${rofi-workspace}#move:${rofi-move}
-        rofi.kb-row-tab:
-        rofi.kb-remove-to-eol:
-        rofi.kb-accept-entry: Return
-        rofi.kb-mode-next: Tab
-        rofi.kb-mode-previous: Shift+Tab
-        rofi.kb-row-up: Control+k
-        rofi.kb-row-down: Control+j
-      '';
+      extraConfig = {
+        modi = "run,window,workspace:${rofi-workspace},move:${rofi-move}";
+        kb-row-tab = "";
+        kb-remove-to-eol = "";
+        kb-accept-entry = "Return";
+        kb-mode-next = "Tab";
+        kb-mode-previous = "Shift+Tab";
+        kb-row-up = "Control+k";
+        kb-row-down = "Control+j";
+      };
     };
 
     wayland.windowManager.sway = {

@@ -49,7 +49,7 @@
        file-templates    ; auto-snippets for empty files
        fold              ; (nigh) universal code folding
        multiple-cursors  ; editing in many places at once
-       parinfer          ; turn lisp into python, sort of
+       ;; parinfer          ; turn lisp into python, sort of
        rotate-text       ; cycle region at point between text candidates
        snippets          ; my elves. They type so I don't have to
        word-wrap         ; soft wrapping with language-aware indent
@@ -83,7 +83,7 @@
        ocaml             ; an objective camel
        cc                ; C/C++/Obj-C madness
        clojure           ; java with a lisp
-       csharp            ; unity, .NET, and mono shenanigans
+       ;; csharp            ; unity, .NET, and mono shenanigans
        data              ; config/data formats
        emacs-lisp        ; drown in parentheses
        (haskell +dante +lsp)  ; a language that's lazier than I am

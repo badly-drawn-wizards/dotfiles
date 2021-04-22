@@ -45,7 +45,6 @@
   environment = {
     systemPackages = with pkgs; [ 
       zsh
-      lxqt.lxqt-policykit
     ];
     pathsToLink = [ "/" ];
   };

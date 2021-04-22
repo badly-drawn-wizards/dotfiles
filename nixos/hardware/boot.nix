@@ -9,12 +9,12 @@
 
     initrd = {
       availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
-      kernelModules = [ "wl" "dm-raid" "dm-snapshot" ];
+      kernelModules = [ "dm-raid" "dm-snapshot" ];
     };
 
     kernelPackages = pkgs.linuxPackages_latest;
 
-    kernelModules = [ "wl" "kvm-intel" ];
+    kernelModules = [ "kvm-intel" ];
 
     cleanTmpDir = true;
 

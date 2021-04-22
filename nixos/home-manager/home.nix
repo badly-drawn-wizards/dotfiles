@@ -96,7 +96,7 @@ with builtins;
 
       # *Stands on table*
       # OCaml, my caml
-      ocaml dune
+      ocaml
 
       # PLF & PLFA my dudes
       coq
@@ -121,6 +121,8 @@ with builtins;
       gnome3.adwaita-icon-theme
 
       minecraft
+
+      texlive.combined.scheme-full
     ];
 
     sessionVariables = {
