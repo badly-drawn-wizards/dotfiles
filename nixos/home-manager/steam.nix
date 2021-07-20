@@ -4,8 +4,7 @@
 
   home.packages = with pkgs; [
     # Gaaaaaaaaames (HMU if you play Celeste)
-    steam
-    steam-run-native
+    (steam.override { extraLibraries = pkgs: [pkgs.pipewire]; })
 
     # For proton
     python3

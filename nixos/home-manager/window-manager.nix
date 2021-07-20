@@ -127,7 +127,9 @@ in {
             inherit command;
           })
           config.window-manager.startupPrograms;
-        fonts = [ "Font Awesome 8" "Fira Code 8" ];
+        fonts = {
+          names = [ "Font Awesome" "Fira Code" ];
+        };
         modifier = mod;
         menu = rofi-run "run";
         focus = {

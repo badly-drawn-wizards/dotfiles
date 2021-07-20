@@ -37,6 +37,10 @@ with builtins;
 
   programs = {
     mako.enable = true;
+    vscode = {
+      enable = true;
+      extensions = with pkgs; with vscode-extensions; [vscodevim.vim ms-vsliveshare.vsliveshare];
+    };
   };
 
   xdg = {
@@ -60,7 +64,7 @@ with builtins;
       thunderbird
 
       # Chat with some folks
-      teams zoom-us discord element-desktop slack
+      teams zoom-us discord element-desktop slack zulip
 
       # Reading some mafths
       mupdf
@@ -100,7 +104,7 @@ with builtins;
 
       # PLF & PLFA my dudes
       coq
-      # (agda.withPackages [ agdaPackages.standard-library ])
+      (agda.withPackages [ agdaPackages.standard-library ])
 
 
       # A window into windows
