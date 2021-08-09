@@ -17,7 +17,7 @@ with builtins;
     ./xresources.nix
     ./networking.nix
     ./steam.nix
-    ./idea.nix
+    ./intellij.nix
   ];
 
   window-manager.startupPrograms = with pkgs; [
