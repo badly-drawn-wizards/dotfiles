@@ -2,7 +2,7 @@
 
 {
   home.packages = with pkgs; [
-    idea
+    idea-community
   ];
 
   home.file = {
