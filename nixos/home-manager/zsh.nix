@@ -43,11 +43,15 @@
     bindkey "^N" history-search-forward
     bindkey "^R" history-incremental-pattern-search-backward
     bindkey "^S" history-incremental-pattern-search-forward
+
+    export MCFLY_KEY_SCHEME=vim
+    eval "$(mcfly init zsh)"
   '';
   };
 
   home.packages = with pkgs; [
     zsh-syntax-highlighting
     thefuck
+    mcfly
   ];
 }

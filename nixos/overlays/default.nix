@@ -5,6 +5,7 @@
     inputs.nur.overlay
     (import ./rot8.nix)
     (import ./dune.nix)
+    (import ./lean4-mode.nix)
     # (import ./steamtinkerlaunch.nix)
   ];
 }

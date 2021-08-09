@@ -29,16 +29,19 @@
         url = "github:edolstra/flake-compat";
         flake = false;
     };
+    flake-utils.url = "github:numtide/flake-utils";
   };
-  outputs = { nixpkgs, ... }@inputs: {
-    nixosConfigurations.noobnoob = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      specialArgs = {
-        inherit inputs;
+  outputs = { nixpkgs, flake-utils, ... }@inputs:
+    (flake-utils.lib.eachDefaultSystem (system:
+      {})) // {
+      nixosConfigurations.noobnoob = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = {
+          inherit inputs;
+        };
+        modules = [
+          ./configuration.nix
+        ];
       };
-      modules = [
-        ./configuration.nix
-      ];
     };
-  };
 }

@@ -70,11 +70,31 @@
   (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
   (setq web-mode-code-indent-offset 2))
 
-(after! lean-mode
-  (set-popup-rule! "\\*Lean Goal\\*"
-    :side 'right
-    :size 50))
+(after! lean4-mode
+  (lsp-register-client
+   (make-lsp-client :new-connection (lsp-stdio-connection (lambda () `(,(lean4-get-executable lean4-executable-name) "--server")))
+                    :environment-fn (lambda () '(("LEAN_PATH" . "./build")))
+                    :major-modes '(lean4-mode)
+                    :server-id 'lean4-lsp))
+  (set-lookup-handlers! 'lean4-mode
+    :definition #'lean4-find-definition)
+  (sp-with-modes 'lean4-mode
+    (sp-local-pair "/-" "-/")
+    (sp-local-pair "`" "`")
+    (sp-local-pair "{" "}")
+    (sp-local-pair "«" "»")
+    (sp-local-pair "⟨" "⟩")
+    (sp-local-pair "⟪" "⟫"))
+  (map! :map lean4-mode-map
+        :mode lean4-mode
+        :localleader
+        "g" #'lean4-toggle-show-goal
+        "n" #'lean4-toggle-next-error
+        "e" #'lean4-execute))
 
+(set-popup-rule! "\\*Lean Goal\\*"
+    :side 'right
+    :size 50)
 
 (after! coq-mode
   (set-popup-rule! "\\*goals\\*"

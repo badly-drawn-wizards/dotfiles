@@ -12,6 +12,5 @@
         set autochdir
         set tags=./tags,tags
       '';
-      ".ideavimrc".source = ./.ideavimrc;
   };
 }

@@ -26,7 +26,5 @@
 
   home.packages = with pkgs; [
     tridactyl-native
-
-    tor-browser-bundle-bin
   ];
 }
