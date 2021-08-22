@@ -91,6 +91,9 @@ in {
     home.sessionVariables = {
       XDG_SESSION_TYPE="wayland";
       XDG_CURRENT_DESKTOP="sway";
+
+      # Get sway to play nicely with IntelliJ
+      _JAVA_AWT_WM_NONREPARENTING=1;
     };
 
     # home.packages = with pkgs; [

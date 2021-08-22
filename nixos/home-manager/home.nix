@@ -16,7 +16,7 @@ with builtins;
     ./git.nix
     ./xresources.nix
     ./networking.nix
-    ./steam.nix
+    ./games.nix
     ./intellij.nix
   ];
 
@@ -40,7 +40,6 @@ with builtins;
     mako.enable = true;
     vscode = {
       enable = true;
-      extensions = with pkgs; with vscode-extensions; [vscodevim.vim ms-vsliveshare.vsliveshare];
     };
   };
 
@@ -128,6 +127,8 @@ with builtins;
       minecraft
 
       texlive.combined.scheme-full
+
+      java-language-server # Temporary
     ];
 
     sessionVariables = {

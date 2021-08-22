@@ -11,6 +11,6 @@
       fsType = "vfat";
     };
   };
-  swapDevices = [ ];
+  swapDevices = [ { device = "/var/swap"; size = 16384; } ];
 
 }

@@ -6,6 +6,7 @@
     (import ./rot8.nix)
     (import ./dune.nix)
     (import ./lean4-mode.nix)
+    (import ./java-language-server.nix)
     # (import ./steamtinkerlaunch.nix)
   ];
 }
