@@ -10,9 +10,8 @@
   programs.firefox = {
     enable = true;
 
-    package = pkgs.firefox-wayland;
+    package = pkgs.firefox-esr;
 
-    extensions = [];
     profiles."default" = {
       path = "lly2q038.default";
       userChrome = ''
@@ -22,7 +21,10 @@
     };
   };
 
-  home.sessionVariables.MOZ_USE_XINPUT2 = "1";
+  home.sessionVariables = {
+    MOZ_USE_XINPUT2 = "1";
+    MOZ_ENABLE_WAYLAND = "1";
+  };
 
   home.packages = with pkgs; [
     tridactyl-native

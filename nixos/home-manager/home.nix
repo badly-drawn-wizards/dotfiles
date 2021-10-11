@@ -98,14 +98,9 @@ with builtins;
       # Impressive if wasn't grating to my ears.
       spotify
 
-      # *Stands on table*
-      # OCaml, my caml
-      ocaml
-
-      # PLF & PLFA my dudes
-      coq
+      python3
       (agda.withPackages [ agdaPackages.standard-library ])
-
+      elan
 
       # A window into windows
       virt-manager virt-viewer wineWowPackages.staging winetricks
@@ -120,15 +115,10 @@ with builtins;
       nix-prefetch-github
       cachix
 
-      teeworlds
-
       gnome3.adwaita-icon-theme
-
-      minecraft
 
       texlive.combined.scheme-full
 
-      java-language-server # Temporary
     ];
 
     sessionVariables = {

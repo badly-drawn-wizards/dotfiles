@@ -89,7 +89,7 @@
        emacs-lisp        ; drown in parentheses
        (haskell +dante +lsp)  ; a language that's lazier than I am
        (java +lsp) ; the poster child for carpal tunnel syndrome
-       (web +lsp)
+       ;; (web +lsp)
        (javascript +lsp)        ; all(hope(abandon(ye(who(enter(here))))))
        json
        (latex +viewers +ref)
