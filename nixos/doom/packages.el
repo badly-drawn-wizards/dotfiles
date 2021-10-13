@@ -57,3 +57,4 @@
 (package! org-drill)
 (package! dhall-mode)
 (package! lean4-mode)
+(package! mips-mode)
