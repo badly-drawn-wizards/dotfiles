@@ -16,6 +16,7 @@
 
     bluetooth = {
       enable = true;
+      package = pkgs.bluezFull;
     };
 
     sensor = {

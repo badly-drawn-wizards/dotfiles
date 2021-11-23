@@ -178,7 +178,7 @@ in {
             "${mod}+o" = "exec ${rofi-run "workspace"}";
             "${mod}+Shift+o" = "exec ${rofi-run "move"}";
             "${mod}+p" = "exec ${rofi-run "window"}";
-
+            "${mod}+m" = "exec mpv-paste";
           };
 
         in lib.mkOptionDefault (

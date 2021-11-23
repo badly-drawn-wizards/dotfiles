@@ -119,6 +119,9 @@ with builtins;
 
       texlive.combined.scheme-full
 
+      mpv
+
+      wl-clipboard
     ];
 
     sessionVariables = {
@@ -132,6 +135,13 @@ with builtins;
       '';
       ".profile".source = ./.profile;
       ".zprofile".source = ./.profile;
+      ".local/bin/mpv-paste" = {
+        text = ''
+          #!/usr/bin/env /bin/sh
+          mpv --af=scaletempo=stride=30:search=20 $(wl-paste)
+        '';
+        executable = true;
+      };
     };
     stateVersion = "20.03";
   };

@@ -6,6 +6,8 @@
   ];
   home.file = {
     ".gitconfig".text = ''
+      [init]
+        defaultBranch = master
       [user]
         email = reuben.steenekamp@gmail.com
         name = Reuben Steenekamp

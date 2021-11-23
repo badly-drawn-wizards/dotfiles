@@ -87,7 +87,7 @@
        ;; csharp            ; unity, .NET, and mono shenanigans
        data              ; config/data formats
        emacs-lisp        ; drown in parentheses
-       (haskell +dante +lsp)  ; a language that's lazier than I am
+       (haskell +lsp)  ; a language that's lazier than I am
        (java +lsp) ; the poster child for carpal tunnel syndrome
        ;; (web +lsp)
        (javascript +lsp)        ; all(hope(abandon(ye(who(enter(here))))))
