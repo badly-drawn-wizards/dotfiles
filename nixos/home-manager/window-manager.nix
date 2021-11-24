@@ -147,6 +147,9 @@ in {
             xkb_layout = "us";
             xkb_options = "caps:swapescape";
           };
+          "ELAN2514:00 04F3:29F5" = {
+            map_to_output = "eDP-1";
+          };
         };
         output = {
           "eDP-1" = {

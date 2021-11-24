@@ -9,7 +9,7 @@ with builtins;
     ./i3status.nix
     ./zsh.nix
     ./browsers.nix
-    ./obs-studio.nix
+    ./obs.nix
     ./vim.nix
     ./emacs.nix
     ./calibre.nix

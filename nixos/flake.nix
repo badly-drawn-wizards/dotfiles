@@ -18,10 +18,16 @@
         nixpkgs.follows = "/nixpkgs";
       };
     };
+    doom-emacs = {
+      url = "github:hlissner/doom-emacs/develop";
+      flake = false;
+    };
     nix-doom-emacs = {
-      url = "github:vlaci/nix-doom-emacs";
+      # url = "github:vlaci/nix-doom-emacs/develop";
+      url = "/workspace/nix-doom-emacs";
       inputs = {
         nixpkgs.follows = "/nixpkgs";
+        doom-emacs.follows = "/doom-emacs";
         emacs-overlay.follows = "/emacs-overlay";
       };
     };
