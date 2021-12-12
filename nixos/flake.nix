@@ -32,22 +32,29 @@
       };
     };
     flake-compat = {
-        url = "github:edolstra/flake-compat";
-        flake = false;
+      url = "github:edolstra/flake-compat";
+      flake = false;
     };
-    flake-utils.url = "github:numtide/flake-utils";
+    dwarffs.url = "github:edolstra/dwarffs";
+    utils.url = "github:gytis-ivaskevicius/flake-utils-plus";
   };
-  outputs = { nixpkgs, flake-utils, ... }@inputs:
-    (flake-utils.lib.eachDefaultSystem (system:
-      {})) // {
-      nixosConfigurations.noobnoob = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = {
-          inherit inputs;
-        };
-        modules = [
-          ./configuration.nix
-        ];
+  outputs = { nixpkgs, utils, nur, emacs-overlay, self, ... }@inputs:
+    utils.lib.mkFlake {
+      inherit self inputs;
+
+      channelsConfig.allowUnfree = true;
+      channels.nixpkgs = {
+        patches = import ./patches;
+      };
+
+      sharedOverlays = [
+        (emacs-overlay.overlay)
+        (nur.overlay)
+      ] ++ import ./overlays;
+
+      hosts.noobnoob = {
+        modules = [ ./configuration.nix ];
+        specialArgs = { inherit inputs; };
       };
     };
 }

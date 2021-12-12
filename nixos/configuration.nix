@@ -4,12 +4,12 @@
 {
   imports =
     [
+      inputs.dwarffs.nixosModules.dwarffs
       ./hardware
       ./graphics
       ./audio
       ./networking
       ./fonts
-      ./overlays
       ./home-manager
       ./cachix.nix
     ];
@@ -43,8 +43,10 @@
   time.timeZone = "Africa/Johannesburg";
 
   environment = {
+    enableDebugInfo = true;
     systemPackages = with pkgs; [ 
       zsh
+      gnome3.adwaita-icon-theme
     ];
     pathsToLink = [ "/" ];
   };
@@ -71,7 +73,12 @@
     defaultUserShell = "/run/current-system/sw/bin/zsh";
   };
 
+  programs = {
+    dconf.enable = true;
+  };
+
   services = {
+    fstrim.enable = true;
     devmon.enable = true;
     blueman.enable = true;
     gvfs.enable = true;

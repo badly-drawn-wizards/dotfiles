@@ -30,6 +30,7 @@ with builtins;
     "${pasystray}/bin/pasystray"
     "${blueman}/bin/blueman-applet"
     "${dropbox}/bin/dropbox"
+    "${qbittorrent}/bin/qbittorrent"
 
     "${rot8}/bin/rot8"
     "${polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
@@ -48,7 +49,6 @@ with builtins;
   };
 
   services = {
-
     udiskie = {
       enable = true;
       tray = "always";
@@ -57,6 +57,8 @@ with builtins;
     network-manager-applet.enable = true;
     gpg-agent.enable = true;
   };
+
+  gtk.enable = true;
 
   home = {
     packages = with pkgs; [
@@ -97,6 +99,7 @@ with builtins;
       # 12k skips / hour = 3.3 skips / second
       # Impressive if wasn't grating to my ears.
       spotify
+      zrythm-debug
 
       python3
       (agda.withPackages [ agdaPackages.standard-library ])
@@ -122,6 +125,8 @@ with builtins;
       mpv
 
       wl-clipboard
+
+      unar
     ];
 
     sessionVariables = {
