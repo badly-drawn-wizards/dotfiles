@@ -51,10 +51,9 @@
 ;(package! builtin-package :recipe (:branch "develop"))
 
 
-;; (package! web-mode)
-(package! editorconfig)
-(package! futhark-mode)
-(package! org-drill)
-(package! dhall-mode)
+; (package! editorconfig)
 (package! lean4-mode)
-(package! mips-mode)
+(package! org-drill)
+
+(package! tree-sitter)
+(package! tree-sitter-langs)

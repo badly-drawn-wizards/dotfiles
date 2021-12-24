@@ -71,6 +71,8 @@ with builtins;
       # Reading some mafths
       mupdf
 
+      komikku
+
       # Write some mafths
       xournalpp dia
 
@@ -115,7 +117,7 @@ with builtins;
       libva-utils glxinfo
 
       # Nix tools
-      nix-prefetch-github
+      nix-prefetch
       cachix
 
       gnome3.adwaita-icon-theme

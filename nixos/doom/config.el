@@ -65,6 +65,8 @@
            "* Card :drill: \n\n%?\n\n** Answer" :prepend t)))
   (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5)))
 
+(after! nix-mode
+  (setq nix-nixfmt-bin "nixpkgs-fmt"))
 
 (after! web-mode
   (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
@@ -154,6 +156,14 @@
 
 (after! prettier-js
   (add-hook 'typescript-mode-hook 'prettier-js-mode))
+
+(use-package! tree-sitter
+  :init
+  (defadvice tsc-dyn-get--download (around tsc-dont-download (&rest arg)))
+  :config
+  (require 'tree-sitter-langs)
+  (global-tree-sitter-mode)
+  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
 
 (map!
  :leader

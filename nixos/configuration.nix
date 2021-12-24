@@ -78,6 +78,9 @@
   };
 
   services = {
+
+    neo4j.enable = true;
+
     fstrim.enable = true;
     devmon.enable = true;
     blueman.enable = true;

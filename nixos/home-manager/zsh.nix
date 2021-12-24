@@ -10,6 +10,7 @@
     enableAutosuggestions = true;
     shellAliases = {
       t = "tmux attach || tmux new";
+      ls = "exa";
     };
     plugins = [
       {
@@ -53,5 +54,6 @@
     zsh-syntax-highlighting
     thefuck
     mcfly
+    exa
   ];
 }
