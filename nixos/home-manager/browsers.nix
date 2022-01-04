@@ -10,8 +10,6 @@
   programs.firefox = {
     enable = true;
 
-    package = pkgs.firefox-esr;
-
     profiles."default" = {
       path = "lly2q038.default";
       userChrome = ''
