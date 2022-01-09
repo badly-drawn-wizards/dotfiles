@@ -182,6 +182,7 @@ in {
             "${mod}+Shift+o" = "exec ${rofi-run "move"}";
             "${mod}+p" = "exec ${rofi-run "window"}";
             "${mod}+m" = "exec mpv-paste";
+            "XF86PowerOff" = "exec toggle-rot8";
           };
 
         in lib.mkOptionDefault (

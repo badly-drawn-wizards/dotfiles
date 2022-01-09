@@ -18,6 +18,7 @@ with builtins;
     ./networking.nix
     ./games.nix
     ./intellij.nix
+    ./rot8.nix
   ];
 
   window-manager.startupPrograms = with pkgs; [
@@ -32,7 +33,6 @@ with builtins;
     "${dropbox}/bin/dropbox"
     "${qbittorrent}/bin/qbittorrent"
 
-    "${rot8}/bin/rot8"
     "${polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
   ];
 
