@@ -12,9 +12,15 @@
       kernelModules = [ "dm-raid" "dm-snapshot" ];
     };
 
+    kernelParams = [
+      "intel_iommu=on"
+    ];
+
     kernelPackages = pkgs.linuxPackages_latest;
 
-    kernelModules = [ "kvm-intel" ];
+    kernelModules = [
+      "kvm-intel"
+    ];
 
     cleanTmpDir = true;
 

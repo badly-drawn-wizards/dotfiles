@@ -35,6 +35,15 @@
       url = "github:edolstra/flake-compat";
       flake = false;
     };
+
+    nix-ld = {
+      url = "github:Mic92/nix-ld";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nix-alien = {
+      url = "github:thiagokokada/nix-alien";
+      inputs.nixpkgs.follows = "/nixpkgs";
+    };
     dwarffs.url = "github:edolstra/dwarffs";
     utils.url = "github:gytis-ivaskevicius/flake-utils-plus";
   };
@@ -55,6 +64,10 @@
       hosts.noobnoob = {
         modules = [ ./configuration.nix ];
         specialArgs = { inherit inputs; };
+      };
+
+      outputsBuilder = channels: with channels.nixpkgs; {
+        packages = { inherit vosk-api; };
       };
     };
 }

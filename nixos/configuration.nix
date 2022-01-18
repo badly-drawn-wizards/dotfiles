@@ -5,6 +5,7 @@
   imports =
     [
       inputs.dwarffs.nixosModules.dwarffs
+      inputs.nix-ld.nixosModules.nix-ld
       ./hardware
       ./graphics
       ./audio
@@ -19,7 +20,8 @@
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
-    registry.nixpkgs.flake = inputs.nixpkgs;
+    generateRegistryFromInputs = true;
+    linkInputs = true;
   };
 
   nixpkgs =  {
@@ -79,8 +81,6 @@
 
   services = {
 
-    neo4j.enable = true;
-
     fstrim.enable = true;
     devmon.enable = true;
     blueman.enable = true;
@@ -107,6 +107,8 @@
       enable = true;
       displayManager.startx.enable = true;
     };
+
+    gnome.gnome-keyring.enable = true;
 
     logind.extraConfig = ''
       HandlePowerKey=ignore

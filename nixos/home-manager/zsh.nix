@@ -11,6 +11,7 @@
     shellAliases = {
       t = "tmux attach || tmux new";
       ls = "exa";
+      dc = "docker-compose";
     };
     plugins = [
       {

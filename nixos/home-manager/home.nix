@@ -12,6 +12,7 @@ with builtins;
     ./obs.nix
     ./vim.nix
     ./emacs.nix
+    ./vscode
     ./calibre.nix
     ./git.nix
     ./xresources.nix
@@ -19,19 +20,20 @@ with builtins;
     ./games.nix
     ./intellij.nix
     ./rot8.nix
+    ./dictation.nix
   ];
 
   window-manager.startupPrograms = with pkgs; [
     "${mako}/bin/mako"
     "${firefox}/bin/firefox"
-    "${thunderbird}/bin/thunderbird"
-    "${xournalpp}/bin/xournalpp"
+    # "${thunderbird}/bin/thunderbird"
+    # "${xournalpp}/bin/xournalpp"
 
     "${onboard}/bin/onboard"
     "${pasystray}/bin/pasystray"
     "${blueman}/bin/blueman-applet"
     "${dropbox}/bin/dropbox"
-    "${qbittorrent}/bin/qbittorrent"
+    # "${qbittorrent}/bin/qbittorrent"
 
     "${polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
   ];
@@ -39,9 +41,6 @@ with builtins;
 
   programs = {
     mako.enable = true;
-    vscode = {
-      enable = true;
-    };
   };
 
   xdg = {
@@ -96,7 +95,7 @@ with builtins;
 
       # Misc utilites
       ranger direnv tree less jq
-      htop pciutils postman
+      htop pciutils postman lsof
 
       # 12k skips / hour = 3.3 skips / second
       # Impressive if wasn't grating to my ears.
@@ -119,6 +118,7 @@ with builtins;
       # Nix tools
       nix-prefetch
       cachix
+      fup-repl
 
       gnome3.adwaita-icon-theme
 
@@ -129,6 +129,8 @@ with builtins;
       wl-clipboard
 
       unar
+
+      docker-compose
     ];
 
     sessionVariables = {
