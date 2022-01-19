@@ -23,8 +23,8 @@
       flake = false;
     };
     nix-doom-emacs = {
-      # url = "github:vlaci/nix-doom-emacs/develop";
-      url = "/workspace/nix-doom-emacs";
+      url = "github:nix-community/nix-doom-emacs";
+      # url = "/workspace/nix-doom-emacs";
       inputs = {
         nixpkgs.follows = "/nixpkgs";
         doom-emacs.follows = "/doom-emacs";
@@ -66,8 +66,8 @@
         specialArgs = { inherit inputs; };
       };
 
-      outputsBuilder = channels: with channels.nixpkgs; {
-        packages = { inherit vosk-api; };
+      outputsBuilder = channels: {
+        packages = channels.nixpkgs;
       };
     };
 }

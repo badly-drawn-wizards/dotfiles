@@ -1,0 +1,66 @@
+From bee8743bbfd0ad30930f2c21ddcc405eaaf7c764 Mon Sep 17 00:00:00 2001
+From: Reuben Steenekamp <reuben.steenekamp@gmail.com>
+Date: Tue, 18 Jan 2022 16:57:42 +0200
+Subject: [PATCH] Use dynamic linking
+
+---
+ setup.py         |  1 -
+ vosk/__init__.py | 13 ++-----------
+ vosk_builder.py  |  4 ++--
+ 3 files changed, 4 insertions(+), 14 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index 9cc4dd9..2ed4120 100644
+--- a/setup.py
++++ b/setup.py
+@@ -52,7 +52,6 @@ setuptools.setup(
+     long_description_content_type="text/markdown",
+     url="https://github.com/alphacep/vosk-api",
+     packages=setuptools.find_packages(),
+-    package_data = {'vosk': ['*.so', '*.dll', '*.dyld']},
+     include_package_data=True,
+     classifiers=[
+         'Programming Language :: Python :: 3',
+diff --git a/vosk/__init__.py b/vosk/__init__.py
+index cf39a47..6a00786 100644
+--- a/vosk/__init__.py
++++ b/vosk/__init__.py
+@@ -4,17 +4,8 @@ import sys
+ from .vosk_cffi import ffi as _ffi
+ 
+ def open_dll():
+-    dlldir = os.path.abspath(os.path.dirname(__file__))
+-    if sys.platform == 'win32':
+-        # We want to load dependencies too
+-        os.environ["PATH"] = dlldir + os.pathsep + os.environ['PATH']
+-        if hasattr(os, 'add_dll_directory'):
+-            os.add_dll_directory(dlldir)
+-        return _ffi.dlopen(os.path.join(dlldir, "libvosk.dll"))
+-    elif sys.platform == 'linux':
+-        return _ffi.dlopen(os.path.join(dlldir, "libvosk.so"))
+-    elif sys.platform == 'darwin':
+-        return _ffi.dlopen(os.path.join(dlldir, "libvosk.dyld"))
++    if sys.platform == 'linux':
++        return _ffi.dlopen("libvosk.so")
+     else:
+         raise TypeError("Unsupported platform")
+ 
+diff --git a/vosk_builder.py b/vosk_builder.py
+index 902910d..5baf315 100644
+--- a/vosk_builder.py
++++ b/vosk_builder.py
+@@ -3,8 +3,8 @@
+ import os
+ from cffi import FFI
+ 
+-vosk_root=os.environ.get("VOSK_SOURCE", "..")
+-cpp_command = "cpp " + vosk_root + "/src/vosk_api.h"
++vosk_api_h=os.environ.get("VOSK_API_H")
++cpp_command = "cpp " + vosk_api_h
+ 
+ ffibuilder = FFI()
+- ffibuilder.set_source("vosk.vosk_cffi", None)
++ ffibuilder.set_source("vosk.vosk_cffi", None)
+-- 
+2.34.1
+

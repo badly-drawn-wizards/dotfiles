@@ -4,4 +4,5 @@
 (import ./zrythm.nix)
 (import ./komikku.nix)
 (import ./nerd-dictation.nix)
+(import ./sway.nix)
 ]

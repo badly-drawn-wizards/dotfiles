@@ -83,11 +83,6 @@ in {
   };
   config = {
 
-    # window-manager.startupPrograms = with pkgs; [
-      # "${xdg-desktop-portal-wlr}/libexec/xdg-desktop-portal-wlr"
-      # "${xdg-desktop-portal}/libexec/xdg-desktop-portal -r"
-    # ];
-
     home.sessionVariables = {
       XDG_SESSION_TYPE="wayland";
       XDG_CURRENT_DESKTOP="sway";
@@ -95,11 +90,6 @@ in {
       # Get sway to play nicely with IntelliJ
       _JAVA_AWT_WM_NONREPARENTING=1;
     };
-
-    # home.packages = with pkgs; [
-    #   xdg-desktop-portal
-    #   xdg-desktop-portal-wlr
-    # ];
 
     programs.rofi = {
       enable = true;
@@ -207,6 +197,7 @@ in {
             focusedWorkspace = mkBarColorSet base09 dark00;
             inactiveWorkspace = mkBarColorSet dark00 base09;
           };
+          trayOutput = "*";
         }];
       };
     };

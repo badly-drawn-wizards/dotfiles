@@ -14,4 +14,10 @@ stdenv.mkDerivation {
   buildInputs = [ kaldi openfst openblas mkl ];
 
   src = "${repo}/src";
+  patches = [ ./vosk-api-dynamic.patch ];
+  installPhase = ''
+    mkdir -p $out/{lib,include/vosk}
+    cp *.so $out/lib/
+    cp *.h  $out/include/vosk/
+  '';
 }

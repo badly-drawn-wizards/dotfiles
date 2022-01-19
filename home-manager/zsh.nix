@@ -23,7 +23,7 @@
     dirHashes = {
       org = "$HOME/org";
       ws = "/workspace";
-      nixos = "/workspace/dotfiles/nixos";
+      dot = "/workspace/dotfiles";
     };
     oh-my-zsh = {
       enable = true;

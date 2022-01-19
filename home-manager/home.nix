@@ -41,6 +41,7 @@ with builtins;
 
   programs = {
     mako.enable = true;
+    zathura.enable = true;
   };
 
   xdg = {
@@ -67,16 +68,10 @@ with builtins;
       # Chat with some folks
       teams zoom-us discord element-desktop slack zulip
 
-      # Reading some mafths
-      mupdf
-
       komikku
 
       # Write some mafths
       xournalpp dia
-
-      # Plug 'n play
-      udiskie
 
       # I got the bluez
       blueman
@@ -131,6 +126,7 @@ with builtins;
       unar
 
       docker-compose
+      dbeaver
     ];
 
     sessionVariables = {
@@ -148,6 +144,13 @@ with builtins;
         text = ''
           #!/usr/bin/env /bin/sh
           mpv --af=scaletempo=stride=30:search=20 $(wl-paste)
+        '';
+        executable = true;
+      };
+      ".local/bin/db" = {
+        text = ''
+          #!/usr/bin/env /bin/sh
+          GDK_BACKEND=x11 dbeaver
         '';
         executable = true;
       };
