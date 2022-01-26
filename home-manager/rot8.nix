@@ -1,6 +1,10 @@
 { config, lib, pkgs, ... }:
 
 {
+  window-manager.extraBinds = {
+    "XF86PowerOff" = "exec toggle-rot8";
+  };
+
   systemd.user.services.rot8 = {
     Unit = {
       Description = "rot8, automatic screen rotation";

@@ -3,7 +3,7 @@
 ;;; Code:
 
 (setq user-full-name "Reuben Steenekamp"
-      user-mail-address "reuben.steenekamp@smsportal.com")
+      user-mail-address "reuben.steenekamp@gmail.com")
 
 (setq doom-font (font-spec :family "Fira Code" :size 16))
 (setq doom-theme 'doom-spacegrey)
@@ -158,7 +158,7 @@
   (add-hook 'typescript-mode-hook 'prettier-js-mode))
 
 (use-package! tree-sitter
-  :init
+  ;; :init
   (defadvice tsc-dyn-get--download (around tsc-dont-download (&rest arg)))
   :config
   (require 'tree-sitter-langs)

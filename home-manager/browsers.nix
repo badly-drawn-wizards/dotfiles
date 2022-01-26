@@ -15,6 +15,9 @@
       userChrome = ''
       @namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"); /* set default namespace to XUL */
       #TabsToolbar {visibility: collapse;}
+      #sidebar-header {
+        display: none;
+      }
     '';
     };
   };

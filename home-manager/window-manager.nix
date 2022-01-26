@@ -3,6 +3,7 @@
 , config
 , ...
 }:
+
 with builtins;
 with config.theme;
 let
@@ -68,7 +69,8 @@ let
   rofi-workspace = rofi-workspace-cmd "rofi-workspace" (ws: "workspace ${ws}");
   rofi-move = rofi-workspace-cmd "rofi-move" (ws: "move window to workspace ${ws}");
 
-in {
+in
+{
   options = with lib; with types; {
     window-manager = {
       startupPrograms = mkOption {
@@ -110,8 +112,9 @@ in {
     wayland.windowManager.sway = {
       enable = true;
 
-      extraConfig = ''
-      input 1267:10741:ELAN2514:00_04F3:29F5 map_to_output eDP-1
+
+      extraSessionCommands = ''
+      . ${config.home.homeDirectory}/.profile
       '';
 
       config = {
@@ -137,7 +140,10 @@ in {
             xkb_layout = "us";
             xkb_options = "caps:swapescape";
           };
-          "ELAN2514:00 04F3:29F5" = {
+          "1267:10741:ELAN2514:00_04F3:29F5" = {
+            map_to_output = "eDP-1";
+          };
+          "1267:10741:ELAN2514:00_04F3:29F5_Stylus" = {
             map_to_output = "eDP-1";
           };
         };
@@ -172,7 +178,7 @@ in {
             "${mod}+Shift+o" = "exec ${rofi-run "move"}";
             "${mod}+p" = "exec ${rofi-run "window"}";
             "${mod}+m" = "exec mpv-paste";
-            "XF86PowerOff" = "exec toggle-rot8";
+            "${mod}+t" = "exec thunar";
           };
 
         in lib.mkOptionDefault (

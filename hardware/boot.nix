@@ -5,6 +5,13 @@
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
+      grub = {
+        enable = true;
+        efiSupport = true;
+        theme = pkgs.dracula-grub-theme;
+        gfxmodeEfi = "1920x1440,auto";
+        device = "nodev";
+      };
     };
 
     initrd = {

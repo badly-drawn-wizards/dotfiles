@@ -62,7 +62,7 @@
        (undo +tree)
 
        :term
-       shell             ; a terminal REPL for Emacs
+       vterm
 
        :checkers
        syntax              ; tasing you for every semicolon you forget

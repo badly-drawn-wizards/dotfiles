@@ -46,10 +46,7 @@
 
   environment = {
     enableDebugInfo = true;
-    systemPackages = with pkgs; [ 
-      zsh
-      gnome3.adwaita-icon-theme
-    ];
+    systemPackages = with pkgs; [ zsh ];
     pathsToLink = [ "/" ];
   };
 
@@ -77,6 +74,7 @@
 
   programs = {
     dconf.enable = true;
+    sway.enable = true;
   };
 
   services = {
@@ -114,9 +112,13 @@
       HandlePowerKey=ignore
     '';
 
-    dbus.enable = true;
+    dbus = {
+      enable = true;
+      packages = with pkgs; [ dconf ];
+    };
 
     udev = {
+      packages = with pkgs; [ gnome3.gnome-settings-daemon ];
       extraRules = ''
         KERNEL=="ttyUSB*", MODE="0777"
       '';

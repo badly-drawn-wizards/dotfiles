@@ -9,6 +9,9 @@
         nixpkgs.follows = "/nixpkgs";
       };
     };
+    nixpkgs-wayland  = {
+      url = "github:nix-community/nixpkgs-wayland";
+    };
     nur = {
       url = "github:nix-community/NUR";
     };
@@ -46,8 +49,17 @@
     };
     dwarffs.url = "github:edolstra/dwarffs";
     utils.url = "github:gytis-ivaskevicius/flake-utils-plus";
+    pypi-deps-db = {
+      url = "github:DavHau/pypi-deps-db";
+      flake = false;
+    };
+    mach-nix = {
+      url = "github:DavHau/mach-nix";
+      inputs.nixpkgs.follows = "/nixpkgs";
+      inputs.pypi-deps-db.follows = "/pypi-deps-db";
+    };
   };
-  outputs = { nixpkgs, utils, nur, emacs-overlay, self, ... }@inputs:
+  outputs = { nixpkgs, utils, emacs-overlay, nur, nixpkgs-wayland, mach-nix, self, ... }@inputs:
     utils.lib.mkFlake {
       inherit self inputs;
 
@@ -57,8 +69,10 @@
       };
 
       sharedOverlays = [
+        (self: super: { mach-nix = self.callPackage ({system}: mach-nix.lib.${system}) {}; })
         (emacs-overlay.overlay)
         (nur.overlay)
+        (nixpkgs-wayland.overlay)
       ] ++ import ./overlays;
 
       hosts.noobnoob = {

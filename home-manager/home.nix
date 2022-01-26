@@ -20,16 +20,18 @@ with builtins;
     ./games.nix
     ./intellij.nix
     ./rot8.nix
+    # ./wpaperd.nix
     ./dictation.nix
   ];
 
   window-manager.startupPrograms = with pkgs; [
     "${mako}/bin/mako"
     "${firefox}/bin/firefox"
+    "${discord}"
     # "${thunderbird}/bin/thunderbird"
     # "${xournalpp}/bin/xournalpp"
 
-    "${onboard}/bin/onboard"
+    "${squeekboard}/bin/squeekboard"
     "${pasystray}/bin/pasystray"
     "${blueman}/bin/blueman-applet"
     "${dropbox}/bin/dropbox"
@@ -41,7 +43,13 @@ with builtins;
 
   programs = {
     mako.enable = true;
-    zathura.enable = true;
+    zathura = {
+      enable = true;
+    };
+    obs-studio = {
+      enable = true;
+      plugins = [ pkgs.obs-studio-plugins.wlrobs ];
+    };
   };
 
   xdg = {
@@ -56,9 +64,27 @@ with builtins;
 
     network-manager-applet.enable = true;
     gpg-agent.enable = true;
+
+    # Has some weird black square
+    #xembed-sni-proxy.enable = true;
   };
 
-  gtk.enable = true;
+  gtk =
+    let
+      draculaTheme = {
+        package = pkgs.dracula-theme;
+        name = "Dracula";
+      };
+      whitesurTheme = {
+        package = pkgs.whitesur-icon-theme;
+        name = "WhiteSur-dark";
+      };
+    in
+    {
+      enable = true;
+      theme = draculaTheme;
+      iconTheme = whitesurTheme;
+    };
 
   home = {
     packages = with pkgs; [
@@ -68,7 +94,10 @@ with builtins;
       # Chat with some folks
       teams zoom-us discord element-desktop slack zulip
 
-      komikku
+      squeekboard
+      xfce.thunar
+
+      lightnovel-crawler
 
       # Write some mafths
       xournalpp dia
@@ -95,7 +124,6 @@ with builtins;
       # 12k skips / hour = 3.3 skips / second
       # Impressive if wasn't grating to my ears.
       spotify
-      zrythm-debug
 
       python3
       (agda.withPackages [ agdaPackages.standard-library ])
@@ -103,6 +131,9 @@ with builtins;
 
       # A window into windows
       virt-manager virt-viewer wineWowPackages.staging winetricks
+
+      # Yoho yoho
+      transmission-qt
 
       # Tell me how it is
       libnotify
@@ -114,8 +145,6 @@ with builtins;
       nix-prefetch
       cachix
       fup-repl
-
-      gnome3.adwaita-icon-theme
 
       texlive.combined.scheme-full
 
