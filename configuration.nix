@@ -46,7 +46,7 @@
 
   environment = {
     enableDebugInfo = true;
-    systemPackages = with pkgs; [ zsh ];
+    # systemPackages = with pkgs; [ zsh ];
     pathsToLink = [ "/" ];
   };
 
@@ -75,6 +75,7 @@
   programs = {
     dconf.enable = true;
     sway.enable = true;
+    zsh.enable = true;
   };
 
   services = {
