@@ -3,7 +3,7 @@
 {
   fileSystems = {
     "/" = {
-      device = "/dev/vg/root";
+      device = "/dev/vg0/nixos";
       fsType = "ext4";
     };
     "/boot" = {
@@ -11,6 +11,6 @@
       fsType = "vfat";
     };
   };
-  swapDevices = [ { device = "/var/swap"; size = 16384; } ];
+  swapDevices = [ { device = "/dev/vg0/swap"; } ];
 
 }

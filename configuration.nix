@@ -1,4 +1,7 @@
-{ pkgs, inputs, ... }:
+{ 
+pkgs, 
+inputs, 
+... }:
 
 
 {
@@ -46,7 +49,7 @@
 
   environment = {
     enableDebugInfo = true;
-    # systemPackages = with pkgs; [ zsh ];
+    systemPackages = with pkgs; [ vim git ];
     pathsToLink = [ "/" ];
   };
 

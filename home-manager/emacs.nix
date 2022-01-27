@@ -22,7 +22,7 @@
   # A marriage made in hell
   programs.doom-emacs =
     let
-      emacs = pkgs.emacs;
+      emacs = pkgs.emacsGit;
       epkgs = pkgs.emacsPackagesFor emacs;
     in {
       enable = true;

@@ -158,7 +158,7 @@
   (add-hook 'typescript-mode-hook 'prettier-js-mode))
 
 (use-package! tree-sitter
-  ;; :init
+  :init
   (defadvice tsc-dyn-get--download (around tsc-dont-download (&rest arg)))
   :config
   (require 'tree-sitter-langs)
