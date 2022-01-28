@@ -83,7 +83,7 @@ with builtins;
       thunderbird
 
       # Chat with some folks
-      teams zoom-us discord element-desktop slack zulip
+      teams zoom-us discord element-desktop slack zulip franz
 
       squeekboard
       xfce.thunar

@@ -3,6 +3,14 @@
 , lib
 , ...
 }:
+let
+  typewritten = pkgs.fetchFromGitHub {
+    owner = "reobin";
+    repo = "typewritten";
+    rev = "v1.4.5";
+    sha256 = "C3wpfv9qHvmAPxbC00uMdPMwAYpdaf+Ro5ydphgJgBo=";
+  };
+in
 {
   programs.zsh = {
     enable = true;
@@ -14,6 +22,11 @@
       dc = "docker-compose";
     };
     plugins = [
+      {
+        name = "typewritten";
+        src = typewritten;
+        file = "typewritten.zsh";
+      }
       {
         name = "zsh-syntax-highlighting";
         src = "${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting";
@@ -27,7 +40,8 @@
     };
     oh-my-zsh = {
       enable = true;
-      theme = "candy";
+      extraConfig = builtins.readFile ./zsh-theme-extra.zsh;
+      theme = "";
       plugins = [
         "direnv"
         "thefuck"
