@@ -157,14 +157,6 @@
 (after! prettier-js
   (add-hook 'typescript-mode-hook 'prettier-js-mode))
 
-(use-package! tree-sitter
-  :init
-  (defadvice tsc-dyn-get--download (around tsc-dont-download (&rest arg)))
-  :config
-  (require 'tree-sitter-langs)
-  (global-tree-sitter-mode)
-  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
-
 (map!
  :leader
 
@@ -192,3 +184,12 @@
 
 (setq tab-width 2)
 (setq evil-shift-width 2)
+
+(use-package! tree-sitter
+  :init
+  (defadvice tsc-dyn-get--download (around tsc-dont-download (&rest arg)))
+  :config
+  (cl-pushnew (expand-file-name "~/.tree-sitter") tree-sitter-load-path)
+  (require 'tree-sitter-langs)
+  (global-tree-sitter-mode)
+  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))

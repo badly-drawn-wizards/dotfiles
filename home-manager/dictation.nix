@@ -5,9 +5,9 @@
     #nerd-dictation
   ];
 
-  home.file = {
-    ".config/nerd-dictation/model" = {
-      source = pkgs.vosk-model-small-en-us;
-    };
-  };
+  # home.file = {
+  #   ".config/nerd-dictation/model" = {
+  #     source = pkgs.vosk-model-small-en-us;
+  #   };
+  # };
 }

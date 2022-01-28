@@ -1,4 +1,5 @@
 { pkgs
+, lib
 , ...
 }:
 with builtins;
@@ -21,7 +22,9 @@ with builtins;
     ./intellij.nix
     ./rot8.nix
     # ./wpaperd.nix
-    ./dictation.nix
+    # ./dictation.nix
+    ./nix.nix
+    ./kitty.nix
   ];
 
   window-manager.startupPrograms = with pkgs; [
@@ -69,22 +72,10 @@ with builtins;
     #xembed-sni-proxy.enable = true;
   };
 
-  gtk =
-    let
-      draculaTheme = {
-        package = pkgs.dracula-theme;
-        name = "Dracula";
-      };
-      whitesurTheme = {
-        package = pkgs.whitesur-icon-theme;
-        name = "WhiteSur-dark";
-      };
-    in
-    {
-      enable = true;
-      theme = draculaTheme;
-      iconTheme = whitesurTheme;
-    };
+  # xsession.pointerCursor = {
+  #   name = "Vanilla-DMZ";
+  #   size = 64;
+  # };
 
   home = {
     packages = with pkgs; [
@@ -115,7 +106,7 @@ with builtins;
       dropbox
 
       # Terminal stuff
-      rxvt-unicode tmux
+      tmux
 
       # Misc utilites
       ranger direnv tree less jq
@@ -140,11 +131,6 @@ with builtins;
 
       # MESA work FFS.
       libva-utils glxinfo
-
-      # Nix tools
-      nix-prefetch
-      cachix
-      fup-repl
 
       texlive.combined.scheme-full
 

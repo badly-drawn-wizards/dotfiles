@@ -8,6 +8,6 @@ in
   rot8 = callPackage (import ./rot8.nix) {};
   wizard = callPackage (import ./wizard.nix) {};
   dracula-grub-theme = callPackage (import ./dracula-grub-theme.nix) {};
+  dracula-rofi-theme = callPackage (import ./dracula-rofi-theme.nix) {};
   lightnovel-crawler = callPackage (import ./lightnovel-crawler.nix) {};
-  cum = callPackage (import ./cum.nix) {};
 }

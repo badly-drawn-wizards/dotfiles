@@ -1,7 +1,7 @@
 self: super:
 {
   sway-unwrapped =
-      (super.sway-unwrapped.overrideAttrs (attrs: {
+      super.sway-unwrapped.overrideAttrs (attrs: {
         src = super.fetchFromGitHub {
           owner = "FlexW";
           repo = "sway";
@@ -9,5 +9,10 @@ self: super:
           sha256 = "aOlvyO50dMQKWSfX/H9ZSG8st7nP6zgAwX+gZjDap8I=";
         };
         mesonFlags = attrs.mesonFlags ++ [ "-Dtray=enabled" "-Dwerror=false" ];
-      })).override { meson = self.meson_0_60; };
+      });
+
+  swaylock =
+    super.swaylock.overrideAttrs (attrs: {
+      mesonFlags = [ "-Dpam=enabled" "-Dgdk-pixbuf=enabled" "-Dman-pages=enabled" ];
+    });
 }

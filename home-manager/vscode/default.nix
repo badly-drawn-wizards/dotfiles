@@ -9,7 +9,14 @@
         "extensions.autoUpdate" = false;
       });
       extensions = with pkgs.vscode-extensions; [
+        bbenoist.nix
+        vscodevim.vim
+        kahole.magit
+        vspacecode.whichkey
+        vspacecode.vspacecode
         ms-dotnettools.csharp
+        dracula-theme.theme-dracula
+        ms-azuretools.vscode-docker
       ];
     };
 

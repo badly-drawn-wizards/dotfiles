@@ -13,7 +13,6 @@
       fira-code
       fira-code-symbols
       font-awesome
-      emacs-all-the-icons-fonts
       source-code-pro
       noto-fonts
       noto-fonts-emoji

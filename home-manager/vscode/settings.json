@@ -85,5 +85,6 @@
         "markdown": true
     },
     "agdaMode.connection.agdaPath": "/etc/profiles/per-user/reuben/bin/agda",
-    "csharp.suppressBuildAssetsNotification": true
+    "csharp.suppressBuildAssetsNotification": true,
+    "workbench.colorTheme": "Dracula"
 }

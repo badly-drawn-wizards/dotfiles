@@ -83,5 +83,15 @@
       outputsBuilder = channels: {
         packages = channels.nixpkgs;
       };
+    } // {
+      # :lf <path-to-dotfiles>
+      # :a repl
+      repl = rec {
+        pkgs = self.pkgs.x86_64-linux.nixpkgs;
+        config = self.nixosConfigurations.noobnoob.config;
+        hm = config.home-manager.users.reuben;
+        emacs = hm.programs.emacs.package;
+        epkgs = pkgs.emacsPackagesFor emacs;
+      };
     };
 }

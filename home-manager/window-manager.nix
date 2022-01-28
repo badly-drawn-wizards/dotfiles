@@ -20,6 +20,7 @@ let
     text = "#${txt}"; 
   };
   mod = "Mod4";
+  terminal = "${pkgs.kitty}/bin/kitty";
 
   rofi-run = modi:
     ''${pkgs.rofi}/bin/rofi -show ${modi}'';
@@ -93,21 +94,23 @@ in
       _JAVA_AWT_WM_NONREPARENTING=1;
     };
 
-    programs.rofi = {
-      enable = true;
-      font = "Fira Code 8";
-      terminal = "${pkgs.rxvt-unicode}/bin/urxvt";
-      extraConfig = {
-        modi = "run,window,workspace:${rofi-workspace},move:${rofi-move}";
-        kb-row-tab = "";
-        kb-remove-to-eol = "";
-        kb-accept-entry = "Return";
-        kb-mode-next = "Tab";
-        kb-mode-previous = "Shift+Tab";
-        kb-row-up = "Control+k";
-        kb-row-down = "Control+j";
-      };
-    };
+    home.file.".config/rofi/config.rasi".text = ''
+      @theme "${pkgs.dracula-rofi-theme}/theme/config2.rasi"
+      * {
+        font: "${config.font} ${builtins.toString config.fontSize}";
+      }
+      configuration {
+        modi: "run,window,workspace:${rofi-workspace},move:${rofi-move}";
+        kb-row-tab: "";
+        kb-remove-to-eol: "";
+        kb-accept-entry: "Return";
+        kb-mode-next: "Tab";
+        kb-mode-previous: "Shift+Tab";
+        kb-row-up: "Control+k";
+        kb-row-down: "Control+j";
+      }
+    '';
+    home.packages = with pkgs; [ rofi ];
 
     wayland.windowManager.sway = {
       enable = true;
@@ -118,6 +121,7 @@ in
       '';
 
       config = {
+        inherit terminal;
         startup = map
           (command: {
             inherit command;
@@ -149,7 +153,7 @@ in
         };
         output = {
           "eDP-1" = {
-            scale = "2";
+            # scale = "2";
             bg = "$HOME/backgrounds/megumin.jpg fill";
             mode = "3840x2168";
           };
@@ -188,20 +192,20 @@ in
           config.window-manager.extraBinds
         );
         colors = {
-          focused = mkColorSet base02 base05;
-          focusedInactive = mkColorSet base00 base0E;
-          unfocused = mkColorSet base00 base0E;
+          focused = mkColorSet color5 color0;
+          focusedInactive = mkColorSet color0 color12;
+          unfocused = mkColorSet color0 color12;
         };
         bars = [{
           position = "top";
           command = "${pkgs.sway}/bin/swaybar";
           # command = "${pkgs.waybar}/bin/waybar";
           colors = {
-            background = "#${base00}";
-            statusline = "#${base04}";
-            separator = "#${base02}";
-            focusedWorkspace = mkBarColorSet base09 dark00;
-            inactiveWorkspace = mkBarColorSet dark00 base09;
+            background = "#${background}";
+            statusline = "#${color12}";
+            separator = "#${color11}";
+            focusedWorkspace = mkBarColorSet color9 color0;
+            inactiveWorkspace = mkBarColorSet color0 color9;
           };
           trayOutput = "*";
         }];

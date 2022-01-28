@@ -22,13 +22,30 @@
   # A marriage made in hell
   programs.doom-emacs =
     let
-      emacs = pkgs.emacsGit;
+      emacs = pkgs.emacs;
       epkgs = pkgs.emacsPackagesFor emacs;
     in {
       enable = true;
       doomPrivateDir = ../doom;
       extraPackages = [ epkgs.lean4-mode epkgs.tsc ];
       emacsPackage = emacs;
+      emacsPackagesOverlay = eself: esuper: {
+        irony = esuper.irony.overrideAttrs (_: { doCheck = false; });
+
+        lean4-mode = esuper.trivialBuild {
+          pname = "lean4-mode";
+          version = "v4.0.0-m2";
+          src = pkgs.fetchFromGitHub {
+            owner = "leanprover";
+            repo = "lean4";
+            rev = "26dda3f63d885e8c22888926bdea0d99f58bf444";
+            sha256 = "e0bDkcyd8PYzU1KuPkgZFgC/bPTC9fuFQzc6mMzL9LY=";
+            fetchSubmodules = true;
+          };
+          sourceRoot = "source/lean4-mode";
+          packageRequires = with eself; [ dash dash-functional f flycheck lsp-mode magit-section s ];
+        };
+      };
     };
 
   home.packages = with pkgs; [

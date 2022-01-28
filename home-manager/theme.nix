@@ -2,27 +2,65 @@
 
 with lib;
 {
-  options.theme = mkOption {
-    type = types.attrsOf types.string;
-    default = {
-      base00 = "292b2e";
-      dark00 = "212026";
-      base01 = "484848";
-      base02 = "5d4d7a";
-      dark02 = "444155";
-      base03 = "5b5b5b";
-      base04 = "a3a3a3";
-      base05 = "b8b8b8";
-      base06 = "e8e8e8";
-      base07 = "f8f8f8";
-      base08 = "f2241f";
-      base09 = "ffa500";
-      base0A = "b1951d";
-      base0B = "67b11d";
-      base0C = "2d9574";
-      base0D = "4f97d7";
-      base0E = "734d79";
-      base0F = "b03060";
+  options = {
+    theme = mkOption {
+      type = types.attrsOf types.string;
+      default = {
+        background = "1e1f28";
+        foreground = "f8f8f2";
+        cursor = "bbbbbb";
+        selection_background = "44475a";
+        color0 = "000000";
+        color8 = "545454";
+        color1 = "ff5555";
+        color9 = "ff5454";
+        color2 = "50fa7b";
+        color10 = "50fa7b";
+        color3 = "f0fa8b";
+        color11 = "f0fa8b";
+        color4 = "bd92f8";
+        color12 = "bd92f8";
+        color5 = "ff78c5";
+        color13 = "ff78c5";
+        color6 = "8ae9fc";
+        color14 = "8ae9fc";
+        color7 = "bbbbbb";
+        color15 = "ffffff";
+        selection_foreground = "1e1f28";
+      };
     };
+    font = mkOption {
+      type = types.str;
+      default = "Fira Code";
+    };
+    fontSize = mkOption {
+      type = types.int;
+      default = 9;
+    };
+  };
+
+  config = {
+    gtk =
+      let
+        draculaTheme = {
+          package = pkgs.dracula-theme;
+          name = "Dracula";
+        };
+        whitesurTheme = {
+          package = pkgs.whitesur-icon-theme;
+          name = "WhiteSur-dark";
+        };
+        extraConfig = {
+        };
+        toGtk2 = config: lib.concatStringsSep "\n" (lib.mapAttrsToList (k: v: "${k} = ${builtins.toString v}") config);
+      in
+      {
+        enable = true;
+        theme = draculaTheme;
+        iconTheme = whitesurTheme;
+        gtk2.extraConfig = toGtk2 extraConfig;
+        gtk3 = { inherit extraConfig; };
+        gtk4 = { inherit extraConfig; };
+      };
   };
 }
