@@ -60,6 +60,15 @@
     };
   };
   outputs = { nixpkgs, utils, emacs-overlay, nur, nixpkgs-wayland, mach-nix, self, ... }@inputs:
+    let
+      flake-plus-module =
+        (_: {
+          nix = {
+            generateRegistryFromInputs = true;
+            linkInputs = true;
+          };
+        });
+    in
     utils.lib.mkFlake {
       inherit self inputs;
 
@@ -76,7 +85,10 @@
       ] ++ import ./overlays;
 
       hosts.noobnoob = {
-        modules = [ ./configuration.nix ];
+        modules = [
+          flake-plus-module
+          ./configuration.nix
+        ];
         specialArgs = { inherit inputs; };
       };
 
@@ -84,7 +96,7 @@
         packages = channels.nixpkgs;
       };
     } // {
-      # :lf <path-to-dotfiles>
+      # nix repl /dot
       # :a repl
       repl = rec {
         pkgs = self.pkgs.x86_64-linux.nixpkgs;

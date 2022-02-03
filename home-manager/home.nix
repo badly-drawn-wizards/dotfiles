@@ -5,7 +5,7 @@
 with builtins;
 {
   imports = [
-    ./theme.nix
+    ../theme.nix
     ./window-manager.nix
     ./i3status.nix
     ./zsh.nix
@@ -25,6 +25,7 @@ with builtins;
     # ./dictation.nix
     ./nix.nix
     ./kitty.nix
+    ./gtk.nix
   ];
 
   window-manager.startupPrograms = with pkgs; [
@@ -88,7 +89,7 @@ with builtins;
       squeekboard
       xfce.thunar
 
-      lightnovel-crawler
+      godot
 
       # Write some mafths
       xournalpp dia
@@ -119,9 +120,10 @@ with builtins;
       python3
       (agda.withPackages [ agdaPackages.standard-library ])
       elan
+      swiProlog
 
       # A window into windows
-      virt-manager virt-viewer wineWowPackages.staging winetricks
+      virt-manager virt-viewer
 
       # Yoho yoho
       transmission-qt

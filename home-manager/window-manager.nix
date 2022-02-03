@@ -7,6 +7,12 @@
 with builtins;
 with config.theme;
 let
+  io = {
+    keyboard = "1:1:AT_Translated_Set_2_keyboard";
+    stylus = "1267:10741:ELAN2514:00_04F3:29F5_Stylus";
+    touchpad = "1267:10741:ELAN2514:00_04F3:29F5";
+    monitor = "eDP-1";
+  };
   mkColorSet = bg: txt: {
     border = "#${bg}"; 
     childBorder = "#${bg}"; 
@@ -23,7 +29,7 @@ let
   terminal = "${pkgs.kitty}/bin/kitty";
 
   rofi-run = modi:
-    ''${pkgs.rofi}/bin/rofi -show ${modi}'';
+    ''${pkgs.rofi}/bin/rofi -matching fuzzy -show ${modi}'';
 
   # TODO switch this over to rofi
   rename-workspace = ''i3-input -F "rename workspace to %s"'';
@@ -140,20 +146,21 @@ in
           inner = 5;
         };
         input = {
-          "1:1:AT_Translated_Set_2_keyboard" = {
+          ${io.keyboard} = {
             xkb_layout = "us";
             xkb_options = "caps:swapescape";
+            repeat_rate = "0";
           };
-          "1267:10741:ELAN2514:00_04F3:29F5" = {
-            map_to_output = "eDP-1";
+          ${io.touchpad} = {
+            map_to_output = io.monitor;
           };
-          "1267:10741:ELAN2514:00_04F3:29F5_Stylus" = {
-            map_to_output = "eDP-1";
+          ${io.stylus} = {
+            map_to_output = io.monitor;
           };
         };
         output = {
-          "eDP-1" = {
-            # scale = "2";
+          ${io.monitor} = {
+            scale = "2";
             bg = "$HOME/backgrounds/megumin.jpg fill";
             mode = "3840x2168";
           };

@@ -12,5 +12,4 @@
     };
   };
   swapDevices = [ { device = "/dev/vg0/swap"; } ];
-
 }

@@ -10,6 +10,12 @@
   programs.firefox = {
     enable = true;
 
+    package = pkgs.firefox.override {
+      cfg = {
+        enableTridactylNative = true;
+      };
+    };
+
     profiles."default" = {
       path = "lly2q038.default";
       userChrome = ''
@@ -28,7 +34,8 @@
     MOZ_DBUS_REMOTE = "1";
   };
 
-  home.packages = with pkgs; [
-    tridactyl-native
-  ];
+  home.file.".tridactylrc".text = ''
+    colors quake
+    set editorcmd em
+  '';
 }

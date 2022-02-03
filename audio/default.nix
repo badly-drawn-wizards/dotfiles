@@ -29,5 +29,4 @@
       };
   };
 
-  services.pipewire.enable = true;
 }

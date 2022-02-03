@@ -27,11 +27,23 @@
     in {
       enable = true;
       doomPrivateDir = ../doom;
+      extraConfig = ''
+      (setq lsp-csharp-server-path "${pkgs.omnisharp-roslyn}/bin/omnisharp")
+      '';
       extraPackages = [ epkgs.lean4-mode epkgs.tsc ];
       emacsPackage = emacs;
       emacsPackagesOverlay = eself: esuper: {
         irony = esuper.irony.overrideAttrs (_: { doCheck = false; });
-
+        sln-mode = esuper.trivialBuild rec {
+          pname="sln-mode";
+          version="0f91d1b957c7d2a7bab9278ec57b54d57f1dbd9c";
+          src = pkgs.fetchFromGitHub {
+            owner = "sensorflo";
+            repo = "sln-mode";
+            rev = version;
+            sha256 = "XqkqPyEJuTtFslOz1fpTf/Klbd/zA7IGpzpmum/MGao=";
+          };
+        };
         lean4-mode = esuper.trivialBuild {
           pname = "lean4-mode";
           version = "v4.0.0-m2";

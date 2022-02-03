@@ -9,7 +9,9 @@ inputs,
     [
       inputs.dwarffs.nixosModules.dwarffs
       inputs.nix-ld.nixosModules.nix-ld
+      ./theme.nix
       ./hardware
+      ./power
       ./graphics
       ./audio
       ./networking
@@ -23,8 +25,6 @@ inputs,
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
-    generateRegistryFromInputs = true;
-    linkInputs = true;
   };
 
   nixpkgs =  {
@@ -112,20 +112,10 @@ inputs,
 
     gnome.gnome-keyring.enable = true;
 
-    logind.extraConfig = ''
-      HandlePowerKey=ignore
-    '';
 
     dbus = {
       enable = true;
       packages = with pkgs; [ dconf ];
-    };
-
-    udev = {
-      packages = with pkgs; [ gnome3.gnome-settings-daemon ];
-      extraRules = ''
-        KERNEL=="ttyUSB*", MODE="0777"
-      '';
     };
 
     flatpak.enable = true;
@@ -134,8 +124,12 @@ inputs,
   xdg.portal = {
     enable = true;
     extraPortals = [ pkgs.xdg-desktop-portal-wlr ];
+    gtkUsePortal = true;
   };
 
+  services.pipewire = {
+    enable = true;
+  };
 
   # Remember to check docs before considering changing this
   system.stateVersion = "20.03";

@@ -20,6 +20,8 @@ in
       t = "tmux attach || tmux new";
       ls = "exa";
       dc = "docker-compose";
+      ne = "nix-eval";
+      nattr = "nix-apply builtins.attrNames";
     };
     plugins = [
       {
@@ -50,7 +52,7 @@ in
 
     };
 
-    initExtra = ''
+    initExtra = let dollar = "$"; in ''
     stty -ixon
     zstyle ':completion:*' list-colors
     setopt autocd cdable_vars
@@ -62,6 +64,19 @@ in
 
     export MCFLY_KEY_SCHEME=vim
     eval "$(mcfly init zsh)"
+
+    function nix-apply() {
+      local f=$1
+      local args=${dollar}{*[2,-2]}
+      local x=${dollar}{*[-1]}
+      nix-eval $args "($f) ($x)"
+    }
+
+    function nix-eval() {
+      local expr="${dollar}{*[-1]}"
+      local args="${dollar}{*[1,-2]}"
+      nix eval /dot#repl --apply "repl: with repl; $expr" $args
+    }
   '';
   };
 

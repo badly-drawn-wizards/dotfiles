@@ -1,0 +1,35 @@
+{
+  "OmniSharp__x86_64-linux": {
+    "installPath": ".omnisharp/1.37.17",
+    "binaries": [
+      "./mono.linux-x86_64",
+      "./run"
+    ],
+    "urls": [
+      "https://download.visualstudio.microsoft.com/download/pr/47df6cf8-7648-4fff-9e9c-304f0202d31c/6cf1b92d91f942929922013b2139cca9/omnisharp-linux-x64-1.37.17.zip",
+      "https://roslynomnisharp.blob.core.windows.net/releases/1.37.17/omnisharp-linux-x64-1.37.17.zip"
+    ],
+    "sha256": "1zkl9al9r1sfl1jva0gscbirvmx2yrcc1phhza59dyf1nj0n29rl"
+  },
+  "Debugger__x86_64-linux": {
+    "installPath": ".debugger",
+    "binaries": [
+      "./vsdbg-ui",
+      "./vsdbg"
+    ],
+    "urls": [
+      "https://vsdebugger.azureedge.net/coreclr-debug-1-23-17/coreclr-debug-linux-x64.zip"
+    ],
+    "sha256": "0dikny8684841qyaqnrkjz5fc0ww3cbilpb10kz73yk7p6fn3x1w"
+  },
+  "Razor__x86_64-linux": {
+    "installPath": ".razor",
+    "binaries": [
+      "./rzls"
+    ],
+    "urls": [
+      "https://download.visualstudio.microsoft.com/download/pr/b8678010-2cd7-4201-a5e7-ba57920607d5/b846e9c7d7afdba54a72fae1dcb6c42c/razorlanguageserver-linux-x64-6.0.0-preview.5.21358.6.zip"
+    ],
+    "sha256": "0gb36nlb7fgcv03a0awna1qyrsky6ys5gkpsmvxc5j35f1yq337b"
+  }
+}

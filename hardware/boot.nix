@@ -9,7 +9,7 @@
         enable = true;
         efiSupport = true;
         theme = pkgs.dracula-grub-theme;
-        gfxmodeEfi = "1920x1440,auto";
+        gfxmodeEfi = "1920x1440,3840x2160,auto";
         device = "nodev";
       };
     };
@@ -26,8 +26,17 @@
     kernelPackages = pkgs.linuxPackages_latest;
 
     kernelModules = [
+      # For screen-sharing
+      "v4l2loopback"
+      "snd-aloop"
+
+      # Virtualization
       "kvm-intel"
     ];
+
+    extraModprobeConfig = ''
+    options v4l2loopback exclusive_caps=1 card_label="Screen"
+    '';
 
     cleanTmpDir = true;
 
