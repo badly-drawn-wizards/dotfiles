@@ -2,6 +2,7 @@ export TYPEWRITTEN_SYMBOL="λ "
 export DRACULA_TYPEWRITTEN_COLOR_MAPPINGS="primary:#d5ccff;secondary:#9580ff;info_neutral_1:#d0ffcc;info_neutral_2:#ffffcc;info_special:#ff9580;info_negative:#ff5555;notice:#ffff80;accent:#d5ccff"
 export TYPEWRITTEN_COLOR_MAPPINGS="${DRACULA_TYPEWRITTEN_COLOR_MAPPINGS}"
 export TYPEWRITTEN_PROMPT_LAYOUT="multiline"
+export TYPEWRITTEN_DISABLE_RETURN_CODE=1
 
 # Dracula Theme (for zsh-syntax-highlighting)
 #

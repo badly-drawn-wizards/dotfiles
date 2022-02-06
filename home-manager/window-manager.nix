@@ -36,7 +36,7 @@ let
 
   assigns = {
     " web" = [
-      { class = "^Firefox$"; }
+      { app_id = "^firefox$"; }
     ];
     " read" = [
       { app_id = "^calibre-gui$"; }
@@ -47,11 +47,11 @@ let
       { class = "^discord$"; }
       { class = "^Riot$"; }
       { class = "^Slack$"; }
-      { class = "^Thunderbird$"; }
+      { app_id = "^thunderbird$"; }
     ];
     " write" = [
       { class = "^Write$"; }
-      { app_id = "^com.github.xournalpp.xournalpp"; }
+      { app_id = "^xournalpp"; }
     ];
   };
 
@@ -117,6 +117,10 @@ in
       }
     '';
     home.packages = with pkgs; [ rofi ];
+
+    window-manager.startupPrograms = [
+      # "${pkgs.autotiling}/bin/autotiling"
+    ];
 
     wayland.windowManager.sway = {
       enable = true;
@@ -190,6 +194,9 @@ in
             "${mod}+p" = "exec ${rofi-run "window"}";
             "${mod}+m" = "exec mpv-paste";
             "${mod}+t" = "exec thunar";
+
+            "XF86MonBrightnessUp" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set +10%";
+            "XF86MonBrightnessDown" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set 10%-";
           };
 
         in lib.mkOptionDefault (

@@ -1,50 +1,4 @@
 {
-    "vim.easymotion": true,
-    "vim.useSystemClipboard": true,
-    "vim.normalModeKeyBindingsNonRecursive": [
-        {
-            "before": [
-                "<space>"
-            ],
-            "commands": [
-                "vspacecode.space"
-            ]
-        },
-        {
-            "before": [
-                ","
-            ],
-            "commands": [
-                "vspacecode.space",
-                {
-                    "command": "whichkey.triggerKey",
-                    "args": "m"
-                }
-            ]
-        }
-    ],
-    "vim.visualModeKeyBindingsNonRecursive": [
-        {
-            "before": [
-                "<space>"
-            ],
-            "commands": [
-                "vspacecode.space"
-            ]
-        },
-        {
-            "before": [
-                ","
-            ],
-            "commands": [
-                "vspacecode.space",
-                {
-                    "command": "whichkey.triggerKey",
-                    "args": "m"
-                }
-            ]
-        }
-    ],
     "explorer.confirmDelete": false,
     "editor.suggestSelection": "first",
     "editor.minimap.enabled": false,
@@ -62,6 +16,7 @@
         "**/.factorypath": true,
         "**/*.olean": true
     },
+    "workbench.startupEditor": "none",
     "workbench.editorAssociations": {
         "*.pdf": "pdf.preview"
     },

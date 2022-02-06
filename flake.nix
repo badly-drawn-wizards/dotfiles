@@ -59,7 +59,7 @@
       inputs.pypi-deps-db.follows = "/pypi-deps-db";
     };
   };
-  outputs = { nixpkgs, utils, emacs-overlay, nur, nixpkgs-wayland, mach-nix, self, ... }@inputs:
+  outputs = { nixpkgs, utils, emacs-overlay, nur, nixpkgs-wayland, mach-nix, nix-alien, self, ... }@inputs:
     let
       flake-plus-module =
         (_: {
@@ -82,6 +82,7 @@
         (emacs-overlay.overlay)
         (nur.overlay)
         (nixpkgs-wayland.overlay)
+        (nix-alien.overlay)
       ] ++ import ./overlays;
 
       hosts.noobnoob = {

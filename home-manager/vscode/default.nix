@@ -8,12 +8,16 @@ in
       enable = true;
       userSettings = with builtins;
         (fromJSON (readFile ./settings.json) //
-        (fromJSON (readFile ./vspacecode/settings.json)) // {
-        "omnisharp.path" = "${pkgs.omnisharp-roslyn}/bin/omnisharp";
-        "omnisharp.loggingLevel" = "trace";
-        "extensions.autoCheckUpdates" = false;
-        "extensions.autoUpdate" = false;
-      });
+        (fromJSON (readFile ./vspacecode/settings.json)) //
+        {
+          "whichkey.bindingOverrides" = (fromJSON (readFile ./whichkey.json));
+        } // {
+          "omnisharp.path" = "${pkgs.omnisharp-roslyn}/bin/omnisharp";
+          "omnisharp.loggingLevel" = "trace";
+          "omnisharp.enableDecompilationSupport" = true;
+          "extensions.autoCheckUpdates" = false;
+          "extensions.autoUpdate" = false;
+        });
       keybindings = [
       ] ++ builtins.fromJSON (builtins.readFile ./vspacecode/keybindings.json);
       extensions = with pkgs.vscode-extensions; [
