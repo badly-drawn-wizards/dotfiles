@@ -91,8 +91,9 @@ with builtins;
 
       godot
 
-      # Write some mafths
       xournalpp dia
+
+      libreoffice onlyoffice-bin
 
       # I got the bluez
       blueman

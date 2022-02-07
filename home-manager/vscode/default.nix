@@ -37,6 +37,12 @@ in
           version = "0.0.2";
           sha256 = "TVvjKdKXeExpnyUh+fDPl+eSdlQzh7lt8xSfw1YgtL4=";
         }
+        {
+          publisher = "jroesch";
+          name = "lean";
+          version = "0.16.45";
+          sha256 = "sha256-bZJ374kvzZpjxTBbadHLEoET7ilRhu4afuWN+qG0Tng=";
+        }
       ];
     };
 
