@@ -8,7 +8,7 @@
       ./printing.nix
     ];
 
-  nix.maxJobs = 8;
+  nix.settings.max-jobs = 8;
   powerManagement.cpuFreqGovernor = "powersave";
 
   hardware = {

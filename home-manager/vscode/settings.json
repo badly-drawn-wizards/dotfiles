@@ -1,7 +1,14 @@
 {
     "explorer.confirmDelete": false,
-    "editor.suggestSelection": "first",
+
     "editor.minimap.enabled": false,
+    "editor.suggestSelection": "first",
+
+    "editor.tabSize": 2,
+
+    "editor.fontFamily": "'Fira Code', 'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'",
+    "editor.fontLigatures": true,
+
     "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
     "files.exclude": {
         "**/.git": true,
@@ -20,8 +27,6 @@
     "workbench.editorAssociations": {
         "*.pdf": "pdf.preview"
     },
-    "java.trace.server": "verbose",
-    "editor.formatOnSave": true,
     "[javascript]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
@@ -41,5 +46,6 @@
     },
     "agdaMode.connection.agdaPath": "/etc/profiles/per-user/reuben/bin/agda",
     "csharp.suppressBuildAssetsNotification": true,
-    "workbench.colorTheme": "Dracula"
+    "workbench.colorTheme": "Dracula",
+    "vim.foldfix": true
 }

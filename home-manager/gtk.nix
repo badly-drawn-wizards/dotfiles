@@ -22,7 +22,14 @@ with lib;
         theme = draculaTheme;
         iconTheme = whitesurTheme;
         gtk2.extraConfig = toGtk2 extraConfig;
-        gtk3 = { inherit extraConfig; };
+        gtk3 = {
+          inherit extraConfig;
+          bookmarks = [
+            "file://${config.home.homeDirectory}/university"
+            "file:///workspace"
+            "file:///dot"
+          ];
+        };
         gtk4 = { inherit extraConfig; };
       };
   };

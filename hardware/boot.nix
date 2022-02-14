@@ -16,13 +16,16 @@
 
     initrd = {
       availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
-      kernelModules = [ "i915" "dm-raid" "dm-snapshot" ];
+      kernelModules = [ "i915" ];
     };
 
     kernelParams = [
       "intel_iommu=on"
     ];
 
+    extraModulePackages = [
+      config.boot.kernelPackages.v4l2loopback.out
+    ];
     kernelPackages = pkgs.linuxPackages_latest;
 
     kernelModules = [

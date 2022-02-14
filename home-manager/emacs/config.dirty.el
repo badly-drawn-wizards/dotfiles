@@ -1,16 +1,9 @@
-;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
-
-;;; Code:
+;;;  -*- lexical-binding: t; -*-
 
 (setq user-full-name "Reuben Steenekamp"
       user-mail-address "reuben.steenekamp@gmail.com")
 
-(setq doom-font (font-spec :family "Fira Code" :size 16))
 (setq doom-theme 'doom-spacegrey)
-
-(defconst my/opacity 99)
-(set-frame-parameter (selected-frame) 'alpha my/opacity)
-(add-to-list 'default-frame-alist `(alpha . ,my/opacity))
 
 (defvar pomodoro-espeak--compliments
   '("you sexy beast"
@@ -30,7 +23,6 @@
 
 (defun pomodoro-espeak/pomodoro-break-over ()
   (pomodoro-espeak/speak "Break is over. Back to work."))
-
 
 (after! alert
   (setq alert-default-style 'libnotify))
@@ -114,41 +106,21 @@
 (after! dante
   (setq dante-methods '(impure-nix new-build bare-ghci)))
 
-(after! direnv
-  (direnv-mode))
+(after! envrc
+  (defadvice envrc--update (after envrc-hooks () activate)
+    (run-hooks 'envrc-hook)))
 
-(after! python
-  (defadvice +eval/send-region-to-repl (around micropython-send-to-repl (&rest arg) activate)
-    (let ((should-run (equal python-shell-interpreter "mpfshell"))
-          (python-process (get-buffer-process "*Python*")))
-      (if should-run
-        (comint-send-string python-process ""))
-      ad-do-it
-      (if should-run
-        (comint-send-string python-process "")))))
+(defvar executable-var-alist
+  '((lsp-python-ms-executable . "python-language-server")
+    (lsp-python-ms-python-executable . "python")
+    (lsp-csharp-server-path . "omnisharp")
+    (lsp-purescript-server-executable . "purescript-language-server")))
 
-
-(after! lsp-python-ms
-  ;; Defer for use with direnv
-  (add-hook
-   'python-mode-hook
-   (lambda ()
-     (setq lsp-python-ms-executable (executable-find "python-language-server")))))
-
-(after! lsp-purescript
-  (add-hook
-   'purescript-mode-hook
-   (lambda ()
-     (setq lsp-purescript-server-executable (executable-find "purescript-language-server")))))
-
-(after! lsp-lua
-  (lsp-register-client
-   (make-lsp-client
-    :new-connection (lsp-stdio-connection (lambda () (executable-find "lua-lsp")))
-
-    :major-modes '(lua-mode)
-    :priority -3
-    :server-id 'lsp-lua-lsp)))
+(defun update-executable-vars ()
+  "Locally update variables that point to executables by looking up them up in PATH."
+  (cl-loop for (var . name) in executable-var-alist
+     collect (set (make-local-variable var) (executable-find name))))
+(add-hook 'envrc-hook #'update-executable-vars)
 
 (after! agda2
   (add-to-list 'auto-mode-alist '("\\.agda\\'" . agda2-mode))

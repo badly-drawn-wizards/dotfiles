@@ -47,7 +47,10 @@
       url = "github:thiagokokada/nix-alien";
       inputs.nixpkgs.follows = "/nixpkgs";
     };
-    dwarffs.url = "github:edolstra/dwarffs";
+    dwarffs = {
+      url = "github:edolstra/dwarffs";
+      inputs.nixpkgs.follows = "/nixpkgs";
+    };
     utils.url = "github:gytis-ivaskevicius/flake-utils-plus";
     pypi-deps-db = {
       url = "github:DavHau/pypi-deps-db";
@@ -61,11 +64,16 @@
   };
   outputs = { nixpkgs, utils, emacs-overlay, nur, nixpkgs-wayland, mach-nix, nix-alien, self, ... }@inputs:
     let
+      flakePath = "/workspace/dotfiles";
       flake-plus-module =
         (_: {
           nix = {
             generateRegistryFromInputs = true;
             linkInputs = true;
+            registry.dot.to = {
+              type = "path";
+              path = flakePath;
+            };
           };
         });
     in

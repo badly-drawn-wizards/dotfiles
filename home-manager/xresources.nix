@@ -2,7 +2,7 @@
 with config.theme;
 {
 
-  window-manager.startupPrograms = [
+  windowManager.startupPrograms = [
     "xrdb -merge $HOME/.Xresources"
   ];
 
@@ -26,7 +26,7 @@ with config.theme;
     "*color4" = "#${color4}";
     "*color5" = "#${color5}";
     "*color6" = "#${color6}";
-    "*color7" = "{color7}";
+    "*color7" = "#${color7}";
 
     "*color8" = "#${color8}";
     "*color9" = "#${color9}";

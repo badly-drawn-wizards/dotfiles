@@ -1,8 +1,22 @@
 { config, lib, pkgs, inputs, ... }:
 
+let
+  configPath = ".emacs.d/lisp";
+  cleanConfig = ''
+  (setq doom-font (font-spec :family "${config.fontMono}" :size 16))
+  '';
+  cleanConfigName = "config.clean.el";
+  dirtyConfigName= "config.dirty.el";
+in
 {
-  home.sessionVariables.EDITOR = "em";
+  home.sessionVariables = {
+    EDITOR = "em";
+  };
+
   home.file = {
+    "${configPath}/${cleanConfigName}".text = cleanConfig;
+    "${configPath}/${dirtyConfigName}".source = config.lib.file.mkOutOfStoreSymlink "${import ./path-to-this-directory.nix}/${dirtyConfigName}";
+
     ".local/bin/em" = {
       text = ''
         #!/usr/bin/env /bin/sh
@@ -26,11 +40,16 @@
       epkgs = pkgs.emacsPackagesFor emacs;
     in {
       enable = true;
-      doomPrivateDir = ../doom;
+      doomPrivateDir = ./doom;
       extraConfig = ''
-      (setq lsp-csharp-server-path "${pkgs.omnisharp-roslyn}/bin/omnisharp")
+      (add-to-list 'load-path "${config.home.homeDirectory}/${configPath}")
+      (load "${cleanConfigName}")
+      (load "${dirtyConfigName}")
       '';
-      extraPackages = [ epkgs.lean4-mode epkgs.tsc ];
+      extraPackages = [
+        epkgs.tsc
+        pkgs.cargo
+      ];
       emacsPackage = emacs;
       emacsPackagesOverlay = eself: esuper: {
         irony = esuper.irony.overrideAttrs (_: { doCheck = false; });

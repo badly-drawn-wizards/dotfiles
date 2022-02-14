@@ -1,0 +1,167 @@
+From 30e1d443fe43b3c87f64cf03a7286d429565cba2 Mon Sep 17 00:00:00 2001
+From: Julius de Bruijn <julius+github@nauk.io>
+Date: Thu, 9 Dec 2021 14:30:12 +0100
+Subject: [PATCH] emacsPackages.tree-sitter: fix grammar/native executor
+
+---
+ .../emacs/elisp-packages/manual-packages.nix  |  3 +
+ .../tree-sitter-langs/default.nix             | 55 ++++++++++++++
+ .../emacs/elisp-packages/tsc/default.nix      | 73 +++++++++++++++++++
+ 3 files changed, 131 insertions(+)
+ create mode 100644 pkgs/applications/editors/emacs/elisp-packages/tree-sitter-langs/default.nix
+ create mode 100644 pkgs/applications/editors/emacs/elisp-packages/tsc/default.nix
+
+diff --git a/pkgs/applications/editors/emacs/elisp-packages/manual-packages.nix b/pkgs/applications/editors/emacs/elisp-packages/manual-packages.nix
+index 676b9bfca9a61..1db36388bb107 100644
+--- a/pkgs/applications/editors/emacs/elisp-packages/manual-packages.nix
++++ b/pkgs/applications/editors/emacs/elisp-packages/manual-packages.nix
+@@ -229,6 +229,9 @@
+ 
+   sv-kalender = callPackage ./sv-kalender { };
+ 
++  tree-sitter-langs = callPackage ./tree-sitter-langs { };
++  tsc = callPackage ./tsc { };
++
+   youtube-dl = callPackage ./youtube-dl { };
+ 
+   # From old emacsPackages (pre emacsPackagesNg)
+diff --git a/pkgs/applications/editors/emacs/elisp-packages/tree-sitter-langs/default.nix b/pkgs/applications/editors/emacs/elisp-packages/tree-sitter-langs/default.nix
+new file mode 100644
+index 0000000000000..1dbcf605adf99
+--- /dev/null
++++ b/pkgs/applications/editors/emacs/elisp-packages/tree-sitter-langs/default.nix
+@@ -0,0 +1,55 @@
++{ lib
++, pkgs
++, symlinkJoin
++, fetchzip
++, melpaBuild
++, stdenv
++, fetchFromGitHub
++, writeText
++}:
++
++let
++  version = "0.10.14";
++  tree-sitter-grammars = stdenv.mkDerivation rec {
++    name = "tree-sitter-grammars";
++
++    inherit version;
++
++    src = fetchzip {
++      name = "tree-sitter-grammars-linux-${version}.tar.gz";
++      url = "https://github.com/emacs-tree-sitter/tree-sitter-langs/releases/download/${version}/${src.name}";
++      sha256 = "sha256-J8VplZWhyWN8ur74Ep0CTl4nPtESzfs2Gh6MxfY5Zqc=";
++      stripRoot = false;
++    };
++
++    installPhase = ''
++      install -d $out/langs/bin
++      echo -n $version > $out/langs/bin/BUNDLE-VERSION
++      install -m444 * $out/langs/bin
++    '';
++  };
++in melpaBuild rec {
++  inherit version;
++
++  pname = "tree-sitter-langs";
++  commit = version;
++
++  src = fetchFromGitHub {
++    owner = "emacs-tree-sitter";
++    repo = "tree-sitter-langs";
++    rev = version;
++    sha256 = "sha256-uKfkhcm1k2Ov4fSr7ALVnpQoX/l9ssEWMn761pa7Y/c=";
++  };
++
++  recipe = writeText "recipe" ''
++    (tree-sitter-langs
++    :repo "emacs-tree-sitter/tree-sitter-langs"
++    :fetcher github
++    :files (:defaults "queries"))
++  '';
++
++  postPatch = ''
++    substituteInPlace ./tree-sitter-langs-build.el \
++    --replace "tree-sitter-langs-grammar-dir tree-sitter-langs--dir"  "tree-sitter-langs-grammar-dir \"${tree-sitter-grammars}/langs\""
++  '';
++}
+diff --git a/pkgs/applications/editors/emacs/elisp-packages/tsc/default.nix b/pkgs/applications/editors/emacs/elisp-packages/tsc/default.nix
+new file mode 100644
+index 0000000000000..aefb7d02004dd
+--- /dev/null
++++ b/pkgs/applications/editors/emacs/elisp-packages/tsc/default.nix
+@@ -0,0 +1,73 @@
++{ lib
++, symlinkJoin
++, melpaBuild
++, fetchFromGitHub
++, rustPlatform
++, writeText
++, clang
++, llvmPackages
++}:
++with lib.licenses;
++with rustPlatform;
++with llvmPackages;
++
++let
++  version = "0.16.1";
++
++  src = fetchFromGitHub {
++    owner = "emacs-tree-sitter";
++    repo = "elisp-tree-sitter";
++    rev = version;
++    sha256 = "sha256-tAohHdAsy/HTFFPSNOo0UyrdolH8h0KF2ekFXuLltBE=";
++  };
++
++  tsc = melpaBuild rec {
++    inherit src;
++    inherit version;
++
++    pname = "tsc";
++    commit = version;
++
++    sourceRoot = "source/core";
++
++    recipe = writeText "recipe" ''
++      (tsc
++      :repo "emacs-tree-sitter/elisp-tree-sitter"
++      :fetcher github)
++    '';
++  };
++
++  tsc-dyn = buildRustPackage {
++    inherit version;
++    inherit src;
++
++    pname = "tsc-dyn";
++
++    nativeBuildInputs = [ clang ];
++    sourceRoot = "source/core";
++
++    configurePhase = ''
++      export LIBCLANG_PATH="${libclang.lib}/lib"
++    '';
++
++    postInstall = ''
++      LIB=($out/lib/libtsc_dyn.*)
++      TSC_PATH=$out/share/emacs/site-lisp/elpa/tsc-${version}
++      install -d $TSC_PATH
++      install -m444 $out/lib/libtsc_dyn.* $TSC_PATH/''${LIB/*libtsc_/tsc-}
++      echo -n $version > $TSC_PATH/DYN-VERSION
++      rm -r $out/lib
++    '';
++
++    cargoSha256 = "sha256-7UOhs3wx6fGvqPjNxUKoEHwPtiJ5zgLFPwDSvhYlmis=";
++  };
++in symlinkJoin {
++  name = "tsc";
++  paths = [ tsc tsc-dyn ];
++
++  meta = {
++    description = "The core APIs of the Emacs binding for tree-sitter.";
++    license = mit;
++    maintainers = with maintainers; [ pimeys ];
++  };
++}

@@ -25,7 +25,7 @@ let
     background = "#${bg}"; 
     text = "#${txt}"; 
   };
-  mod = "Mod4";
+  mod = config.wayland.windowManager.sway.config.modifier;
   terminal = "${pkgs.kitty}/bin/kitty";
 
   rofi-run = modi:
@@ -79,7 +79,7 @@ let
 in
 {
   options = with lib; with types; {
-    window-manager = {
+    windowManager = {
       startupPrograms = mkOption {
         type = listOf str;
         default = [];
@@ -118,29 +118,24 @@ in
     '';
     home.packages = with pkgs; [ rofi ];
 
-    window-manager.startupPrograms = [
-      # "${pkgs.autotiling}/bin/autotiling"
-    ];
-
     wayland.windowManager.sway = {
       enable = true;
 
-
       extraSessionCommands = ''
-      . ${config.home.homeDirectory}/.profile
+        . "${config.home.profileDirectory}/etc/profile.d/hm-session-vars.sh"
       '';
 
       config = {
         inherit terminal;
         startup = map
-          (command: {
+          (command: if builtins.isString command then {
             inherit command;
-          })
-          config.window-manager.startupPrograms;
+          } else command)
+          config.windowManager.startupPrograms;
         fonts = {
           names = [ "Font Awesome" "Fira Code" ];
         };
-        modifier = mod;
+        modifier = "Mod4";
         menu = rofi-run "run";
         focus = {
           mouseWarping = false;
@@ -193,8 +188,9 @@ in
             "${mod}+Shift+o" = "exec ${rofi-run "move"}";
             "${mod}+p" = "exec ${rofi-run "window"}";
             "${mod}+m" = "exec mpv-paste";
-            "${mod}+t" = "exec thunar";
 
+            "${mod}+t" = "exec ${pkgs.xfce.thunar}/bin/thunar";
+            "${mod}+Print" = ''exec ${pkgs.grim}/bin/grim -t png -g "$(${pkgs.slurp}/bin/slurp)" ${config.home.homeDirectory}/screenshots/$(date +%Y-%m-%d_%H-%m-%s).png'';
             "XF86MonBrightnessUp" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set +10%";
             "XF86MonBrightnessDown" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set 10%-";
           };
@@ -203,7 +199,7 @@ in
           focusKeybinds //
           moveKeybinds //
           otherKeybinds //
-          config.window-manager.extraBinds
+          config.windowManager.extraBinds
         );
         colors = {
           focused = mkColorSet color5 color0;
@@ -213,7 +209,7 @@ in
         bars = [{
           position = "top";
           command = "${pkgs.sway}/bin/swaybar";
-          # command = "${pkgs.waybar}/bin/waybar";
+          statusCommand = "${pkgs.python39Packages.py3status}/bin/py3status";
           colors = {
             background = "#${background}";
             statusline = "#${color12}";

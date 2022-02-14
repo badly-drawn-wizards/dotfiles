@@ -14,14 +14,15 @@ let
   full = "";
   battery = "";
   thermometer = "";
+  keyboard = "";
 in
 {
   programs.i3status = {
     enable = true;
     enableDefault = false;
-    general = {
-      separator = " / ";
-    };
+    # general = {
+    #   separator = " / ";
+    # };
     modules = {
       "battery all" = {
         position = 1;
@@ -52,9 +53,18 @@ in
         };
       };
 
-      "disk /" = {
+      "external_script disk" = {
         position = 5;
-        settings = { format = " ${storage} %avail / %total "; };
+        settings = {
+          format = " ${storage} {output}";
+          script_path = ''${pkgs.writeScriptBin "i3status-get-disk" ''
+            used=$(df -h --output=used / | tail -n1 | tr -d ' ')
+            size=$(df -h --output=size / | tail -n1 | tr -d ' ')
+            echo "$used / $size"
+          ''}/bin/i3status-get-disk'';
+          cache_timeout = 60;
+          "on_click 1" = "exec ${pkgs.xfce.thunar}/bin/thunar";
+        };
       };
 
       "tztime local" = {

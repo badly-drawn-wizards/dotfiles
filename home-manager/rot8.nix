@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 {
-  window-manager.extraBinds = {
+  windowManager.extraBinds = {
     "XF86PowerOff" = "exec toggle-rot8";
   };
 

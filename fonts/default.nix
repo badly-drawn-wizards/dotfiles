@@ -2,7 +2,7 @@
 
 {
   console = {
-    packages = with pkgs; [ fira-consolefont terminus_font ];
+    packages = with pkgs; [ terminus_font ];
     keyMap = "us";
     font = "ter-v32b";
     colors = with config.theme; [
@@ -28,6 +28,7 @@
 
   fonts = {
     fonts = with pkgs; [
+      monoid
       fira-code
       fira-code-symbols
       font-awesome
@@ -38,7 +39,7 @@
     enableDefaultFonts = true;
     fontconfig = {
       defaultFonts = {
-        monospace = [ "Fira Code" ];
+        monospace = [ config.fontMono ];
       };
     };
   };

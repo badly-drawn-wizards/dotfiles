@@ -1,4 +1,5 @@
-{ pkgs
+{ config
+, pkgs
 , lib
 , ...
 }:
@@ -12,7 +13,7 @@ with builtins;
     ./browsers.nix
     ./obs.nix
     ./vim.nix
-    ./emacs.nix
+    ./emacs
     ./vscode
     ./calibre.nix
     ./git.nix
@@ -28,14 +29,13 @@ with builtins;
     ./gtk.nix
   ];
 
-  window-manager.startupPrograms = with pkgs; [
+  windowManager.startupPrograms = with pkgs; [
     "${mako}/bin/mako"
     "${firefox}/bin/firefox"
     "${discord}"
     # "${thunderbird}/bin/thunderbird"
     # "${xournalpp}/bin/xournalpp"
 
-    "${squeekboard}/bin/squeekboard"
     "${pasystray}/bin/pasystray"
     "${blueman}/bin/blueman-applet"
     "${dropbox}/bin/dropbox"
@@ -43,7 +43,6 @@ with builtins;
 
     "${polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
   ];
-
 
   programs = {
     mako.enable = true;
@@ -118,7 +117,7 @@ with builtins;
       # Impressive if wasn't grating to my ears.
       spotify
 
-      python3
+      python3 python-language-server
       (agda.withPackages [ agdaPackages.standard-library ])
       elan
       swiProlog
@@ -145,6 +144,10 @@ with builtins;
 
       docker-compose
       dbeaver
+
+      nbrowse
+
+      nix-alien nix-index-update
     ];
 
     sessionVariables = {
@@ -152,12 +155,15 @@ with builtins;
       EDITOR = "em";
     };
 
+    sessionPath = [
+      "${config.home.homeDirectory}/.local/bin"
+      "${config.home.homeDirectory}/.dotnet/tools"
+    ];
+
     file = {
       ".tmux.conf".text = ''
         set-window-option -g mode-keys vi
       '';
-      ".profile".source = ./.profile;
-      ".zprofile".source = ./.profile;
       ".local/bin/mpv-paste" = {
         text = ''
           #!/usr/bin/env /bin/sh

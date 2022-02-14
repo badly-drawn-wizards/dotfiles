@@ -29,10 +29,17 @@ with lib;
         selection_foreground = "1e1f28";
       };
     };
+
     font = mkOption {
       type = types.str;
       default = "Fira Code";
     };
+
+    fontMono = mkOption {
+      type = types.str;
+      default = "Fira Code";
+    };
+
     fontSize = mkOption {
       type = types.int;
       default = 9;
