@@ -1,0 +1,26 @@
+From 6df5d16d20175fc872ee5dc9ff46043e376012aa Mon Sep 17 00:00:00 2001
+From: Martin Weinelt <hexa@darmstadt.ccc.de>
+Date: Sun, 23 Jan 2022 12:57:56 +0100
+Subject: [PATCH] spice: properly test for existance of python modules
+
+---
+ pkgs/development/libraries/spice/default.nix | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/pkgs/development/libraries/spice/default.nix b/pkgs/development/libraries/spice/default.nix
+index ee0f6be16984b..4f639cf29f74f 100644
+--- a/pkgs/development/libraries/spice/default.nix
++++ b/pkgs/development/libraries/spice/default.nix
+@@ -46,6 +46,12 @@ stdenv.mkDerivation rec {
+   postPatch = ''
+     install ${doxygen_sh} doxygen.sh
+     patchShebangs build-aux
++
++    # https://gitlab.freedesktop.org/spice/spice-common/-/issues/5
++    substituteInPlace subprojects/spice-common/meson.build \
++      --replace \
++      "cmd = run_command(python, '-m', module)" \
++      "cmd = run_command(python, '-c', 'import @0@'.format(module))"
+   '';
+ 
+   nativeBuildInputs = [

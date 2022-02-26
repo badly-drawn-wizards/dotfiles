@@ -27,6 +27,7 @@ with builtins;
     ./nix.nix
     ./kitty.nix
     ./gtk.nix
+    ./onscreen-keyboard.nix
   ];
 
   windowManager.startupPrograms = with pkgs; [
@@ -57,6 +58,39 @@ with builtins;
 
   xdg = {
     mime.enable = true;
+    configFile."mimeapps.list".force = true;
+    mimeApps = let
+      zathuraDesktop = "org.pwmt.zathura-pdf-mupdf.desktop";
+      firefoxDesktop = "firefox.desktop";
+      nautilusDesktop = "org.gnome.Nautilus.desktop";
+      codeDesktop = "code.desktop";
+      common = {
+        "application/pdf" = [ zathuraDesktop ];
+        "application/epub+zip" = [ zathuraDesktop ];
+        "x-scheme-handler/http" = [ firefoxDesktop  ];
+        "x-scheme-handler/https" = [ firefoxDesktop  ];
+        "x-scheme-handler/chrome" = [ firefoxDesktop  ];
+        "text/html" = [ firefoxDesktop  ];
+        "application/x-extension-htm" = [ firefoxDesktop  ];
+        "application/x-extension-html" = [ firefoxDesktop  ];
+        "application/x-extension-shtml" = [ firefoxDesktop  ];
+        "application/xhtml+xml" = [ firefoxDesktop  ];
+        "application/x-extension-xhtml" = [ firefoxDesktop  ];
+        "application/x-extension-xht" = [ firefoxDesktop  ];
+      };
+    in {
+      enable = true;
+      associations = {
+        added = common // {
+        };
+        removed = {
+          "inode/directory" = [ "code.desktop" ];
+        };
+      };
+      defaultApplications = common // {
+        "inode/directory" = [ nautilusDesktop ];
+      };
+    };
   };
 
   services = {
@@ -83,10 +117,10 @@ with builtins;
       thunderbird
 
       # Chat with some folks
-      teams zoom-us discord element-desktop slack zulip franz
+      teams zoom-us discord element-desktop slack zulip franz skypeforlinux
 
       squeekboard
-      xfce.thunar
+      gnome3.nautilus
 
       godot
 
@@ -112,6 +146,7 @@ with builtins;
       # Misc utilites
       ranger direnv tree less jq
       htop pciutils postman lsof
+      wget
 
       # 12k skips / hour = 3.3 skips / second
       # Impressive if wasn't grating to my ears.
@@ -145,9 +180,7 @@ with builtins;
       docker-compose
       dbeaver
 
-      nbrowse
-
-      nix-alien nix-index-update
+      nix-alien nix-index-update nix-index
     ];
 
     sessionVariables = {

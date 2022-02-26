@@ -81,7 +81,7 @@ in
   options = with lib; with types; {
     windowManager = {
       startupPrograms = mkOption {
-        type = listOf str;
+        type = listOf (either str attrs);
         default = [];
       };
       extraBinds = mkOption {
@@ -189,7 +189,7 @@ in
             "${mod}+p" = "exec ${rofi-run "window"}";
             "${mod}+m" = "exec mpv-paste";
 
-            "${mod}+t" = "exec ${pkgs.xfce.thunar}/bin/thunar";
+            "${mod}+t" = "exec ${pkgs.gnome3.nautilus}/bin/nautilus";
             "${mod}+Print" = ''exec ${pkgs.grim}/bin/grim -t png -g "$(${pkgs.slurp}/bin/slurp)" ${config.home.homeDirectory}/screenshots/$(date +%Y-%m-%d_%H-%m-%s).png'';
             "XF86MonBrightnessUp" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set +10%";
             "XF86MonBrightnessDown" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set 10%-";

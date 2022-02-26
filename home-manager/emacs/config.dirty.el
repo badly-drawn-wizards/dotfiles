@@ -64,12 +64,10 @@
   (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
   (setq web-mode-code-indent-offset 2))
 
+(require 'lean-mode)
+(setq default-input-method "Lean")
+
 (after! lean4-mode
-  (lsp-register-client
-   (make-lsp-client :new-connection (lsp-stdio-connection (lambda () `(,(lean4-get-executable lean4-executable-name) "--server")))
-                    :environment-fn (lambda () '(("LEAN_PATH" . "./build")))
-                    :major-modes '(lean4-mode)
-                    :server-id 'lean4-lsp))
   (set-lookup-handlers! 'lean4-mode
     :definition #'lean4-find-definition)
   (sp-with-modes 'lean4-mode
@@ -165,3 +163,6 @@
   (require 'tree-sitter-langs)
   (global-tree-sitter-mode)
   (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
+
+(setq projectile-switch-project-action 'projectile-vc)
+(setq counsel-projectile-switch-project-action 'counsel-projectile-switch-project-action-vc)

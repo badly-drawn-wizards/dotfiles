@@ -12,8 +12,7 @@ inputs,
       ./theme.nix
       ./hardware
       ./power
-      ./graphics
-      ./audio
+      ./multimedia
       ./networking
       ./fonts
       ./home-manager

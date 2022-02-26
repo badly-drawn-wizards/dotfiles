@@ -15,6 +15,8 @@ let
   battery = "";
   thermometer = "";
   keyboard = "";
+
+  showKeyboard = "${pkgs.systemd}/bin/busctl call --user sm.puri.OSK0 /sm/puri/OSK0 sm.puri.OSK0 SetVisible b true";
 in
 {
   programs.i3status = {
@@ -63,14 +65,25 @@ in
             echo "$used / $size"
           ''}/bin/i3status-get-disk'';
           cache_timeout = 60;
-          "on_click 1" = "exec ${pkgs.xfce.thunar}/bin/thunar";
+          "on_click 1" = "exec ${pkgs.gnome3.nautilus}/bin/nautilus";
         };
       };
-
       "tztime local" = {
         position = 6;
         settings = { format = " ${clock} %H:%M:%S ${calendar} %d/%m"; };
       };
+      "external_script keyboard" = {
+        position = 7;
+        settings = {
+          format = "{output}";
+          script_path = ''${pkgs.writeScriptBin "keyboard-indicator" ''
+          echo "${keyboard}"
+          ''}/bin/keyboard-indicator'';
+          cache_timeout = 60;
+          "on_click 1" = "exec ${showKeyboard}";
+        };
+      };
+
     };
   };
 }

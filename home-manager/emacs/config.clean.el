@@ -1,1 +1,1 @@
-/nix/store/w4gbs7g2x3ms1rc6iwgndgm4m232jvgr-home-manager-files/.emacs.d/lisp/config.clean.el
+/nix/store/86q0xvbrks3v7rv8wd4h7960c9z9nrkl-home-manager-files/.emacs.d/lisp/config.clean.el

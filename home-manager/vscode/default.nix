@@ -1,25 +1,34 @@
 { config, lib, pkgs, ... }:
 
 let
+  inherit (builtins) fromJSON readFile map filter;
+  readJSON = path: fromJSON (readFile path);
+  settings = readJSON ./settings.json;
+  defaultKeybindings = readJSON ./default/keybindings.json;
+  excludeDefaultKeybinding = key:
+    map (binding: binding // { command = "-${binding.command}"; })
+      (filter (binding: binding.key == key) defaultKeybindings);
+  vspacecodeSettings = readJSON ./vspacecode/settings.json;
+  vspacecodeKeybindings = readJSON ./vspacecode/keybindings.json;
+  whichkeyOverrides = readJSON ./whichkey.json;
   inherit (pkgs.vscode-utils) extensionsFromVscodeMarketplace;
 in
 {
     programs.vscode = {
       enable = true;
-      userSettings = with builtins;
-        (fromJSON (readFile ./settings.json) //
-        (fromJSON (readFile ./vspacecode/settings.json)) //
+      userSettings =
+        settings //
+        vspacecodeSettings //
         {
-          "whichkey.bindingOverrides" = (fromJSON (readFile ./whichkey.json));
-        } // {
+          "whichkey.bindingOverrides" = whichkeyOverrides;
           "omnisharp.path" = "${pkgs.omnisharp-roslyn}/bin/omnisharp";
           "omnisharp.loggingLevel" = "trace";
           "omnisharp.enableDecompilationSupport" = true;
           "extensions.autoCheckUpdates" = false;
           "extensions.autoUpdate" = false;
-        });
+        };
       keybindings = [
-      ] ++ builtins.fromJSON (builtins.readFile ./vspacecode/keybindings.json);
+      ] ++ excludeDefaultKeybinding "ctrl+o" ++ vspacecodeKeybindings;
       extensions = with pkgs.vscode-extensions; [
         bbenoist.nix
         vscodevim.vim

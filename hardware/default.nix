@@ -22,6 +22,10 @@
       settings = {
         General = {
           Enable = "Source,Sink,Media,Socket";
+          MultiProfile = "multiple";
+        };
+        Policy = {
+          AutoEnable = false;
         };
       };
     };
