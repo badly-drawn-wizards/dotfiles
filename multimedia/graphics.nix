@@ -2,7 +2,8 @@
 
 {
   environment.variables = {
-    MESA_LOADER_DRIVER_OVERRIDE = "iris";
+    # MESA_LOADER_DRIVER_OVERRIDE = "iris";
+    VDPAU_DRIVER = "va_gl";
   };
   hardware.opengl = {
     enable = true;

@@ -1,2 +1,4 @@
 *.swp
 result
+
+home-manager/emacs/config.clean.el

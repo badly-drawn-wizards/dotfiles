@@ -6,7 +6,7 @@ let
   (setq doom-font (font-spec :family "${config.fontMono}" :size 16))
   '';
   cleanConfigName = "config.clean.el";
-  dirtyConfigName= "config.dirty.el";
+  dirtyConfigName = "config.dirty.el";
 in
 {
   home.sessionVariables = {
