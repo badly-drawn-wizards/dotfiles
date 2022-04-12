@@ -180,6 +180,8 @@ with builtins;
       docker-compose
       dbeaver
 
+      wireshark
+
       nix-alien nix-index-update nix-index
     ];
 

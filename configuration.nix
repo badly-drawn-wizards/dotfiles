@@ -69,7 +69,10 @@ inputs,
     };
     users.reuben = {
       isNormalUser = true;
-      extraGroups = [ "wheel" "networkmanager" "audio" "video" "systemd-journal" "docker" "lpadmin" "dialout" ];
+      extraGroups = [
+        "wheel" "networkmanager" "audio" "video"
+        "systemd-journal" "docker" "lpadmin" "dialout"
+        "wireshark"] ;
     };
     defaultUserShell = "/run/current-system/sw/bin/zsh";
   };
@@ -78,6 +81,9 @@ inputs,
     dconf.enable = true;
     sway.enable = true;
     zsh.enable = true;
+
+    # Allow non-root network capture
+    wireshark.enable = true;
   };
 
   services = {
