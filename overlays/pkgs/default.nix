@@ -12,9 +12,9 @@ in
   nbrowse = callPackage (import ./nbrowse) {};
 
   # If there is a proper way to override, I could not find it.
-  vscode-extensions = super.vscode-extensions // {
-    ms-dotnettools = super.vscode-extensions.ms-dotnettools // {
-      csharp = callPackage (import ./ms-dotnettools-csharp) {};
-    };
-  };
+  # vscode-extensions = super.vscode-extensions // {
+  #   ms-dotnettools = super.vscode-extensions.ms-dotnettools // {
+  #     csharp = callPackage (import ./ms-dotnettools-csharp) {};
+  #   };
+  # };
 }

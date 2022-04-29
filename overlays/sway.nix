@@ -5,8 +5,8 @@ self: super:
         src = super.fetchFromGitHub {
           owner = "badly-drawn-wizards";
           repo = "sway";
-          rev = "80f8c2f13f76318e90afb8e9c5c028bada2559a7";
-          sha256 = "wx4MXc+934ooiOPyeJmf+kt2KZSx4bwezhBSXM/sbxc=";
+          rev = "47e4201076b2329386232b0fdb5ded5a7d08ca0e";
+          sha256 = "0cjYy0pVeUeFvRdPw0U9IfyW/FBy2LmmYPfBl0KUbwU=";
         };
         mesonFlags = attrs.mesonFlags ++ [ "-Dtray=enabled" "-Dwerror=false" ];
       });

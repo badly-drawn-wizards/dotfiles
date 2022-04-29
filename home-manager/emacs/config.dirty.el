@@ -34,9 +34,10 @@
 
 (defvar my/org-drill-file nil)
 (after! org
-  (setq org-directory "~/org")
+  (setq org-directory (concat (getenv "HOME") "/org"))
   (setq my/org-drill-file (concat org-directory "/drill/main.org"))
   (setq org-refile-targets '((nil :maxlevel . 3) (org-agenda-files :maxlevel . 9)))
+  (setq org-default-notes-file (concat org-directory "/todo.org"))
   (setq org-capture-templates
         '(("t" "Personal todo" entry
            (file+headline +org-capture-todo-file "Inbox")

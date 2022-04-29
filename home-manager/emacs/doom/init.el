@@ -82,7 +82,8 @@
        (agda +local)              ; types of types of types of types...
        coq
        ocaml             ; an objective camel
-       cc                ; C/C++/Obj-C madness
+       ;; Temporarily disable until ivy-rtags is fixed
+       ;; cc                ; C/C++/Obj-C madness
        clojure           ; java with a lisp
        (csharp +lsp)            ; unity, .NET, and mono shenanigans
        data              ; config/data formats

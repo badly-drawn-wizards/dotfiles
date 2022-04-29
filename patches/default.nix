@@ -1,3 +1,3 @@
 [
-  ./tree-sitter-fix.patch
+  # ./tree-sitter-fix.patch
 ]

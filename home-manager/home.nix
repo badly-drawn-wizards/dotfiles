@@ -182,6 +182,8 @@ with builtins;
 
       wireshark
 
+      zrythm
+
       nix-alien nix-index-update nix-index
     ];
 
