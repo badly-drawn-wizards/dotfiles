@@ -20,7 +20,7 @@ inputs,
     ];
 
   nix = {
-    package = pkgs.nixFlakes;
+    package = pkgs.nixVersions.stable;
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
@@ -132,12 +132,31 @@ inputs,
       xdg-desktop-portal-wlr
       xdg-desktop-portal-gtk
     ];
-    gtkUsePortal = true;
   };
 
   services.pipewire = {
     enable = true;
   };
+
+
+  systemd.user.services.rot8 = {
+    enable = true;
+    unitConfig = {
+      Description = "rot8, automatic screen rotation";
+      After = [ "graphical-session-pre.target" ];
+      PartOf = [ "graphical-session.target" ];
+    };
+
+    serviceConfig = {
+      ExecStart = "${pkgs.rot8}/bin/rot8";
+      Environment = "RUST_BACKTRACE=full";
+    };
+
+    wantedBy = [ "graphical-session.target" ];
+
+    path = [ pkgs.sway pkgs.procps ];
+  };
+
 
   # Remember to check docs before considering changing this
   system.stateVersion = "20.03";

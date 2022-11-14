@@ -6,8 +6,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "dracula";
     repo = "rofi";
-    rev = "6d92bc04ba01655fb3645dabeecdfe38f59969a6";
-    sha256 = "JOfgzFRcZwPC5PnkwOW3jVDMuJv+svTXtg0CthKM1sA=";
+    rev = "090a990c8dc306e100e73cece82dc761f3f0130c";
+    sha256 = "raoJ3ndKtpEpsN3yN4tMt5Kn1PrqVzlakeCZMETmItw=";
   };
 
   installPhase = ''

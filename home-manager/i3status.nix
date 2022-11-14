@@ -65,7 +65,7 @@ in
             echo "$used / $size"
           ''}/bin/i3status-get-disk'';
           cache_timeout = 60;
-          "on_click 1" = "exec ${pkgs.gnome3.nautilus}/bin/nautilus";
+          "on_click 1" = "exec ${pkgs.gnome.nautilus}/bin/nautilus";
         };
       };
       "tztime local" = {

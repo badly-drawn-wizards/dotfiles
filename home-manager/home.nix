@@ -120,7 +120,7 @@ with builtins;
       teams zoom-us discord element-desktop slack zulip franz skypeforlinux
 
       squeekboard
-      gnome3.nautilus
+      gnome.nautilus
 
       godot
 
@@ -152,10 +152,12 @@ with builtins;
       # Impressive if wasn't grating to my ears.
       spotify
 
-      python3 python-language-server
+      (python3.withPackages (ps: with ps; [numpy matplotlib torch transformers]))
+      python-language-server
+
       (agda.withPackages [ agdaPackages.standard-library ])
+
       elan
-      swiProlog
 
       # A window into windows
       virt-manager virt-viewer
@@ -183,8 +185,11 @@ with builtins;
       wireshark
 
       zrythm
+      renoise
 
-      nix-alien nix-index-update nix-index
+      #nix-alien nix-index-update nix-index
+
+      dotnet-sdk
     ];
 
     sessionVariables = {

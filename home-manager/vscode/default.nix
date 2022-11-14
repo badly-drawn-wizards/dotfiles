@@ -21,13 +21,21 @@ in
         vspacecodeSettings //
         {
           "whichkey.bindingOverrides" = whichkeyOverrides;
-          "omnisharp.path" = "${pkgs.omnisharp-roslyn}/bin/omnisharp";
+          "omnisharp.path" = "${pkgs.omnisharp-roslyn}/bin/OmniSharp";
           "omnisharp.loggingLevel" = "trace";
           "omnisharp.enableDecompilationSupport" = true;
           "extensions.autoCheckUpdates" = false;
           "extensions.autoUpdate" = false;
         };
       keybindings = [
+        {
+          key = "ctrl+o";
+          command = "workbench.action.navigateBack";
+        }
+        {
+          key = "ctrl+i";
+          command = "workbench.action.navigateForward";
+        }
       ] ++ excludeDefaultKeybinding "ctrl+o" ++ vspacecodeKeybindings;
       extensions = with pkgs.vscode-extensions; [
         bbenoist.nix
@@ -40,37 +48,28 @@ in
         ms-azuretools.vscode-docker
         esbenp.prettier-vscode
         angular.ng-template
+        mkhl.direnv
+        ms-vscode.cpptools
+        ms-python.python
       ] ++ extensionsFromVscodeMarketplace [
-        # {
-        #   publisher = "rubymaniac";
-        #   name = "vscode-direnv";
-        #   version = "0.0.2";
-        #   sha256 = "TVvjKdKXeExpnyUh+fDPl+eSdlQzh7lt8xSfw1YgtL4=";
-        # }
         {
-          publisher = "mkhl";
-          name = "direnv";
-          version = "0.5.0";
-          sha256 = "kkR+f92GEQM2FLEgeBlTa5W1w1IV+umxRg+kVlWh+8s=";
+          publisher = "ms-vscode";
+          name = "makefile-tools";
+          version = "0.6.0";
+          sha256 = "Sd1bLdRBdLVK8y09wL/CJF+/kThPTH8MHw2mFQt+6h8=";
         }
         {
           publisher = "jroesch";
           name = "lean";
-          version = "0.16.45";
+          version = "0.16.46";
           sha256 = "bZJ374kvzZpjxTBbadHLEoET7ilRhu4afuWN+qG0Tng=";
         }
         {
-          publisher = "genuitec";
-          name = "angular-cli-task-provider";
-          version = "1.3.2";
-          sha256 = "dy4zcc7fgtaOGNlTbUGXsth/cEadx8ql1BE7IxyrAjI=";
+          publisher = "leanprover";
+          name = "lean4";
+          version = "0.0.97";
+          sha256 = "uAXKN+6NWUsDV1KZ/4YjFlGy97BiuCm0NtHadpyO504=";
         }
-        # {
-        #   publisher = "redhat";
-        #   name = "fabric8-analytics";
-        #   version = "0.3.5";
-        #   sha256 = "D96ADlqjQMhXLaVLTHmpPrIqgy1FGt0QZTPBo90DF30=";
-        # }
       ];
     };
 

@@ -16,7 +16,7 @@
       };
       "./.config/networkmanager-dmenu/config.ini".text = ''
         [dmenu]
-        dmenu_command = ${pkgs.rofi}/bin/rofi
+        dmenu_command = ${pkgs.rofi}/bin/rofi -dmenu
       '';
     };
   };

@@ -10,7 +10,8 @@ let
   io = {
     keyboard = "1:1:AT_Translated_Set_2_keyboard";
     stylus = "1267:10741:ELAN2514:00_04F3:29F5_Stylus";
-    touchpad = "1267:10741:ELAN2514:00_04F3:29F5";
+    touchscreen = "1267:10741:ELAN2514:00_04F3:29F5";
+    touchpad = "1739:52560:SYNA3297:00_06CB:CD50_Touchpad";
     monitor = "eDP-1";
   };
   mkColorSet = bg: txt: {
@@ -109,6 +110,8 @@ in
         modi: "run,window,workspace:${rofi-workspace},move:${rofi-move}";
         kb-row-tab: "";
         kb-remove-to-eol: "";
+        kb-element-next: "";
+        kb-element-prev: "";
         kb-accept-entry: "Return";
         kb-mode-next: "Tab";
         kb-mode-previous: "Shift+Tab";
@@ -148,10 +151,13 @@ in
           ${io.keyboard} = {
             xkb_layout = "us";
             xkb_options = "caps:swapescape";
-            repeat_rate = "0";
+            # repeat_rate = "0";
+          };
+          ${io.touchscreen} = {
+            map_to_output = io.monitor;
           };
           ${io.touchpad} = {
-            map_to_output = io.monitor;
+            natural_scroll = "enabled";
           };
           ${io.stylus} = {
             map_to_output = io.monitor;
@@ -189,7 +195,7 @@ in
             "${mod}+p" = "exec ${rofi-run "window"}";
             "${mod}+m" = "exec mpv-paste";
 
-            "${mod}+t" = "exec ${pkgs.gnome3.nautilus}/bin/nautilus";
+            "${mod}+t" = "exec ${pkgs.gnome.nautilus}/bin/nautilus";
             "${mod}+Print" = ''exec ${pkgs.grim}/bin/grim -t png -g "$(${pkgs.slurp}/bin/slurp)" ${config.home.homeDirectory}/screenshots/$(date +%Y-%m-%d_%H-%m-%s).png'';
             "XF86MonBrightnessUp" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set +10%";
             "XF86MonBrightnessDown" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set 10%-";

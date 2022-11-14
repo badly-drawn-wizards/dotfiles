@@ -1,12 +1,19 @@
 { config, lib, pkgs, ... }:
 
 {
+  services.upower = {
+    enable = true;
+    criticalPowerAction = "HybridSleep";
+  };
   services.logind.extraConfig = ''
     HandlePowerKey=ignore
-    HandleLidSwitch=suspend-then-hibernate
+    HandleLidSwitch=hybrid-sleep
+    IdleAction=suspend
+    IdleActionSec=10m
   '';
 
   systemd.sleep.extraConfig = ''
-    HibernateDelaySec=30m
+    HibernateDelaySec=15m
   '';
+
 }

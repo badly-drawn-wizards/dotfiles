@@ -1,15 +1,15 @@
-{ rustPlatform, fetchFromGitHub }:
+{ rustPlatform, fetchFromGitHub, procps }:
 rustPlatform.buildRustPackage {
   pname = "rot8";
-  version = "0.1.3";
+  version = "0.1.5";
 
-  cargoSha256 = "sMFa3Pe/JC1sWeeN40RBXNRV02jDyhDlb+eTvATJLfM=";
+  cargoSha256 = "Zz3RK79pMBn9JcpOVHf8vrvQzOJuV7anm136HcTBhJE=";
 
   src = fetchFromGitHub {
     owner = "efernau";
     repo = "rot8";
-    rev = "e8957f0c6035a8873a968e7a13a43790f149ce89";
-    sha256 = "jel8TO/QbBtS1+o3N6qvp8ju9B9w15uSBJOooVKLCWU=";
+    rev = "0e737607ac4977e209988e0816143778e3446fb6";
+    sha256 = "i+VLVA/XKZiFPEeFHR3CpZKi8CWA/tiaZJerciqQHJ0=";
     fetchSubmodules = true;
   };
 }

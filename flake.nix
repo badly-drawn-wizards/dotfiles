@@ -26,8 +26,8 @@
       flake = false;
     };
     nix-doom-emacs = {
-      url = "github:nix-community/nix-doom-emacs";
-      # url = "/workspace/nix-doom-emacs";
+      #url = "github:badly-drawn-wizards/nix-doom-emacs";
+      url = "/workspace/nix-doom-emacs";
       inputs = {
         nixpkgs.follows = "/nixpkgs";
         doom-emacs.follows = "/doom-emacs";
@@ -62,7 +62,7 @@
       inputs.pypi-deps-db.follows = "/pypi-deps-db";
     };
   };
-  outputs = { nixpkgs, utils, emacs-overlay, nur, nixpkgs-wayland, mach-nix, nix-alien, self, ... }@inputs:
+  outputs = { nixpkgs, utils, emacs-overlay, nix-doom-emacs, nur, nixpkgs-wayland, mach-nix, nix-alien, self, ... }@inputs:
     let
       flakePath = "/workspace/dotfiles";
       flake-plus-module =
@@ -90,7 +90,7 @@
         (emacs-overlay.overlay)
         (nur.overlay)
         (nixpkgs-wayland.overlay)
-        (nix-alien.overlay)
+        # (nix-alien.overlay)
       ] ++ import ./overlays;
 
       hosts.noobnoob = {

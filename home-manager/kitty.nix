@@ -12,6 +12,9 @@ in
       font_size = config.fontSize;
       background_opacity = "0.98";
       window_margin_width = 6;
+      # Temporary fix for scaling bug in libwayland-cursor
+      linux_display_server = "x11";
+      confirm_os_window_close = 0;
     } // hashColors config.theme;
   };
 }
