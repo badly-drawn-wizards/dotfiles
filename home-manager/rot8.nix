@@ -20,5 +20,19 @@
     };
   };
 
+  systemd.user.services.rot8 = {
+    Unit = {
+      Description = "rot8, automatic screen rotation";
+      After = [ "graphical-session-pre.target" ];
+      PartOf = [ "graphical-session.target" ];
+    };
+
+    Install = { WantedBy = [ "graphical-session.target" ]; };
+
+    Service = {
+      ExecStart = "${pkgs.rot8}/bin/rot8";
+    };
+  };
+
   home.packages = [ pkgs.rot8 ];
 }

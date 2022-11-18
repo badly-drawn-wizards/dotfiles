@@ -26,8 +26,9 @@
       flake = false;
     };
     nix-doom-emacs = {
+      url = "github:nix-community/nix-doom-emacs";
       #url = "github:badly-drawn-wizards/nix-doom-emacs";
-      url = "/workspace/nix-doom-emacs";
+      #url = "/workspace/nix-doom-emacs";
       inputs = {
         nixpkgs.follows = "/nixpkgs";
         doom-emacs.follows = "/doom-emacs";
