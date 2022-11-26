@@ -21,17 +21,17 @@
         nixpkgs.follows = "/nixpkgs";
       };
     };
-    doom-emacs = {
-      url = "github:hlissner/doom-emacs/develop";
-      flake = false;
-    };
+    #doom-emacs = {
+    #  url = "github:hlissner/doom-emacs/develop";
+    #  flake = false;
+    #};
     nix-doom-emacs = {
       url = "github:nix-community/nix-doom-emacs";
       #url = "github:badly-drawn-wizards/nix-doom-emacs";
       #url = "/workspace/nix-doom-emacs";
       inputs = {
         nixpkgs.follows = "/nixpkgs";
-        doom-emacs.follows = "/doom-emacs";
+      #  doom-emacs.follows = "/doom-emacs";
         emacs-overlay.follows = "/emacs-overlay";
       };
     };
@@ -48,6 +48,7 @@
       url = "github:thiagokokada/nix-alien";
       inputs.nixpkgs.follows = "/nixpkgs";
     };
+    nixgl.url = "github:guibou/nixGL";
     dwarffs = {
       url = "github:edolstra/dwarffs";
       inputs.nixpkgs.follows = "/nixpkgs";
@@ -62,10 +63,18 @@
       inputs.nixpkgs.follows = "/nixpkgs";
       inputs.pypi-deps-db.follows = "/pypi-deps-db";
     };
+    unhinged.url = "/workspace/unhinged";
+
+    linux = {
+      url = "git+file:///workspace/linux?ref=master";
+      flake = false;
+    };
   };
-  outputs = { nixpkgs, utils, emacs-overlay, nix-doom-emacs, nur, nixpkgs-wayland, mach-nix, nix-alien, self, ... }@inputs:
+  outputs = { nixpkgs, utils, emacs-overlay,
+              nix-doom-emacs, nur, nixpkgs-wayland,
+              mach-nix, nixgl, nix-alien,
+              unhinged, linux, self, ... }@inputs:
     let
-      flakePath = "/workspace/dotfiles";
       flake-plus-module =
         (_: {
           nix = {
@@ -73,10 +82,20 @@
             linkInputs = true;
             registry.dot.to = {
               type = "path";
-              path = flakePath;
+              path = "/workspace/dotfiles";
             };
           };
         });
+       os = rec {
+          inherit self;
+          nixos = self.nixosConfigurations.noobnoob;
+          pkgs = nixos.pkgs;
+          config = nixos.config;
+          lpkgs = config.boot.kernelPackages;
+          hm = config.home-manager.users.reuben;
+          emacs = hm.programs.emacs.package;
+          epkgs = pkgs.emacsPackagesFor emacs;
+        };
     in
     utils.lib.mkFlake {
       inherit self inputs;
@@ -87,10 +106,15 @@
       };
 
       sharedOverlays = [
-        (self: super: { mach-nix = self.callPackage ({system}: mach-nix.lib.${system}) {}; })
+        (self: super: {
+          inherit os;
+          linuxSrc_custom = linux;
+        })
+        (self: super: { mach-nix = super.callPackage ({system}: mach-nix.lib.${system}) {}; })
         (emacs-overlay.overlay)
         (nur.overlay)
         (nixpkgs-wayland.overlay)
+        (nixgl.overlay)
         # (nix-alien.overlay)
       ] ++ import ./overlays;
 
@@ -105,15 +129,5 @@
       outputsBuilder = channels: {
         packages = channels.nixpkgs;
       };
-    } // {
-      # nix repl /dot
-      # :a repl
-      repl = rec {
-        pkgs = self.pkgs.x86_64-linux.nixpkgs;
-        config = self.nixosConfigurations.noobnoob.config;
-        hm = config.home-manager.users.reuben;
-        emacs = hm.programs.emacs.package;
-        epkgs = pkgs.emacsPackagesFor emacs;
-      };
-    };
+    } // { inherit os; };
 }
