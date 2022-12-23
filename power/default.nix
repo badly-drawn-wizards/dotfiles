@@ -3,12 +3,12 @@
 {
   services.upower = {
     enable = true;
-    criticalPowerAction = "HybridSleep";
+    criticalPowerAction = "Hibernate";
   };
   services.logind.extraConfig = ''
     HandlePowerKey=ignore
-    HandleLidSwitch=hybrid-sleep
-    IdleAction=suspend
+    HandleLidSwitch=suspend-then-hibernate
+    IdleAction=lock
     IdleActionSec=10m
   '';
 

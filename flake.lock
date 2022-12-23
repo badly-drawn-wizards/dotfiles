@@ -962,11 +962,8 @@
         "utils": "utils_3"
       },
       "locked": {
-        "lastModified": 1669503237,
-        "narHash": "sha256-yZ2JZVlOHvwdc0b+G0Toi310eTcmtK8zbcpR3aUBJRE=",
-        "ref": "refs/heads/master",
-        "rev": "fdb9050fc822dbc7188b9cb56746bacb91e13285",
-        "revCount": 3,
+        "lastModified": 1670957096,
+        "narHash": "sha256-HQaHFvfEYxwDbnQ3+m2Mwqr6dlJq/qVLapLz22kA9ew=",
         "type": "git",
         "url": "file:///workspace/unhinged"
       },

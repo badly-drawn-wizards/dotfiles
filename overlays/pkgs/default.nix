@@ -11,6 +11,10 @@ in
 
   nbrowse = callPackage (import ./nbrowse) {};
 
+  pytorch_dlprim = callPackage (import ./pytorch_dlprim.nix) {};
+
+  linux-tools = callPackage (import ./linux-tools.nix) {};
+
   # If there is a proper way to override, I could not find it.
   # vscode-extensions = super.vscode-extensions // {
   #   ms-dotnettools = super.vscode-extensions.ms-dotnettools // {

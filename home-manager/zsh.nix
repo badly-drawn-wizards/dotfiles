@@ -20,8 +20,7 @@ in
       t = "tmux attach || tmux new";
       ls = "exa";
       dc = "docker-compose";
-      ne = "nix-eval";
-      nattr = "nix-apply builtins.attrNames";
+      nr = "nix repl dot#os";
     };
     plugins = [
       {
@@ -65,17 +64,11 @@ in
     export MCFLY_KEY_SCHEME=vim
     eval "$(mcfly init zsh)"
 
-    function nix-apply() {
-      local f=$1
-      local args=${dollar}{*[2,-2]}
-      local x=${dollar}{*[-1]}
-      nix-eval $args "($f) ($x)"
-    }
-
-    function nix-eval() {
-      local expr="${dollar}{*[-1]}"
-      local args="${dollar}{*[1,-2]}"
-      nix eval /dot#repl --apply "repl: with repl; $expr" $args
+    function withtemp() {
+      local tmp=$(mktemp -d)
+      pushd $tmp > /dev/null
+      trap "popd > /dev/null; echo Removing '$tmp'; rm -rf '$tmp'" EXIT
+      eval $@
     }
   '';
   };

@@ -131,30 +131,29 @@
 (map!
  :leader
 
- (:desc "M-x"
-  "<SPC>"
-  #'counsel-M-x)
+ (:desc "M-x" "<SPC>" #'counsel-M-x)
 
- (:desc "Comment"
-  ";"
-  #'evilnc-comment-operator)
+ (:desc "Comment" ";" #'evilnc-comment-operator)
 
  ;; TODO Figure out why this doesn't work
- (:desc "jump"
-  "j")
- ("jj"
-  #'avy-goto-char)
- ("jl"
-  #'avy-goto-line)
+ (:desc "jump" "j")
+ ("jj" #'avy-goto-char)
+ ("jl" #'avy-goto-line)
 
- (:desc "Evil no highlight"
-  "sc"
-  #'evil-ex-nohighlight))
+ (:desc "Evil no highlight" "sc" #'evil-ex-nohighlight)
+ (:desc "Smartparens" "k")
+ ("kr" #'sp-raise-sexp)
+ ("ks" #'sp-forward-slurp-sexp)
+ ("kS" #'sp-backward-slurp-sexp)
+ ("kb" #'sp-forward-barf-sexp)
+ ("kB" #'sp-backward-barf-sexp))
+ 
 
 (evil-snipe-mode 0)
 
-(setq tab-width 2)
-(setq evil-shift-width 2)
+(after! :evil
+  (setq tab-width 2)
+  (setq evil-shift-width 2))
 
 (use-package! tree-sitter
   :init

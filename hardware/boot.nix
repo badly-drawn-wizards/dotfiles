@@ -21,25 +21,19 @@
 
     kernelParams = [
       "intel_iommu=on"
+      "i8042.unlock=1"
     ];
 
     extraModulePackages = [
       config.boot.kernelPackages.v4l2loopback.out
+      config.boot.kernelPackages.acpi_call.out
     ];
-    kernelPackages = pkgs.linuxPackages_latest;
+
+    kernelPackages = pkgs.linuxPackagesFor pkgs.linuxKernel.kernels.linux_ccache;
 
     kernelModules = [
-      # For screen-sharing
-      "v4l2loopback"
-      "snd-aloop"
-
-      # Virtualization
-      "kvm-intel"
+      "acpi_call"
     ];
-
-    extraModprobeConfig = ''
-    options v4l2loopback exclusive_caps=1 card_label="Screen"
-    '';
 
     cleanTmpDir = true;
 

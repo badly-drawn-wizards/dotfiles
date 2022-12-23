@@ -27,7 +27,7 @@ with builtins;
     ./nix.nix
     ./kitty.nix
     ./gtk.nix
-    ./onscreen-keyboard.nix
+    ./osk
   ];
 
   windowManager.startupPrograms = with pkgs; [
@@ -134,8 +134,8 @@ with builtins;
       # Turn that dial to 11
       pasystray pulsemixer
 
-      # Papers please
       polkit_gnome
+      glib
 
       # Back that shit up
       dropbox
@@ -145,14 +145,23 @@ with builtins;
 
       # Misc utilites
       ranger direnv tree less jq
-      htop pciutils postman lsof
+      htop postman lsof
       wget
 
+      usbutils pciutils evtest xorg.xev
       # 12k skips / hour = 3.3 skips / second
       # Impressive if wasn't grating to my ears.
       spotify
 
-      (python3.withPackages (ps: with ps; [numpy matplotlib torch transformers]))
+      clang-tools ccache
+
+      (python3.withPackages (ps: with ps; [
+        numpy matplotlib
+        torch transformers
+        ipython
+        python-uinput
+      ]))
+
       python-language-server
 
       (agda.withPackages [ agdaPackages.standard-library ])

@@ -15,8 +15,6 @@ let
   battery = "";
   thermometer = "";
   keyboard = "";
-
-  showKeyboard = "${pkgs.systemd}/bin/busctl call --user sm.puri.OSK0 /sm/puri/OSK0 sm.puri.OSK0 SetVisible b true";
 in
 {
   programs.i3status = {
@@ -80,7 +78,7 @@ in
           echo "${keyboard}"
           ''}/bin/keyboard-indicator'';
           cache_timeout = 60;
-          "on_click 1" = "exec ${showKeyboard}";
+          "on_click 1" = "exec ${config.onscreen-keyboard.togglePackage}/bin/toggleKeyboard";
         };
       };
 

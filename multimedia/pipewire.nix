@@ -48,12 +48,4 @@ in
     support32Bit = true;
   };
 
-  hardware.bluetooth = {
-    enable = true;
-    settings = {
-      General = {
-        Enable = "Source,Sink,Media,Socket";
-      };
-    };
-  };
 }

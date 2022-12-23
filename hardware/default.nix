@@ -6,6 +6,10 @@
       ./boot.nix
       ./filesystems.nix
       ./printing.nix
+      ./bluetooth.nix
+      ./joycon.nix
+      ./avloopback.nix
+      ./iio.nix
     ];
 
   nix.settings.max-jobs = 8;
@@ -16,30 +20,14 @@
     enableRedistributableFirmware = true;
     cpu.intel.updateMicrocode = true;
 
-    bluetooth = {
-      enable = true;
-      package = pkgs.bluez;
-      settings = {
-        General = {
-          Enable = "Source,Sink,Media,Socket";
-          MultiProfile = "multiple";
-        };
-        Policy = {
-          AutoEnable = false;
-        };
-      };
-    };
-
-    sensor = {
-      iio.enable = true;
-    };
 
   };
 
+
   services.udev = {
-    extraRules = ''
-      KERNEL=="ttyUSB*", MODE="0777"
-    '';
+    # extraRules = ''
+    #   KERNEL=="ttyUSB*", MODE="0777"
+    # '';
   };
 
 

@@ -9,6 +9,7 @@ inputs,
     [
       inputs.dwarffs.nixosModules.dwarffs
       inputs.nix-ld.nixosModules.nix-ld
+      inputs.unhinged.nixosModules.unhinged
       ./theme.nix
       ./hardware
       ./power
@@ -17,12 +18,15 @@ inputs,
       ./fonts
       ./home-manager
       ./cachix.nix
+      ./ccache.nix
+      ./virtualization.nix
+      ./users.nix
     ];
 
   nix = {
     package = pkgs.nixVersions.stable;
     extraOptions = ''
-      experimental-features = nix-command flakes
+      experimental-features = nix-command flakes repl-flake
     '';
   };
 
@@ -31,15 +35,6 @@ inputs,
     config = {
       allowUnfree = true;
     };
-  };
-
-  virtualisation = {
-    docker = {
-      enable = true;
-      enableOnBoot = true;
-    };
-
-    libvirtd.enable = true;
   };
 
   i18n.defaultLocale = "en_US.UTF-8";
@@ -52,55 +47,24 @@ inputs,
     pathsToLink = [ "/" ];
   };
 
-  security.sudo = {
-    enable = true;
-    # TODO This doesn't take precedence, I need to investigate.
-    extraRules = [
-      {
-        groups = [ "wheel" ];
-        commands = [{ command = "ALL"; options = ["SETENV" "NOPASSWD"]; }];
-      }
-    ];
-  };
-
-  users = {
-    groups = {
-      lpadmin = {};
-    };
-    users.reuben = {
-      isNormalUser = true;
-      extraGroups = [
-        "wheel" "networkmanager" "audio" "video"
-        "systemd-journal" "docker" "lpadmin" "dialout"
-        "wireshark"] ;
-    };
-    defaultUserShell = "/run/current-system/sw/bin/zsh";
-  };
-
   programs = {
     dconf.enable = true;
-    sway.enable = true;
     zsh.enable = true;
 
     # Allow non-root network capture
     wireshark.enable = true;
+
+    # systemtap.enable = true;
   };
+
+  security.polkit.enable = true;
 
   services = {
 
     fstrim.enable = true;
     devmon.enable = true;
-    blueman.enable = true;
     gvfs.enable = true;
 
-    # TODO Get printing with Pixma G4411
-    printing = {
-      enable = true;
-      drivers = with pkgs; [
-        gutenprint
-        gutenprintBin
-      ];
-    };
     avahi = {
       enable = true;
       nssmdns = true;
@@ -115,8 +79,10 @@ inputs,
       displayManager.startx.enable = true;
     };
 
-    gnome.gnome-keyring.enable = true;
-
+    gnome = {
+      gnome-keyring.enable = false;
+      gnome-settings-daemon.enable = true;
+    };
 
     dbus = {
       enable = true;
@@ -124,21 +90,26 @@ inputs,
     };
 
     flatpak.enable = true;
+
+    fprintd.enable = true;
+
+    fwupd.enable = true;
+
+    unhinged.enable = true;
   };
 
-  xdg.portal = {
-    enable = true;
-    extraPortals = with pkgs; [
-      xdg-desktop-portal-wlr
-      xdg-desktop-portal-gtk
-    ];
+  xdg = {
+    mime.enable = true;
+    icons.enable = true;
+    portal = {
+      enable = true;
+      extraPortals = with pkgs; [
+        xdg-desktop-portal-wlr
+        xdg-desktop-portal-gtk
+      ];
+    };
   };
 
-  services.pipewire = {
-    enable = true;
-  };
-
-  # Remember to check docs before considering changing this
   system.stateVersion = "20.03";
 
 }

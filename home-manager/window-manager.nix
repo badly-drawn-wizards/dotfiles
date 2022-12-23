@@ -77,6 +77,28 @@ let
   rofi-workspace = rofi-workspace-cmd "rofi-workspace" (ws: "workspace ${ws}");
   rofi-move = rofi-workspace-cmd "rofi-move" (ws: "move window to workspace ${ws}");
 
+  background-dir = "$HOME/backgrounds";
+  set-background = pkgs.writeScriptBin "set-background" ''
+  #!/bin/sh
+  set -e
+  BGS=$(find "${background-dir}" -type f ! -iname ".*" -printf '%f\n' | sort)
+  if [ $# -eq 0 ]
+  then
+    BG=$(echo -e "random\n$BGS" | rofi -dmenu -p "background")
+  elif [ $1 == "last" ]
+  then
+    BG=$(cat ${background-dir}/.last)
+  else
+    BG=$1
+  fi
+  if [ $BG == "random" ]
+  then
+    BG=$(echo "$BGS" | shuf -n1)
+  fi
+  echo $BG > ${background-dir}/.last
+  pkill swaybg || true
+  ${pkgs.swaybg}/bin/swaybg -i "${background-dir}/$BG"
+  '';
 in
 {
   options = with lib; with types; {
@@ -119,7 +141,11 @@ in
         kb-row-down: "Control+j";
       }
     '';
-    home.packages = with pkgs; [ rofi ];
+    home.packages = with pkgs; [ rofi set-background ];
+
+    windowManager.startupPrograms = [
+      "${set-background}/bin/set-background last"
+    ];
 
     wayland.windowManager.sway = {
       enable = true;
@@ -166,7 +192,6 @@ in
         output = {
           ${io.monitor} = {
             scale = "2";
-            bg = "$HOME/backgrounds/megumin.jpg fill";
             mode = "3840x2168";
           };
         };
@@ -194,6 +219,7 @@ in
             "${mod}+Shift+o" = "exec ${rofi-run "move"}";
             "${mod}+p" = "exec ${rofi-run "window"}";
             "${mod}+m" = "exec mpv-paste";
+            "${mod}+b" = "exec ${set-background}/bin/set-background";
 
             "${mod}+t" = "exec ${pkgs.gnome.nautilus}/bin/nautilus";
             "${mod}+Print" = ''exec ${pkgs.grim}/bin/grim -t png -g "$(${pkgs.slurp}/bin/slurp)" ${config.home.homeDirectory}/screenshots/$(date +%Y-%m-%d_%H-%m-%s).png'';
