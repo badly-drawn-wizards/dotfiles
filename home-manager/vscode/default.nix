@@ -61,8 +61,8 @@ in
         {
           publisher = "jroesch";
           name = "lean";
-          version = "0.16.46";
-          sha256 = "bZJ374kvzZpjxTBbadHLEoET7ilRhu4afuWN+qG0Tng=";
+          version = "0.16.56";
+          sha256 = "BMFyuwu66xpz5D6MXOURpobKhXCU59+lzRUWuwlOjK8=";
         }
         {
           publisher = "leanprover";
