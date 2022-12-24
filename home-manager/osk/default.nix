@@ -41,7 +41,7 @@
     home.packages = [ config.onscreen-keyboard.togglePackage ];
 
     home.file = {
-      ".local/share/squeekboard/keyboards/sway.yaml".source = ./sway.yaml;
+      # ".local/share/squeekboard/keyboards/sway.yaml".source = ./sway.yaml;
     };
 
     dconf = {
