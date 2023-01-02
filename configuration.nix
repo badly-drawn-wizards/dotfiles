@@ -44,7 +44,7 @@ inputs,
   environment = {
     enableDebugInfo = true;
     systemPackages = with pkgs; [ vim git ];
-    pathsToLink = [ "/" ];
+    pathsToLink = [ "/share" ];
   };
 
   programs = {
