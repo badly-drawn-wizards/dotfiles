@@ -13,11 +13,13 @@
       ];
     };
 
-    wrappers.stap = {
-      source = "${config.boot.kernelPackages.systemtap}/bin/stap";
-      owner = "root";
-      group = "stapusr";
-      setuid = true;
+    wrappers = lib.optionalAttrs config.programs.systemtap.enable {
+      stap = {
+        source = "${config.boot.kernelPackages.systemtap}/bin/stap";
+        owner = "root";
+        group = "stapusr";
+        setuid = true;
+      };
     };
   };
 
