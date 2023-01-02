@@ -29,7 +29,7 @@
       config.boot.kernelPackages.acpi_call.out
     ];
 
-    kernelPackages = pkgs.linuxPackagesFor pkgs.linuxKernel.kernels.linux_ccache;
+    kernelPackages = pkgs.linuxPackagesFor pkgs.linuxKernel.kernels.linux_custom;
 
     kernelModules = [
       "acpi_call"

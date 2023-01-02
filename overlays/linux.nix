@@ -16,7 +16,7 @@ in
   linuxKernel = super.linuxKernel // {
     kernels = super.linuxKernel.kernels.extend (kself: ksuper: {
       linux_custom = self.linuxPackages_latest.kernel.override ({
-        inherit structuredExtraConfig;
+        # inherit structuredExtraConfig;
         # argsOverride = {
         #   src = pkgs.linuxSrc_custom;
         #   separateDebugInfo = true;
