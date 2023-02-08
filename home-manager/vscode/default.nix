@@ -50,7 +50,7 @@ in
         angular.ng-template
         mkhl.direnv
         ms-vscode.cpptools
-        ms-python.python
+        # ms-python.python
       ] ++ extensionsFromVscodeMarketplace [
         {
           publisher = "ms-vscode";
@@ -58,12 +58,12 @@ in
           version = "0.6.0";
           sha256 = "Sd1bLdRBdLVK8y09wL/CJF+/kThPTH8MHw2mFQt+6h8=";
         }
-        {
-          publisher = "jroesch";
-          name = "lean";
-          version = "0.16.56";
-          sha256 = "BMFyuwu66xpz5D6MXOURpobKhXCU59+lzRUWuwlOjK8=";
-        }
+        # {
+        #   publisher = "jroesch";
+        #   name = "lean";
+        #   version = "0.16.56";
+        #   sha256 = "BMFyuwu66xpz5D6MXOURpobKhXCU59+lzRUWuwlOjK8=";
+        # }
         {
           publisher = "leanprover";
           name = "lean4";
