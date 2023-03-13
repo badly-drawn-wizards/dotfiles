@@ -47,5 +47,6 @@
     "agdaMode.connection.agdaPath": "/etc/profiles/per-user/reuben/bin/agda",
     "csharp.suppressBuildAssetsNotification": true,
     "workbench.colorTheme": "Dracula",
-    "vim.foldfix": true
+    "vim.foldfix": true,
+    "terminal.integrated.allowChords": false
 }
