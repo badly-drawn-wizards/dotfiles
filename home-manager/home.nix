@@ -162,7 +162,7 @@ with builtins;
         python-uinput
       ]))
 
-      python-language-server
+      python3Packages.python-lsp-server
 
       (agda.withPackages [ agdaPackages.standard-library ])
 
@@ -186,7 +186,7 @@ with builtins;
 
       wl-clipboard
 
-      unar
+      unar unrar p7zip
 
       docker-compose
       dbeaver
@@ -212,6 +212,9 @@ with builtins;
     ];
 
     file = {
+      ".config/gdb/gdbinit".text = ''
+      set auto-load safe-path /
+      '';
       ".tmux.conf".text = ''
         set-window-option -g mode-keys vi
       '';
@@ -219,13 +222,6 @@ with builtins;
         text = ''
           #!/usr/bin/env /bin/sh
           mpv --af=scaletempo=stride=30:search=20 $(wl-paste)
-        '';
-        executable = true;
-      };
-      ".local/bin/db" = {
-        text = ''
-          #!/usr/bin/env /bin/sh
-          GDK_BACKEND=x11 dbeaver
         '';
         executable = true;
       };
