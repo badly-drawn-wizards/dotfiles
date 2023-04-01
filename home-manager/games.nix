@@ -10,6 +10,8 @@
 
     winetricks
     wine64Packages.waylandFull
+
+    minecraft
   ];
 
   home.file = {

@@ -31,7 +31,6 @@ with builtins;
   ];
 
   windowManager.startupPrograms = with pkgs; [
-    "${mako}/bin/mako"
     "${firefox}/bin/firefox"
     "${discord}"
     # "${thunderbird}/bin/thunderbird"
@@ -46,7 +45,6 @@ with builtins;
   ];
 
   programs = {
-    mako.enable = true;
     zathura = {
       enable = true;
     };
@@ -94,6 +92,7 @@ with builtins;
   };
 
   services = {
+    mako.enable = true;
     udiskie = {
       enable = true;
       tray = "always";
@@ -199,6 +198,7 @@ with builtins;
       #nix-alien nix-index-update nix-index
 
       dotnet-sdk
+
     ];
 
     sessionVariables = {

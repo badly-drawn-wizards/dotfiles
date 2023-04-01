@@ -163,7 +163,7 @@ in
         vspacecodeSettings //
         {
           "whichkey.bindingOverrides" = whichkeyOverrides;
-          "omnisharp.path" = "${pkgs.omnisharp-roslyn}/bin/OmniSharp";
+          # "omnisharp.path" = "${pkgs.omnisharp-roslyn}/bin/OmniSharp";
           "omnisharp.loggingLevel" = "trace";
           "omnisharp.enableDecompilationSupport" = true;
           "extensions.autoCheckUpdates" = false;
@@ -179,7 +179,10 @@ in
           key = "ctrl+i";
           command = "workbench.action.navigateForward";
         }
-      ] ++ excludeDefaultKeybinding "ctrl+o" ++ vspacecodeKeybindings;
+      ]
+      ++ excludeDefaultKeybinding "ctrl+o"
+      ++ excludeDefaultKeybinding "ctrl+j"
+      ++ vspacecodeKeybindings;
       extensions = with pkgs.vscode-extensions; [
         bbenoist.nix
         vscodevim.vim
