@@ -144,7 +144,7 @@ with builtins;
 
       # Misc utilites
       ranger direnv tree less jq
-      htop postman lsof
+      btop htop postman lsof
       wget
 
       usbutils pciutils evtest xorg.xev
