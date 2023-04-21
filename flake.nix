@@ -63,6 +63,7 @@
       inputs.nixpkgs.follows = "/nixpkgs";
       inputs.pypi-deps-db.follows = "/pypi-deps-db";
     };
+    hyprland.url = "github:hyprwm/Hyprland";
     unhinged.url = "/workspace/unhinged";
 
     linux = {
