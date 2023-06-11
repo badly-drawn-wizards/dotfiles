@@ -3,17 +3,32 @@
 , lib
 , ...
 }:
-let
-  typewritten = pkgs.fetchFromGitHub {
-    owner = "reobin";
-    repo = "typewritten";
-    rev = "v1.4.5";
-    sha256 = "C3wpfv9qHvmAPxbC00uMdPMwAYpdaf+Ro5ydphgJgBo=";
-  };
-in
 {
   programs.zsh = {
     enable = true;
+    plugins = with pkgs; [
+      {
+        name = "nix-shell";
+        src = "${zsh-nix-shell}/share/zsh-nix-shell";
+      }
+      {
+        name = "fast-syntax-highlighting";
+        src = "${zsh-fast-syntax-highlighting}/share/zsh";
+      }
+      {
+        name = "fzf-tab";
+        src = "${zsh-fzf-tab}/share/fzf-tab";
+      }
+      {
+        name = "spaceship-prompt";
+        src = "${spaceship-prompt}/share/zsh";
+      }
+    ];
+    package = pkgs.buildEnv {
+      name = "zsh-packages";
+      paths = with pkgs; [
+      ];
+    };
     enableCompletion = true;
     enableAutosuggestions = true;
     shellAliases = {
@@ -22,18 +37,6 @@ in
       dc = "docker-compose";
       nr = "nix repl dot#os";
     };
-    plugins = [
-      {
-        name = "typewritten";
-        src = typewritten;
-        file = "typewritten.zsh";
-      }
-      {
-        name = "zsh-syntax-highlighting";
-        src = "${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting";
-        file = "zsh-syntax-highlighting.zsh";
-      }
-    ];
     dirHashes = {
       org = "$HOME/org";
       ws = "/workspace";
@@ -41,8 +44,8 @@ in
     };
     oh-my-zsh = {
       enable = true;
-      extraConfig = builtins.readFile ./zsh-theme-extra.zsh;
-      theme = "";
+      theme = "spaceship";
+      custom = "${config.home.homeDirectory}/.oh-my-zsh/custom";
       plugins = [
         "direnv"
         "thefuck"
@@ -51,7 +54,7 @@ in
 
     };
 
-    initExtra = let dollar = "$"; in ''
+    initExtra = ''
     stty -ixon
     zstyle ':completion:*' list-colors
     setopt autocd cdable_vars
@@ -63,18 +66,16 @@ in
 
     export MCFLY_KEY_SCHEME=vim
     eval "$(mcfly init zsh)"
-
-    function withtemp() {
-      local tmp=$(mktemp -d)
-      pushd $tmp > /dev/null
-      trap "popd > /dev/null; echo Removing '$tmp'; rm -rf '$tmp'" EXIT
-      eval $@
-    }
   '';
   };
 
+  home.file = {
+    ".oh-my-zsh/custom/themes".source = "${pkgs.spaceship-prompt}/share/zsh/themes";
+    ".spaceshiprc.zsh".text = ''
+    '';
+  };
+
   home.packages = with pkgs; [
-    zsh-syntax-highlighting
     thefuck
     mcfly
     exa

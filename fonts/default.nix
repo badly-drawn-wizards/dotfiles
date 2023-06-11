@@ -35,6 +35,7 @@
       source-code-pro
       noto-fonts
       noto-fonts-emoji
+      emacs-all-the-icons-fonts
     ];
     enableDefaultFonts = true;
     fontconfig = {

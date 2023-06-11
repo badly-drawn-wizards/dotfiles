@@ -1,6 +1,7 @@
 { 
-pkgs, 
-inputs, 
+pkgs,
+lib,
+inputs,
 ... }:
 
 
@@ -8,7 +9,6 @@ inputs,
   imports =
     [
       inputs.dwarffs.nixosModules.dwarffs
-      inputs.nix-ld.nixosModules.nix-ld
       inputs.unhinged.nixosModules.unhinged
       ./theme.nix
       ./hardware
@@ -24,6 +24,7 @@ inputs,
     ];
 
   nix = {
+    nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
     package = pkgs.nixVersions.stable;
     extraOptions = ''
       experimental-features = nix-command flakes repl-flake
@@ -55,6 +56,7 @@ inputs,
     wireshark.enable = true;
 
     # systemtap.enable = true;
+    nix-ld.enable = true;
   };
 
   security.polkit.enable = true;
@@ -103,7 +105,7 @@ inputs,
     icons.enable = true;
     portal = {
       enable = true;
-      xdgOpenUsePortal = true;
+      xdgOpenUsePortal = false;
       extraPortals = with pkgs; [
         xdg-desktop-portal-wlr
         xdg-desktop-portal-gtk

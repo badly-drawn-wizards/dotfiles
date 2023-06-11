@@ -39,16 +39,6 @@
       url = "github:edolstra/flake-compat";
       flake = false;
     };
-
-    nix-ld = {
-      url = "github:Mic92/nix-ld";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    nix-alien = {
-      url = "github:thiagokokada/nix-alien";
-      inputs.nixpkgs.follows = "/nixpkgs";
-    };
-    nixgl.url = "github:guibou/nixGL";
     dwarffs = {
       url = "github:edolstra/dwarffs";
       inputs.nixpkgs.follows = "/nixpkgs";
@@ -66,14 +56,35 @@
     hyprland.url = "github:hyprwm/Hyprland";
     unhinged.url = "/workspace/unhinged";
 
+    nix-index.url = "github:bennofs/nix-index";
+    nix-index-database = {
+      url = "github:Mic92/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    comma = {
+      url = "github:nix-community/comma";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     linux = {
       url = "git+file:///workspace/linux?ref=master";
+      flake = false;
+    };
+
+    lean4 = {
+      url = "github:leanprover/lean4";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    vs-code-default-keybindings = {
+      url = "github:codebling/vs-code-default-keybindings";
       flake = false;
     };
   };
   outputs = { nixpkgs, utils, emacs-overlay,
               nix-doom-emacs, nur, nixpkgs-wayland,
-              mach-nix, nixgl, nix-alien,
+              nix-index, mach-nix, lean4,
+              vs-code-default-keybindings,
               unhinged, linux, self, ... }@inputs:
     let
       flake-plus-module =
@@ -111,12 +122,19 @@
           inherit os;
           linuxSrc_custom = linux;
         })
+        (self: super: {
+          inherit (nix-index) nix-index nix-locate;
+        })
+        (self: super: {
+          lean4 = super.callPackage ({system}: lean4.packages.${system}) {};
+        })
         (self: super: { mach-nix = super.callPackage ({system}: mach-nix.lib.${system}) {}; })
         (emacs-overlay.overlay)
         (nur.overlay)
         (nixpkgs-wayland.overlay)
-        (nixgl.overlay)
-        # (nix-alien.overlay)
+        (self: super: {
+          inherit vs-code-default-keybindings;
+        })
       ] ++ import ./overlays;
 
       hosts.noobnoob = {

@@ -1,0 +1,42 @@
+@import url("./dracula/colors.css");
+* {
+    border: none;
+    border-radius: 0px;
+    font-family: "Fira Code";
+    font-size: 8pt;
+    /* padding: 0px; */
+    /* margin: 0px; */
+}
+
+#waybar {
+    background: @background-darker;
+    color: @foreground;
+}
+
+#workspaces button {
+    padding: 0px 5px;
+    margin: 0px 5px;
+    border-radius: 7px;
+    color: @purple
+}
+
+#workspaces button.focused {
+    padding: 0px 2px;
+    margin: 0px 1px;
+    background-color: @pink;
+    color: black;
+}
+
+#window {
+    background-color: @background;
+    color: @purple;
+    border-radius: 7px;
+    border: solid @pink 0px;
+    border-left-width: 4px;
+    border-right-width: 4px;
+    min-width: 400px;
+}
+
+.modules-right * {
+    margin-left: 10px;
+}

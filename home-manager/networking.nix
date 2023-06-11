@@ -4,7 +4,6 @@
   home = {
     packages = with pkgs; [
       networkmanager_dmenu
-      rofi
     ];
     file = {
       "./.local/bin/nmd" = {
@@ -16,7 +15,7 @@
       };
       "./.config/networkmanager-dmenu/config.ini".text = ''
         [dmenu]
-        dmenu_command = ${pkgs.rofi}/bin/rofi -dmenu
+        dmenu_command = ${config.programs.rofi.finalPackage}/bin/rofi -dmenu
       '';
     };
   };

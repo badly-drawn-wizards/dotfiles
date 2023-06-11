@@ -7,6 +7,7 @@
     imports = [
       inputs.nix-doom-emacs.hmModule
       inputs.hyprland.homeManagerModules.default
+      inputs.nix-index-database.hmModules.nix-index
       ./home.nix
     ];
   };

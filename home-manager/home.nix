@@ -22,6 +22,8 @@ with builtins;
     ./games.nix
     ./intellij.nix
     ./rot8.nix
+    ./rofi.nix
+    ./backgrounds.nix
     # ./wpaperd.nix
     # ./dictation.nix
     ./nix.nix
@@ -51,6 +53,12 @@ with builtins;
     obs-studio = {
       enable = true;
       plugins = [ pkgs.obs-studio-plugins.wlrobs ];
+    };
+
+    nix-index.enable = true;
+
+    nix-index-database = {
+      comma.enable = true;
     };
   };
 
@@ -145,7 +153,7 @@ with builtins;
       # Misc utilites
       ranger direnv tree less jq
       btop htop postman lsof
-      wget
+      wget fzf
 
       usbutils pciutils evtest xorg.xev
       # 12k skips / hour = 3.3 skips / second
@@ -163,7 +171,7 @@ with builtins;
 
       python3Packages.python-lsp-server
 
-      (agda.withPackages [ agdaPackages.standard-library ])
+      # (agda.withPackages [ agdaPackages.standard-library ])
 
       elan
 
@@ -179,7 +187,7 @@ with builtins;
       # MESA work FFS.
       libva-utils glxinfo
 
-      texlive.combined.scheme-full
+      # texlive.combined.scheme-full
 
       mpv
 
@@ -206,6 +214,7 @@ with builtins;
       EDITOR = "em";
     };
 
+
     sessionPath = [
       "${config.home.homeDirectory}/.local/bin"
       "${config.home.homeDirectory}/.dotnet/tools"
@@ -228,4 +237,6 @@ with builtins;
     };
     stateVersion = "20.03";
   };
+
+  systemd.user.sessionVariables = config.home.sessionVariables;
 }

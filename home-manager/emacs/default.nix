@@ -38,9 +38,32 @@ in
     let
       emacs = pkgs.emacs;
       epkgs = pkgs.emacsPackagesFor emacs;
+      doomPrivateDir = ./doom;
     in {
       enable = true;
-      doomPrivateDir = ./doom;
+      doomPackageDir =
+        let
+          filteredPath = builtins.path {
+            path = doomPrivateDir;
+            name = "doom-private-dir-filtered";
+            filter = path: type:
+              builtins.elem (baseNameOf path) [ "init.el" "packages.el" ];
+          };
+        in
+          pkgs.linkFarm "doom-packages-dir" [
+          {
+            name = "init.el";
+            path = "${filteredPath}/init.el";
+          }
+          {
+            name = "packages.el";
+            path = "${filteredPath}/packages.el";
+          }
+          {
+            name = "config.el";
+            path = pkgs.emptyFile;
+          }];
+      inherit doomPrivateDir;
       extraConfig = ''
       (add-to-list 'load-path "${config.home.homeDirectory}/${configPath}")
       (load "${cleanConfigName}")
@@ -52,30 +75,8 @@ in
       ];
       emacsPackage = emacs;
       emacsPackagesOverlay = eself: esuper: {
-        irony = esuper.irony.overrideAttrs (_: { doCheck = false; });
-        sln-mode = esuper.trivialBuild rec {
-          pname="sln-mode";
-          version="0f91d1b957c7d2a7bab9278ec57b54d57f1dbd9c";
-          src = pkgs.fetchFromGitHub {
-            owner = "sensorflo";
-            repo = "sln-mode";
-            rev = version;
-            sha256 = "XqkqPyEJuTtFslOz1fpTf/Klbd/zA7IGpzpmum/MGao=";
-          };
-        };
-        lean4-mode = esuper.trivialBuild {
-          pname = "lean4-mode";
-          version = "v4.0.0-m2";
-          src = pkgs.fetchFromGitHub {
-            owner = "leanprover";
-            repo = "lean4";
-            rev = "26dda3f63d885e8c22888926bdea0d99f58bf444";
-            sha256 = "e0bDkcyd8PYzU1KuPkgZFgC/bPTC9fuFQzc6mMzL9LY=";
-            fetchSubmodules = true;
-          };
-          sourceRoot = "source/lean4-mode";
-          packageRequires = with eself; [ dash dash-functional f flycheck lsp-mode magit-section s ];
-        };
+        # irony = esuper.irony.overrideAttrs (_: { doCheck = false; });
+        lean4-mode = pkgs.lean4.lean4-mode;
       };
     };
 

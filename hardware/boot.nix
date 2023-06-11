@@ -19,10 +19,7 @@
       kernelModules = [ "i915" ];
     };
 
-    kernelParams = [
-      "intel_iommu=on"
-      "i8042.unlock=1"
-    ];
+    kernelParams = [];
 
     extraModulePackages = [
       config.boot.kernelPackages.v4l2loopback.out
@@ -35,7 +32,7 @@
       "acpi_call"
     ];
 
-    cleanTmpDir = true;
+    tmp.cleanOnBoot = true;
 
     supportedFilesystems = [ "ntfs" ];
   };

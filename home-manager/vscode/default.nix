@@ -1,10 +1,19 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (builtins) fromJSON readFile map filter;
+  inherit (builtins) head isString split concatLists concatStringsSep fromJSON readFile map filter;
+  inherit (lib.strings) splitString;
+  fromJSONC = jsonc:
+      let
+          linesWithSep = concatLists (map (l: if isString l then [l] else l) (builtins.split "([\r\n]+)" jsonc));
+          removeComment = line: head (splitString "//" line);
+          json = concatStringsSep "" (map removeComment linesWithSep);
+      in fromJSON json;
+
   readJSON = path: fromJSON (readFile path);
+  readJSONC = path: fromJSONC (readFile path);
   settings = readJSON ./settings.json;
-  defaultKeybindings = readJSON ./default/keybindings.json;
+  defaultKeybindings = readJSONC "${pkgs.vs-code-default-keybindings}/linux.keybindings.json";
   excludeDefaultKeybinding = key:
     map (binding: binding // { command = "-${binding.command}"; })
       (filter (binding: binding.key == key) defaultKeybindings);
@@ -147,7 +156,7 @@ let
     # "workbench.action.terminal.toggleTerminal"
     # "workbench.action.toggleFullScreen"
     # "workbench.action.toggleMaximizedPanel"
-    "workbench.action.togglePanel"
+    # "workbench.action.togglePanel"
   ];
   commandsToSkipShell = map (binding: "-${binding}") defaultCommandsToSkipShellToRemove;
   vspacecodeSettings = readJSON ./vspacecode/settings.json;
@@ -181,7 +190,6 @@ in
         }
       ]
       ++ excludeDefaultKeybinding "ctrl+o"
-      ++ excludeDefaultKeybinding "ctrl+j"
       ++ vspacecodeKeybindings;
       extensions = with pkgs.vscode-extensions; [
         bbenoist.nix
@@ -189,32 +197,37 @@ in
         kahole.magit
         vspacecode.whichkey
         vspacecode.vspacecode
+        bodil.file-browser
         ms-dotnettools.csharp
         dracula-theme.theme-dracula
-        ms-azuretools.vscode-docker
         esbenp.prettier-vscode
         angular.ng-template
-        mkhl.direnv
         ms-vscode.cpptools
-        # ms-python.python
+        ms-vscode.makefile-tools
+        ms-vscode.cmake-tools
+        ms-vscode.hexeditor
+        ms-vscode.powershell
+        ms-azuretools.vscode-docker
+        ms-python.python
+        pkgs.lean4.vscode-lean4
       ] ++ extensionsFromVscodeMarketplace [
         {
-          publisher = "ms-vscode";
-          name = "makefile-tools";
-          version = "0.6.0";
-          sha256 = "Sd1bLdRBdLVK8y09wL/CJF+/kThPTH8MHw2mFQt+6h8=";
+          publisher = "herrmannplatz";
+          name = "npm-dependency-links";
+          version = "1.0.0";
+          sha256 = "sha256-rvllC1KYNcstSW/mBRdiQvUdNicpwbI0YA9Sz/2Fbqc=";
         }
-        # {
-        #   publisher = "jroesch";
-        #   name = "lean";
-        #   version = "0.16.56";
-        #   sha256 = "BMFyuwu66xpz5D6MXOURpobKhXCU59+lzRUWuwlOjK8=";
-        # }
         {
-          publisher = "leanprover";
-          name = "lean4";
-          version = "0.0.97";
-          sha256 = "uAXKN+6NWUsDV1KZ/4YjFlGy97BiuCm0NtHadpyO504=";
+          publisher = "pflannery";
+          name = "vscode-versionlens";
+          version = "1.5.0";
+          sha256 = "sha256-J6iTVnaOaARrBSR0iaxlwUiRB4Gstkam4uHMYmtR0C4=";
+        }
+        {
+          publisher = "mkhl";
+          name = "direnv";
+          version = "0.13.0";
+          sha256 = "sha256-KdLJ7QTi9jz+JbbQuhXqyE3WV9oF+wyC/9ZJ/XTFOYc=";
         }
       ];
     };

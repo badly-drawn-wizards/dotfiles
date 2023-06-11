@@ -27,7 +27,7 @@ in
       "battery all" = {
         position = 1;
         settings = {
-          format = "${battery} %percentage (%remaining %status) ";
+          format = " ${battery} %percentage (%remaining %status) ";
           integer_battery_capacity = true;
           status_chr = charging;
           status_bat = discharging;
@@ -35,10 +35,12 @@ in
           low_threshold = 10;
         };
       };
+
       load = {
         position = 2;
         settings = { format = " ${cpu} %1min "; };
       };
+
       "cpu_temperature 0" = {
         position = 3;
         settings = {
@@ -60,16 +62,18 @@ in
           script_path = ''${pkgs.writeScriptBin "i3status-get-disk" ''
             used=$(df -h --output=used / | tail -n1 | tr -d ' ')
             size=$(df -h --output=size / | tail -n1 | tr -d ' ')
-            echo "$used / $size"
+            echo " $used / $size "
           ''}/bin/i3status-get-disk'';
           cache_timeout = 60;
           "on_click 1" = "exec ${pkgs.gnome.nautilus}/bin/nautilus";
         };
       };
+
       "tztime local" = {
         position = 6;
-        settings = { format = " ${clock} %H:%M:%S ${calendar} %d/%m"; };
+        settings = { format = " ${clock} %H:%M:%S ${calendar} %d/%m "; };
       };
+
       "external_script keyboard" = {
         position = 7;
         settings = {

@@ -11,7 +11,6 @@ stdenv.mkDerivation {
   };
 
   buildPhase = ''
-  echo ${./wizard}
   cp ${./wizard}/* dracula/
   '';
 

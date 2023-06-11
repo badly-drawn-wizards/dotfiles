@@ -29,11 +29,7 @@ let
   mod = config.wayland.windowManager.sway.config.modifier;
   terminal = "${pkgs.kitty}/bin/kitty";
 
-  rofi-run = modi:
-    ''${pkgs.rofi}/bin/rofi -matching fuzzy -show ${modi}'';
-
-  # TODO switch this over to rofi
-  rename-workspace = ''i3-input -F "rename workspace to %s"'';
+  rofi-modi-cmd = config.programs.rofi.modi-cmd;
 
   assigns = {
     " web" = [
@@ -56,49 +52,6 @@ let
     ];
   };
 
-  # Adapted from
-  # https://blog.sarine.nl/2014/08/03/rofi-updates.html
-  rofi-startup-workspaces = lib.concatStrings (map (s: ''echo "${s}";'') (attrNames assigns));
-  rofi-workspace-bin = name: cmd:
-    let
-      cmd' = cmd "$@";
-      script = ''
-        #!/bin/sh
-        if test -z $@
-        then
-          swaymsg -t get_workspaces | ${pkgs.jq}/bin/jq -r ".[].name" | { cat; ${rofi-startup-workspaces} } | sort | uniq
-        else
-          swaymsg "${cmd'}" >/dev/null
-        fi
-      '';
-    in pkgs.writeScriptBin name script;
-  rofi-workspace-cmd = name: cmd: ''${rofi-workspace-bin name cmd}/bin/${name}'';
-
-  rofi-workspace = rofi-workspace-cmd "rofi-workspace" (ws: "workspace ${ws}");
-  rofi-move = rofi-workspace-cmd "rofi-move" (ws: "move window to workspace ${ws}");
-
-  background-dir = "$HOME/backgrounds";
-  set-background = pkgs.writeScriptBin "set-background" ''
-  #!/bin/sh
-  set -e
-  BGS=$(find "${background-dir}" -type f ! -iname ".*" -printf '%f\n' | sort)
-  if [ $# -eq 0 ]
-  then
-    BG=$(echo -e "random\n$BGS" | rofi -dmenu -p "background")
-  elif [ $1 == "last" ]
-  then
-    BG=$(cat ${background-dir}/.last)
-  else
-    BG=$1
-  fi
-  if [ $BG == "random" ]
-  then
-    BG=$(echo "$BGS" | shuf -n1)
-  fi
-  echo $BG > ${background-dir}/.last
-  pkill swaybg || true
-  ${pkgs.swaybg}/bin/swaybg -i "${background-dir}/$BG"
-  '';
 in
 {
   options = with lib; with types; {
@@ -116,6 +69,7 @@ in
   config = {
 
     home.sessionVariables = {
+      XDG_CONFIG_HOME=config.xdg.configHome;
       XDG_SESSION_TYPE="wayland";
       XDG_CURRENT_DESKTOP="sway";
 
@@ -123,30 +77,36 @@ in
       _JAVA_AWT_WM_NONREPARENTING=1;
     };
 
-    home.file.".config/rofi/config.rasi".text = ''
-      @theme "${pkgs.dracula-rofi-theme}/theme/config2.rasi"
-      * {
-        font: "${config.font} ${builtins.toString config.fontSize}";
-      }
-      configuration {
-        modi: "run,window,workspace:${rofi-workspace},move:${rofi-move}";
-        kb-row-tab: "";
-        kb-remove-to-eol: "";
-        kb-element-next: "";
-        kb-element-prev: "";
-        kb-accept-entry: "Return";
-        kb-mode-next: "Tab";
-        kb-mode-previous: "Shift+Tab";
-        kb-row-up: "Control+k";
-        kb-row-down: "Control+j";
-      }
-    '';
-    home.packages = with pkgs; [ rofi set-background ];
+    programs.waybar = {
+      enable = true;
+      settings = {
+        mainBar = {
+          layer = "top";
+          position = "top";
+          modules-left =
+            ["sway/workspaces" "sway/mode"];
+          modules-center = ["sway/window"];
+          modules-right =
+            ["battery" "cpu" "memory" "clock" "tray"];
+        };
+      };
+      style = ./waybar.css;
+    };
 
-    windowManager.startupPrograms = [
-      "${set-background}/bin/set-background last"
-    ];
-
+    home.file.".config/waybar/dracula" = {
+      source = let
+        dracula-waybar-src = pkgs.fetchFromGitHub {
+          owner = "dracula";
+          repo = "waybar";
+          rev = "3dd04357db89c0bb7f9635848c50cba827246fe3";
+          sha256 = "sha256-ajHz3daePqkSbjVbYDAucoXEF/bj4A9qBrFBIw278Bg=";
+        };
+        dracula-waybar = builtins.path {
+          path = "${dracula-waybar-src}/waybar";
+          filter = path: type: lib.hasSuffix ".css" path;
+        };
+        in dracula-waybar;
+    };
 
     wayland.windowManager.hyprland = {
       enable = true;
@@ -174,7 +134,7 @@ in
           names = [ "Font Awesome" "Fira Code" ];
         };
         modifier = "Mod4";
-        menu = rofi-run "run";
+        menu = rofi-modi-cmd "run";
         focus = {
           mouseWarping = false;
           followMouse = false;
@@ -221,14 +181,13 @@ in
             "${mod}+Shift+minus" = "move scratchpad";
             "${mod}+minus" = "scratchpad show";
 
-            "${mod}+r" = "exec ${rename-workspace}";
             "${mod}+Shift+r" = "reload";
             "${mod}+i" = "exec em";
-            "${mod}+o" = "exec ${rofi-run "workspace"}";
-            "${mod}+Shift+o" = "exec ${rofi-run "move"}";
-            "${mod}+p" = "exec ${rofi-run "window"}";
             "${mod}+m" = "exec mpv-paste";
-            "${mod}+b" = "exec ${set-background}/bin/set-background";
+
+            "${mod}+o" = "exec ${rofi-modi-cmd "workspace"}";
+            "${mod}+Shift+o" = "exec ${rofi-modi-cmd "move"}";
+            # "${mod}+p" = "exec ${rofi-modi-cmd "window"}";
 
             "${mod}+t" = "exec ${pkgs.gnome.nautilus}/bin/nautilus";
             "${mod}+Print" = ''exec ${pkgs.grim}/bin/grim -t png -g "$(${pkgs.slurp}/bin/slurp)" ${config.home.homeDirectory}/screenshots/$(date +%Y-%m-%d_%H-%m-%s).png'';
@@ -249,8 +208,8 @@ in
         };
         bars = [{
           position = "top";
-          command = "${pkgs.sway}/bin/swaybar";
-          statusCommand = "${pkgs.python39Packages.py3status}/bin/py3status";
+          command = "${config.programs.waybar.package}/bin/waybar";
+          # statusCommand = "${pkgs.python39Packages.py3status}/bin/py3status";
           colors = {
             background = "#${background}";
             statusline = "#${color12}";
