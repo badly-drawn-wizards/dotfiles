@@ -1,11 +1,8 @@
-@import url("./dracula/colors.css");
 * {
     border: none;
     border-radius: 0px;
     font-family: "Fira Code";
     font-size: 8pt;
-    /* padding: 0px; */
-    /* margin: 0px; */
 }
 
 #waybar {
@@ -14,15 +11,14 @@
 }
 
 #workspaces button {
-    padding: 0px 5px;
-    margin: 0px 5px;
+    min-width: 20px;
+    padding: 0px 2px;
+    margin: 1px 5px;
     border-radius: 7px;
-    color: @purple
+    color: @purple;
 }
 
 #workspaces button.focused {
-    padding: 0px 2px;
-    margin: 0px 1px;
     background-color: @pink;
     color: black;
 }
@@ -32,11 +28,36 @@
     color: @purple;
     border-radius: 7px;
     border: solid @pink 0px;
-    border-left-width: 4px;
-    border-right-width: 4px;
-    min-width: 400px;
+    border-width: 0px 5px 0px 5px;
+    min-width: 300px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+#custom-org-clock {
+    padding-left: 15px;
+
+    color: grey;
+
+    transition: color 0.5s, text-shadow 1s;
+}
+
+#custom-org-clock.active {
+    color: @white;
+    text-shadow: 0px 0px 2px @purple;
 }
 
 .modules-right * {
     margin-left: 10px;
+}
+
+.critical {
+  color: @red
+}
+
+.urgent {
+  color: @yellow
+}
+
+.normal {
 }

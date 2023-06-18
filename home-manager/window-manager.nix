@@ -7,6 +7,9 @@
 with builtins;
 with config.theme;
 let
+  inherit (config.wayland.windowManager.sway.config) modifier assigns;
+  inherit (config.programs.doom-emacs) org-clock;
+  inherit (lib) concatStrings;
   io = {
     keyboard = "1:1:AT_Translated_Set_2_keyboard";
     stylus = "1267:10741:ELAN2514:00_04F3:29F5_Stylus";
@@ -14,6 +17,7 @@ let
     touchpad = "1739:52560:SYNA3297:00_06CB:CD50_Touchpad";
     monitor = "eDP-1";
   };
+
   mkColorSet = bg: txt: {
     border = "#${bg}"; 
     childBorder = "#${bg}"; 
@@ -26,31 +30,26 @@ let
     background = "#${bg}"; 
     text = "#${txt}"; 
   };
-  mod = config.wayland.windowManager.sway.config.modifier;
-  terminal = "${pkgs.kitty}/bin/kitty";
 
-  rofi-modi-cmd = config.programs.rofi.modi-cmd;
-
-  assigns = {
-    " web" = [
-      { app_id = "^firefox$"; }
-    ];
-    " read" = [
-      { app_id = "^calibre-gui$"; }
-      { class = "^MuPdf$"; }
-      { class = "^okular$"; }
-    ];
-    " chat" = [
-      { class = "^discord$"; }
-      { class = "^Riot$"; }
-      { class = "^Slack$"; }
-      { app_id = "^thunderbird$"; }
-    ];
-    " write" = [
-      { class = "^Write$"; }
-      { app_id = "^xournalpp"; }
-    ];
-  };
+  mod = modifier;
+  rofi-startup-workspaces =
+    concatStrings (map (s: ''echo "${s}";'') (attrNames assigns));
+  # Adapted from
+  # https://blog.sarine.nl/2014/08/03/rofi-updates.html
+  rofi-workspace = name: cmd:
+    let
+      cmd' = cmd "$@";
+      script = ''
+        #!/bin/sh
+        if test -z $@
+        then
+          swaymsg -t get_workspaces | ${pkgs.jq}/bin/jq -r ".[].name" | { cat; ${rofi-startup-workspaces} } | sort | uniq
+        else
+          swaymsg "${cmd'}" >/dev/null
+        fi
+      '';
+    in pkgs.writeScript name script;
+  rofi-modi-cmd = config.programs.rofi.cmd.modi;
 
 in
 {
@@ -77,35 +76,10 @@ in
       _JAVA_AWT_WM_NONREPARENTING=1;
     };
 
-    programs.waybar = {
-      enable = true;
-      settings = {
-        mainBar = {
-          layer = "top";
-          position = "top";
-          modules-left =
-            ["sway/workspaces" "sway/mode"];
-          modules-center = ["sway/window"];
-          modules-right =
-            ["battery" "cpu" "memory" "clock" "tray"];
-        };
-      };
-      style = ./waybar.css;
-    };
-
-    home.file.".config/waybar/dracula" = {
-      source = let
-        dracula-waybar-src = pkgs.fetchFromGitHub {
-          owner = "dracula";
-          repo = "waybar";
-          rev = "3dd04357db89c0bb7f9635848c50cba827246fe3";
-          sha256 = "sha256-ajHz3daePqkSbjVbYDAucoXEF/bj4A9qBrFBIw278Bg=";
-        };
-        dracula-waybar = builtins.path {
-          path = "${dracula-waybar-src}/waybar";
-          filter = path: type: lib.hasSuffix ".css" path;
-        };
-        in dracula-waybar;
+    programs.rofi.modi = {
+      "run" = null;
+      "workspace" = rofi-workspace "rofi-workspace" (ws: "workspace ${ws}");
+      "move" = rofi-workspace "rofi-move" (ws: "move window to workspace ${ws}");
     };
 
     wayland.windowManager.hyprland = {
@@ -124,7 +98,7 @@ in
       '';
 
       config = {
-        inherit terminal;
+        terminal = "${pkgs.kitty}/bin/kitty";
         startup = map
           (command: if builtins.isString command then {
             inherit command;
@@ -164,7 +138,27 @@ in
             mode = "3840x2168";
           };
         };
-        inherit assigns;
+        assigns = {
+          " web" = [
+            { app_id = "^firefox$"; }
+          ];
+          " read" = [
+            { app_id = "^calibre-gui$"; }
+            { class = "^MuPdf$"; }
+            { class = "^okular$"; }
+          ];
+          " chat" = [
+            { class = "^discord$"; }
+            { class = "^Riot$"; }
+            { class = "^Slack$"; }
+            { app_id = "^thunderbird$"; }
+          ];
+          " write" = [
+            { class = "^Write$"; }
+            { app_id = "^xournalpp"; }
+          ];
+        };
+
         keybindings = with lib.attrsets; let
 
           # Usual i3 movement
@@ -187,8 +181,9 @@ in
 
             "${mod}+o" = "exec ${rofi-modi-cmd "workspace"}";
             "${mod}+Shift+o" = "exec ${rofi-modi-cmd "move"}";
-            # "${mod}+p" = "exec ${rofi-modi-cmd "window"}";
 
+            "${mod}+c" = "exec ${org-clock} toggle-last-clock";
+            "${mod}+Shift+c" = "exec ${org-clock} recent-clock";
             "${mod}+t" = "exec ${pkgs.gnome.nautilus}/bin/nautilus";
             "${mod}+Print" = ''exec ${pkgs.grim}/bin/grim -t png -g "$(${pkgs.slurp}/bin/slurp)" ${config.home.homeDirectory}/screenshots/$(date +%Y-%m-%d_%H-%m-%s).png'';
             "XF86MonBrightnessUp" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set +10%";
@@ -209,7 +204,6 @@ in
         bars = [{
           position = "top";
           command = "${config.programs.waybar.package}/bin/waybar";
-          # statusCommand = "${pkgs.python39Packages.py3status}/bin/py3status";
           colors = {
             background = "#${background}";
             statusline = "#${color12}";

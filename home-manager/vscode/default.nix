@@ -229,6 +229,12 @@ in
           version = "0.13.0";
           sha256 = "sha256-KdLJ7QTi9jz+JbbQuhXqyE3WV9oF+wyC/9ZJ/XTFOYc=";
         }
+        # {
+        #   publisher = "jakubstepien";
+        #   name = "angular-template-style-suggestions";
+        #   version = "xxxx";
+        #   sha256 = lib.fakeSha256;
+        # }
       ];
     };
 

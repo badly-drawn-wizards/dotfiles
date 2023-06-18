@@ -3,19 +3,7 @@
 , lib
 , ...
 }:
-let
-  cpu = "";
-  memory = "";
-  storage = "";
-  clock = "";
-  calendar = "";
-  charging = "";
-  discharging = "";
-  full = "";
-  battery = "";
-  thermometer = "";
-  keyboard = "";
-in
+with config.icons;
 {
   programs.i3status = {
     enable = true;
@@ -59,11 +47,12 @@ in
         position = 5;
         settings = {
           format = " ${storage} {output}";
-          script_path = ''${pkgs.writeScriptBin "i3status-get-disk" ''
+          script_path = pkgs.writeScript "i3status-get-disk" ''
+            #!/usr/bin/env bash
             used=$(df -h --output=used / | tail -n1 | tr -d ' ')
             size=$(df -h --output=size / | tail -n1 | tr -d ' ')
             echo " $used / $size "
-          ''}/bin/i3status-get-disk'';
+          '';
           cache_timeout = 60;
           "on_click 1" = "exec ${pkgs.gnome.nautilus}/bin/nautilus";
         };
@@ -78,11 +67,12 @@ in
         position = 7;
         settings = {
           format = "{output}";
-          script_path = ''${pkgs.writeScriptBin "keyboard-indicator" ''
-          echo "${keyboard}"
-          ''}/bin/keyboard-indicator'';
+          script_path = pkgs.writeScript "keyboard-indicator" ''
+            #!/usr/bin/env bash
+            echo "${keyboard}"
+          '';
           cache_timeout = 60;
-          "on_click 1" = "exec ${config.onscreen-keyboard.togglePackage}/bin/toggleKeyboard";
+          "on_click 1" = "exec ${config.onscreen-keyboard.togglePackage}";
         };
       };
 

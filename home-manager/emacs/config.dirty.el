@@ -1,9 +1,74 @@
 ;;;  -*- lexical-binding: t; -*-
 
+(require 'cl-lib)
+(require 'cl-extra)
+(require 'lean-mode)
+(require 'ht)
+(require 'org)
+(require 'org-clock)
+
 (setq user-full-name "Reuben Steenekamp"
       user-mail-address "reuben.steenekamp@gmail.com")
 
 (setq doom-theme 'doom-spacegrey)
+
+(defmacro with-widen (&rest body)
+  `(save-excursion
+     (save-restriction
+       (widen)
+       ,@body)))
+
+(defmacro with-marker (marker &rest body)
+  (let ((m (cl-gensym))
+        (b (cl-gensym)))
+    `(when-let
+      ((,m ,marker)
+       (,b (marker-buffer ,m)))
+      (with-current-buffer ,b
+        (with-widen
+          (goto-char ,m)
+          ,@body)))))
+
+(defun my/org-clock-elapsed-clock-in-time ()
+  (floor
+   (org-time-convert-to-integer
+    (if (and (org-clock-is-active) (= org-clock-marker (point-marker))) (org-time-since org-clock-start-time) 0))
+   60))
+
+(defun my/org-clock-get-clocked-time ()
+  (+
+   (org-clock-sum-current-item
+             (org-clock-get-sum-start))
+   (my/org-clock-elapsed-clock-in-time)))
+
+(defun my/org-marker-heading (marker)
+  (with-marker marker (org-no-properties (org-get-heading t t t t))))
+
+(defun my/org-clock-info ()
+  (json-serialize
+   (let ((active (when (org-clock-is-active) 't)))
+    (or
+      (when-let
+        ((task (if active org-clock-marker (car org-clock-history)))
+         (task-buffer (marker-buffer task)))
+        (ht
+          ("active" (or active :false))
+          ("heading"
+           (or (my/org-marker-heading task) :null))
+          ("clockedMinutes"
+           (or (with-marker task (my/org-clock-elapsed-clock-in-time)) :null))
+          ("totalMinutes"
+           (or (with-marker task (my/org-clock-get-clocked-time)) :null))
+          ("recent"
+           (map 'array #'my/org-marker-heading org-clock-history))
+          ("buffer"
+           (buffer-file-name task-buffer))
+          ("point"
+           (marker-position task))))
+      :null))))
+
+(defun my/org-clock-info-clock-in (i)
+  (with-marker (nth i org-clock-history) (org-clock-in nil nil)))
 
 (defvar pomodoro-espeak--compliments
   '("you sexy beast"
@@ -23,6 +88,9 @@
 
 (defun pomodoro-espeak/pomodoro-break-over ()
   (pomodoro-espeak/speak "Break is over. Back to work."))
+
+(after! parinfer-rust
+  (setq parinfer-rust-preferred-mode "smart"))
 
 (after! alert
   (setq alert-default-style 'libnotify))
@@ -65,8 +133,9 @@
   (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
   (setq web-mode-code-indent-offset 2))
 
-(require 'lean-mode)
+(require 'lean4-input)
 (setq default-input-method "Lean")
+
 
 (after! lean4-mode
   (set-lookup-handlers! 'lean4-mode
@@ -121,39 +190,33 @@
      collect (set (make-local-variable var) (executable-find name))))
 (add-hook 'envrc-hook #'update-executable-vars)
 
-(after! agda2
-  (add-to-list 'auto-mode-alist '("\\.agda\\'" . agda2-mode))
-  (add-to-list 'auto-mode-alist '("\\.lagda.md\\'" . agda2-mode)))
-
 (after! prettier-js
   (add-hook 'typescript-mode-hook 'prettier-js-mode))
 
 (map!
- :leader
+  :leader
 
- (:desc "M-x" "<SPC>" #'counsel-M-x)
+  (:desc "M-x" "<SPC>" #'counsel-M-x)
 
- (:desc "Comment" ";" #'evilnc-comment-operator)
+  (:desc "Comment" ";" #'evilnc-comment-operator)
 
- ;; TODO Figure out why this doesn't work
- (:desc "jump" "j")
- ("jj" #'avy-goto-char)
- ("jl" #'avy-goto-line)
+  ;; TODO Figure out why this doesn't work
+  (:desc "jump" "j")
+  ("jj" #'avy-goto-char)
+  ("jl" #'avy-goto-line)
 
- (:desc "Evil no highlight" "sc" #'evil-ex-nohighlight)
- (:desc "Smartparens" "k")
- ("kr" #'sp-raise-sexp)
- ("ks" #'sp-forward-slurp-sexp)
- ("kS" #'sp-backward-slurp-sexp)
- ("kb" #'sp-forward-barf-sexp)
- ("kB" #'sp-backward-barf-sexp))
+  (:desc "Evil no highlight" "sc" #'evil-ex-nohighlight)
+  (:desc "Smartparens" "k")
+  ("kr" #'sp-raise-sexp)
+  ("ks" #'sp-forward-slurp-sexp)
+  ("kS" #'sp-backward-slurp-sexp)
+  ("kb" #'sp-forward-barf-sexp)
+  ("kB" #'sp-backward-barf-sexp))
  
-
-(evil-snipe-mode 0)
-
-(after! :evil
-  (setq tab-width 2)
-  (setq evil-shift-width 2))
+(setq tab-width 2)
+(setq evil-shift-round t)
+(setq evil-shift-width 2)
+(setq evil-snipe-mode 0)
 
 (use-package! tree-sitter
   :init

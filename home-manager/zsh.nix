@@ -8,20 +8,12 @@
     enable = true;
     plugins = with pkgs; [
       {
-        name = "nix-shell";
-        src = "${zsh-nix-shell}/share/zsh-nix-shell";
-      }
-      {
         name = "fast-syntax-highlighting";
-        src = "${zsh-fast-syntax-highlighting}/share/zsh";
+        src = "${zsh-fast-syntax-highlighting}/share/zsh/site-functions";
       }
       {
         name = "fzf-tab";
         src = "${zsh-fzf-tab}/share/fzf-tab";
-      }
-      {
-        name = "spaceship-prompt";
-        src = "${spaceship-prompt}/share/zsh";
       }
     ];
     package = pkgs.buildEnv {
@@ -54,30 +46,162 @@
 
     };
 
+    initExtraFirst = ''
+      SPACESHIP_PROMPT_ORDER=(
+          time           # Time stamps section
+          user           # Username section
+          dir            # Current directory section
+          host           # Hostname section
+          git            # Git section (git_branch + git_status)
+          hg             # Mercurial section (hg_branch  + hg_status)
+          package        # Package version
+          node           # Node.js section
+          bun            # Bun section
+          deno           # Deno section
+          ruby           # Ruby section
+          python         # Python section
+          elm            # Elm section
+          elixir         # Elixir section
+          xcode          # Xcode section
+          swift          # Swift section
+          golang         # Go section
+          perl           # Perl section
+          php            # PHP section
+          rust           # Rust section
+          haskell        # Haskell Stack section
+          scala          # Scala section
+          kotlin         # Kotlin section
+          java           # Java section
+          lua            # Lua section
+          dart           # Dart section
+          julia          # Julia section
+          crystal        # Crystal section
+          docker         # Docker section
+          docker_compose # Docker section
+          aws            # Amazon Web Services section
+          gcloud         # Google Cloud Platform section
+          azure          # Azure section
+          venv           # virtualenv section
+          conda          # conda virtualenv section
+          dotnet         # .NET section
+          ocaml          # OCaml section
+          vlang          # V section
+          zig            # Zig section
+          purescript     # PureScript section
+          erlang         # Erlang section
+          kubectl        # Kubectl context section
+          ansible        # Ansible section
+          terraform      # Terraform workspace section
+          pulumi         # Pulumi stack section
+          ibmcloud       # IBM Cloud section
+          nix_shell      # Nix shell
+          gnu_screen     # GNU Screen section
+          exec_time      # Execution time
+          async          # Async jobs indicator
+          line_sep       # Line break
+          battery        # Battery level and status
+          jobs           # Background jobs indicator
+          exit_code      # Exit code section
+          sudo           # Sudo indicator
+          char           # Prompt character
+  )      # Interferes with spaceship-prompt when loaded after it for some reason
+      source ${pkgs.fzf-zsh}/share/zsh/plugins/fzf-zsh/fzf-zsh.plugin.zsh
+    '';
     initExtra = ''
-    stty -ixon
-    zstyle ':completion:*' list-colors
-    setopt autocd cdable_vars
-    bindkey -v
-    bindkey "^P" history-search-backward
-    bindkey "^N" history-search-forward
-    bindkey "^R" history-incremental-pattern-search-backward
-    bindkey "^S" history-incremental-pattern-search-forward
+      stty -ixon
+      zstyle ':completion:*' list-colors
+      setopt autocd cdable_vars
+      bindkey -v
+      bindkey "^K" history-search-backward
+      if [[ ! $INSIDE_EMACS = vterm ]]
+      then
+        bindkey "^J" history-search-forward
+      fi
+      bindkey "^P" history-search-backward
+      bindkey "^N" history-search-forward
 
-    export MCFLY_KEY_SCHEME=vim
-    eval "$(mcfly init zsh)"
-  '';
+      function hm-cat() {
+        local file="$HOME/$1"
+        nix eval "dot#os.hm.home.file.\"$file\".source" --apply builtins.readFile --raw
+      }
+
+      SPACESHIP_TIME_SHOW=true
+      SPACESHIP_BATTERY_SHOW=true
+      SPACESHIP_CHAR_SYMBOL=λ
+      SPACESHIP_PROMPT_ORDER=(
+          # user           # Username section
+          dir            # Current directory section
+          time           # Time stamps section
+          # host           # Hostname section
+          git            # Git section (git_branch + git_status)
+          hg             # Mercurial section (hg_branch  + hg_status)
+          package        # Package version
+          node           # Node.js section
+          bun            # Bun section
+          deno           # Deno section
+          ruby           # Ruby section
+          python         # Python section
+          elm            # Elm section
+          elixir         # Elixir section
+          xcode          # Xcode section
+          swift          # Swift section
+          golang         # Go section
+          perl           # Perl section
+          php            # PHP section
+          rust           # Rust section
+          haskell        # Haskell Stack section
+          scala          # Scala section
+          kotlin         # Kotlin section
+          java           # Java section
+          lua            # Lua section
+          dart           # Dart section
+          julia          # Julia section
+          crystal        # Crystal section
+          docker         # Docker section
+          docker_compose # Docker section
+          aws            # Amazon Web Services section
+          gcloud         # Google Cloud Platform section
+          azure          # Azure section
+          venv           # virtualenv section
+          conda          # conda virtualenv section
+          dotnet         # .NET section
+          ocaml          # OCaml section
+          vlang          # V section
+          zig            # Zig section
+          purescript     # PureScript section
+          erlang         # Erlang section
+          kubectl        # Kubectl context section
+          ansible        # Ansible section
+          terraform      # Terraform workspace section
+          # pulumi         # Pulumi stack section
+          # ibmcloud       # IBM Cloud section
+          nix_shell      # Nix shell
+          # gnu_screen     # GNU Screen section
+          exec_time      # Execution time
+          async          # Async jobs indicator
+          battery        # Battery level and status
+          jobs           # Background jobs indicator
+          exit_code      # Exit code section
+          sudo           # Sudo indicator
+          line_sep       # Line break
+          char           # Prompt character
+        )
+    '';
   };
 
   home.file = {
-    ".oh-my-zsh/custom/themes".source = "${pkgs.spaceship-prompt}/share/zsh/themes";
-    ".spaceshiprc.zsh".text = ''
-    '';
+    ".oh-my-zsh/custom/themes".source = pkgs.runCommandLocal "omz-custom-themes" {}
+      ''
+        mkdir -p $out/spaceship-prompt
+        cd $out
+        cp ${pkgs.spaceship-prompt}/share/zsh/themes/spaceship.zsh-theme ./spaceship-prompt/
+        cp -R ${pkgs.spaceship-prompt}/lib/spaceship-prompt/* ./spaceship-prompt/
+        ln -s ./spaceship-prompt/spaceship.zsh-theme
+      '';
   };
 
   home.packages = with pkgs; [
     thefuck
-    mcfly
     exa
   ];
 }

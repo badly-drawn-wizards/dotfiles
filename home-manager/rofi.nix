@@ -1,36 +1,28 @@
 { config, lib, pkgs, ... }:
 
 let
-  assigns = config.wayland.windowManager.sway.config.assigns;
-  rofi-startup-workspaces = lib.concatStrings (map (s: ''echo "${s}";'') (lib.attrNames assigns));
-  # Adapted from
-  # https://blog.sarine.nl/2014/08/03/rofi-updates.html
-  rofi-workspace-bin = name: cmd:
-    let
-      cmd' = cmd "$@";
-      script = ''
-        #!/bin/sh
-        if test -z $@
-        then
-          swaymsg -t get_workspaces | ${pkgs.jq}/bin/jq -r ".[].name" | { cat; ${rofi-startup-workspaces} } | sort | uniq
-        else
-          swaymsg "${cmd'}" >/dev/null
-        fi
-      '';
-    in pkgs.writeScriptBin name script;
-  rofi-workspace-cmd = name: cmd: ''${rofi-workspace-bin name cmd}/bin/${name}'';
-
+  inherit (lib) escapeShellArg attrNames concatStrings;
 in
 {
   options = {
     programs.rofi = with lib; with types; {
       modi = mkOption {
-        type = attrsOf (nullOr str);
+        type = attrsOf (nullOr (either str path));
         default = {};
       };
-      modi-cmd = mkOption {
-        type = functionTo str;
-        default = null;
+      cmd = {
+        base = mkOption {
+          type = str;
+          default = ''${config.programs.rofi.finalPackage}/bin/rofi -matching fuzzy'';
+        };
+        dmenu = mkOption {
+          type = functionTo str;
+          default = prompt: ''${config.programs.rofi.cmd.base} -dmenu -p ${escapeShellArg prompt}'';
+        };
+        modi = mkOption {
+          type = functionTo str;
+          default = modi: ''${config.programs.rofi.cmd.base} -show ${escapeShellArg modi}'';
+        };
       };
     };
   };
@@ -41,13 +33,6 @@ in
       theme = "${pkgs.dracula-rofi-theme}/theme/config2.rasi";
       package = pkgs.rofi-wayland;
       font = "{config.font} ${builtins.toString config.fontSize}";
-      modi = {
-        "run" = null;
-        # "window" = null;
-        "workspace" = rofi-workspace-cmd "rofi-workspace" (ws: "workspace ${ws}");
-        "move" = rofi-workspace-cmd "rofi-move" (ws: "move window to workspace ${ws}");
-      };
-      modi-cmd = modi: ''${config.programs.rofi.finalPackage}/bin/rofi -matching fuzzy -show ${modi}'';
       extraConfig = {
         modi = builtins.concatStringsSep "," (lib.mapAttrsToList
           (name: script:

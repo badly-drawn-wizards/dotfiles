@@ -3,44 +3,52 @@
 let
   mod = config.wayland.windowManager.sway.config.modifier;
   set-background = pkgs.writeScriptBin "set-background" ''
-  #!/bin/sh
-  set -e
-  BGS=$(find "${config.backgrounds}" -type f ! -iname ".*" -printf '%f\n' | sort)
-  if [ $# -eq 0 ]
-  then
-    BG=$(echo -e "random\n$BGS" | rofi -dmenu -p "background")
-  elif [ $1 == "last" ]
-  then
-    BG=$(cat ${config.backgrounds}/.last)
-  else
-    BG=$1
-  fi
-  if [ $BG == "random" ]
-  then
-    BG=$(echo "$BGS" | shuf -n1)
-  fi
-  echo $BG > ${config.backgrounds}/.last
-  pkill swaybg || true
-  ${pkgs.swaybg}/bin/swaybg -i "${config.backgrounds}/$BG"
+    #!/bin/sh
+    set -e
+    BGS=$(find "${config.backgrounds.path}" -type f ! -iname ".*" -printf '%f\n' | sort)
+    if [ $# -eq 0 ]
+    then
+      BG=$(echo -e "random\n$BGS" | ${config.programs.rofi.cmd.dmenu "background"})
+    else
+      BG=$1
+    fi
+    if [ $BG == "random" ]
+    then
+      BG=$(echo "$BGS" | shuf -n1)
+    fi
+    [ ! $BG == .current ] && ( cd ${config.backgrounds.path}; ln -sf $BG .current )
+    pkill swaybg || true
+    [ -f ${config.backgrounds.current} ] && ${pkgs.swaybg}/bin/swaybg -i "${config.backgrounds.current}"
   '';
 in
 {
   options = with lib; with types; {
-    backgrounds = mkOption {
-      type = str;
+    backgrounds = {
+      path = mkOption {
+        type = str;
+        default = "${config.home.homeDirectory}/backgrounds";
+      };
+      current = mkOption {
+        type = path;
+        default = "${config.backgrounds.path}/.current";
+      };
+      set-background = mkOption {
+        type = package;
+        readOnly = true;
+        default = set-background;
+      };
     };
   };
   config = {
-    backgrounds = "${config.home.homeDirectory}/backgrounds";
     windowManager = {
       extraBinds = {
-        "${mod}+b" = "exec ${set-background}/bin/set-background";
+        "${mod}+b" = "exec ${config.backgrounds.set-background}/bin/set-background";
       };
       startupPrograms = [
-        "${set-background}/bin/set-background last"
+        "${config.backgrounds.set-background}/bin/set-background .last"
       ];
     };
 
-    home.packages = [ set-background ];
+    home.packages = [ config.backgrounds.set-background ];
   };
 }

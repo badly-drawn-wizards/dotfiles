@@ -8,19 +8,20 @@ with builtins;
   imports = [
     ../theme.nix
     ./window-manager.nix
-    ./i3status.nix
+    ./waybar
+    ./swaylock.nix
+    # ./i3status.nix
     ./zsh.nix
     ./browsers.nix
     ./obs.nix
     ./vim.nix
     ./emacs
     ./vscode
+    ./intellij
     ./calibre.nix
     ./git.nix
     ./xresources.nix
-    ./networking.nix
     ./games.nix
-    ./intellij.nix
     ./rot8.nix
     ./rofi.nix
     ./backgrounds.nix
@@ -107,16 +108,11 @@ with builtins;
     };
 
     network-manager-applet.enable = true;
-    gpg-agent.enable = true;
-
-    # Has some weird black square
-    #xembed-sni-proxy.enable = true;
+    gnome-keyring = {
+      enable = true;
+      components = [ "pkcs11" "secrets" "ssh" ];
+    };
   };
-
-  # xsession.pointerCursor = {
-  #   name = "Vanilla-DMZ";
-  #   size = 64;
-  # };
 
   home = {
     packages = with pkgs; [
@@ -202,8 +198,6 @@ with builtins;
 
       zrythm
       renoise
-
-      #nix-alien nix-index-update nix-index
 
       dotnet-sdk
 

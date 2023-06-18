@@ -82,7 +82,7 @@ inputs,
     };
 
     gnome = {
-      gnome-keyring.enable = false;
+      gnome-keyring.enable = true;
       gnome-settings-daemon.enable = true;
     };
 

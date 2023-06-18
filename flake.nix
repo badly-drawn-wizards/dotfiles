@@ -54,7 +54,7 @@
       inputs.pypi-deps-db.follows = "/pypi-deps-db";
     };
     hyprland.url = "github:hyprwm/Hyprland";
-    unhinged.url = "/workspace/unhinged";
+    unhinged.url = "github:badly-drawn-wizards/unhinged";
 
     nix-index.url = "github:bennofs/nix-index";
     nix-index-database = {
@@ -65,7 +65,6 @@
       url = "github:nix-community/comma";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
     linux = {
       url = "git+file:///workspace/linux?ref=master";
       flake = false;
@@ -75,16 +74,18 @@
       url = "github:leanprover/lean4";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
     vs-code-default-keybindings = {
       url = "github:codebling/vs-code-default-keybindings";
       flake = false;
     };
+
+    nix-colors.url = "github:Misterio77/nix-colors";
   };
   outputs = { nixpkgs, utils, emacs-overlay,
               nix-doom-emacs, nur, nixpkgs-wayland,
               nix-index, mach-nix, lean4,
               vs-code-default-keybindings,
+              nix-colors,
               unhinged, linux, self, ... }@inputs:
     let
       flake-plus-module =
@@ -120,21 +121,16 @@
       sharedOverlays = [
         (self: super: {
           inherit os;
-          linuxSrc_custom = linux;
-        })
-        (self: super: {
           inherit (nix-index) nix-index nix-locate;
-        })
-        (self: super: {
+          inherit vs-code-default-keybindings;
+          inherit nix-colors;
+          linuxSrc_custom = linux;
           lean4 = super.callPackage ({system}: lean4.packages.${system}) {};
+          mach-nix = super.callPackage ({system}: mach-nix.lib.${system});
         })
-        (self: super: { mach-nix = super.callPackage ({system}: mach-nix.lib.${system}) {}; })
         (emacs-overlay.overlay)
         (nur.overlay)
         (nixpkgs-wayland.overlay)
-        (self: super: {
-          inherit vs-code-default-keybindings;
-        })
       ] ++ import ./overlays;
 
       hosts.noobnoob = {

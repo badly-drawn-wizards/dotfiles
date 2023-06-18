@@ -3,6 +3,22 @@
 with lib;
 {
   options = {
+    icons = mkOption {
+      type = types.attrsOf types.string;
+      default = {
+        cpu = "";
+        memory = "";
+        storage = "";
+        clock = "";
+        calendar = "";
+        charging = "";
+        discharging = "";
+        full = "";
+        battery = "";
+        thermometer = "";
+        keyboard = "";
+      };
+    };
     theme = mkOption {
       type = types.attrsOf types.string;
       default = {

@@ -27,6 +27,9 @@
     "workbench.editorAssociations": {
         "*.pdf": "pdf.preview"
     },
+    "files.associations": {
+        "*.nswag": "json"
+    },
     "[javascript]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
@@ -48,5 +51,7 @@
     "csharp.suppressBuildAssetsNotification": true,
     "workbench.colorTheme": "Dracula",
     "vim.foldfix": true,
-    "terminal.integrated.allowChords": false
+    "terminal.integrated.allowChords": false,
+    "json.schemaDownload.enable": true,
+    "json.validate.enable": true
 }
