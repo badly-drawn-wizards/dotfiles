@@ -125,6 +125,9 @@
         nix eval "dot#os.hm.home.file.\"$file\".source" --apply builtins.readFile --raw
       }
 
+      eval $(gnome-keyring-daemon --start --daemonize 2>&-)
+      export SSH_AUTH_SOCK
+
       SPACESHIP_TIME_SHOW=true
       SPACESHIP_BATTERY_SHOW=true
       SPACESHIP_CHAR_SYMBOL=λ
