@@ -21,6 +21,7 @@ inputs,
       ./ccache.nix
       ./virtualization.nix
       ./users.nix
+      ./security.nix
     ];
 
   nix = {
@@ -59,8 +60,6 @@ inputs,
     nix-ld.enable = true;
   };
 
-  security.polkit.enable = true;
-
   services = {
 
     fstrim.enable = true;
@@ -82,7 +81,6 @@ inputs,
     };
 
     gnome = {
-      gnome-keyring.enable = true;
       gnome-settings-daemon.enable = true;
     };
 

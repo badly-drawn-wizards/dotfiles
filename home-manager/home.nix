@@ -106,12 +106,7 @@ with builtins;
       enable = true;
       tray = "always";
     };
-
     network-manager-applet.enable = true;
-    gnome-keyring = {
-      enable = true;
-      components = [ "pkcs11" "secrets" "ssh" ];
-    };
   };
 
   home = {
