@@ -21,18 +21,18 @@
         nixpkgs.follows = "/nixpkgs";
       };
     };
-    #doom-emacs = {
-    #  url = "github:hlissner/doom-emacs/develop";
-    #  flake = false;
-    #};
+    doom-emacs = {
+      url = "github:hlissner/doom-emacs/develop";
+      flake = false;
+    };
     nix-doom-emacs = {
       url = "github:nix-community/nix-doom-emacs";
       #url = "github:badly-drawn-wizards/nix-doom-emacs";
       #url = "/workspace/nix-doom-emacs";
       inputs = {
         nixpkgs.follows = "/nixpkgs";
-      #  doom-emacs.follows = "/doom-emacs";
-        emacs-overlay.follows = "/emacs-overlay";
+        # doom-emacs.follows = "/doom-emacs";
+        # emacs-overlay.follows = "/emacs-overlay";
       };
     };
     flake-compat = {
@@ -61,6 +61,10 @@
       url = "github:Mic92/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixfs = {
+      url = "github:illustris/nixfs";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     comma = {
       url = "github:nix-community/comma";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -69,7 +73,6 @@
       url = "git+file:///workspace/linux?ref=master";
       flake = false;
     };
-
     lean4 = {
       url = "github:leanprover/lean4";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -81,12 +84,24 @@
 
     nix-colors.url = "github:Misterio77/nix-colors";
   };
-  outputs = { nixpkgs, utils, emacs-overlay,
-              nix-doom-emacs, nur, nixpkgs-wayland,
-              nix-index, mach-nix, lean4,
-              vs-code-default-keybindings,
-              nix-colors,
-              unhinged, linux, self, ... }@inputs:
+  outputs = {
+    nixpkgs,
+      utils,
+      emacs-overlay,
+      nix-doom-emacs,
+      nur,
+      nixpkgs-wayland,
+      nix-index,
+      nixfs,
+      mach-nix,
+      lean4,
+      vs-code-default-keybindings,
+      nix-colors,
+      unhinged,
+      linux,
+      self,
+      ...
+  }@inputs:
     let
       flake-plus-module =
         (_: {
@@ -99,50 +114,51 @@
             };
           };
         });
-       os = rec {
-          inherit self;
-          nixos = self.nixosConfigurations.noobnoob;
-          pkgs = nixos.pkgs;
-          config = nixos.config;
-          lpkgs = config.boot.kernelPackages;
-          hm = config.home-manager.users.reuben;
-          emacs = hm.programs.emacs.package;
-          epkgs = pkgs.emacsPackagesFor emacs;
-        };
+      os = rec {
+        inherit self;
+        nixos = self.nixosConfigurations.noobnoob;
+        pkgs = nixos.pkgs;
+        config = nixos.config;
+        lpkgs = config.boot.kernelPackages;
+        hm = config.home-manager.users.reuben;
+        emacs = hm.programs.doom-emacs.package;
+        epkgs = pkgs.emacsPackages;
+      };
     in
-    utils.lib.mkFlake {
-      inherit self inputs;
+      utils.lib.mkFlake {
+        inherit self inputs;
 
-      channelsConfig.allowUnfree = true;
-      channels.nixpkgs = {
-        patches = import ./patches;
-      };
+        channelsConfig.allowUnfree = true;
+        channels.nixpkgs = {
+          patches = import ./patches;
+        };
 
-      sharedOverlays = [
-        (self: super: {
-          inherit os;
-          inherit (nix-index) nix-index nix-locate;
-          inherit vs-code-default-keybindings;
-          inherit nix-colors;
-          linuxSrc_custom = linux;
-          lean4 = super.callPackage ({system}: lean4.packages.${system}) {};
-          mach-nix = super.callPackage ({system}: mach-nix.lib.${system});
-        })
-        (emacs-overlay.overlay)
-        (nur.overlay)
-        (nixpkgs-wayland.overlay)
-      ] ++ import ./overlays;
+        sharedOverlays = [
+          (self: super: {
+            inherit os;
+            inherit (nix-index) nix-index nix-locate;
+            inherit vs-code-default-keybindings;
+            inherit nix-colors;
+            linuxSrc_custom = linux;
+            lean4 = super.callPackage ({system}: lean4.packages.${system}) {};
+            mach-nix = super.callPackage ({system}: mach-nix.lib.${system});
+          })
+          (emacs-overlay.overlay)
+          (nur.overlay)
+          (nixpkgs-wayland.overlay)
+        ] ++ import ./overlays;
 
-      hosts.noobnoob = {
-        modules = [
-          flake-plus-module
-          ./configuration.nix
-        ];
-        specialArgs = { inherit inputs; };
-      };
+        hosts.noobnoob = {
+          modules = [
+            flake-plus-module
+            nixfs.nixosModules.nixfs
+            ./configuration.nix
+          ];
+          specialArgs = { inherit inputs; };
+        };
 
-      outputsBuilder = channels: {
-        packages = channels.nixpkgs;
-      };
-    } // { inherit os; };
+        outputsBuilder = channels: {
+          packages = channels.nixpkgs;
+        };
+      } // { inherit os; };
 }

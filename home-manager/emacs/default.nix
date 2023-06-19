@@ -104,9 +104,15 @@ in
     # A marriage made in hell
     programs.doom-emacs =
       let
-        emacs = pkgs.emacs;
-        epkgs = pkgs.emacsPackagesFor emacs;
+        inherit (pkgs) emacs emacsPackagesFor;
+        oepkgs = emacsPackagesFor emacs;
         doomPrivateDir = ./doom;
+
+        straightBuild = { pname, src, ... }@args: pkgs.trivialBuild ({
+          ename = pname;
+          version = "1";
+          buildPhase = ":";
+        } // args);
       in {
         enable = true;
         doomPackageDir =
@@ -138,13 +144,13 @@ in
         (load "${dirtyConfigName}")
         '';
         extraPackages = [
-          epkgs.tsc
           pkgs.cargo
         ];
         emacsPackage = emacs;
         emacsPackagesOverlay = eself: esuper: {
           # irony = esuper.irony.overrideAttrs (_: { doCheck = false; });
-          lean4-mode = pkgs.lean4.lean4-mode;
+          inherit (pkgs.lean4) lean4-mode;
+          inherit (oepkgs) evil-collection;
         };
       };
 

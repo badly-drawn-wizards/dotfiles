@@ -42,6 +42,23 @@
     "doom-emacs": {
       "flake": false,
       "locked": {
+        "lastModified": 1642165074,
+        "narHash": "sha256-Sl8/Pmq+AZ4y1U0/96Ka/BXRroBDoW1VXQKUKEAyuaA=",
+        "owner": "hlissner",
+        "repo": "doom-emacs",
+        "rev": "35865ef5e89442e3809b8095199977053dd4210f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hlissner",
+        "ref": "develop",
+        "repo": "doom-emacs",
+        "type": "github"
+      }
+    },
+    "doom-emacs_2": {
+      "flake": false,
+      "locked": {
         "lastModified": 1662497747,
         "narHash": "sha256-4n7E1fqda7cn5/F2jTkOnKw1juG6XMS/FI9gqODL3aU=",
         "owner": "doomemacs",
@@ -112,6 +129,23 @@
       "original": {
         "owner": "nix-community",
         "repo": "emacs-overlay",
+        "type": "github"
+      }
+    },
+    "emacs-overlay_2": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1676366521,
+        "narHash": "sha256-i4UAY8t9Au9SJtsgYppa3NHSVf1YkV6yqnNIQd+Km4g=",
+        "owner": "nix-community",
+        "repo": "emacs-overlay",
+        "rev": "c16be6de78ea878aedd0292aa5d4a1ee0a5da501",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "emacs-overlay",
+        "rev": "c16be6de78ea878aedd0292aa5d4a1ee0a5da501",
         "type": "github"
       }
     },
@@ -699,11 +733,9 @@
     },
     "nix-doom-emacs": {
       "inputs": {
-        "doom-emacs": "doom-emacs",
+        "doom-emacs": "doom-emacs_2",
         "doom-snippets": "doom-snippets",
-        "emacs-overlay": [
-          "emacs-overlay"
-        ],
+        "emacs-overlay": "emacs-overlay_2",
         "emacs-so-long": "emacs-so-long",
         "evil-collection": "evil-collection",
         "evil-escape": "evil-escape",
@@ -835,6 +867,26 @@
       "original": {
         "owner": "NixOS",
         "repo": "nix",
+        "type": "github"
+      }
+    },
+    "nixfs": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1683039582,
+        "narHash": "sha256-qEd/0isJFqrHodX02KIC9pcug3WHMAlhXdP/ylVc898=",
+        "owner": "illustris",
+        "repo": "nixfs",
+        "rev": "74c605f1320252b4bd5b44e4d66d45bec72be3a7",
+        "type": "github"
+      },
+      "original": {
+        "owner": "illustris",
+        "repo": "nixfs",
         "type": "github"
       }
     },
@@ -1207,6 +1259,7 @@
     "root": {
       "inputs": {
         "comma": "comma",
+        "doom-emacs": "doom-emacs",
         "dwarffs": "dwarffs",
         "emacs-overlay": "emacs-overlay",
         "flake-compat": "flake-compat_2",
@@ -1219,6 +1272,7 @@
         "nix-doom-emacs": "nix-doom-emacs",
         "nix-index": "nix-index",
         "nix-index-database": "nix-index-database",
+        "nixfs": "nixfs",
         "nixpkgs": "nixpkgs_5",
         "nixpkgs-wayland": "nixpkgs-wayland",
         "nur": "nur",
