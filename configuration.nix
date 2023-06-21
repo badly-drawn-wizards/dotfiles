@@ -96,6 +96,8 @@ inputs,
     fwupd.enable = true;
 
     unhinged.enable = true;
+
+    nixfs.enable = true;
   };
 
   xdg = {
