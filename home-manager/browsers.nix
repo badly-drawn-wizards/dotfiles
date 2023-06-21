@@ -34,6 +34,8 @@
     MOZ_DBUS_REMOTE = "1";
   };
 
+  home.file.".mozilla/native-messaging-hosts".source = "${config.programs.firefox.package}/lib/mozilla/native-messaging-hosts";
+
   home.file.".tridactylrc".text = ''
     colors quake
     set editorcmd em
