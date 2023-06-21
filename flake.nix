@@ -22,7 +22,7 @@
       };
     };
     doom-emacs = {
-      url = "github:hlissner/doom-emacs/develop";
+      url = "github:doomemacs/doomemacs/develop";
       flake = false;
     };
     nix-doom-emacs = {
