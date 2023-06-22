@@ -5,10 +5,12 @@
   security = {
     polkit.enable = true;
     rtkit.enable = true;
-
-    pam.services.login = {
-      sshAgentAuth.enable = true;
-      gnupg.enable = true;
+    pam.services = {
+      login = {
+        sshAgentAuth.enable = true;
+        gnupg.enable = true;
+      };
+      swaylock = {};
     };
   };
 }

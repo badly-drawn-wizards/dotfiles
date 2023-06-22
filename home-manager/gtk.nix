@@ -32,7 +32,7 @@ in
       {
         enable = true;
         theme = draculaTheme;
-        iconTheme = whitesurTheme;
+        iconTheme = draculaTheme;
         gtk2.extraConfig = toGtk2 extraConfig;
         gtk3 = {
           inherit extraConfig;

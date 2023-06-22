@@ -92,6 +92,10 @@ in
 
     wayland.windowManager.sway = {
       enable = true;
+      systemd = {
+        enable = true;
+        xdgAutostart = true;
+      };
 
       extraSessionCommands = ''
         . "${config.home.profileDirectory}/etc/profile.d/hm-session-vars.sh"

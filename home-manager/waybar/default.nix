@@ -14,7 +14,7 @@ let
     removePrefix concatStrings concatMapStrings fixedWidthString;
   inherit (lib.lists)
     map genList zipListsWith reverseList elemAt;
-  inherit (config.programs.doom-emacs) eval-elisp org-clock;
+  inherit (config.programs.doom-emacs) org-clock org-agenda;
   theme = {
     background-darker = "#${rgb-to-hex [30 31 41]}";
     background = "#282a36";
@@ -68,50 +68,60 @@ in
           layer = "top";
           position = "top";
           modules-left =
-            ["sway/workspaces" "sway/mode" "custom/org-clock"];
-          modules-center = ["sway/window"];
+            ["sway/workspaces" "sway/mode" "custom/org-clock" ];
+          modules-center = [ "sway/window" ];
           modules-right =
-            ["battery" "cpu" "memory" "disk" "clock" "tray"];
+            ["battery" "cpu" "memory" "disk" "custom/org-agenda" "clock" "tray"];
 
           modules = {
             "sway/workspaces" = {
               disable-scroll = true;
               all-outputs = true;
             };
-            "sway/window".max-length = 70;
             "custom/org-clock" = {
               max-length = 100;
-              exec = "${org-clock}";
+              exec = org-clock;
               return-type = "json";
               interval = 2;
               exec-on-event = true;
               on-click = "${org-clock} toggle-last-clock";
               on-click-right = "${org-clock} recent-clock";
             };
+
+            "sway/window".max-length = 70;
+
             "battery" = {
               bat = "BAT0";
-              format = "[{icon}: {capacity}]";
-              format-charging = "[${colored icons.battery theme.purple}: {capacity}]";
-              format-full = "[${colored icons.battery theme.green}: {capacity}]";
+              format = "[ {icon}: {capacity}";
+              format-charging = "[ ${colored icons.battery theme.purple}: {capacity}";
+              format-full = "[ ${colored icons.battery theme.green}: {capacity}";
               format-icons = map (colored icons.battery) color-tiers-asc;
               interval = 2;
             };
             "cpu" = {
-              format = "[{icon}: {usage}]";
+              format = " | {icon}:{usage}";
               format-icons = map (colored icons.cpu) color-tiers-desc;
               interval = 2;
             };
-            "disk" = {
-              format = "[${icons.storage}: {percentage_used}]";
-              tooltip-format = "{used}/{total}";
-            };
             "memory" = {
-              format = "[{icon}: {percentage}]";
+              format = " | {icon}: {percentage}";
               format-icons = map (colored icons.memory) color-tiers-desc;
               interval = 2;
             };
+            "disk" = {
+              format = " | ${icons.storage}: {percentage_used}]";
+              tooltip-format = "{used}/{total}";
+            };
+
+            "custom/org-agenda" = {
+              format = "[ ${icons.calendar}";
+              exec = org-agenda;
+              return-type = "json";
+              interval = 30;
+            };
             "clock" = {
-              format = "[${icons.clock}: {:%y-%m-%d %H:%M}]";
+              format = " | ${icons.clock}: {:%H:%M} ]";
+              tooltip-format = "[{:%y-%m-%d}]";
               interval = 2;
             };
           };

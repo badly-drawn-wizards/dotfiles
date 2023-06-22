@@ -97,7 +97,7 @@ inputs,
 
     unhinged.enable = true;
 
-    nixfs.enable = true;
+    nixfs.enable = false;
   };
 
   xdg = {

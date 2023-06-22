@@ -37,6 +37,6 @@ with config.theme;
     "*color14" = "#${color14}";
     "*color15" = "#${color15}";
 
-    "Xft.dpi" = 96;
+    # "Xft.dpi" = 96;
   };
 }

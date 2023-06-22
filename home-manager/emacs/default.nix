@@ -3,13 +3,12 @@
 let
   configPath = ".emacs.d/lisp";
   cleanConfig = ''
-  (setq doom-font (font-spec :family "${config.fontMono}" :size 16))
   '';
   cleanConfigName = "config.clean.el";
   dirtyConfigName = "config.dirty.el";
 
-  inherit (pkgs) jq writeScript;
-  inherit (config.programs.doom-emacs) eval-elisp;
+  inherit (pkgs) jq writeScript symlinkJoin;
+  inherit (config.programs.doom-emacs) elisp-client elisp-batch;
   
   org-clock-format-jq = writeScript "org-clock-jq" ''
     #!/usr/bin/env jq
@@ -40,7 +39,8 @@ let
   org-clock = writeScript "org-clock" ''
     #!/usr/bin/env bash
     function status() {
-      ${eval-elisp} "(my/org-clock-info)" | ${jq}/bin/jq -r 'if . == "" then null else . end'
+      ${elisp-client} "(my/org-clock-info)" \
+        | ${jq}/bin/jq -sr '.[] // null'
     }
     if [ $# -eq 0 ]
     then
@@ -48,31 +48,56 @@ let
     else
       case $1 in
         toggle-last-clock)
-          ${eval-elisp} "(+org/toggle-last-clock nil)"
+          ${elisp-client} "(+org/toggle-last-clock nil)"
           ;;
         recent-clock)
           i=$(\
             status \
-            | jq -r ".recent[]" \
+            | ${jq}/bin/jq -r ".recent[]" \
             | ${config.programs.rofi.cmd.dmenu "org-clock-recent"} -no-custom -format i)
-          [$i = ""] && ${eval-elisp} "(my/org-clock-info-clock-in $i)"
+          [ -n $i ] && ${elisp-client} "(my/org-clock-info-clock-in $i)"
           ;;
       esac
     fi
   '';
+
+  org-agenda = writeScript "org-agenda" ''
+    #!/usr/bin/env bash
+    function agenda() {
+      ${elisp-batch} '(progn (require (quote org-utils)) (my/org-batch-agenda))'
+    }
+    agenda | ${jq}/bin/jq -sRc '{
+      text: "",
+      tooltip: .,
+      class: "agenda",
+      percentage: 0
+    }'
+  '';
+  dirty-elisp-dir = config.lib.file.mkOutOfStoreSymlink
+    "${import ./path-to-this-directory.nix}/lisp";
 in
 {
   options = with lib; with types; {
     programs.doom-emacs = {
-      eval-elisp = mkOption {
+      elisp-client = mkOption {
         type = str;
         readOnly = true;
         default = "${config.programs.doom-emacs.package}/bin/emacsclient --no-wait -qa ${pkgs.coreutils}/bin/true --eval";
+      };
+      elisp-batch = mkOption {
+        type = str;
+        readOnly = true;
+        default = ''EMACSLOADPATH="${dirty-elisp-dir}:$EMACSLOADPATH" ${config.programs.doom-emacs.package}/bin/emacs --batch -q --eval'';
       };
       org-clock = mkOption {
         type = package;
         readOnly = true;
         default = org-clock;
+      };
+      org-agenda = mkOption {
+        type = package;
+        readOnly = true;
+        default = org-agenda;
       };
     };
   };
@@ -82,12 +107,10 @@ in
     };
 
     home.file = {
-      "${configPath}/${cleanConfigName}".text = cleanConfig;
-      "${configPath}/${dirtyConfigName}".source = config.lib.file.mkOutOfStoreSymlink "${import ./path-to-this-directory.nix}/${dirtyConfigName}";
-
+      "${configPath}".source = dirty-elisp-dir;
       ".local/bin/em" = {
         text = ''
-          #!/usr/bin/env /bin/sh
+          #!/usr/bin/env sh
           emacsclient -c -a "" $@
         '';
         executable = true;
@@ -140,7 +163,7 @@ in
         inherit doomPrivateDir;
         extraConfig = ''
         (add-to-list 'load-path "${config.home.homeDirectory}/${configPath}")
-        (load "${cleanConfigName}")
+        (setq doom-font (font-spec :family "${config.fontMono}" :size 16))
         (load "${dirtyConfigName}")
         '';
         extraPackages = [

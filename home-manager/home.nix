@@ -9,7 +9,9 @@ with builtins;
     ../theme.nix
     ./window-manager.nix
     ./waybar
+    ./mako.nix
     ./swaylock.nix
+    ./cursor.nix
     # ./i3status.nix
     ./zsh.nix
     ./browsers.nix
@@ -25,8 +27,6 @@ with builtins;
     ./rot8.nix
     ./rofi.nix
     ./backgrounds.nix
-    # ./wpaperd.nix
-    # ./dictation.nix
     ./nix.nix
     ./kitty.nix
     ./gtk.nix
@@ -35,14 +35,13 @@ with builtins;
 
   windowManager.startupPrograms = with pkgs; [
     "${firefox}/bin/firefox"
-    "${discord}"
+    "${discord}/bin/discord"
     # "${thunderbird}/bin/thunderbird"
     # "${xournalpp}/bin/xournalpp"
 
     "${pasystray}/bin/pasystray"
     "${blueman}/bin/blueman-applet"
     "${dropbox}/bin/dropbox"
-    # "${qbittorrent}/bin/qbittorrent"
 
     "${polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
   ];
@@ -101,7 +100,16 @@ with builtins;
   };
 
   services = {
-    mako.enable = true;
+    clipman.enable = true;
+    batsignal = {
+      enable = true;
+      extraArgs = [
+        "-e"
+        "-W" " Highway to the danger zone"
+        "-C" " Ride into the danger zone"
+        "-D" " Headin' into twilight"
+      ];
+    };
     udiskie = {
       enable = true;
       tray = "always";

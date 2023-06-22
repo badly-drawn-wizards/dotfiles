@@ -18,7 +18,7 @@ let
     fi
     [ ! $BG == .current ] && ( cd ${config.backgrounds.path}; ln -sf $BG .current )
     pkill swaybg || true
-    [ -f ${config.backgrounds.current} ] && ${pkgs.swaybg}/bin/swaybg -i "${config.backgrounds.current}"
+    [ -f ${config.backgrounds.current} ] && ${pkgs.swaybg}/bin/swaybg -c "#${config.theme.color0}" -i "${config.backgrounds.current}"
   '';
 in
 {
@@ -45,7 +45,7 @@ in
         "${mod}+b" = "exec ${config.backgrounds.set-background}/bin/set-background";
       };
       startupPrograms = [
-        "${config.backgrounds.set-background}/bin/set-background .last"
+        "${config.backgrounds.set-background}/bin/set-background .current"
       ];
     };
 

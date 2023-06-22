@@ -104,7 +104,7 @@
           exit_code      # Exit code section
           sudo           # Sudo indicator
           char           # Prompt character
-  )      # Interferes with spaceship-prompt when loaded after it for some reason
+      )      # Interferes with spaceship-prompt when loaded after it for some reason
       source ${pkgs.fzf-zsh}/share/zsh/plugins/fzf-zsh/fzf-zsh.plugin.zsh
     '';
     initExtra = ''
@@ -127,6 +127,11 @@
 
       eval $(gnome-keyring-daemon --start --daemonize 2>&-)
       export SSH_AUTH_SOCK
+      if [[ "$INSIDE_EMACS" = 'vterm' ]] \
+          && [[ -n ''${EMACS_VTERM_PATH} ]] \
+          && [[ -f ''${EMACS_VTERM_PATH}/etc/emacs-vterm-zsh.sh ]]; then
+        source ''${EMACS_VTERM_PATH}/etc/emacs-vterm-zsh.sh
+      fi
 
       SPACESHIP_TIME_SHOW=true
       SPACESHIP_BATTERY_SHOW=true
