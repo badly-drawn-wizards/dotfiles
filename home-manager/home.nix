@@ -9,6 +9,7 @@ with builtins;
     ../theme.nix
     ./theme.nix
     ./window-manager
+    ./browsers
     ./tray.nix
     ./editors
     ./mail.nix
