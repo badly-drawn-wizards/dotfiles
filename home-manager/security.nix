@@ -5,8 +5,10 @@
     # "${polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
   ];
 
-  programs.zsh.initExtra = ''
-    eval $(gnome-keyring-daemon --start --daemonize 2>&-)
-    export SSH_AUTH_SOCK
-  '';
+  programs.zsh.initExtraDag = {
+    gnome-keyring = lib.hm.dag.entryAnywhere ''
+      eval $(gnome-keyring-daemon --start --daemonize 2>&-)
+      export SSH_AUTH_SOCK
+    '';
+  };
 }

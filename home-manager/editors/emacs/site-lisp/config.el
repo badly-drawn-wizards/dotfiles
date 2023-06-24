@@ -11,9 +11,11 @@
 (require 'pomodoro-espeak)
 (require 'org-utils)
 (require 'config-org)
+(require 'config-lisp)
 (require 'config-provers)
 (require 'config-treesitter)
 (require 'config-envrc)
+(require 'nix-prefetch)
 
 (after! alert
   (setq alert-default-style 'libnotify))

@@ -67,10 +67,6 @@ in
       '';
       extraPackages = with pkgs; [
         cargo
-        tree-sitter
-        espeak
-        ripgrep
-        libnotify
       ];
       emacsPackage = emacs;
       emacsPackagesOverlay = eself: esuper: {
@@ -79,15 +75,21 @@ in
       };
     };
 
-  programs.zsh.initExtra = ''
-    if [[ $INSIDE_EMACS = vterm ]]; then
-      bindkey "^J" accept-line
-      if [[ -n ''${EMACS_VTERM_PATH} ]] \
-        && [[ -f ''${EMACS_VTERM_PATH}/etc/emacs-vterm-zsh.sh ]]; then
-        source ''${EMACS_VTERM_PATH}/etc/emacs-vterm-zsh.sh
+  programs.zsh.initExtraDag.vterm-init = lib.hm.dag.entryAfter [ "bind-keys" ] ''
+      if [[ $INSIDE_EMACS = vterm ]]; then
+        bindkey "^J" accept-line
+        if [[ -n ''${EMACS_VTERM_PATH} ]] \
+          && [[ -f ''${EMACS_VTERM_PATH}/etc/emacs-vterm-zsh.sh ]]; then
+          source ''${EMACS_VTERM_PATH}/etc/emacs-vterm-zsh.sh
+        fi
       fi
-    fi
   '';
 
-  home.packages = [ em ];
+  home.packages = with pkgs; [
+    em
+    tree-sitter
+    espeak
+    ripgrep
+    libnotify
+  ];
 }
