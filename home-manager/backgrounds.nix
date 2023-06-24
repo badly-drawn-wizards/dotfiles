@@ -3,7 +3,7 @@
 let
   mod = config.wayland.windowManager.sway.config.modifier;
   set-background = pkgs.writeScriptBin "set-background" ''
-    #!/bin/sh
+    #!/usr/bin/env sh
     set -e
     BGS=$(find "${config.backgrounds.path}" -type f ! -iname ".*" -printf '%f\n' | sort)
     if [ $# -eq 0 ]

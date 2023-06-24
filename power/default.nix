@@ -9,11 +9,11 @@
     HandlePowerKey=ignore
     HandleLidSwitch=hybrid-sleep
     IdleAction=lock
-    IdleActionSec=5m
+    IdleActionSec=300
   '';
 
   systemd.sleep.extraConfig = ''
-    HibernateDelaySec=15m
+    HibernateDelaySec=900
   '';
 
 }

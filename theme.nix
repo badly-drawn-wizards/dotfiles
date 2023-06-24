@@ -17,6 +17,8 @@ with lib;
         battery = "";
         thermometer = "";
         keyboard = "";
+        eye = "";
+        eye-slash = "";
       };
     };
     theme = mkOption {

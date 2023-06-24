@@ -1,6 +1,13 @@
 { config, lib, pkgs, ... }:
 
+let
+  draculaTheme = {
+    package = pkgs.dracula-theme;
+    name = "Dracula";
+  };
+in
 {
+
   home.pointerCursor = {
     name = "Adwaita";
     package = pkgs.gnome.adwaita-icon-theme;
@@ -9,5 +16,9 @@
       enable = true;
       defaultCursor = "Adwaita";
     };
+  };
+  gtk = {
+    theme = draculaTheme;
+    iconTheme = draculaTheme;
   };
 }

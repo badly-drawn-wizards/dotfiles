@@ -3,6 +3,7 @@
 let
   mod = config.wayland.windowManager.sway.config.modifier;
   swaylock = config.programs.swaylock.package;
+  swaylock-cmd = "${swaylock}/bin/swaylock -f";
 in
 {
   programs.swaylock = {
@@ -15,9 +16,12 @@ in
 
   services.swayidle = {
     enable = true;
+    timeouts = [
+      { timeout = 300; command = swaylock-cmd; }
+    ];
     events = [
-      { event = "before-sleep"; command = "${swaylock}/bin/swaylock"; }
-      { event = "lock"; command = "${swaylock}/bin/swaylock"; }
+      { event = "before-sleep"; command = swaylock-cmd; }
+      { event = "lock"; command = swaylock-cmd; }
     ];
   };
 

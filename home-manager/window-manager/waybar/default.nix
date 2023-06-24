@@ -71,7 +71,17 @@ in
             ["sway/workspaces" "sway/mode" "custom/org-clock" ];
           modules-center = [ "sway/window" ];
           modules-right =
-            ["battery" "cpu" "memory" "disk" "custom/org-agenda" "clock" "tray"];
+            [
+              "idle_inhibitor"
+              "custom/osk"
+              "battery"
+              "cpu"
+              "memory"
+              "disk"
+              "custom/org-agenda"
+              "clock"
+              "tray"
+            ];
 
           modules = {
             "sway/workspaces" = {
@@ -92,37 +102,49 @@ in
 
             "battery" = {
               bat = "BAT0";
-              format = "[ {icon}: {capacity}";
-              format-charging = "[ ${colored icons.battery theme.purple}: {capacity}";
-              format-full = "[ ${colored icons.battery theme.green}: {capacity}";
+              format = "[{icon}: {capacity} ";
+              format-charging = "[${colored icons.battery theme.purple}: {capacity} ";
+              format-full = "[${colored icons.battery theme.green}: {capacity} ";
               format-icons = map (colored icons.battery) color-tiers-asc;
               interval = 2;
             };
             "cpu" = {
-              format = " | {icon}:{usage}";
+              format = "| {icon}: {usage} ";
               format-icons = map (colored icons.cpu) color-tiers-desc;
               interval = 2;
             };
             "memory" = {
-              format = " | {icon}: {percentage}";
+              format = "| {icon}: {percentage} ";
               format-icons = map (colored icons.memory) color-tiers-desc;
               interval = 2;
             };
             "disk" = {
-              format = " | ${icons.storage}: {percentage_used}]";
+              format = "| ${icons.storage}: {percentage_used}]";
               tooltip-format = "{used}/{total}";
             };
 
             "custom/org-agenda" = {
-              format = "[ ${icons.calendar}";
+              format = "[${icons.calendar} ";
               exec = org-agenda;
               return-type = "json";
               interval = 30;
             };
             "clock" = {
-              format = " | ${icons.clock}: {:%H:%M} ]";
+              format = "| ${icons.clock}: {:%H:%M}]";
               tooltip-format = "[{:%y-%m-%d}]";
               interval = 2;
+            };
+            "idle_inhibitor" = {
+              format = "[{icon} ";
+              format-icons = {
+                activated = icons.eye;
+                deactivated = icons.eye-slash;
+              };
+            };
+            "custom/osk" = {
+              format = "| ${icons.keyboard}]";
+              tooltip = false;
+              on-click = "${config.onscreen-keyboard.toggle}";
             };
           };
         }

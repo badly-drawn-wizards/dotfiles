@@ -3,7 +3,7 @@
 
 (require 'lean4-mode)
 (require 'lean4-input)
-(setq default-input-method "Lean")
+(setq-default default-input-method "Lean")
 
 (after! lean4-mode
   (set-lookup-handlers! 'lean4-mode
@@ -37,4 +37,4 @@
     :size 50))
 
 (provide 'config-provers)
-;;; config-lean4.el ends here
+;;; config-provers.el ends here

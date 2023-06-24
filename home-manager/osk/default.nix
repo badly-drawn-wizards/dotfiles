@@ -3,7 +3,7 @@
 {
   options = {
     onscreen-keyboard = {
-      togglePackage = lib.mkOption {
+      toggle = lib.mkOption {
         type = lib.types.package;
         readOnly = true;
         default = pkgs.writeScript "toggleKeyboard" ''
@@ -47,6 +47,5 @@
         };
       };
     };
-
   };
 }

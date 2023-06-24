@@ -40,7 +40,7 @@ let
     let
       cmd' = cmd "$@";
       script = ''
-        #!/bin/sh
+        #!/usr/bin/env sh
         if test -z $@
         then
           swaymsg -t get_workspaces | ${pkgs.jq}/bin/jq -r ".[].name" | { cat; ${rofi-startup-workspaces} } | sort | uniq
@@ -95,6 +95,11 @@ in
       systemd = {
         enable = true;
         xdgAutostart = true;
+      };
+
+      wrapperFeatures = {
+        base = true;
+        gtk = true;
       };
 
       extraSessionCommands = ''
@@ -181,7 +186,6 @@ in
 
             "${mod}+Shift+r" = "reload";
             "${mod}+i" = "exec em";
-            "${mod}+m" = "exec mpv-paste";
 
             "${mod}+o" = "exec ${rofi-modi-cmd "workspace"}";
             "${mod}+Shift+o" = "exec ${rofi-modi-cmd "move"}";
