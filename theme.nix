@@ -19,6 +19,9 @@ with lib;
         keyboard = "";
         eye = "";
         eye-slash = "";
+        play = "";
+        pause = "";
+        stop = "";
       };
     };
     theme = mkOption {

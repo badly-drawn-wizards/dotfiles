@@ -2,8 +2,14 @@
 
 let
   inherit (pkgs) jq writeScript symlinkJoin;
-  inherit (config.programs.doom-emacs) elisp-client elisp-batch extraSiteLisp;
+  inherit (config.programs.doom-emacs) elisp-client doomscript extraSiteLisp;
   inherit (extraSiteLisp) site-lisp;
+
+  org-agenda-doomscript = writeScript "org-agenda-doomscript" ''
+    #!/usr/bin/env doomscript
+    (require 'org-utils)
+    (my/org-batch-agenda)
+  '';
 
   org-clock-format-jq = writeScript "org-clock-jq" ''
     #!/usr/bin/env jq
@@ -39,10 +45,10 @@ in
         readOnly = true;
         default = "${config.programs.doom-emacs.package}/bin/emacsclient --no-wait -qa ${pkgs.coreutils}/bin/true --eval";
       };
-      elisp-batch = mkOption {
+      doomscript = mkOption {
         type = str;
         readOnly = true;
-        default = ''EMACSLOADPATH="${site-lisp}:$EMACSLOADPATH" ${config.programs.doom-emacs.package}/bin/emacs --batch -q --eval'';
+        default = ''EMACSLOADPATH="${site-lisp}:$EMACSLOADPATH" ${config.programs.doom-emacs.package}/bin/doomscript'';
       };
       org-clock = mkOption {
         type = package;
@@ -78,7 +84,7 @@ in
         default = writeScript "org-agenda" ''
           #!/usr/bin/env bash
           function agenda() {
-            ${elisp-batch} '(progn (require (quote org-utils)) (my/org-batch-agenda))'
+            ${doomscript} ${org-agenda-doomscript}
           }
           agenda | ${jq}/bin/jq -sRc '{
             text: "",

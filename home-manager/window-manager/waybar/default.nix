@@ -63,6 +63,10 @@ in
 {
     programs.waybar = {
       enable = true;
+      systemd = {
+        enable = true;
+        target = "sway-session.target";
+      };
       settings = [
         {
           layer = "top";
@@ -72,6 +76,7 @@ in
           modules-center = [ "sway/window" ];
           modules-right =
             [
+              "mpris"
               "idle_inhibitor"
               "custom/osk"
               "battery"
@@ -99,6 +104,27 @@ in
             };
 
             "sway/window".max-length = 70;
+
+            "mpris" = {
+              format = "[{status_icon}]";
+              status-icons = {
+                playing = icons.play;
+                paused = icons.pause;
+                stopped = icons.stop;
+              };
+            };
+            "idle_inhibitor" = {
+              format = "[{icon} ";
+              format-icons = {
+                activated = icons.eye;
+                deactivated = icons.eye-slash;
+              };
+            };
+            "custom/osk" = {
+              format = "| ${icons.keyboard}]";
+              tooltip = false;
+              on-click = "${config.onscreen-keyboard.toggle}";
+            };
 
             "battery" = {
               bat = "BAT0";
@@ -134,18 +160,6 @@ in
               tooltip-format = "[{:%y-%m-%d}]";
               interval = 2;
             };
-            "idle_inhibitor" = {
-              format = "[{icon} ";
-              format-icons = {
-                activated = icons.eye;
-                deactivated = icons.eye-slash;
-              };
-            };
-            "custom/osk" = {
-              format = "| ${icons.keyboard}]";
-              tooltip = false;
-              on-click = "${config.onscreen-keyboard.toggle}";
-            };
           };
         }
       ];
@@ -156,5 +170,9 @@ in
             [(readFile ./waybar.css)]
         );
       };
+    };
+
+    systemd.user.services.waybar = {
+      Service.Environment = "PATH=${lib.makeBinPath [ pkgs.bash ]}";
     };
 }

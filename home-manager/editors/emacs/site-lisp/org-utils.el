@@ -3,6 +3,9 @@
 (require 'org)
 (require 'org-clock)
 
+(require 'doom-lib)
+(require 'config-org)
+
 (defmacro with-widen (&rest body)
   `(save-excursion
      (save-restriction
@@ -64,10 +67,8 @@
 (defun my/org-batch-agenda ()
   (org-no-properties
         (org-batch-agenda
-          "a" org-agenda-span
-          (quote week)
-          org-agenda-include-diary
-          nil)))
+          "a"
+          org-agenda-span (quote month))))
 
 (provide 'org-utils)
 ;;; org-utils.el ends here

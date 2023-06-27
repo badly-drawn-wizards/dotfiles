@@ -209,18 +209,7 @@ in
           focusedInactive = mkColorSet color0 color12;
           unfocused = mkColorSet color0 color12;
         };
-        bars = [{
-          position = "top";
-          command = "${config.programs.waybar.package}/bin/waybar";
-          colors = {
-            background = "#${background}";
-            statusline = "#${color12}";
-            separator = "#${color11}";
-            focusedWorkspace = mkBarColorSet color9 color0;
-            inactiveWorkspace = mkBarColorSet color0 color9;
-          };
-          trayOutput = "*";
-        }];
+        bars = [];
       };
     };
   };

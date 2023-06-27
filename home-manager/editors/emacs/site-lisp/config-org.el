@@ -3,6 +3,7 @@
 (defvar my/org-drill-file nil)
 (after! org
   (setq org-directory (concat (getenv "HOME") "/org"))
+  (setq org-agenda-files (list org-directory))
   (setq my/org-drill-file (concat org-directory "/drill/main.org"))
   (setq org-refile-targets '((nil :maxlevel . 3) (org-agenda-files :maxlevel . 9)))
   (setq org-default-notes-file (concat org-directory "/todo.org"))
