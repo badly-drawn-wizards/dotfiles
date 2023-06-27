@@ -159,6 +159,11 @@
 
         outputsBuilder = channels: {
           packages = channels.nixpkgs;
+          devShell = channels.nixpkgs.mkShell {
+            buildInputs = [
+              channels.nixpkgs.nur.repos.rycee.mozilla-addons-to-nix
+            ];
+          };
         };
       } // { inherit os; };
 }
