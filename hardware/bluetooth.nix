@@ -8,9 +8,10 @@
       General = {
         Enable = "Source,Sink,Media,Socket";
         MultiProfile = "multiple";
+        Experimental = true;
       };
       Policy = {
-        AutoEnable = false;
+        AutoEnable = true;
       };
     };
   };
