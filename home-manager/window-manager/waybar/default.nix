@@ -36,14 +36,14 @@ let
     "#" + rgb-to-hex (color-mix-rgb a (hexToRGB (removePrefix "#" h1)) (hexToRGB (removePrefix "#" h2)));
   clamp = x: y: a: max x (min y a);
   lerp-list-with = f: xs: a: let
-      a' = clamp 0 1 a;
-      n = length xs - 1;
-      x1 = floor (a' * n);
-      x2 = min n (x1 + 1);
-      b = a' - x1;
-    in
-      assert n > 0;
-      f b (elemAt xs x1) (elemAt xs x2);
+    a' = clamp 0 1 a;
+    n = length xs - 1;
+    x1 = floor (a' * n);
+    x2 = min n (x1 + 1);
+    b = a' - x1;
+  in
+    assert n > 0;
+    f b (elemAt xs x1) (elemAt xs x2);
   arange1 = n: genList (x: 1.0 * x / (n - 1)) n;
   color-tiers-asc = map
     (lerp-list-with color-mix-hex [ theme.red theme.yellow theme.white ])
@@ -61,118 +61,120 @@ let
 
 in
 {
-    programs.waybar = {
+  programs.waybar = {
+    enable = true;
+    systemd = {
       enable = true;
-      systemd = {
-        enable = true;
-        target = "sway-session.target";
-      };
-      settings = [
-        {
-          layer = "top";
-          position = "top";
-          modules-left =
-            ["sway/workspaces" "sway/mode" "custom/org-clock" ];
-          modules-center = [ "sway/window" ];
-          modules-right =
-            [
-              "mpris"
-              "idle_inhibitor"
-              "custom/osk"
-              "battery"
-              "cpu"
-              "memory"
-              "disk"
-              "custom/org-agenda"
-              "clock"
-              "tray"
-            ];
+      target = "sway-session.target";
+    };
+    settings = [
+      {
+        layer = "top";
+        position = "top";
+        modules-left =
+          ["sway/workspaces" "sway/mode" "custom/org-clock" ];
+        modules-center = [ "sway/window" ];
+        modules-right =
+          [
+            "mpris"
+            "idle_inhibitor"
+            "custom/osk"
+            "battery"
+            "cpu"
+            "memory"
+            "disk"
+            "custom/org-agenda"
+            "clock"
+            "tray"
+          ];
 
-          modules = {
-            "sway/workspaces" = {
-              disable-scroll = true;
-              all-outputs = true;
-            };
-            "custom/org-clock" = {
-              max-length = 100;
-              exec = org-clock;
-              return-type = "json";
-              interval = 2;
-              exec-on-event = true;
-              on-click = "${org-clock} toggle-last-clock";
-              on-click-right = "${org-clock} recent-clock";
-            };
+        modules = {
+          "sway/workspaces" = {
+            disable-scroll = true;
+            all-outputs = true;
+          };
+          "custom/org-clock" = {
+            max-length = 100;
+            exec = org-clock;
+            return-type = "json";
+            interval = 2;
+            exec-on-event = true;
+            on-click = "${org-clock} toggle-last-clock";
+            on-click-right = "${org-clock} recent-clock";
+          };
 
-            "sway/window".max-length = 70;
+          "sway/window".max-length = 70;
 
-            "mpris" = {
-              format = "[{status_icon}]";
-              status-icons = {
-                playing = icons.play;
-                paused = icons.pause;
-                stopped = icons.stop;
-              };
-            };
-            "idle_inhibitor" = {
-              format = "[{icon} ";
-              format-icons = {
-                activated = icons.eye;
-                deactivated = icons.eye-slash;
-              };
-            };
-            "custom/osk" = {
-              format = "| ${icons.keyboard}]";
-              tooltip = false;
-              on-click = "${config.onscreen-keyboard.toggle}";
-            };
-
-            "battery" = {
-              bat = "BAT0";
-              format = "[{icon}: {capacity} ";
-              format-charging = "[${colored icons.battery theme.purple}: {capacity} ";
-              format-full = "[${colored icons.battery theme.green}: {capacity} ";
-              format-icons = map (colored icons.battery) color-tiers-asc;
-              interval = 2;
-            };
-            "cpu" = {
-              format = "| {icon}: {usage} ";
-              format-icons = map (colored icons.cpu) color-tiers-desc;
-              interval = 2;
-            };
-            "memory" = {
-              format = "| {icon}: {percentage} ";
-              format-icons = map (colored icons.memory) color-tiers-desc;
-              interval = 2;
-            };
-            "disk" = {
-              format = "| ${icons.storage}: {percentage_used}]";
-              tooltip-format = "{used}/{total}";
-            };
-
-            "custom/org-agenda" = {
-              format = "[${icons.calendar} ";
-              exec = org-agenda;
-              return-type = "json";
-              interval = 30;
-            };
-            "clock" = {
-              format = "| ${icons.clock}: {:%H:%M}]";
-              tooltip-format = "[{:%y-%m-%d}]";
-              interval = 2;
+          "mpris" = {
+            format = "[{status_icon}]";
+            status-icons = {
+              playing = icons.play;
+              paused = icons.pause;
+              stopped = icons.stop;
             };
           };
-        }
-      ];
-      style = pkgs.writeTextFile {
-        name = "waybar-css";
-        text = lib.strings.concatLines (
-            (lib.mapAttrsToList (k: v: "@define-color ${k} ${v};") theme) ++
-            [(readFile ./waybar.css)]
-        );
-      };
-    };
+          "idle_inhibitor" = {
+            format = "[{icon} ";
+            format-icons = {
+              activated = icons.eye;
+              deactivated = icons.eye-slash;
+            };
+          };
+          "custom/osk" = {
+            format = "| ${icons.keyboard}]";
+            tooltip = false;
+            on-click = "${config.onscreen-keyboard.toggle}";
+          };
 
-    systemd.user.services.waybar = {
-      Service.Environment = "PATH=${lib.makeBinPath [ pkgs.bash ]}";
+          "battery" = {
+            bat = "BAT0";
+            format = "[{icon}: {capacity} ";
+            format-charging = "[${colored icons.battery theme.purple}: {capacity} ";
+            format-full = "[${colored icons.battery theme.green}: {capacity} ";
+            format-icons = map (colored icons.battery) color-tiers-asc;
+            interval = 2;
+          };
+          "cpu" = {
+            format = "| {icon}: {usage} ";
+            format-icons = map (colored icons.cpu) color-tiers-desc;
+            interval = 2;
+          };
+          "memory" = {
+            format = "| {icon}: {percentage} ";
+            format-icons = map (colored icons.memory) color-tiers-desc;
+            interval = 2;
+          };
+          "disk" = {
+            format = "| ${icons.storage}: {percentage_used}]";
+            tooltip-format = "{used}/{total}";
+          };
+
+          "custom/org-agenda" = {
+            format = "[${icons.calendar} ";
+            exec = org-agenda;
+            return-type = "json";
+            interval = 30;
+          };
+          "clock" = {
+            format = "| ${icons.clock}: {:%H:%M}]";
+            tooltip-format = "[{:%y-%m-%d}]";
+            interval = 2;
+          };
+        };
+      }
+    ];
+    style = pkgs.writeTextFile {
+      name = "waybar-css";
+      text = lib.strings.concatLines (
+        (lib.mapAttrsToList (k: v: "@define-color ${k} ${v};") theme) ++
+        [(readFile ./waybar.css)]
+      );
     };
+  };
+
+  systemd.user.services.waybar = {
+    Service.Environment = [
+      "PATH=${lib.makeBinPath [ pkgs.coreutils config.home.profileDirectory ]}"
+    ];
+  };
 }

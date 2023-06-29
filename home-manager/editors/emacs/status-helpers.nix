@@ -2,17 +2,17 @@
 
 let
   inherit (pkgs) jq writeScript symlinkJoin;
-  inherit (config.programs.doom-emacs) elisp-client doomscript extraSiteLisp;
+  inherit (config.programs.doom-emacs) package elisp-client doomscript extraSiteLisp;
   inherit (extraSiteLisp) site-lisp;
 
   org-agenda-doomscript = writeScript "org-agenda-doomscript" ''
-    #!/usr/bin/env doomscript
+    #!${package}/bin/doomscript
     (require 'org-utils)
     (my/org-batch-agenda)
   '';
 
   org-clock-format-jq = writeScript "org-clock-jq" ''
-    #!/usr/bin/env jq
+    #!${pkgs.jq}/bin/jq
     # https://stackoverflow.com/q/64957982
     def lpad(n):
       tostring
@@ -38,23 +38,23 @@ let
   '';
 in
 {
-  options = with lib; with types; {
+  options = with lib; {
     programs.doom-emacs = {
       elisp-client = mkOption {
-        type = str;
+        type = types.str;
         readOnly = true;
-        default = "${config.programs.doom-emacs.package}/bin/emacsclient --no-wait -qa ${pkgs.coreutils}/bin/true --eval";
+        default = "${package}/bin/emacsclient --no-wait -qa ${pkgs.coreutils}/bin/true --eval";
       };
       doomscript = mkOption {
-        type = str;
+        type = types.str;
         readOnly = true;
-        default = ''EMACSLOADPATH="${site-lisp}:$EMACSLOADPATH" ${config.programs.doom-emacs.package}/bin/doomscript'';
+        default = ''EMACSLOADPATH="${site-lisp}:$EMACSLOADPATH" ${package}/bin/doomscript'';
       };
       org-clock = mkOption {
-        type = package;
+        type = types.package;
         readOnly = true;
         default = writeScript "org-clock" ''
-          #!/usr/bin/env bash
+          #!${pkgs.bash}/bin/bash
           function status() {
             ${elisp-client} "(my/org-clock-info)" \
               | ${jq}/bin/jq -sr '.[] // null'
@@ -79,10 +79,10 @@ in
         '';
       };
       org-agenda = mkOption {
-        type = package;
+        type = types.package;
         readOnly = true;
         default = writeScript "org-agenda" ''
-          #!/usr/bin/env bash
+          #!${pkgs.bash}/bin/bash
           function agenda() {
             ${doomscript} ${org-agenda-doomscript}
           }

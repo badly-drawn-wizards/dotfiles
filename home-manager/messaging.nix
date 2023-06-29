@@ -14,5 +14,6 @@
       zulip
       franz
       skypeforlinux
+      whatsapp-for-linux
   ];
 }

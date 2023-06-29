@@ -69,10 +69,10 @@
       url = "github:nix-community/comma";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    linux = {
-      url = "git+file:///workspace/linux?ref=master";
-      flake = false;
-    };
+    #linux = {
+    #  url = "git+file:///workspace/linux?ref=master";
+    #  flake = false;
+    #};
     lean4 = {
       url = "github:leanprover/lean4";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -98,7 +98,7 @@
       vs-code-default-keybindings,
       nix-colors,
       unhinged,
-      linux,
+      # linux,
       self,
       ...
   }@inputs:
@@ -134,18 +134,18 @@
         };
 
         sharedOverlays = [
+          (emacs-overlay.overlay)
+          (nur.overlay)
+          (nixpkgs-wayland.overlay)
           (self: super: {
             inherit os;
             inherit (nix-index) nix-index nix-locate;
             inherit vs-code-default-keybindings;
             inherit nix-colors;
-            linuxSrc_custom = linux;
+            # linuxSrc_custom = linux;
             lean4 = super.callPackage ({system}: lean4.packages.${system}) {};
             mach-nix = super.callPackage ({system}: mach-nix.lib.${system});
           })
-          (emacs-overlay.overlay)
-          (nur.overlay)
-          (nixpkgs-wayland.overlay)
         ] ++ import ./overlays;
 
         hosts.noobnoob = {

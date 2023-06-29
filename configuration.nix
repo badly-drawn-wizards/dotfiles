@@ -95,7 +95,7 @@ inputs,
 
     fwupd.enable = true;
 
-    unhinged.enable = true;
+    # unhinged.enable = true;
 
     nixfs.enable = false;
   };
