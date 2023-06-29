@@ -40,6 +40,8 @@ with builtins;
     };
   };
 
+  services.dropbox.enable = true;
+
   xdg = {
     mime.enable = true;
     configFile."mimeapps.list".force = true;
