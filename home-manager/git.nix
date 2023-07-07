@@ -22,7 +22,10 @@
         User git
         HostName github.com
 
-      IdentityFile ~/.ssh/id_rsa
+      Host *
+        IdentityFile ~/.ssh/id_rsa
+        IdentityFile ~/.ssh/id_ed25519_whirly
+        IdentitiesOnly yes
     '';
   };
 

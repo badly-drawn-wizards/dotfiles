@@ -26,6 +26,9 @@ with builtins;
     ./osk
     ./sync.nix
     ./virtualization.nix
+    ./lang
+    ./tts.nix
+    ./gpg.nix
   ];
 
   manual = {
@@ -35,9 +38,7 @@ with builtins;
   };
 
   programs = {
-    zathura = {
-      enable = true;
-    };
+    zathura.enable = true;
   };
 
   services.dropbox.enable = true;
@@ -63,6 +64,7 @@ with builtins;
         "application/xhtml+xml" = [ firefoxDesktop  ];
         "application/x-extension-xhtml" = [ firefoxDesktop  ];
         "application/x-extension-xht" = [ firefoxDesktop  ];
+        "application/x-www-browser" = [ firefoxDesktop  ];
       };
     in {
       enable = true;

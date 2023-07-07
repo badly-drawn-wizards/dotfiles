@@ -3,3 +3,4 @@ result
 
 home-manager/emacs/config.clean.el
 home-manager/dracula
+.direnv/

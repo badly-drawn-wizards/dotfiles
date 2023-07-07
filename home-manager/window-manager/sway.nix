@@ -86,7 +86,7 @@ in
       enable = true;
       xwayland = {
         enable = true;
-        hidpi = true;
+        # hidpi = true;
       };
     };
 
@@ -127,26 +127,23 @@ in
           inner = 5;
         };
         input = {
-          ${io.keyboard} = {
+          "*" = {
+            natural_scroll = "enabled";
             xkb_layout = "us";
             xkb_options = "caps:swapescape";
-            # repeat_rate = "0";
           };
-          ${io.touchscreen} = {
-            map_to_output = io.monitor;
-          };
-          ${io.touchpad} = {
-            natural_scroll = "enabled";
-          };
-          ${io.stylus} = {
-            map_to_output = io.monitor;
-          };
+          # ${io.touchscreen} = {
+          #   map_to_output = io.monitor;
+          # };
+          # ${io.stylus} = {
+          #   map_to_output = io.monitor;
+          # };
         };
         output = {
-          ${io.monitor} = {
-            scale = "2";
-            mode = "3840x2168";
-          };
+          # ${io.monitor} = {
+          #   scale = "2";
+          #   mode = "3840x2168";
+          # };
         };
         assigns = {
           " web" = [

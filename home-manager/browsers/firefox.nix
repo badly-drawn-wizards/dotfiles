@@ -13,6 +13,7 @@
     package = pkgs.firefox.override {
       cfg = {
         enableTridactylNative = true;
+        speechSynthesisSupport = true;
       };
     };
 

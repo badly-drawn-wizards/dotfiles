@@ -7,7 +7,7 @@
   ];
   home.packages = with pkgs; [
       teams
-      zoom-us
+      # zoom-us
       discord
       element-desktop
       slack

@@ -8,6 +8,10 @@
     };
 
     libvirtd.enable = true;
+
+    oci-containers = {
+      backend = "docker";
+    };
   };
 
   boot.kernelModules = [

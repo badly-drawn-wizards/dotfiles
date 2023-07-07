@@ -2,7 +2,7 @@
 
 {
   windowManager.startupPrograms = with pkgs; [
-    # "${polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
+    "${polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
   ];
 
   programs.zsh.initExtraDag = {

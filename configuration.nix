@@ -22,6 +22,8 @@ inputs,
       ./virtualization.nix
       ./users.nix
       ./security.nix
+      ./mimic3.nix
+      ./vpn.nix
     ];
 
   nix = {
@@ -86,7 +88,7 @@ inputs,
 
     dbus = {
       enable = true;
-      packages = with pkgs; [ dconf ];
+      packages = with pkgs; [ dconf gcr ];
     };
 
     flatpak.enable = true;

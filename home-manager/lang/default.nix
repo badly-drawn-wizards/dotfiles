@@ -5,5 +5,6 @@
     ./tree-sitter.nix
     ./lean.nix
     ./python.nix
+    ./java.nix
   ];
 }

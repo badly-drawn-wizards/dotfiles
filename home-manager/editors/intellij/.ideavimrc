@@ -1,3 +1,8 @@
+source ~/.intellimacs/spacemacs.vim
+source ~/.intellimacs/extra.vim
+source ~/.intellimacs/major.vim
+source ~/.intellimacs/which-key.vim
+
 # Enable vim surround
 set surround
 vmap s S
@@ -5,32 +10,32 @@ vmap s S
 # Enable incremental search
 set incsearch
 
-nmap <Space><Space> :action GotoAction<CR>
+" nmap <Space><Space> :action GotoAction<CR>
 
-# Window subsection
-nmap <Space>w <C-w>
-nmap <C-w>d :action VimWindowClose<CR>
-nmap <C-w>u :action ReopenClosedTab<CR>
+" # Window subsection
+" nmap <Space>w <C-w>
+" nmap <C-w>d :action VimWindowClose<CR>
+" nmap <C-w>u :action ReopenClosedTab<CR>
 
-nmap gD :action GotoImplementation<CR>
-nmap <Space>ff :action GotoFile<CR>
-nmap <Space>fc :action GotoClass<CR>
-nmap <Space>fs :action GotoSymbol<CR>
-nmap <Space>fm :action FileStructurePopup<CR>
+" nmap gD :action GotoImplementation<CR>
+" nmap <Space>ff :action GotoFile<CR>
+" nmap <Space>fc :action GotoClass<CR>
+" nmap <Space>fs :action GotoSymbol<CR>
+" nmap <Space>fm :action FileStructurePopup<CR>
 
-nmap <Space>ft :action ActivateProjectToolWindow<CR>
-nmap <Space>ct :action ActivateRunToolWindow<CR>
+" nmap <Space>ft :action ActivateProjectToolWindow<CR>
+" nmap <Space>ct :action ActivateRunToolWindow<CR>
 
-nmap <Space>hd :action QuickJavaDoc<CR>
+" nmap <Space>hd :action QuickJavaDoc<CR>
 
-nmap <Space>bd :action CloseEditor<CR>
-nmap <Space>bp :action PreviousTab<CR>
-nmap <Space>bn :action NextTab<CR>
+" nmap <Space>bd :action CloseEditor<CR>
+" nmap <Space>bp :action PreviousTab<CR>
+" nmap <Space>bn :action NextTab<CR>
 
-nmap <Space>se :action RenameElement<CR>
+" nmap <Space>se :action RenameElement<CR>
 
-nmap <Space>dn :action StepOver<CR>
-nmap <Space>di :action StepInto<CR>
-nmap <Space>do :action StepOut<CR>
-nmap <Space>dd :action RunToCursor<CR>
-nmap <Space>dc :action Resume<CR>
+" nmap <Space>dn :action StepOver<CR>
+" nmap <Space>di :action StepInto<CR>
+" nmap <Space>do :action StepOut<CR>
+" nmap <Space>dd :action RunToCursor<CR>
+" nmap <Space>dc :action Resume<CR>

@@ -44,15 +44,6 @@
       inputs.nixpkgs.follows = "/nixpkgs";
     };
     utils.url = "github:gytis-ivaskevicius/flake-utils-plus";
-    pypi-deps-db = {
-      url = "github:DavHau/pypi-deps-db";
-      flake = false;
-    };
-    mach-nix = {
-      url = "github:DavHau/mach-nix";
-      inputs.nixpkgs.follows = "/nixpkgs";
-      inputs.pypi-deps-db.follows = "/pypi-deps-db";
-    };
     hyprland.url = "github:hyprwm/Hyprland";
     unhinged.url = "github:badly-drawn-wizards/unhinged";
 
@@ -82,6 +73,11 @@
       flake = false;
     };
 
+    dream2nix = {
+      url = "github:nix-community/dream2nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     nix-colors.url = "github:Misterio77/nix-colors";
   };
   outputs = {
@@ -93,7 +89,6 @@
       nixpkgs-wayland,
       nix-index,
       nixfs,
-      mach-nix,
       lean4,
       vs-code-default-keybindings,
       nix-colors,
@@ -144,7 +139,6 @@
             inherit nix-colors;
             # linuxSrc_custom = linux;
             lean4 = super.callPackage ({system}: lean4.packages.${system}) {};
-            mach-nix = super.callPackage ({system}: mach-nix.lib.${system});
           })
         ] ++ import ./overlays;
 
@@ -159,11 +153,11 @@
 
         outputsBuilder = channels: {
           packages = channels.nixpkgs;
-          devShell = channels.nixpkgs.mkShell {
-            buildInputs = [
-              channels.nixpkgs.nur.repos.rycee.mozilla-addons-to-nix
-            ];
-          };
+          # devShell = channels.nixpkgs.mkShell {
+          #   buildInputs = [
+          #     channels.nixpkgs.nur.repos.rycee.mozilla-addons-to-nix
+          #   ];
+          # };
         };
       } // { inherit os; };
 }

@@ -167,6 +167,7 @@ in
 {
     programs.vscode = {
       enable = true;
+      mutableExtensionsDir = false;
       userSettings =
         settings //
         vspacecodeSettings //
@@ -228,6 +229,12 @@ in
           name = "direnv";
           version = "0.13.0";
           sha256 = "sha256-KdLJ7QTi9jz+JbbQuhXqyE3WV9oF+wyC/9ZJ/XTFOYc=";
+        }
+        {
+          publisher = "syler";
+          name = "sass-indented";
+          version = "1.8.26";
+          sha256 = "sha256-e3Y6qW+xsvvT1fby59X5VVkP2WmvYWtoajRiks0lLFM=";
         }
         # {
         #   publisher = "jakubstepien";

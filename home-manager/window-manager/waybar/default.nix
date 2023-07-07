@@ -127,7 +127,7 @@ in
           };
 
           "battery" = {
-            bat = "BAT0";
+            bat = "BAT1";
             format = "[{icon}: {capacity} ";
             format-charging = "[${colored icons.battery theme.purple}: {capacity} ";
             format-full = "[${colored icons.battery theme.green}: {capacity} ";
