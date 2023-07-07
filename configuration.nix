@@ -23,7 +23,7 @@ inputs,
       ./users.nix
       ./security.nix
       ./mimic3.nix
-      ./vpn.nix
+      inputs.dotfiles-private.nixosModules.dotfiles-private
     ];
 
   nix = {
@@ -84,6 +84,7 @@ inputs,
 
     gnome = {
       gnome-settings-daemon.enable = true;
+      at-spi2-core.enable = true;
     };
 
     dbus = {

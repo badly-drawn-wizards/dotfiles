@@ -18,14 +18,16 @@
         autosquash = true
     '';
     ".ssh/config".text = ''
-      Host github
+      IdentitiesOnly yes
+      Host github.com
         User git
         HostName github.com
-
-      Host *
+        PreferredAuthentications publickey
         IdentityFile ~/.ssh/id_rsa
+
+      Host whirlylabs.com
         IdentityFile ~/.ssh/id_ed25519_whirly
-        IdentitiesOnly yes
+
     '';
   };
 

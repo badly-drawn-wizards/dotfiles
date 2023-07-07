@@ -60,10 +60,6 @@
       url = "github:nix-community/comma";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    #linux = {
-    #  url = "git+file:///workspace/linux?ref=master";
-    #  flake = false;
-    #};
     lean4 = {
       url = "github:leanprover/lean4";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -79,6 +75,11 @@
     };
 
     nix-colors.url = "github:Misterio77/nix-colors";
+
+    dotfiles-private = {
+     url = "git+file:///workspace/dotfiles-private?ref=master";
+    };
+
   };
   outputs = {
     nixpkgs,

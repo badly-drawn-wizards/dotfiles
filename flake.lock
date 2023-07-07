@@ -139,6 +139,22 @@
         "type": "github"
       }
     },
+    "dotfiles-private": {
+      "locked": {
+        "lastModified": 1688723642,
+        "narHash": "sha256-+G3NGzlbp5+qD8Ih91Axflm/ns7ByagfJrhyRUNwkBc=",
+        "ref": "master",
+        "rev": "4b59deb5bd53af9df1c36474c790b1edc4fb1429",
+        "revCount": 1,
+        "type": "git",
+        "url": "file:///workspace/dotfiles-private"
+      },
+      "original": {
+        "ref": "master",
+        "type": "git",
+        "url": "file:///workspace/dotfiles-private"
+      }
+    },
     "dream2nix": {
       "inputs": {
         "all-cabal-json": "all-cabal-json",
@@ -1491,6 +1507,7 @@
       "inputs": {
         "comma": "comma",
         "doom-emacs": "doom-emacs",
+        "dotfiles-private": "dotfiles-private",
         "dream2nix": "dream2nix",
         "dwarffs": "dwarffs",
         "emacs-overlay": "emacs-overlay",
