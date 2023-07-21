@@ -13,7 +13,7 @@ let
   inherit (lib.strings)
     removePrefix concatStrings concatMapStrings fixedWidthString;
   inherit (lib.lists)
-    map genList zipListsWith reverseList elemAt;
+    map mapAttrs genList zipListsWith reverseList elemAt;
   inherit (config.programs.doom-emacs) org-clock org-agenda;
   theme = {
     background-darker = "#${rgb-to-hex [30 31 41]}";
@@ -47,7 +47,7 @@ let
   arange1 = n: genList (x: 1.0 * x / (n - 1)) n;
   color-tiers-asc = map
     (lerp-list-with color-mix-hex [ theme.red theme.yellow theme.white ])
-    (arange1 30);
+    (arange1 15);
   color-tiers-desc = reverseList color-tiers-asc;
   tag-open = tag: attrs:
     let
