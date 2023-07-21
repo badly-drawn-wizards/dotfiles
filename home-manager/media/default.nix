@@ -10,6 +10,7 @@
   home.packages = with pkgs; [
       mpv
       spotify
+      spotify-tui
 
       libva-utils glxinfo
   ];
