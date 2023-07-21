@@ -25,7 +25,7 @@
         PreferredAuthentications publickey
         IdentityFile ~/.ssh/id_rsa
 
-      Host whirlylabs.com
+      Host *.whirlylabs.com
         IdentityFile ~/.ssh/id_ed25519_whirly
 
     '';
