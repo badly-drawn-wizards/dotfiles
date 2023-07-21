@@ -5,7 +5,7 @@ let
   set-background = pkgs.writeScriptBin "set-background" ''
     #!/usr/bin/env sh
     set -e
-    BGS=$(find "${config.backgrounds.path}" -type f ! -iname ".*" -printf '%f\n' | sort)
+    BGS=$(find "${config.backgrounds.path}/" -type f ! -iname ".*" -printf '%f\n' | sort)
     if [ $# -eq 0 ]
     then
       BG=$(echo -e "random\n$BGS" | ${config.programs.rofi.cmd.dmenu "background"})
