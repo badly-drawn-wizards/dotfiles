@@ -58,7 +58,20 @@ let
   colored = text: color:
     "${tag-open "span" { inherit color; }}${text}${tag-close "span"}";
 
-
+  playerctld-shift = "${pkgs.dbus}/bin/dbus-send --session --type=method_call --dest=org.mpris.MediaPlayer2.playerctld /org/mpris/MediaPlayer2 com.github.altdesktop.playerctld.Shift";
+  mpris-config = {
+    format = " | {player_icon}: {status_icon}";
+    status-icons = {
+      playing = icons.play;
+      paused = icons.pause;
+      stopped = icons.stop;
+    };
+    player-icons = {
+      default = colored "" theme.purple;
+      spotifyd = colored "" theme.green;
+      firefox = colored "" theme.red;
+    };
+  };
 in
 {
   programs.waybar = {
@@ -76,7 +89,12 @@ in
         modules-center = [ "sway/window" ];
         modules-right =
           [
-            "mpris"
+            "custom/mpris-start"
+            "mpris#other"
+            "mpris#spotify"
+            "mpris#firefox"
+            "custom/mpris-end"
+
             "idle_inhibitor"
             "custom/osk"
             "battery"
@@ -105,14 +123,28 @@ in
 
           "sway/window".max-length = 70;
 
-          "mpris" = {
-            format = "[{status_icon}]";
-            status-icons = {
-              playing = icons.play;
-              paused = icons.pause;
-              stopped = icons.stop;
-            };
+          "custom/mpris-start" = {
+            format = "[";
+            tooltip = false;
+            on-click = playerctld-shift;
           };
+          "mpris#other" = mpris-config // {
+            ignored-players = [
+              "spotify"
+              "firefox"
+            ];
+          };
+          "mpris#spotify" = mpris-config // {
+            player = "spotify";
+          };
+          "mpris#firefox" = mpris-config // {
+            player = "firefox";
+          };
+          "custom/mpris-end" = {
+            format = "]";
+            tooltip = false;
+          };
+
           "idle_inhibitor" = {
             format = "[{icon} ";
             format-icons = {
