@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 let
   intellimacs = pkgs.fetchFromGitHub {
@@ -11,12 +11,19 @@ let
   idea-jdk = pkgs.jetbrains.jdk.overrideAttrs (attrs: {
     passthru = attrs.passthru // { home = "${config.home.homeDirectory}/${jdk-home}"; };
   });
+  idea-community = pkgs.jetbrains.idea-community.override {
+    jdk = idea-jdk;
+  };
+  fernflower-jar = "${idea-community}/idea-community/plugins/java-decompiler/lib/java-decompiler.jar";
+  fernflower = pkgs.writeScriptBin "fernflower" ''
+  #!/usr/bin/env bash
+  ${idea-jdk}/bin/java -jar ${lib.escapeShellArg fernflower-jar} "$@"
+  '';
 in
 {
   home.packages = with pkgs; [
-    (jetbrains.idea-community.override {
-      jdk = idea-jdk;
-    })
+    idea-community
+    fernflower
   ];
 
   home.file = {
