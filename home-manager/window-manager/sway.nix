@@ -82,14 +82,6 @@ in
       "move" = rofi-workspace "rofi-move" (ws: "move window to workspace ${ws}");
     };
 
-    wayland.windowManager.hyprland = {
-      enable = true;
-      xwayland = {
-        enable = true;
-        # hidpi = true;
-      };
-    };
-
     wayland.windowManager.sway = {
       enable = true;
 
