@@ -89,6 +89,7 @@ in
         modules-center = [ "sway/window" ];
         modules-right =
           [
+            "custom/rotate-on" "custom/rotate-off"
             "custom/mpris-start"
             "mpris#other"
             "mpris#spotify"
@@ -119,6 +120,25 @@ in
             exec-on-event = true;
             on-click = "${org-clock} toggle-last-clock";
             on-click-right = "${org-clock} recent-clock";
+          };
+
+          "custom/rotate-on" = {
+            format = "[ ";
+            on-click = writeScript "sway-tablet" ''
+            #!${pkgs.bash}/bin/bash
+            ${pkgs.sway}/bin/swaymsg input type:keyboard events disabled
+            ${pkgs.sway}/bin/swaymsg input type:touchpad events disabled
+            ${pkgs.sway}/bin/swaymsg output eDP-1 transform 90
+            '';
+          };
+          "custom/rotate-off" = {
+            format = "| ]";
+            on-click = writeScript "sway-laptop" ''
+            #!${pkgs.bash}/bin/bash
+            ${pkgs.sway}/bin/swaymsg input type:keyboard events enabled
+            ${pkgs.sway}/bin/swaymsg input type:touchpad events enabled
+            ${pkgs.sway}/bin/swaymsg output eDP-1 transform normal
+            '';
           };
 
           "sway/window".max-length = 70;
@@ -159,7 +179,7 @@ in
           };
 
           "battery" = {
-            bat = "BAT1";
+            bat = "BAT0";
             format = "[{icon}: {capacity} ";
             format-charging = "[${colored icons.battery theme.purple}: {capacity} ";
             format-full = "[${colored icons.battery theme.green}: {capacity} ";

@@ -11,10 +11,6 @@ let
   inherit (config.programs.doom-emacs) org-clock;
   inherit (lib) concatStrings;
   io = {
-    keyboard = "1:1:AT_Translated_Set_2_keyboard";
-    stylus = "1267:10741:ELAN2514:00_04F3:29F5_Stylus";
-    touchscreen = "1267:10741:ELAN2514:00_04F3:29F5";
-    touchpad = "1739:52560:SYNA3297:00_06CB:CD50_Touchpad";
     monitor = "eDP-1";
   };
 
@@ -124,18 +120,21 @@ in
             xkb_layout = "us";
             xkb_options = "caps:swapescape";
           };
-          # ${io.touchscreen} = {
-          #   map_to_output = io.monitor;
-          # };
-          # ${io.stylus} = {
-          #   map_to_output = io.monitor;
-          # };
+          "type:touch" = {
+            map_to_output = io.monitor;
+          };
+          "type:tablet_tool" = {
+            map_to_output = io.monitor;
+          };
+          "type:touchpad" = {
+            map_to_output = io.monitor;
+          };
         };
         output = {
-          # ${io.monitor} = {
-          #   scale = "2";
+          ${io.monitor} = {
+            scale = "1.5";
           #   mode = "3840x2168";
-          # };
+          };
         };
         assigns = {
           " web" = [
