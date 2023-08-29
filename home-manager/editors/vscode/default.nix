@@ -203,6 +203,7 @@ in
         dracula-theme.theme-dracula
         esbenp.prettier-vscode
         angular.ng-template
+        ms-vsliveshare.vsliveshare
         ms-vscode.cpptools
         ms-vscode.makefile-tools
         ms-vscode.cmake-tools

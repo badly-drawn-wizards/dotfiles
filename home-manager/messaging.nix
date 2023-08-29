@@ -6,7 +6,7 @@
     "${discord}/bin/discord"
   ];
   home.packages = with pkgs; [
-      teams
+      # teams
       # zoom-us
       discord
       element-desktop
