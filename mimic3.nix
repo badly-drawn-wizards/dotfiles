@@ -29,22 +29,22 @@ let
   };
 in
 {
-  virtualisation.oci-containers.containers."mimic3" = {
-    autoStart = true;
-    image = "mimic3-container";
-    inherit imageFile;
-    ports = [
-      "127.0.0.1:59125:59125"
-    ];
-    volumes = [
-      "mimic3:/home/mimic3"
-      "/run/user/1000/pipewire-0:/run/user/1000/pipewire-0"
-    ];
-    environment = {
-     XDG_RUNTIME_DIR = "/run/user/1000";
-    };
-    user = "mimic3";
-    entrypoint = "run-venv";
-    cmd = ["mimic3-server" "--play-program" "pw-play --rate 22050 --channels 1 --format s16 -"];
-  };
+  # virtualisation.oci-containers.containers."mimic3" = {
+  #   autoStart = true;
+  #   image = "mimic3-container";
+  #   inherit imageFile;
+  #   ports = [
+  #     "127.0.0.1:59125:59125"
+  #   ];
+  #   volumes = [
+  #     "mimic3:/home/mimic3"
+  #     "/run/user/1000/pipewire-0:/run/user/1000/pipewire-0"
+  #   ];
+  #   environment = {
+  #    XDG_RUNTIME_DIR = "/run/user/1000";
+  #   };
+  #   user = "mimic3";
+  #   entrypoint = "run-venv";
+  #   cmd = ["mimic3-server" "--play-program" "pw-play --rate 22050 --channels 1 --format s16 -"];
+  # };
 }
