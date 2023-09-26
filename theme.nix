@@ -4,7 +4,7 @@ with lib;
 {
   options = {
     icons = mkOption {
-      type = types.attrsOf types.string;
+      type = types.attrsOf types.str;
       default = {
         cpu = "";
         memory = "";
@@ -25,7 +25,7 @@ with lib;
       };
     };
     theme = mkOption {
-      type = types.attrsOf types.string;
+      type = types.attrsOf types.str;
       default = {
         background = "1e1f28";
         foreground = "f8f8f2";

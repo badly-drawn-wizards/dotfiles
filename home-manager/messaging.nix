@@ -9,7 +9,7 @@
       # teams
       # zoom-us
       discord
-      element-desktop
+      (element-desktop.override { electron = pkgs.electron_24; })
       slack
       zulip
       franz
