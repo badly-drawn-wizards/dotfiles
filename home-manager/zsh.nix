@@ -43,7 +43,7 @@
       enableAutosuggestions = true;
       shellAliases = {
         t = "tmux attach || tmux new";
-        ls = "exa";
+        ls = "eza";
         dc = "docker-compose";
         nr = "nix repl dot#os";
       };
@@ -172,7 +172,7 @@
 
     home.packages = with pkgs; [
       thefuck
-      exa
+      eza
     ];
   };
 }
