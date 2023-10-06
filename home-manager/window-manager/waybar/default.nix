@@ -89,7 +89,7 @@ in
         modules-center = [ "sway/window" ];
         modules-right =
           [
-            "custom/rotate-on" "custom/rotate-off"
+            # "custom/rotate-on" "custom/rotate-off"
             "custom/mpris-start"
             "mpris#other"
             "mpris#spotify"
@@ -179,7 +179,6 @@ in
           };
 
           "battery" = {
-            bat = "BAT0";
             format = "[{icon}: {capacity} ";
             format-charging = "[${colored icons.battery theme.purple}: {capacity} ";
             format-full = "[${colored icons.battery theme.green}: {capacity} ";

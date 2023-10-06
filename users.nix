@@ -33,7 +33,9 @@
       extraGroups = [
         "wheel" "networkmanager" "audio" "video"
         "systemd-journal" "docker" "lpadmin" "dialout"
-        "wireshark" "stapusr" "ccache"];
+        "wireshark" "stapusr" "ccache"
+        "kvm" "libvirtd"
+      ];
     };
     defaultUserShell = "/run/current-system/sw/bin/zsh";
   };

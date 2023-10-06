@@ -27,7 +27,7 @@
   };
 
   fonts = {
-    fonts = with pkgs; [
+    packages = with pkgs; [
       monoid
       fira-code
       fira-code-symbols
@@ -37,7 +37,7 @@
       noto-fonts-emoji
       emacs-all-the-icons-fonts
     ];
-    enableDefaultFonts = true;
+    enableDefaultPackages = true;
     fontconfig = {
       defaultFonts = {
         monospace = [ config.fontMono ];

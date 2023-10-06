@@ -23,7 +23,7 @@
         User git
         HostName github.com
         PreferredAuthentications publickey
-        IdentityFile ~/.ssh/id_ed25519
+        IdentityFile ~/.ssh/id_rsa
 
       Host *.whirlylabs.com
         IdentityFile ~/.ssh/id_ed25519_whirly

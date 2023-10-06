@@ -132,7 +132,7 @@ in
         };
         output = {
           ${io.monitor} = {
-            scale = "1.5";
+            scale = "1";
           #   mode = "3840x2168";
           };
         };

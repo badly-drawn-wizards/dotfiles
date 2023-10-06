@@ -22,7 +22,6 @@ inputs,
       ./virtualization.nix
       ./users.nix
       ./security.nix
-      ./mimic3.nix
       inputs.dotfiles-private.nixosModules.dotfiles-private
     ];
 
@@ -116,6 +115,6 @@ inputs,
     };
   };
 
-  system.stateVersion = "20.03";
+  system.stateVersion = "23.11";
 
 }

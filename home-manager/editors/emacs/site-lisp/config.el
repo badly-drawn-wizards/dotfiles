@@ -1,7 +1,5 @@
 ;;;  -*- lexical-binding: t; -*-
 
-(require 'cl-lib)
-(require 'cl-extra)
 (require 'ht)
 
 (setq user-full-name "Reuben Steenekamp"
@@ -42,4 +40,5 @@
   ("jl" #'avy-goto-line))
 
 (after! projectile
-  (setq projectile-switch-project-action 'projectile-dired))
+  (setq projectile-switch-project-action 'projectile-find-file)
+  (setq projectile-completion-system 'ivy))

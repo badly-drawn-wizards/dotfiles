@@ -2,16 +2,20 @@
 
 {
   virtualisation = {
-    docker = {
+    containers = {
       enable = true;
-      enableOnBoot = true;
+      containersConf.cniPlugins = with pkgs; [
+        cni-plugins
+        cni-plugin-flannel
+      ];
+    };
+
+    podman = {
+      enable = true;
+      dockerCompat = true;
     };
 
     libvirtd.enable = true;
-
-    oci-containers = {
-      backend = "docker";
-    };
   };
 
   boot.kernelModules = [
