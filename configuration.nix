@@ -33,13 +33,6 @@ inputs,
     '';
   };
 
-  nixpkgs =  {
-    # Yes, I'm an unprincipled swine. Fight me RMS.
-    config = {
-      allowUnfree = true;
-    };
-  };
-
   i18n.defaultLocale = "en_US.UTF-8";
 
   time.timeZone = "Africa/Johannesburg";

@@ -12,7 +12,10 @@
 
     podman = {
       enable = true;
-      dockerCompat = true;
+    };
+
+    docker = {
+      enable = true;
     };
 
     libvirtd.enable = true;

@@ -1,9 +1,9 @@
 { config, lib, pkgs, ... }:
 
 {
-  windowManager.extraBinds = {
-    "XF86PowerOff" = "exec rot8 -O";
-  };
+  # windowManager.extraBinds = {
+  #   "XF86PowerOff" = "exec rot8 -O";
+  # };
 
-  home.packages = [ pkgs.rot8 ];
+  # home.packages = [ pkgs.rot8 ];
 }

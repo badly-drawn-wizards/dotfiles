@@ -77,6 +77,7 @@
        magit             ; a git porcelain for Emacs
        make              ; run make tasks from Emacs
        pdf               ; pdf enhancements
+       terraform
 
        :lang
        (agda +local)              ; types of types of types of types...
