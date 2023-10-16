@@ -22,6 +22,7 @@ inputs,
       ./virtualization.nix
       ./users.nix
       ./security.nix
+      inputs.dotfiles-private.nixosModules.dotfiles-private
     ];
 
   nix = {
