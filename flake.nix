@@ -81,9 +81,9 @@
 
     nix-colors.url = "github:Misterio77/nix-colors";
 
-    #dotfiles-private = {
-    #  url = "git+file:///workspace/dotfiles-private?ref=master";
-    #};
+    dotfiles-private = {
+      url = "git+file:///workspace/dotfiles-private?ref=master";
+    };
 
   };
   outputs = {
