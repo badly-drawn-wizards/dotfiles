@@ -3,7 +3,13 @@
 let
   mod = config.wayland.windowManager.sway.config.modifier;
   swaylock = config.programs.swaylock.package;
-  swaylock-cmd = "${swaylock}/bin/swaylock -f";
+  swaylock-cmd = toString (pkgs.writeScript "swaylock-cmd" ''
+  #!${pkgs.bash}/bin/bash
+  ${pkgs.sway}/bin/swaymsg input type:keyboard events enabled
+  ${pkgs.sway}/bin/swaymsg input type:touchpad events enabled
+  ${pkgs.sway}/bin/swaymsg output eDP-1 transform normal
+  exec ${swaylock}/bin/swaylock -f
+  '');
 in
 {
   programs.swaylock = {

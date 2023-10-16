@@ -19,6 +19,7 @@
     enableAllFirmware = true;
     enableRedistributableFirmware = true;
     cpu.intel.updateMicrocode = true;
+    cpu.amd.updateMicrocode = true;
 
 
   };
@@ -29,6 +30,5 @@
     #   KERNEL=="ttyUSB*", MODE="0777"
     # '';
   };
-
 
 }

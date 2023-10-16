@@ -89,7 +89,7 @@ in
         modules-center = [ "sway/window" ];
         modules-right =
           [
-            # "custom/rotate-on" "custom/rotate-off"
+            "custom/rotate-on" "custom/rotate-off"
             "custom/mpris-start"
             "mpris#other"
             "mpris#spotify"
@@ -128,7 +128,7 @@ in
             #!${pkgs.bash}/bin/bash
             ${pkgs.sway}/bin/swaymsg input type:keyboard events disabled
             ${pkgs.sway}/bin/swaymsg input type:touchpad events disabled
-            ${pkgs.sway}/bin/swaymsg output eDP-1 transform 90
+            ${pkgs.sway}/bin/swaymsg output eDP-1 transform 90 anticlockwise
             '';
           };
           "custom/rotate-off" = {

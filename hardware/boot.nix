@@ -8,8 +8,9 @@
       grub = {
         enable = true;
         efiSupport = true;
+        enableCryptodisk = true;
         theme = pkgs.dracula-grub-theme;
-        gfxmodeEfi = "1920x1440,3840x2160,auto";
+        # gfxmodeEfi = "1920x1440,3840x2160,auto";
         device = "nodev";
       };
     };
@@ -29,11 +30,10 @@
     kernelPackages = pkgs.linuxPackagesFor pkgs.linuxKernel.kernels.linux_custom;
 
     kernelModules = [
-      "acpi_call"
     ];
 
     tmp.cleanOnBoot = true;
 
-    supportedFilesystems = [ "ntfs" ];
+    supportedFilesystems = [ "btrfs" "ntfs" ];
   };
 }

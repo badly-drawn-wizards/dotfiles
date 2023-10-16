@@ -1,4 +1,4 @@
-{ 
+{
 pkgs,
 lib,
 inputs,
@@ -9,7 +9,7 @@ inputs,
   imports =
     [
       inputs.dwarffs.nixosModules.dwarffs
-      inputs.unhinged.nixosModules.unhinged
+      # inputs.unhinged.nixosModules.unhinged
       ./theme.nix
       ./hardware
       ./power
@@ -22,7 +22,6 @@ inputs,
       ./virtualization.nix
       ./users.nix
       ./security.nix
-      inputs.dotfiles-private.nixosModules.dotfiles-private
     ];
 
   nix = {
@@ -89,8 +88,6 @@ inputs,
     fprintd.enable = true;
 
     fwupd.enable = true;
-
-    # unhinged.enable = true;
 
     nixfs.enable = false;
   };

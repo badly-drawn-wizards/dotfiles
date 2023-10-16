@@ -1,15 +1,33 @@
 { config, lib, pkgs, ... }:
 
 {
-  fileSystems = {
-    "/" = {
-      device = "/dev/vg0/nixos";
-      fsType = "ext4";
+  boot.initrd.luks.devices = {
+    root = {
+      device = "/dev/nvme0n1p2";
+      preLVM = true;
     };
+  };
+  fileSystems = {
     "/boot" = {
       device = "/dev/nvme0n1p1";
       fsType = "vfat";
     };
+    "/" = {
+      device = "/dev/vg/nixos";
+      fsType = "btrfs";
+      options = [ "subvol=root" "compress=zstd" "noatime" ];
+    };
+    "/nix" = {
+      device = "/dev/vg/nixos";
+      fsType = "btrfs";
+      options = [ "subvol=nix" "compress=zstd" "noatime" ];
+      
+    };
+    "/home" = {
+      device = "/dev/vg/nixos";
+      fsType = "btrfs";
+      options = [ "subvol=home" "compress=zstd" "noatime" ];
+    };
   };
-  swapDevices = [ { device = "/dev/vg0/swap"; } ];
-}
+  swapDevices = [ { device = "/dev/vg/swap"; } ];
+  }
