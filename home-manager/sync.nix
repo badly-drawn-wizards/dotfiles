@@ -1,10 +1,5 @@
 { config, lib, pkgs, ... }:
 
 {
-  services = {
-    dropbox = {
-      enable = true;
-      path = "${config.home.homeDirectory}/Dropbox";
-    };
-  };
+  home.packages = with pkgs; [ maestral-gui ];
 }

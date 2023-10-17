@@ -13,9 +13,12 @@
       spotify-tui
 
       libva-utils glxinfo
+
+      qpwgraph
   ];
 
   services = {
+    easyeffects.enable = true;
     mpd.enable = true;
     mpd-mpris.enable = true;
     mpris-proxy.enable = true;

@@ -29,6 +29,7 @@ with builtins;
     ./lang
     ./tts.nix
     ./gpg.nix
+    ./security.nix
   ];
 
   manual = {
@@ -40,8 +41,6 @@ with builtins;
   programs = {
     zathura.enable = true;
   };
-
-  services.dropbox.enable = true;
 
   xdg = {
     mime.enable = true;
@@ -101,6 +100,7 @@ with builtins;
 
       unar unrar p7zip
 
+      pciutils usbutils iw nettools
     ];
 
     sessionVariables = {
