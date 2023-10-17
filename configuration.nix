@@ -9,7 +9,6 @@ inputs,
   imports =
     [
       inputs.dwarffs.nixosModules.dwarffs
-      inputs.unhinged.nixosModules.unhinged
       ./theme.nix
       ./hardware
       ./power
@@ -89,8 +88,6 @@ inputs,
     fprintd.enable = true;
 
     fwupd.enable = true;
-
-    # unhinged.enable = true;
 
     nixfs.enable = false;
   };
