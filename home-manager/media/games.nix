@@ -4,9 +4,11 @@
 
   home.packages = with pkgs; [
     nethack
-    steam
     lutris
     xboxdrv
+
+    steam
+    steam-run
 
     winetricks
     wine64Packages.waylandFull
