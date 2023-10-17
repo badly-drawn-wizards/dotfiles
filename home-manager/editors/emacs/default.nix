@@ -8,7 +8,7 @@ let
 
   em = writeScriptBin "em" ''
     #!/usr/bin/env sh
-    emacsclient -c -a "" $@
+    emacsclient -c -a "emacs" $@
   '';
 
 in
