@@ -55,6 +55,9 @@ inputs,
 
   services = {
 
+    acpid.enable = true;
+    asusd.enable = true;
+
     fstrim.enable = true;
     devmon.enable = true;
     gvfs.enable = true;

@@ -20,12 +20,18 @@
       kernelModules = [ "i915" ];
     };
 
-    kernelParams = [];
+    kernelParams = [
+      "acpi_osi=Linux"
+    ];
 
     extraModulePackages = [
       config.boot.kernelPackages.v4l2loopback.out
       config.boot.kernelPackages.acpi_call.out
     ];
+
+    extraModprobeConfig = ''
+    options asus_nb_wmi tablet_mode_sw=2
+    '';
 
     kernelPackages = pkgs.linuxPackagesFor pkgs.linuxKernel.kernels.linux_custom;
 

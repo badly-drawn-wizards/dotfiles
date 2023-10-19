@@ -1,3 +1,4 @@
+
 { config, lib, pkgs, ... }:
 
 with lib;
@@ -17,6 +18,7 @@ with lib;
         battery = "";
         thermometer = "";
         keyboard = "";
+        keyboard-slash = " ⃠";
         eye = "";
         eye-slash = "";
         play = "";

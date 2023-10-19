@@ -12,6 +12,8 @@ let
   inherit (lib) concatStrings;
   io = {
     monitor = "eDP-1";
+    keyboard = "1:1:AT_Translated_Set_2_keyboard";
+    touchpad = "type:touchpad";
   };
 
   mkColorSet = bg: txt: {
@@ -59,8 +61,31 @@ in
         type = attrsOf str;
         default = {};
       };
+
+      kb-events = mkOption {
+        type = attrsOf package;
+        readOnly = true;
+        default = rec {
+          get = pkgs.writeScript "kb-events-get" ''
+            #!${pkgs.bash}/bin/bash
+            ${pkgs.sway}/bin/swaymsg -t get_inputs -r | jq -r '.[] | select (.identifier == "${io.keyboard}") | .libinput.send_events'
+          '';
+
+          do = pkgs.writeScript "kb-events-do" ''
+            #!${pkgs.bash}/bin/bash
+            ${pkgs.sway}/bin/swaymsg input ${io.keyboard} events "$@"
+            ${pkgs.sway}/bin/swaymsg input ${io.touchpad} events $(${get})
+          '';
+
+          toggle = pkgs.writeScript "kb-events-do" ''
+            #!${pkgs.bash}/bin/bash
+            ${do} toggle enabled disabled
+          '';
+        };
+      };
     };
   };
+
   config = {
 
     home.sessionVariables = {
@@ -132,7 +157,7 @@ in
         };
         output = {
           ${io.monitor} = {
-            scale = "1";
+            scale = "1.5";
           #   mode = "3840x2168";
           };
         };
@@ -185,6 +210,7 @@ in
             "${mod}+Print" = ''exec ${pkgs.grim}/bin/grim -t png -g "$(${pkgs.slurp}/bin/slurp)" ${config.home.homeDirectory}/screenshots/$(date +%Y-%m-%d_%H-%m-%s).png'';
             "XF86MonBrightnessUp" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set +10%";
             "XF86MonBrightnessDown" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set 10%-";
+            "XF86Launch1" = "exec ${config.windowManager.kb-events.toggle}";
           };
 
         in lib.mkOptionDefault (

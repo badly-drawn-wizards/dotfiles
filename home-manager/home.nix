@@ -100,7 +100,10 @@ with builtins;
 
       unar unrar p7zip
 
-      pciutils usbutils iw nettools
+      pciutils usbutils iw nettools wirelesstools
+      d-spy
+
+      asusctl
     ];
 
     sessionVariables = {

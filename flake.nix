@@ -84,13 +84,16 @@
     dotfiles-private = {
       url = "git+file:///workspace/dotfiles-private?ref=master";
     };
-
+    nixvim = {
+      url = "github:nix-community/nixvim";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
+
   outputs = {
     nixpkgs,
       utils,
       emacs-overlay,
-      nix-doom-emacs,
       nur,
       nixpkgs-wayland,
       nix-index,

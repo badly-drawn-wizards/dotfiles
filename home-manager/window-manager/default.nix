@@ -3,6 +3,7 @@
 {
   imports = [
     ./sway.nix
+    ./hyprland.nix
     ./waybar
     ./swaylock.nix
     ./mako.nix

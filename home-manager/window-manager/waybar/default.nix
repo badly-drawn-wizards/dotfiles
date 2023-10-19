@@ -97,7 +97,7 @@ in
             "custom/mpris-end"
 
             "idle_inhibitor"
-            "custom/osk"
+            "custom/keyboard"
             "battery"
             "cpu"
             "memory"
@@ -126,8 +126,6 @@ in
             format = "[ ";
             on-click = writeScript "sway-tablet" ''
             #!${pkgs.bash}/bin/bash
-            ${pkgs.sway}/bin/swaymsg input type:keyboard events disabled
-            ${pkgs.sway}/bin/swaymsg input type:touchpad events disabled
             ${pkgs.sway}/bin/swaymsg output eDP-1 transform 90 anticlockwise
             '';
           };
@@ -135,8 +133,6 @@ in
             format = "| ]";
             on-click = writeScript "sway-laptop" ''
             #!${pkgs.bash}/bin/bash
-            ${pkgs.sway}/bin/swaymsg input type:keyboard events enabled
-            ${pkgs.sway}/bin/swaymsg input type:touchpad events enabled
             ${pkgs.sway}/bin/swaymsg output eDP-1 transform normal
             '';
           };
@@ -172,10 +168,17 @@ in
               deactivated = icons.eye-slash;
             };
           };
-          "custom/osk" = {
-            format = "| ${icons.keyboard}]";
+          "custom/keyboard" = {
+            format = "| {}]";
             tooltip = false;
-            on-click = "${config.onscreen-keyboard.toggle}";
+            on-click = "${config.windowManager.kb-events.toggle}";
+            exec-on-event = true;
+            exec = writeScript "kb-event-get-percent" ''
+              #!${pkgs.bash}/bin/bash
+              ${config.windowManager.kb-events.get} | ${jq}/bin/jq -Rc 'if . == "enabled" then "${icons.keyboard}" else "${icons.keyboard-slash}" end | {"text": ., "tooltip": "", "class": "", "percentage": 0}'
+            '';
+            return-type = "json";
+            interval = 5;
           };
 
           "battery" = {
