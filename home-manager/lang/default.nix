@@ -7,5 +7,6 @@
     ./python.nix
     ./java.nix
     ./scala.nix
+    ./nix.nix
   ];
 }

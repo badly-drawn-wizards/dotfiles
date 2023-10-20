@@ -71,7 +71,7 @@ in
       emacsPackage = emacs;
       emacsPackagesOverlay = eself: esuper: {
         inherit (pkgs.lean4) lean4-mode;
-        inherit (oepkgs) evil-collection;
+        # inherit (oepkgs) evil-collection;
       };
     };
 

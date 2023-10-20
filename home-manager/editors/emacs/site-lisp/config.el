@@ -18,18 +18,17 @@
 (after! alert
   (setq alert-default-style 'libnotify))
 
-(after! nix-mode
-  (setq nix-nixfmt-bin "nixpkgs-fmt"))
+(after! lsp-nix
+  (setq lsp-rnix-server-path "nixd"))
 
-(after! editorconfig
-  (editorconfig-mode 1))
+(setq nix-nixfmt-bin "nixpkgs-fmt")
+
+(editorconfig-mode 1)
 
 (setq-default tab-width 2)
 (after! evil
   (setq-default evil-shift-round t)
   (setq-default evil-shift-width 2))
-(after! evil-snipe
-  (evil-snipe-mode 0))
 
 (map!
   :leader

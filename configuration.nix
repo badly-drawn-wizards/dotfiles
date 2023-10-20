@@ -21,6 +21,10 @@ inputs,
       ./virtualization.nix
       ./users.nix
       ./security.nix
+
+      # To deploy elsewhere later
+      ./home-assistant.nix
+
       inputs.dotfiles-private.nixosModules.dotfiles-private
     ];
 
@@ -57,6 +61,7 @@ inputs,
 
     acpid.enable = true;
     asusd.enable = true;
+    ratbagd.enable = true;
 
     fstrim.enable = true;
     devmon.enable = true;
@@ -91,8 +96,6 @@ inputs,
     fprintd.enable = true;
 
     fwupd.enable = true;
-
-    nixfs.enable = false;
   };
 
   xdg = {

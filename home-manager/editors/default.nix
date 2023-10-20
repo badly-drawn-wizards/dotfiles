@@ -5,6 +5,6 @@
     ./emacs
     ./vscode
     ./intellij
-    ./vim.nix
+    ./vim
   ];
 }

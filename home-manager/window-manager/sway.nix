@@ -199,7 +199,8 @@ in
             "${mod}+minus" = "scratchpad show";
 
             "${mod}+Shift+r" = "reload";
-            "${mod}+i" = "exec em";
+            "${mod}+i" = "exec kitty nvim";
+            "${mod}+Shift+i" = "exec em";
 
             "${mod}+o" = "exec ${rofi-modi-cmd "workspace"}";
             "${mod}+Shift+o" = "exec ${rofi-modi-cmd "move"}";

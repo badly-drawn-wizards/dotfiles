@@ -88,6 +88,10 @@
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    nixd = {
+      url = "github:nix-community/nixd";
+    };
   };
 
   outputs = {
@@ -102,6 +106,7 @@
       vs-code-default-keybindings,
       nix-colors,
       unhinged,
+      nixd,
       # linux,
       self,
       ...
@@ -149,6 +154,7 @@
             # linuxSrc_custom = linux;
             lean4 = super.callPackage ({system}: lean4.packages.${system}) {};
           })
+          nixd.overlays.default
         ] ++ import ./overlays;
 
         hosts.noobnoob = {

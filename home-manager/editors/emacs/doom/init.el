@@ -98,7 +98,7 @@
        ledger            ; an accounting system in Emacs
        (lua +lsp)
        markdown          ; writing docs for people to ignore
-       nix               ; I hereby declare "nix geht mehr!"
+       (nix +lsp +treesitter)               ; I hereby declare "nix geht mehr!"
        (org              ; organize your plain life in plain text
         +pomodoro        ; be fruitful with the tomato technique
         +present)        ; using org-mode for presentations
