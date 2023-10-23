@@ -8,6 +8,7 @@
     ./swaylock.nix
     ./mako.nix
     ./rofi.nix
+    ./kanshi.nix
   ];
 
   home.packages = with pkgs; [
