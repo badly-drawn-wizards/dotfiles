@@ -8,5 +8,6 @@
     ./java.nix
     ./scala.nix
     ./nix.nix
+    ./latex.nix
   ];
 }

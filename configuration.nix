@@ -63,18 +63,15 @@ inputs,
     asusd.enable = true;
     ratbagd.enable = true;
 
+    # Somehow permissions are fucked, will figure out later
+    clamav = {
+      daemon.enable = true;
+      updater.enable = true;
+    };
+
     fstrim.enable = true;
     devmon.enable = true;
     gvfs.enable = true;
-
-    avahi = {
-      enable = true;
-      nssmdns = true;
-      publish = {
-        enable = true;
-        userServices = true;
-      };
-    };
 
     xserver = {
       enable = true;

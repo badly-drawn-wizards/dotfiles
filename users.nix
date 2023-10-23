@@ -32,8 +32,8 @@
       isNormalUser = true;
       extraGroups = [
         "wheel" "networkmanager" "audio" "video"
-        "systemd-journal" "docker" "lpadmin" "dialout"
-        "wireshark" "stapusr" "ccache"
+        "systemd-journal" "docker" "lpadmin" "lp" 
+        "dialout" "wireshark" "stapusr" "ccache"
         "kvm" "libvirtd"
       ];
     };

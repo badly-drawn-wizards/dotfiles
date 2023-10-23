@@ -12,6 +12,7 @@ let
   inherit (lib) concatStrings;
   io = {
     monitor = "eDP-1";
+    external-monitor = "DP-1";
     keyboard = "1:1:AT_Translated_Set_2_keyboard";
     touchpad = "type:touchpad";
   };
@@ -48,6 +49,10 @@ let
       '';
     in pkgs.writeScript name script;
   rofi-modi-cmd = config.programs.rofi.cmd.modi;
+  sway-other-monitor = pkgs.writeScript "sway-other-monitor" ''
+    #!${pkgs.bash}/bin/bash
+    swaymsg -t get_outputs | jq -r '. | sort_by(.focused) | .[0].name'
+  '';
 
 in
 {
@@ -174,7 +179,10 @@ in
             { class = "^discord$"; }
             { class = "^Riot$"; }
             { class = "^Slack$"; }
+            { class = "^Element$"; }
+            { class = "^Zulip$"; }
             { app_id = "^thunderbird$"; }
+            { app_id = "^whatsapp-for-linux$"; }
           ];
           " write" = [
             { class = "^Write$"; }
@@ -199,16 +207,19 @@ in
             "${mod}+minus" = "scratchpad show";
 
             "${mod}+Shift+r" = "reload";
-            "${mod}+i" = "exec kitty nvim";
+            "${mod}+i" = "exec kitty reloadable-nvim";
             "${mod}+Shift+i" = "exec em";
 
             "${mod}+o" = "exec ${rofi-modi-cmd "workspace"}";
             "${mod}+Shift+o" = "exec ${rofi-modi-cmd "move"}";
 
+            "${mod}+p" = "exec bash -c \"${pkgs.sway}/bin/swaymsg focus output $(${sway-other-monitor})\"";
+            "${mod}+Shift+p" = "exec bash -c \"${pkgs.sway}/bin/swaymsg move workspace to output $(${sway-other-monitor})\"";
+
             "${mod}+c" = "exec ${org-clock} toggle-last-clock";
             "${mod}+Shift+c" = "exec ${org-clock} recent-clock";
             "${mod}+t" = "exec ${pkgs.gnome.nautilus}/bin/nautilus";
-            "${mod}+Print" = ''exec ${pkgs.grim}/bin/grim -t png -g "$(${pkgs.slurp}/bin/slurp)" ${config.home.homeDirectory}/screenshots/$(date +%Y-%m-%d_%H-%m-%s).png'';
+            "${mod}+Shift+s" = "exec ${pkgs.screenshot}/bin/screenshot";
             "XF86MonBrightnessUp" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set +10%";
             "XF86MonBrightnessDown" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set 10%-";
             "XF86Launch1" = "exec ${config.windowManager.kb-events.toggle}";

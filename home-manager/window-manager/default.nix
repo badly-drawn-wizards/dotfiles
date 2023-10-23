@@ -9,4 +9,8 @@
     ./mako.nix
     ./rofi.nix
   ];
+
+  home.packages = with pkgs; [
+    wdisplays
+  ];
 }

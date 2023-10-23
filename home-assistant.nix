@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 {
-
   virtualisation.oci-containers = {
     backend = "podman";
     containers.homeassistant = {

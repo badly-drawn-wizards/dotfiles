@@ -104,6 +104,9 @@ with builtins;
       d-spy
 
       asusctl
+
+      screenshot
+      feh
     ];
 
     sessionVariables = {

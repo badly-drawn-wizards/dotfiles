@@ -8,7 +8,7 @@ let
     hexToRGB;
   inherit (lib)
     mod length min max toHexString readFile
-    escapeShellArg escape
+    escapeShellArg
     mapAttrsToList;
   inherit (lib.strings)
     removePrefix concatStrings concatMapStrings fixedWidthString;
@@ -110,7 +110,7 @@ in
         modules = {
           "sway/workspaces" = {
             disable-scroll = true;
-            all-outputs = true;
+            all-outputs = false;
           };
           "custom/org-clock" = {
             max-length = 100;
@@ -165,17 +165,21 @@ in
             format = "[{icon} ";
             format-icons = {
               activated = icons.eye;
-              deactivated = icons.eye-slash;
+              deactivated = colored icons.eye theme.red;
             };
           };
           "custom/keyboard" = {
-            format = "| {}]";
+            format = "| {icon}]";
             tooltip = false;
             on-click = "${config.windowManager.kb-events.toggle}";
             exec-on-event = true;
+            format-icons = [
+              (colored icons.keyboard theme.red)
+              icons.keyboard
+            ];
             exec = writeScript "kb-event-get-percent" ''
               #!${pkgs.bash}/bin/bash
-              ${config.windowManager.kb-events.get} | ${jq}/bin/jq -Rc 'if . == "enabled" then "${icons.keyboard}" else "${icons.keyboard-slash}" end | {"text": ., "tooltip": "", "class": "", "percentage": 0}'
+              ${config.windowManager.kb-events.get} | ${jq}/bin/jq -Rc 'if . == "enabled" then 100 else 0 end | {"text": "", "tooltip": "", "class": "", "percentage": .}'
             '';
             return-type = "json";
             interval = 5;

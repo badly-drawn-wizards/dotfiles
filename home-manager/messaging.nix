@@ -3,7 +3,11 @@
 {
 
   windowManager.startupPrograms = with pkgs; [
+    "${thunderbird}/bin/thunderbird"
+    "${zulip}/bin/zulip"
     "${discord}/bin/discord"
+    "${element-desktop}/bin/element-desktop"
+    "${element-desktop}/bin/element-desktop --profile personal"
   ];
   home.packages = with pkgs; [
       # teams
