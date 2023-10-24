@@ -30,6 +30,7 @@ with builtins;
     ./tts.nix
     ./gpg.nix
     ./security.nix
+    ./image-editor.nix
   ];
 
   manual = {

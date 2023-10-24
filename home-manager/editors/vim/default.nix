@@ -22,6 +22,8 @@ in
 
   programs.nixvim = {
     enable = true;
+    luaLoader.enable = true;
+
     clipboard.providers.wl-copy.enable = true;
 
     colorschemes.dracula.enable = true;
@@ -45,6 +47,14 @@ in
           vim.cmd("bdelete")
         end
       '';
+      cmp_tab_trigger = ["fallback" ''
+        local c = require('cmp')
+        if c.visible() then
+          c.select_next_item()
+        else
+          fallback()
+        end
+      ''];
     };
 
     plugins = {
@@ -80,6 +90,21 @@ in
           texlab.enable = true;
         };
       };
+
+      vimtex.enable = true;
+
+      nvim-cmp = {
+        enable = true;
+        autoEnableSources = true;
+        mapping = {
+          "<CR>" = "cmp.mapping.confirm({ select = true })";
+          "<Tab>" = {
+            modes = ["i" "s"];
+            action = fn.cmp_tab_trigger;
+          };
+          "<C-Space>" = "cmp.mapping.complete()";
+        };
+      };
       cmp-fuzzy-buffer.enable = true;
       cmp-treesitter.enable = true;
       cmp-nvim-lsp.enable = true;
@@ -98,7 +123,6 @@ in
 
       surround.enable = true;
       undotree.enable = true;
-      vimtex.enable = true;
       mini = {
         enable = true;
         modules = {
@@ -116,6 +140,20 @@ in
       rainbow-delimiters.enable = true;
 
       project-nvim.enable = true;
+      auto-session = {
+        enable = true;
+        logLevel = "error";
+        autoSession = {
+          enabled = true;
+          enableLastSession = true;
+        };
+        autoSave.enabled = true;
+        autoRestore.enabled = true;
+        sessionLens = {
+          loadOnSetup = true;
+        };
+      };
+
       telescope = {
         enable = true;
         extensions = {
@@ -128,11 +166,14 @@ in
         };
       };
       which-key.enable = true;
-      toggleterm.enable = true;
+
+      neo-tree.enable = true;
 
       neogit.enable = true;
       diffview.enable = true;
       gitgutter.enable = true;
+
+      toggleterm.enable = true;
 
       dap.enable = true;
 
@@ -211,6 +252,10 @@ in
         })
 
         (leader {
+          key = ".";
+          action = cmd "Neotree position=current";
+        })
+        (leader {
           key = "ff";
           action = tele "file_browser";
         })
@@ -270,12 +315,12 @@ in
         })
         (leader {
           key = "sc";
-          action = cmd "noh";
+          action = cmd "nohlsearch";
           desc = "Clear high";
         })
 
         (leader {
-          key = "jl";
+          key = "jj";
           action = defer "MiniJump2d.start(MiniJump2d.builtin_opts.default)";
           desc = "Mini jump";
         })
@@ -303,6 +348,10 @@ in
         (leader {
           key = "gs";
           action = cmd "GitGutterStageHunk";
+        })
+        (leader {
+          key = "gS";
+          action = cmd "!git stage %";
         })
 
         (leader {

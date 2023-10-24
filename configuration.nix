@@ -43,12 +43,16 @@ inputs,
   environment = {
     enableDebugInfo = true;
     systemPackages = with pkgs; [ vim git ];
-    pathsToLink = [ "/share" ];
+    pathsToLink = [ "/share" "/share/zsh" ];
   };
 
   programs = {
+    zsh = {
+      enable = true;
+      enableCompletion = true;
+    };
+
     dconf.enable = true;
-    zsh.enable = true;
 
     # Allow non-root network capture
     wireshark.enable = true;

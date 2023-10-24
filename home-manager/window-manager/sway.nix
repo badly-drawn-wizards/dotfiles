@@ -210,6 +210,7 @@ in
             "${mod}+i" = "exec kitty reloadable-nvim";
             "${mod}+Shift+i" = "exec em";
 
+            "${mod}+Tab" = "workspace back_and_forth";
             "${mod}+o" = "exec ${rofi-modi-cmd "workspace"}";
             "${mod}+Shift+o" = "exec ${rofi-modi-cmd "move"}";
 
