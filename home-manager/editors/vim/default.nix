@@ -105,7 +105,7 @@ in
           ai = {};
           jump2d = {
             mappings = {
-              start_jumping = "<leader>jj";
+              start_jumping = "";
             };
             labels = "asdfjkl;qweruiopzxcvm,./ghbn";
           };
@@ -275,8 +275,13 @@ in
         })
 
         (leader {
-          key = "jj";
-          action = cmd "";
+          key = "jl";
+          action = defer "MiniJump2d.start(MiniJump2d.builtin_opts.default)";
+          desc = "Mini jump";
+        })
+        (leader {
+          key = "jl";
+          action = defer "MiniJump2d.start(MiniJump2d.builtin_opts.line_start)";
           desc = "Mini jump";
         })
 
@@ -299,7 +304,6 @@ in
           key = "gs";
           action = cmd "GitGutterStageHunk";
         })
-
 
         (leader {
           key = "qq";
