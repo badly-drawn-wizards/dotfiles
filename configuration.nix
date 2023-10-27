@@ -27,7 +27,6 @@ inputs,
       ./home-assistant.nix
 
       inputs.dotfiles-private.nixosModules.dotfiles-private
-      inputs.k8s-vm.nixosModules.k8s-vm
     ];
 
   nix = {

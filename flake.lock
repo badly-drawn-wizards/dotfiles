@@ -744,22 +744,6 @@
         "type": "github"
       }
     },
-    "k8s-vm": {
-      "locked": {
-        "lastModified": 1698317648,
-        "narHash": "sha256-WMAUE44VNlWWpdycoRuvT9VUcUTwbsO+/oBdP+nazCE=",
-        "ref": "master",
-        "rev": "eb6ff7ba3fa46b5cd06d3adb4269f65c79b77ba7",
-        "revCount": 1,
-        "type": "git",
-        "url": "file:///workspace/k8s-vm"
-      },
-      "original": {
-        "ref": "master",
-        "type": "git",
-        "url": "file:///workspace/k8s-vm"
-      }
-    },
     "lean4": {
       "inputs": {
         "flake-utils": "flake-utils_3",
@@ -1647,7 +1631,6 @@
         "flake-compat": "flake-compat_3",
         "home-manager": "home-manager",
         "hyprland": "hyprland",
-        "k8s-vm": "k8s-vm",
         "lean4": "lean4",
         "nix-colors": "nix-colors",
         "nix-doom-emacs": "nix-doom-emacs",
