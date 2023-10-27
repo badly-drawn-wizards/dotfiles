@@ -1,17 +1,18 @@
 { config, lib, pkgs, ... }:
 
 let
+  inherit (config.nixvim.helpers) mkRaw;
   fn = config.programs.nixvim.extraFunction;
 
   reload-signal = "69";
+  reloadable-session = "reloadable-session";
   reloadable-nvim = pkgs.writeScriptBin "reloadable-nvim" ''
   #!${pkgs.bash}/bin/bash
-  last=${reload-signal}
-  while [ $last = ${reload-signal} ] 
-  do
-    nvim
-    last=$?
-  done
+  nvim "$@"
+  if [ $? = ${reload-signal} ] 
+  then
+    exec reloadable-nvim -c "lua ${fn.reloadRestore}()"
+  fi
   '';
 in
 {
@@ -31,21 +32,28 @@ in
 
     editorconfig.enable = true;
 
+    autoCmd = [
+      {
+        event = ["VimLeavePre"];
+        command = "silent lua ${fn.reloadVimLeaveHook}()";
+      }
+    ];
+
     extraFunctions = {
-      leaderbdelete = ''
-        local bufnr = vim.api.nvim_get_current_buf()
-        local modified = vim.api.nvim_get_option_value("modified", { buf = bufnr })
-        if modified then
-          vim.ui.input({
-            prompt = "... unwritten changes, want to delete buffer? (y/n) ",
-          }, function(input)
-            if input == "y" then
-              vim.cmd("bdelete!")
-            end
-          end)
-        else
-          vim.cmd("bdelete")
+      reload = ''
+        isReloading = true
+        require('neo-tree').close_all()
+        require("auto-session").SaveSession("${reloadable-session}", false)
+        vim.cmd("confirm qa")
+        isReloading = false
+      '';
+      reloadVimLeaveHook = ''
+        if isReloading then
+          vim.cmd("cq ${reload-signal}")
         end
+      '';
+      reloadRestore = ''
+        require('auto-session').RestoreSessionFromFile('${reloadable-session}')
       '';
       cmp_tab_trigger = ["fallback" ''
         local c = require('cmp')
@@ -67,6 +75,7 @@ in
             gd = "definition";
             gi = "implementation";
             gt = "type_definition";
+            "<M-CR>" = "code_action";
           };
           diagnostic = {
             "<leader>cj" = "goto_next";
@@ -75,7 +84,14 @@ in
         };
         servers = {
           clangd.enable = true;
-          nixd.enable = true;
+          nixd = {
+            enable = true;
+            settings = {
+              options.enable = true;
+              formatting.command = "nixpkgs-fmt";
+            };
+            rootDir = "require('lspconfig.util').root_pattern('.nixd.json', '.git')";
+          };
           pylsp.enable = true;
           omnisharp.enable = true;
           terraformls.enable = true;
@@ -104,21 +120,32 @@ in
           };
           "<C-Space>" = "cmp.mapping.complete()";
         };
+        sorting.comparators = let
+          uglyRaw = expr: "order or (${expr})";
+        in [ 
+          (uglyRaw "require('cmp_fuzzy_buffer.compare')")
+          "offset" "exact" "score" "recently_used" "locality" "kind" "length" "order" 
+        ];
+        sources = [
+          { name = "nvim_lsp"; groupIndex = 1; }
+          { name = "nvim_lsp_document_symbol"; groupIndex = 1; }
+          { name = "nvim_lsp_signature_help"; groupIndex = 1; }
+          { name = "nvim_lua"; groupIndex = 2; }
+          { name = "latex_symbols"; groupIndex = 2; }
+          { name = "tree_sitter"; groupIndex = 2; }
+          { name = "fuzzy_buffer"; groupIndex = 3; keywordLength = 4; }
+        ];
       };
-      cmp-fuzzy-buffer.enable = true;
-      cmp-treesitter.enable = true;
-      cmp-nvim-lsp.enable = true;
-      cmp-nvim-lsp-document-symbol.enable = true;
-      cmp-nvim-lsp-signature-help.enable = true;
-      cmp-nvim-lua.enable = true;
-      cmp-latex-symbols.enable = true;
-
 
       trouble.enable = true;
 
       nix.enable = true;
 
-      treesitter.enable = true;
+      treesitter = {
+        enable = true;
+        package = pkgs.vimPlugins.nvim-treesitter;
+        folding = true;
+      };
       treesitter-refactor.enable = true;
 
       surround.enable = true;
@@ -148,7 +175,7 @@ in
           enableLastSession = true;
         };
         autoSave.enabled = true;
-        autoRestore.enabled = true;
+        autoRestore.enabled = false;
         sessionLens = {
           loadOnSetup = true;
         };
@@ -156,6 +183,10 @@ in
 
       telescope = {
         enable = true;
+        extraOptions.defaults.mappings.i = {
+          "<C-j>" = mkRaw "require('telescope.actions').move_selection_next";
+          "<C-k>" = mkRaw "require('telescope.actions').move_selection_previous";
+        };
         extensions = {
           file_browser = {
             enable = true;
@@ -225,11 +256,19 @@ in
 
     extraPlugins = with pkgs.vimPlugins; [
       lean-nvim
+      nvim-web-devicons
+      vim-autoswap
     ];
 
     extraConfigLuaPre = ''
       vim.mapleader   = ' '
       vim.g.mapleader = ' '
+      vim.o.sessionoptions="blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+      vim.o.foldenable = false
+      vim.g.editorconfig = {
+        indent_style = "space",
+        indent_size = 2
+      }
     '';
 
     keymaps = let
@@ -253,11 +292,15 @@ in
 
         (leader {
           key = ".";
-          action = cmd "Neotree position=current";
+          action = cmd "Neotree position=current dir=%:p:h";
         })
         (leader {
           key = "ff";
           action = tele "file_browser";
+        })
+        (leader {
+          key = "fed";
+          action = cmd "e ~/.config/nvim/init.lua";
         })
 
         (leader {
@@ -267,7 +310,7 @@ in
         })
         (leader {
           key = "bd";
-          action = fn.leaderbdelete;
+          action = cmd "confirm bdelete";
           desc = "Delete buffer";
         })
         (leader {
@@ -309,19 +352,54 @@ in
           desc = "Grep";
         })
         (leader {
-          key = "sd";
-          action = tele "live_grep";
-          desc = "Grep";
-        })
-        (leader {
           key = "sc";
           action = cmd "nohlsearch";
-          desc = "Clear high";
+          desc = "Clear search highlight";
+        })
+        (leader {
+          key = "ss";
+          action = tele "treesitter";
+          desc = "LSP treesitter";
+        })
+        (leader {
+          key = "sD";
+          action = tele "lsp_references";
+          desc = "LSP references";
+        })
+        (leader {
+          key = "sld";
+          action = tele "lsp_definitions";
+          desc = "LSP definitions";
+        })
+        (leader {
+          key = "sli";
+          action = tele "lsp_implmentations";
+          desc = "LSP implementations";
+        })
+        (leader {
+          key = "slt";
+          action = tele "lsp_type_definitions";
+          desc = "LSP type definitions";
+        })
+        (leader {
+          key = "sls";
+          action = tele "lsp_workspace_symbols";
+          desc = "LSP symbols";
+        })
+        (leader {
+          key = "slci";
+          action = tele "lsp_incoming_calls";
+          desc = "LSP incoming calls";
+        })
+        (leader {
+          key = "slco";
+          action = tele "lsp_outgoing_calls";
+          desc = "LSP outgoing calls";
         })
 
         (leader {
           key = "jj";
-          action = defer "MiniJump2d.start(MiniJump2d.builtin_opts.default)";
+          action = defer "MiniJump2d.start(MiniJump2d.builtin_opts.word_start)";
           desc = "Mini jump";
         })
         (leader {
@@ -336,8 +414,18 @@ in
           desc = "Open project";
         })
         (leader {
+          key = "pa";
+          action = cmd "AddProject";
+          desc = "Open project";
+        })
+        (leader {
+          key = "ps";
+          action = defer "require('auto-session.session-lens').search_session()";
+          desc = "Search session";
+        })
+        (leader {
           key = "pf";
-          action = tele "find_files";
+          action = tele "find_files hidden=true";
           desc = "Find file";
         })
 
@@ -356,15 +444,25 @@ in
 
         (leader {
           key = "qq";
-          action = cmd "quitall";
+          action = cmd "confirm qa";
+          desc = "Quit nvim";
+        })
+        (leader {
+          key = "qQ";
+          action = cmd "qa!";
           desc = "Quit nvim";
         })
         (leader {
           key = "qr";
-          action = cmd "cq ${reload-signal}";
+          action = defer "reload()";
         })
       ]
     );
+  };
+
+  programs.zsh.shellAliases = {
+    vim = "reloadable-nvim";
+    v = "vim";
   };
 
   home.file = {
@@ -373,5 +471,6 @@ in
   home.packages = with pkgs; [
     neovim-remote
     reloadable-nvim
+    chafa
   ];
 }

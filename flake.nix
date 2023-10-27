@@ -84,6 +84,7 @@
     dotfiles-private = {
       url = "git+file:///workspace/dotfiles-private?ref=master";
     };
+
     nixvim = {
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -127,11 +128,16 @@
         inherit self;
         nixos = self.nixosConfigurations.noobnoob;
         pkgs = nixos.pkgs;
+        lib = pkgs.lib;
         config = nixos.config;
         lpkgs = config.boot.kernelPackages;
         hm = config.home-manager.users.reuben;
         emacs = hm.programs.doom-emacs.package;
         epkgs = pkgs.emacsPackages;
+        nixd = {
+          nixos = nixos.options;
+          hm = nixos.options.home-manager.users.type.getSubOptions [];
+        };
       };
     in
       utils.lib.mkFlake {

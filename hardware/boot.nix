@@ -17,7 +17,7 @@
 
     initrd = {
       availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
-      kernelModules = [ "i915" ];
+      kernelModules = [ "nfs" "amdgpu" ];
     };
 
     kernelParams = [
@@ -40,6 +40,6 @@
 
     tmp.cleanOnBoot = true;
 
-    supportedFilesystems = [ "btrfs" "ntfs" ];
+    supportedFilesystems = [ "btrfs" "ntfs" "nfs" ];
   };
 }

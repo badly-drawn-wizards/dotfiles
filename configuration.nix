@@ -2,7 +2,8 @@
 pkgs,
 lib,
 inputs,
-... }:
+... 
+}:
 
 
 {
@@ -16,9 +17,9 @@ inputs,
       ./networking
       ./fonts
       ./home-manager
+      ./virtualization
       ./cachix.nix
       ./ccache.nix
-      ./virtualization.nix
       ./users.nix
       ./security.nix
 
@@ -26,10 +27,11 @@ inputs,
       ./home-assistant.nix
 
       inputs.dotfiles-private.nixosModules.dotfiles-private
+      inputs.k8s-vm.nixosModules.k8s-vm
     ];
 
   nix = {
-    nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
+    nixPath = [ "nixpkgs=${inputs.nixpkgs}" "nixos-config=/workspace/dotfiles" ];
     package = pkgs.nixVersions.stable;
     extraOptions = ''
       experimental-features = nix-command flakes repl-flake
@@ -62,6 +64,7 @@ inputs,
   };
 
   services = {
+    openssh.enable = true;
 
     acpid.enable = true;
     asusd.enable = true;
@@ -80,6 +83,7 @@ inputs,
     xserver = {
       enable = true;
       displayManager.startx.enable = true;
+      videoDrivers = [ "modesetting" "amdgpu" ];
     };
 
     gnome = {

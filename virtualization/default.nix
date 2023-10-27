@@ -1,6 +1,10 @@
 { config, lib, pkgs, ... }:
 
 {
+  imports = [
+    ./vagrant.nix
+  ];
+
   virtualisation = {
     containers = {
       enable = true;
@@ -10,15 +14,19 @@
       ];
     };
 
+    docker = {
+      enable = true;
+    };
     podman = {
       enable = true;
     };
 
-    docker = {
-      enable = true;
-    };
-
     libvirtd.enable = true;
+
+    virtualbox.host = {
+      enable = true;
+      enableExtensionPack = true;
+    };
   };
 
   boot.kernelModules = [

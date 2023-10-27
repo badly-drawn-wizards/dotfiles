@@ -18,11 +18,6 @@ in
     ./status-helpers.nix
   ];
 
-  home.sessionVariables = {
-    EDITOR = "em";
-  };
-
-
   # A marriage made in hell
   programs.doom-emacs =
     let

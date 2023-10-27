@@ -46,6 +46,8 @@
         ls = "eza";
         dc = "docker-compose";
         nr = "nix repl dot#os";
+        nrb = "sudo nixos-rebuild build --show-trace --keep-going";
+        nrs = "sudo nixos-rebuild switch --show-trace --keep-going";
       };
       dirHashes = {
         org = "$HOME/org";
