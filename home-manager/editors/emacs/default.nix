@@ -30,7 +30,8 @@ in
         version = "1";
         buildPhase = ":";
       } // args);
-    in {
+    in
+    {
       enable = true;
       doomPackageDir =
         let
@@ -41,7 +42,7 @@ in
               builtins.elem (baseNameOf path) [ "init.el" "packages.el" ];
           };
         in
-          pkgs.linkFarm "doom-packages-dir" [
+        pkgs.linkFarm "doom-packages-dir" [
           {
             name = "init.el";
             path = "${filteredPath}/init.el";
@@ -53,12 +54,13 @@ in
           {
             name = "config.el";
             path = pkgs.emptyFile;
-          }];
+          }
+        ];
       inherit doomPrivateDir;
       extraConfig = ''
-      (add-to-list 'load-path "${site-lisp}")
-      (setq doom-font (font-spec :family "${config.fontMono}" :size 16))
-      (load "${configName}")
+        (add-to-list 'load-path "${site-lisp}")
+        (setq doom-font (font-spec :family "${config.fontMono}" :size 16))
+        (load "${configName}")
       '';
       extraPackages = with pkgs; [
         cargo
@@ -71,20 +73,16 @@ in
     };
 
   programs.zsh.initExtraDag.vterm-init = lib.hm.dag.entryAfter [ "bind-keys" ] ''
-      if [[ $INSIDE_EMACS = vterm ]]; then
-        bindkey "^J" accept-line
-        if [[ -n ''${EMACS_VTERM_PATH} ]] \
-          && [[ -f ''${EMACS_VTERM_PATH}/etc/emacs-vterm-zsh.sh ]]; then
-          source ''${EMACS_VTERM_PATH}/etc/emacs-vterm-zsh.sh
-        fi
+    if [[ $INSIDE_EMACS = vterm ]]; then
+      bindkey "^J" accept-line
+      if [[ -n ''${EMACS_VTERM_PATH} ]] \
+        && [[ -f ''${EMACS_VTERM_PATH}/etc/emacs-vterm-zsh.sh ]]; then
+        source ''${EMACS_VTERM_PATH}/etc/emacs-vterm-zsh.sh
       fi
+    fi
   '';
 
   home.packages = with pkgs; [
     em
-    tree-sitter
-    espeak
-    ripgrep
-    libnotify
   ];
 }

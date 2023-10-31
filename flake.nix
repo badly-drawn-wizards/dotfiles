@@ -3,13 +3,16 @@
     nixpkgs = {
       url = "github:NixOS/nixpkgs/nixos-unstable";
     };
+    nixpkgs-master = {
+      url = "github:NixOS/nixpkgs/master";
+    };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs = {
         nixpkgs.follows = "/nixpkgs";
       };
     };
-    nixpkgs-wayland  = {
+    nixpkgs-wayland = {
       url = "github:nix-community/nixpkgs-wayland";
     };
     nur = {
@@ -93,25 +96,38 @@
     nixd = {
       url = "github:nix-community/nixd";
     };
+
+    microvm = {
+      url = "github:astro/microvm.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    k8s-vm = {
+      url = "git+file:///workspace/k8s-vm";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.microvm.follows = "microvm";
+    };
+
   };
 
-  outputs = {
-    nixpkgs,
-      utils,
-      emacs-overlay,
-      nur,
-      nixpkgs-wayland,
-      nix-index,
-      nixfs,
-      lean4,
-      vs-code-default-keybindings,
-      nix-colors,
-      unhinged,
-      nixd,
-      # linux,
-      self,
-      ...
-  }@inputs:
+  outputs =
+    { nixpkgs
+    , nixpkgs-master
+    , utils
+    , emacs-overlay
+    , nur
+    , nixpkgs-wayland
+    , nix-index
+    , nixfs
+    , lean4
+    , vs-code-default-keybindings
+    , nix-colors
+    , unhinged
+    , nixd
+    , # linux,
+      self
+    , ...
+    }@inputs:
     let
       flake-plus-module =
         (_: {
@@ -136,11 +152,12 @@
         epkgs = pkgs.emacsPackages;
         nixd = {
           nixos = nixos.options;
-          hm = nixos.options.home-manager.users.type.getSubOptions [];
+          hm = nixos.options.home-manager.users.type.getSubOptions [ ];
         };
       };
     in
-      utils.lib.mkFlake {
+    utils.lib.mkFlake
+      {
         inherit self inputs;
 
         channelsConfig.allowUnfree = true;
@@ -157,8 +174,9 @@
             inherit (nix-index) nix-index nix-locate;
             inherit vs-code-default-keybindings;
             inherit nix-colors;
+            pkgs-master = import nixpkgs-master { inherit (self) system; };
             # linuxSrc_custom = linux;
-            lean4 = super.callPackage ({system}: lean4.packages.${system}) {};
+            lean4 = super.callPackage ({ system }: lean4.packages.${system}) { };
           })
           nixd.overlays.default
         ] ++ import ./overlays;

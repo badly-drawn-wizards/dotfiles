@@ -8,26 +8,21 @@ with builtins;
 with config.theme;
 let
   inherit (config.wayland.windowManager.sway.config) modifier assigns;
+  inherit (config.windowManager) io;
   inherit (config.programs.doom-emacs) org-clock;
   inherit (lib) concatStrings;
-  io = {
-    monitor = "eDP-1";
-    external-monitor = "DP-1";
-    keyboard = "1:1:AT_Translated_Set_2_keyboard";
-    touchpad = "type:touchpad";
-  };
 
   mkColorSet = bg: txt: {
-    border = "#${bg}"; 
-    childBorder = "#${bg}"; 
-    background = "#${bg}"; 
-    indicator = "#${bg}"; 
-    text = "#${txt}"; 
+    border = "#${bg}";
+    childBorder = "#${bg}";
+    background = "#${bg}";
+    indicator = "#${bg}";
+    text = "#${txt}";
   };
   mkBarColorSet = bg: txt: {
-    border = "#${bg}"; 
-    background = "#${bg}"; 
-    text = "#${txt}"; 
+    border = "#${bg}";
+    background = "#${bg}";
+    text = "#${txt}";
   };
 
   mod = modifier;
@@ -47,7 +42,8 @@ let
           swaymsg "${cmd'}" >/dev/null
         fi
       '';
-    in pkgs.writeScript name script;
+    in
+    pkgs.writeScript name script;
   rofi-modi-cmd = config.programs.rofi.cmd.modi;
   sway-other-monitor = pkgs.writeScript "sway-other-monitor" ''
     #!${pkgs.bash}/bin/bash
@@ -60,11 +56,20 @@ in
     windowManager = {
       startupPrograms = mkOption {
         type = listOf (either str attrs);
-        default = [];
+        default = [ ];
       };
       extraBinds = mkOption {
         type = attrsOf str;
-        default = {};
+        default = { };
+      };
+
+      io = mkOption {
+        default = {
+          monitor = "eDP-1";
+          external-monitor = "DP-1";
+          keyboard = "1:1:AT_Translated_Set_2_keyboard";
+          touchpad = "type:touchpad";
+        };
       };
 
       kb-events = mkOption {
@@ -94,12 +99,12 @@ in
   config = {
 
     home.sessionVariables = {
-      XDG_CONFIG_HOME=config.xdg.configHome;
-      XDG_SESSION_TYPE="wayland";
-      XDG_CURRENT_DESKTOP="sway";
+      XDG_CONFIG_HOME = config.xdg.configHome;
+      XDG_SESSION_TYPE = "wayland";
+      XDG_CURRENT_DESKTOP = "sway";
 
       # Get sway to play nicely with IntelliJ
-      _JAVA_AWT_WM_NONREPARENTING=1;
+      _JAVA_AWT_WM_NONREPARENTING = 1;
     };
 
     programs.rofi.modi = {
@@ -128,9 +133,10 @@ in
       config = {
         terminal = "${pkgs.kitty}/bin/kitty";
         startup = map
-          (command: if builtins.isString command then {
-            inherit command;
-          } else command)
+          (command:
+            if builtins.isString command then {
+              inherit command;
+            } else command)
           config.windowManager.startupPrograms;
         fonts = {
           names = [ "Font Awesome" "Fira Code" ];
@@ -163,7 +169,7 @@ in
         output = {
           ${io.monitor} = {
             scale = "1.5";
-          #   mode = "3840x2168";
+            #   mode = "3840x2168";
           };
         };
         assigns = {
@@ -217,8 +223,6 @@ in
             "${mod}+p" = "exec bash -c \"${pkgs.sway}/bin/swaymsg focus output $(${sway-other-monitor})\"";
             "${mod}+Shift+p" = "exec bash -c \"${pkgs.sway}/bin/swaymsg move workspace to output $(${sway-other-monitor})\"";
 
-            "${mod}+c" = "exec ${org-clock} toggle-last-clock";
-            "${mod}+Shift+c" = "exec ${org-clock} recent-clock";
             "${mod}+t" = "exec ${pkgs.gnome.nautilus}/bin/nautilus";
             "${mod}+Shift+s" = "exec ${pkgs.screenshot}/bin/screenshot";
             "XF86MonBrightnessUp" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set +10%";
@@ -226,7 +230,8 @@ in
             "XF86Launch1" = "exec ${config.windowManager.kb-events.toggle}";
           };
 
-        in lib.mkOptionDefault (
+        in
+        lib.mkOptionDefault (
           focusKeybinds //
           moveKeybinds //
           otherKeybinds //
@@ -237,7 +242,7 @@ in
           focusedInactive = mkColorSet color0 color12;
           unfocused = mkColorSet color0 color12;
         };
-        bars = [];
+        bars = [ ];
       };
     };
   };

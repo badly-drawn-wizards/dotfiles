@@ -7,12 +7,12 @@ let
   reload-signal = "69";
   reloadable-session = "reloadable-session";
   reloadable-nvim = pkgs.writeScriptBin "reloadable-nvim" ''
-  #!${pkgs.bash}/bin/bash
-  nvim "$@"
-  if [ $? = ${reload-signal} ] 
-  then
-    exec reloadable-nvim -c "lua ${fn.reloadRestore}()"
-  fi
+    #!${pkgs.bash}/bin/bash
+    nvim "$@"
+    if [ $? = ${reload-signal} ] 
+    then
+      exec reloadable-nvim -c "lua ${fn.reloadRestore}()"
+    fi
   '';
 in
 {
@@ -25,7 +25,10 @@ in
     enable = true;
     luaLoader.enable = true;
 
-    clipboard.providers.wl-copy.enable = true;
+    clipboard = {
+      register = "unnamedplus";
+      providers.wl-copy.enable = true;
+    };
 
     colorschemes.dracula.enable = true;
     colorscheme = "dracula";
@@ -34,7 +37,7 @@ in
 
     autoCmd = [
       {
-        event = ["VimLeavePre"];
+        event = [ "VimLeavePre" ];
         command = "silent lua ${fn.reloadVimLeaveHook}()";
       }
     ];
@@ -55,14 +58,17 @@ in
       reloadRestore = ''
         require('auto-session').RestoreSessionFromFile('${reloadable-session}')
       '';
-      cmp_tab_trigger = ["fallback" ''
-        local c = require('cmp')
-        if c.visible() then
-          c.select_next_item()
-        else
-          fallback()
-        end
-      ''];
+      cmp_tab_trigger = [
+        "fallback"
+        ''
+          local c = require('cmp')
+          if c.visible() then
+            c.select_next_item()
+          else
+            fallback()
+          end
+        ''
+      ];
     };
 
     plugins = {
@@ -92,7 +98,12 @@ in
             };
             rootDir = "require('lspconfig.util').root_pattern('.nixd.json', '.git')";
           };
-          pylsp.enable = true;
+          pylsp = {
+            enable = true;
+            settings.plugins = {
+              pylsp_mypy.enabled = true;
+            };
+          };
           omnisharp.enable = true;
           terraformls.enable = true;
           tsserver.enable = true;
@@ -106,6 +117,8 @@ in
           texlab.enable = true;
         };
       };
+      lsp-format.enable = true;
+      lspkind.enable = true;
 
       vimtex.enable = true;
 
@@ -115,17 +128,28 @@ in
         mapping = {
           "<CR>" = "cmp.mapping.confirm({ select = true })";
           "<Tab>" = {
-            modes = ["i" "s"];
+            modes = [ "i" "s" ];
             action = fn.cmp_tab_trigger;
           };
           "<C-Space>" = "cmp.mapping.complete()";
+          "<C-j>" = "cmp.mapping.select_next_item()";
+          "<C-k>" = "cmp.mapping.select_prev_item()";
         };
-        sorting.comparators = let
-          uglyRaw = expr: "order or (${expr})";
-        in [ 
-          (uglyRaw "require('cmp_fuzzy_buffer.compare')")
-          "offset" "exact" "score" "recently_used" "locality" "kind" "length" "order" 
-        ];
+        sorting.comparators =
+          let
+            uglyRaw = expr: "order or (${expr})";
+          in
+          [
+            (uglyRaw "require('cmp_fuzzy_buffer.compare')")
+            "offset"
+            "exact"
+            "score"
+            "recently_used"
+            "locality"
+            "kind"
+            "length"
+            "order"
+          ];
         sources = [
           { name = "nvim_lsp"; groupIndex = 1; }
           { name = "nvim_lsp_document_symbol"; groupIndex = 1; }
@@ -153,14 +177,14 @@ in
       mini = {
         enable = true;
         modules = {
-          ai = {};
+          ai = { };
           jump2d = {
             mappings = {
               start_jumping = "";
             };
             labels = "asdfjkl;qweruiopzxcvm,./ghbn";
           };
-          comment = {};
+          comment = { };
         };
       };
 
@@ -183,10 +207,11 @@ in
 
       telescope = {
         enable = true;
-        extraOptions.defaults.mappings.i = {
+        defaults.mappings.i = {
           "<C-j>" = mkRaw "require('telescope.actions').move_selection_next";
           "<C-k>" = mkRaw "require('telescope.actions').move_selection_previous";
         };
+        defaults.
         extensions = {
           file_browser = {
             enable = true;
@@ -198,11 +223,21 @@ in
       };
       which-key.enable = true;
 
-      neo-tree.enable = true;
+      neo-tree = {
+        enable = true;
+        filesystem = {
+          bindToCwd = false;
+          hijackNetrwBehavior = "open_current";
+          useLibuvFileWatcher = true;
+        };
+      };
 
-      neogit.enable = true;
+      neogit = {
+        enable = true;
+        integrations.diffview = true;
+      };
       diffview.enable = true;
-      gitgutter.enable = true;
+      gitsigns.enable = true;
 
       toggleterm.enable = true;
 
@@ -271,193 +306,201 @@ in
       }
     '';
 
-    keymaps = let
-      leader = { key, action, desc ? null, lua ? true, options ? {} }: {
-        inherit action lua;
-        mode = "n";
-        key = "<leader>${key}";
-        options = { silent = true; } // options // { inherit desc; };
-      };
-
-      defer = body: "(function () return (${body}) end)";
-      cmd = fn: defer "vim.cmd('${fn}')";
-      tele = fn: cmd "Telescope ${fn}";
-      nop = defer "nil";
-    in (
-      [
-        (leader {
-          key = " ";
-          action = tele "commands";
-        })
-
-        (leader {
-          key = ".";
-          action = cmd "Neotree position=current dir=%:p:h";
-        })
-        (leader {
-          key = "ff";
-          action = tele "file_browser";
-        })
-        (leader {
-          key = "fed";
-          action = cmd "e ~/.config/nvim/init.lua";
-        })
-
-        (leader {
-          key = "bb";
-          action = tele "buffers";
-          desc = "Find buffer";
-        })
-        (leader {
-          key = "bd";
-          action = cmd "confirm bdelete";
-          desc = "Delete buffer";
-        })
-        (leader {
-          key = "bD";
-          action = cmd "bdelete!";
-          desc = "Force delete buffer";
-        })
-
-        (leader {
-          key = "w";
-          action = defer "wk_alias('<C-w>')";
-          desc = "+window";
-        })
-        {
+    keymaps =
+      let
+        leader = { key, action, desc ? null, lua ? true, options ? { } }: {
+          inherit action lua;
           mode = "n";
-          key = "<C-w>d";
-          lua = false;
-          action = "<C-w>q";
-          options.desc = "Quit window";
-        }
+          key = "<leader>${key}";
+          options = { silent = true; } // options // { inherit desc; };
+        };
 
-        (leader {
-          key = "ot";
-          action = cmd "ToggleTerm";
-          desc = "Toggle terminal";
-        })
-        {
-          mode = "t";
-          key = "<Esc><Esc>";
-          action = "<C-\\><C-n>";
-          lua = false;
-          options.desc = "Escape terminal mode";
-          options.remap = false;
-        }
+        defer = body: "(function () return (${body}) end)";
+        cmd = fn: defer "vim.cmd('${fn}')";
+        tele = fn: cmd "Telescope ${fn}";
+        nop = defer "nil";
+      in
+      (
+        [
+          (leader {
+            key = " ";
+            action = tele "commands";
+          })
 
-        (leader {
-          key = "sp";
-          action = tele "live_grep";
-          desc = "Grep";
-        })
-        (leader {
-          key = "sc";
-          action = cmd "nohlsearch";
-          desc = "Clear search highlight";
-        })
-        (leader {
-          key = "ss";
-          action = tele "treesitter";
-          desc = "LSP treesitter";
-        })
-        (leader {
-          key = "sD";
-          action = tele "lsp_references";
-          desc = "LSP references";
-        })
-        (leader {
-          key = "sld";
-          action = tele "lsp_definitions";
-          desc = "LSP definitions";
-        })
-        (leader {
-          key = "sli";
-          action = tele "lsp_implmentations";
-          desc = "LSP implementations";
-        })
-        (leader {
-          key = "slt";
-          action = tele "lsp_type_definitions";
-          desc = "LSP type definitions";
-        })
-        (leader {
-          key = "sls";
-          action = tele "lsp_workspace_symbols";
-          desc = "LSP symbols";
-        })
-        (leader {
-          key = "slci";
-          action = tele "lsp_incoming_calls";
-          desc = "LSP incoming calls";
-        })
-        (leader {
-          key = "slco";
-          action = tele "lsp_outgoing_calls";
-          desc = "LSP outgoing calls";
-        })
+          (leader {
+            key = ".";
+            action = cmd "Neotree position=current dir=%:p:h";
+          })
+          (leader {
+            key = "ff";
+            action = tele "file_browser";
+          })
+          (leader {
+            key = "fed";
+            action = cmd "e ~/.config/nvim/init.lua";
+          })
 
-        (leader {
-          key = "jj";
-          action = defer "MiniJump2d.start(MiniJump2d.builtin_opts.word_start)";
-          desc = "Mini jump";
-        })
-        (leader {
-          key = "jl";
-          action = defer "MiniJump2d.start(MiniJump2d.builtin_opts.line_start)";
-          desc = "Mini jump";
-        })
+          (leader {
+            key = "bb";
+            action = tele "buffers";
+            desc = "Find buffer";
+          })
+          (leader {
+            key = "bd";
+            action = cmd "confirm bdelete";
+            desc = "Delete buffer";
+          })
+          (leader {
+            key = "bD";
+            action = cmd "bdelete!";
+            desc = "Force delete buffer";
+          })
 
-        (leader {
-          key = "pp";
-          action = tele "projects";
-          desc = "Open project";
-        })
-        (leader {
-          key = "pa";
-          action = cmd "AddProject";
-          desc = "Open project";
-        })
-        (leader {
-          key = "ps";
-          action = defer "require('auto-session.session-lens').search_session()";
-          desc = "Search session";
-        })
-        (leader {
-          key = "pf";
-          action = tele "find_files hidden=true";
-          desc = "Find file";
-        })
+          (leader {
+            key = "w";
+            action = defer "wk_alias('<C-w>')";
+            desc = "+window";
+          })
+          {
+            mode = "n";
+            key = "<C-w>d";
+            lua = false;
+            action = "<C-w>q";
+            options.desc = "Quit window";
+          }
 
-        (leader {
-          key = "gg";
-          action = cmd "Neogit";
-        })
-        (leader {
-          key = "gs";
-          action = cmd "GitGutterStageHunk";
-        })
-        (leader {
-          key = "gS";
-          action = cmd "!git stage %";
-        })
+          (leader {
+            key = "l";
+            action = defer "vim.api.nvim_input('\"+')";
+            options.desc = "Use clipboard register";
+          })
 
-        (leader {
-          key = "qq";
-          action = cmd "confirm qa";
-          desc = "Quit nvim";
-        })
-        (leader {
-          key = "qQ";
-          action = cmd "qa!";
-          desc = "Quit nvim";
-        })
-        (leader {
-          key = "qr";
-          action = defer "reload()";
-        })
-      ]
-    );
+          (leader {
+            key = "ot";
+            action = cmd "ToggleTerm";
+            desc = "Toggle terminal";
+          })
+          {
+            mode = "t";
+            key = "<Esc><Esc>";
+            action = "<C-\\><C-n>";
+            lua = false;
+            options.desc = "Escape terminal mode";
+            options.remap = false;
+          }
+
+          (leader {
+            key = "sp";
+            action = tele "live_grep";
+            desc = "Grep";
+          })
+          (leader {
+            key = "sc";
+            action = cmd "nohlsearch";
+            desc = "Clear search highlight";
+          })
+          (leader {
+            key = "ss";
+            action = tele "treesitter";
+            desc = "LSP treesitter";
+          })
+          (leader {
+            key = "sD";
+            action = tele "lsp_references";
+            desc = "LSP references";
+          })
+          (leader {
+            key = "sld";
+            action = tele "lsp_definitions";
+            desc = "LSP definitions";
+          })
+          (leader {
+            key = "sli";
+            action = tele "lsp_implmentations";
+            desc = "LSP implementations";
+          })
+          (leader {
+            key = "slt";
+            action = tele "lsp_type_definitions";
+            desc = "LSP type definitions";
+          })
+          (leader {
+            key = "sls";
+            action = tele "lsp_workspace_symbols";
+            desc = "LSP symbols";
+          })
+          (leader {
+            key = "slci";
+            action = tele "lsp_incoming_calls";
+            desc = "LSP incoming calls";
+          })
+          (leader {
+            key = "slco";
+            action = tele "lsp_outgoing_calls";
+            desc = "LSP outgoing calls";
+          })
+
+          (leader {
+            key = "jj";
+            action = defer "MiniJump2d.start(MiniJump2d.builtin_opts.word_start)";
+            desc = "Mini jump";
+          })
+          (leader {
+            key = "jl";
+            action = defer "MiniJump2d.start(MiniJump2d.builtin_opts.line_start)";
+            desc = "Mini jump";
+          })
+
+          (leader {
+            key = "pp";
+            action = tele "projects";
+            desc = "Open project";
+          })
+          (leader {
+            key = "pa";
+            action = cmd "AddProject";
+            desc = "Open project";
+          })
+          (leader {
+            key = "ps";
+            action = defer "require('auto-session.session-lens').search_session()";
+            desc = "Search session";
+          })
+          (leader {
+            key = "pf";
+            action = tele "find_files hidden=true";
+            desc = "Find file";
+          })
+
+          (leader {
+            key = "gg";
+            action = cmd "Neogit";
+          })
+          (leader {
+            key = "gs";
+            action = cmd "GitGutterStageHunk";
+          })
+          (leader {
+            key = "gS";
+            action = cmd "!git stage %";
+          })
+
+          (leader {
+            key = "qq";
+            action = cmd "confirm qa";
+            desc = "Quit nvim";
+          })
+          (leader {
+            key = "qQ";
+            action = cmd "qa!";
+            desc = "Quit nvim";
+          })
+          (leader {
+            key = "qr";
+            action = defer "reload()";
+          })
+        ]
+      );
   };
 
   programs.zsh.shellAliases = {
@@ -465,8 +508,7 @@ in
     v = "vim";
   };
 
-  home.file = {
-  };
+  home.file = { };
 
   home.packages = with pkgs; [
     neovim-remote

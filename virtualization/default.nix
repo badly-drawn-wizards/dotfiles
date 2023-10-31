@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 
 {
   imports = [
@@ -29,7 +29,21 @@
     };
   };
 
+  microvm = {
+    host.enable = true;
+    vms = {
+      k8s-vm = {
+        flake = inputs.k8s-vm;
+      };
+    };
+    autostart = [ ];
+  };
+
+  systemd.services."microvm-tap-interfaces@".serviceConfig = {
+    AmbientCapabilities = [ "CAP_NET_ADMIN" ];
+  };
+
   boot.kernelModules = [
-      "kvm-intel"
+    "kvm-intel"
   ];
 }

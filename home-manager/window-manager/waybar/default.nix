@@ -14,7 +14,6 @@ let
     removePrefix concatStrings concatMapStrings fixedWidthString;
   inherit (lib.lists)
     map mapAttrs genList zipListsWith reverseList elemAt;
-  inherit (config.programs.doom-emacs) org-clock org-agenda;
   theme = {
     background-darker = "#${rgb-to-hex [30 31 41]}";
     background = "#282a36";
@@ -31,17 +30,18 @@ let
     white = "#ffffff";
   };
   rgb-to-hex = concatMapStrings (v: fixedWidthString 2 "0" (toHexString v));
-  color-mix-rgb = a: zipListsWith (c1: c2: floor ((1 - a)*c1 + a*c2));
+  color-mix-rgb = a: zipListsWith (c1: c2: floor ((1 - a) * c1 + a * c2));
   color-mix-hex = a: h1: h2:
     "#" + rgb-to-hex (color-mix-rgb a (hexToRGB (removePrefix "#" h1)) (hexToRGB (removePrefix "#" h2)));
   clamp = x: y: a: max x (min y a);
-  lerp-list-with = f: xs: a: let
-    a' = clamp 0 1 a;
-    n = length xs - 1;
-    x1 = floor (a' * n);
-    x2 = min n (x1 + 1);
-    b = a' - x1;
-  in
+  lerp-list-with = f: xs: a:
+    let
+      a' = clamp 0 1 a;
+      n = length xs - 1;
+      x1 = floor (a' * n);
+      x2 = min n (x1 + 1);
+      b = a' - x1;
+    in
     assert n > 0;
     f b (elemAt xs x1) (elemAt xs x2);
   arange1 = n: genList (x: 1.0 * x / (n - 1)) n;
@@ -53,7 +53,7 @@ let
     let
       body = concatStrings (mapAttrsToList (k: v: if v == null then "" else " ${k}=\"${v}\"") attrs);
     in
-      ''<${tag}${body}>'';
+    ''<${tag}${body}>'';
   tag-close = tag: ''</${tag}>'';
   colored = text: color:
     "${tag-open "span" { inherit color; }}${text}${tag-close "span"}";
@@ -85,11 +85,12 @@ in
         layer = "top";
         position = "top";
         modules-left =
-          ["sway/workspaces" "sway/mode" "custom/org-clock" ];
+          [ "sway/workspaces" "sway/mode" ];
         modules-center = [ "sway/window" ];
         modules-right =
           [
-            "custom/rotate-on" "custom/rotate-off"
+            "custom/rotate-on"
+            "custom/rotate-off"
             "custom/mpris-start"
             "mpris#other"
             "mpris#spotify"
@@ -102,7 +103,6 @@ in
             "cpu"
             "memory"
             "disk"
-            "custom/org-agenda"
             "clock"
             "tray"
           ];
@@ -112,28 +112,19 @@ in
             disable-scroll = true;
             all-outputs = false;
           };
-          "custom/org-clock" = {
-            max-length = 100;
-            exec = org-clock;
-            return-type = "json";
-            interval = 2;
-            exec-on-event = true;
-            on-click = "${org-clock} toggle-last-clock";
-            on-click-right = "${org-clock} recent-clock";
-          };
 
           "custom/rotate-on" = {
             format = "[ ";
             on-click = writeScript "sway-tablet" ''
-            #!${pkgs.bash}/bin/bash
-            ${pkgs.sway}/bin/swaymsg output eDP-1 transform 90 anticlockwise
+              #!${pkgs.bash}/bin/bash
+              ${pkgs.sway}/bin/swaymsg output eDP-1 transform 90 anticlockwise
             '';
           };
           "custom/rotate-off" = {
             format = "| ]";
             on-click = writeScript "sway-laptop" ''
-            #!${pkgs.bash}/bin/bash
-            ${pkgs.sway}/bin/swaymsg output eDP-1 transform normal
+              #!${pkgs.bash}/bin/bash
+              ${pkgs.sway}/bin/swaymsg output eDP-1 transform normal
             '';
           };
 
@@ -207,12 +198,6 @@ in
             tooltip-format = "{used}/{total}";
           };
 
-          "custom/org-agenda" = {
-            format = "[${icons.calendar} ";
-            exec = org-agenda;
-            return-type = "json";
-            interval = 30;
-          };
           "clock" = {
             format = "| ${icons.clock}: {:%H:%M}]";
             tooltip-format = "[{:%y-%m-%d}]";
@@ -225,7 +210,7 @@ in
       name = "waybar-css";
       text = lib.strings.concatLines (
         (lib.mapAttrsToList (k: v: "@define-color ${k} ${v};") theme) ++
-        [(readFile ./waybar.css)]
+        [ (readFile ./waybar.css) ]
       );
     };
   };
