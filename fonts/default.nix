@@ -28,13 +28,13 @@
 
   fonts = {
     packages = with pkgs; [
-      fira-code
-      fira-code-symbols
-      font-awesome
+      nerdfonts
       noto-fonts
       noto-fonts-emoji
+      font-awesome
+      fira-code
+      fira-code-symbols
       emacs-all-the-icons-fonts
-      nerdfonts
     ];
     enableDefaultPackages = true;
     fontconfig = {

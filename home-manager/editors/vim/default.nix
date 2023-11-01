@@ -42,6 +42,12 @@ in
       }
     ];
 
+    highlight = {
+      Normal = {
+        ctermbg = "NONE";
+      };
+    };
+
     extraFunctions = {
       reload = ''
         isReloading = true
@@ -211,7 +217,6 @@ in
           "<C-j>" = mkRaw "require('telescope.actions').move_selection_next";
           "<C-k>" = mkRaw "require('telescope.actions').move_selection_previous";
         };
-        defaults.
         extensions = {
           file_browser = {
             enable = true;
@@ -402,7 +407,7 @@ in
           (leader {
             key = "ss";
             action = tele "treesitter";
-            desc = "LSP treesitter";
+            desc = "Treesitter symbols";
           })
           (leader {
             key = "sD";

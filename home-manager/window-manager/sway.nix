@@ -194,6 +194,9 @@ in
             { class = "^Write$"; }
             { app_id = "^xournalpp"; }
           ];
+          " music" = [
+            { class = "^Spotify$"; }
+          ];
         };
 
         keybindings = with lib.attrsets; let
