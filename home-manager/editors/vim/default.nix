@@ -40,6 +40,10 @@ in
         event = [ "VimLeavePre" ];
         command = "silent lua ${fn.reloadVimLeaveHook}()";
       }
+      {
+        event = [ "TermEnter" "TermLeave" ];
+        command = "silent lua ${fn.toggletermAutoscroll}()";
+      }
     ];
 
     highlight = {
@@ -75,6 +79,13 @@ in
           end
         ''
       ];
+      toggletermAutoscroll = ''
+        local tt = require('toggleterm.terminal')
+        local term = tt.get(tt.get_focused_id())
+        if term then
+          term.auto_scroll = vim.api.nvim_get_mode() == "t"
+        end
+      '';
     };
 
     plugins = {
@@ -244,7 +255,14 @@ in
       diffview.enable = true;
       gitsigns.enable = true;
 
-      toggleterm.enable = true;
+      toggleterm = {
+        enable = true;
+
+        autoScroll = false;
+        highlights = {
+          Normal.ctermbg = "None";
+        };
+      };
 
       dap.enable = true;
 
@@ -319,9 +337,9 @@ in
           key = "<leader>${key}";
           options = { silent = true; } // options // { inherit desc; };
         };
-
+        strEscape = lib.escape [ "'" "\"" ];
         defer = body: "(function () return (${body}) end)";
-        cmd = fn: defer "vim.cmd('${fn}')";
+        cmd = fn: defer "vim.cmd('${strEscape fn}')";
         tele = fn: cmd "Telescope ${fn}";
         nop = defer "nil";
       in
@@ -382,7 +400,7 @@ in
 
           (leader {
             key = "ot";
-            action = cmd "ToggleTerm";
+            action = cmd "exe v:count1 . 'ToggleTerm'";
             desc = "Toggle terminal";
           })
           {
