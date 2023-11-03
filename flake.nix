@@ -90,6 +90,7 @@
 
     nixvim = {
       url = "github:nix-community/nixvim";
+      # url = "git+file:///workspace/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

@@ -4,26 +4,20 @@ let
   inherit (config.nixvim.helpers) mkRaw;
   fn = config.programs.nixvim.extraFunction;
 
-  reload-signal = "69";
-  reloadable-session = "reloadable-session";
-  reloadable-nvim = pkgs.writeScriptBin "reloadable-nvim" ''
-    #!${pkgs.bash}/bin/bash
-    nvim "$@"
-    if [ $? = ${reload-signal} ] 
-    then
-      exec reloadable-nvim -c "lua ${fn.reloadRestore}()"
-    fi
-  '';
 in
 {
   imports = [
     ./extra-functions.nix
     ./which-key-alias.nix
+    ./reloadable-session.nix
+    ./transparent.nix
   ];
 
   programs.nixvim = {
     enable = true;
+
     luaLoader.enable = true;
+
 
     clipboard = {
       register = "unnamedplus";
@@ -37,37 +31,12 @@ in
 
     autoCmd = [
       {
-        event = [ "VimLeavePre" ];
-        command = "silent lua ${fn.reloadVimLeaveHook}()";
-      }
-      {
         event = [ "TermEnter" "TermLeave" ];
         command = "silent lua ${fn.toggletermAutoscroll}()";
       }
     ];
 
-    highlight = {
-      Normal = {
-        ctermbg = "NONE";
-      };
-    };
-
     extraFunctions = {
-      reload = ''
-        isReloading = true
-        require('neo-tree').close_all()
-        require("auto-session").SaveSession("${reloadable-session}", false)
-        vim.cmd("confirm qa")
-        isReloading = false
-      '';
-      reloadVimLeaveHook = ''
-        if isReloading then
-          vim.cmd("cq ${reload-signal}")
-        end
-      '';
-      reloadRestore = ''
-        require('auto-session').RestoreSessionFromFile('${reloadable-session}')
-      '';
       cmp_tab_trigger = [
         "fallback"
         ''
@@ -186,6 +155,7 @@ in
         enable = true;
         package = pkgs.vimPlugins.nvim-treesitter;
         folding = true;
+        indent = true;
       };
       treesitter-refactor.enable = true;
 
@@ -207,7 +177,12 @@ in
 
       rainbow-delimiters.enable = true;
 
-      project-nvim.enable = true;
+      project-nvim =
+        {
+          enable = true;
+          ignoreLsp = [ "nixd" ];
+        };
+
       auto-session = {
         enable = true;
         logLevel = "error";
@@ -257,11 +232,7 @@ in
 
       toggleterm = {
         enable = true;
-
         autoScroll = false;
-        highlights = {
-          Normal.ctermbg = "None";
-        };
       };
 
       dap.enable = true;
@@ -310,6 +281,8 @@ in
           }
         ];
       };
+
+      transparent.enable = true;
     };
 
     extraPlugins = with pkgs.vimPlugins; [
@@ -323,10 +296,6 @@ in
       vim.g.mapleader = ' '
       vim.o.sessionoptions="blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
       vim.o.foldenable = false
-      vim.g.editorconfig = {
-        indent_style = "space",
-        indent_size = 2
-      }
     '';
 
     keymaps =
@@ -520,7 +489,7 @@ in
           })
           (leader {
             key = "qr";
-            action = defer "reload()";
+            action = defer "${fn.reload}()";
           })
         ]
       );
@@ -535,7 +504,6 @@ in
 
   home.packages = with pkgs; [
     neovim-remote
-    reloadable-nvim
     chafa
   ];
 }

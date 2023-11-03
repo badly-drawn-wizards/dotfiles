@@ -1,16 +1,16 @@
 self: super:
 {
   vimPlugins = super.vimPlugins.extend (vself: vsuper: {
-    # nvim-session-lens = self.vimUtils.buildVimPlugin {
-    #   pname = "nvim-session-lens";
-    #   version = "2023-10-26";
-    #   src = self.fetchFromGitHub {
-    #     owner = "rmagatti";
-    #     repo = "session-lens";
-    #     rev = "1b65d8e1bcd1836c5135cce118ba18d662a9dabd";
-    #     sha256 = "sha256-ZSzUp3i3JZMwzN2f9nG5zS+qWq0qE2J+djEv042IMI0=";
-    #   };
-    #   meta.homepage = "https://github.com/rmagatti/session-lens/";
-    # };
+    nvim-transparent = self.vimUtils.buildVimPlugin {
+      pname = "nvim-transparent";
+      version = "2023-11-01";
+      src = self.fetchFromGitHub {
+        owner = "xiyaowong";
+        repo = "transparent.nvim";
+        rev = "3af6232c8d39d51062702e875ff6407c1eeb0391";
+        sha256 = "sha256-1JyfwHBCtNCPmsOLzJRWBtg1u9uApQZY4fn2mTL3NZ4=";
+      };
+      meta.homepage = "https://github.com/xiyaowong/transparent.nvim";
+    };
   });
 }
