@@ -1,5 +1,3 @@
 [
-  # ./tree-sitter-fix.patch
-  # ./bluez-debug.patch
-  # ./systemtap.patch
+  ./264832.patch
 ]

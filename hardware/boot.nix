@@ -17,7 +17,7 @@
 
     initrd = {
       availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
-      kernelModules = [ "nfs" "amdgpu" ];
+      kernelModules = [ "nfs" "radeon" ];
     };
 
     kernelParams = [
@@ -30,10 +30,11 @@
     ];
 
     extraModprobeConfig = ''
-    options asus_nb_wmi tablet_mode_sw=2
+      options asus_nb_wmi tablet_mode_sw=2
     '';
 
-    kernelPackages = pkgs.linuxPackagesFor pkgs.linuxKernel.kernels.linux_custom;
+    # kernelPackages = pkgs.linuxPackages_6_5;
+    kernelPackages = pkgs.linuxPackages_6_6;
 
     kernelModules = [
     ];

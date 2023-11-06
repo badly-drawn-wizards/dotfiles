@@ -2,7 +2,7 @@
 
 {
   environment.variables = {
-    WLR_NO_HARDWARE_CURSORS="1";
+    WLR_NO_HARDWARE_CURSORS = "1";
   };
   hardware.opengl = {
     enable = true;
@@ -14,7 +14,7 @@
     ];
   };
 
-  services.xserver.videoDrivers = ["nvidia"];
+  services.xserver.videoDrivers = [ "nvidia" ];
 
   hardware.nvidia = {
     modesetting.enable = true;
