@@ -29,10 +29,6 @@
       config.boot.kernelPackages.acpi_call.out
     ];
 
-    extraModprobeConfig = ''
-      options asus_nb_wmi tablet_mode_sw=2
-    '';
-
     # kernelPackages = pkgs.linuxPackages_6_5;
     kernelPackages = pkgs.linuxPackages_6_6;
 

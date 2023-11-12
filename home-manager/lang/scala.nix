@@ -1,5 +1,5 @@
 { config, lib, pkgs, ... }:
 
 {
-  home.packages = [ pkgs.sbt ];
+  home.packages = with pkgs; [ sbt coursier ];
 }

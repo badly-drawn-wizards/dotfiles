@@ -1,7 +1,8 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (config.nixvim.helpers) mkRaw;
+  cfg = config.nixvim;
+  inherit (cfg.helpers) mkRaw toLuaObject;
   fn = config.programs.nixvim.extraFunction;
 
 in
@@ -24,19 +25,47 @@ in
       providers.wl-copy.enable = true;
     };
 
-    colorschemes.dracula.enable = true;
     colorscheme = "dracula";
+    highlight = {
+      DraculaPink = mkRaw ''{["fg"] = (require('dracula').colors().pink)}'';
+      DraculaPurple = mkRaw ''{["fg"] = (require('dracula').colors().purple)}'';
+    };
 
     editorconfig.enable = true;
 
+
+    autoGroups = {
+      nvim_metals = {
+        clear = true;
+      };
+    };
     autoCmd = [
       {
         event = [ "TermEnter" "TermLeave" ];
-        command = "silent lua ${fn.toggletermAutoscroll}()";
+        callback = mkRaw fn.toggleterm_autoscroll;
+      }
+      {
+        event = [ "FileType" ];
+        pattern = [ "scala" "sbt" "java" ];
+        callback = mkRaw fn.nvim_metals_attach;
+        group = "nvim_metals";
       }
     ];
 
+    userCommands = {
+      Metals = {
+        desc = "Metals command palette";
+        command = "lua require('telescope').extensions.metals.commands()";
+      };
+    };
+
     extraFunctions = {
+      lightline_lsp_status = ''
+        return vim.g['metals_status']
+      '';
+      nvim_metals_attach = ''
+        require("metals").initialize_or_attach(metals_config)
+      '';
       cmp_tab_trigger = [
         "fallback"
         ''
@@ -48,7 +77,7 @@ in
           end
         ''
       ];
-      toggletermAutoscroll = ''
+      toggleterm_autoscroll = ''
         local tt = require('toggleterm.terminal')
         local term = tt.get(tt.get_focused_id())
         if term then
@@ -98,7 +127,7 @@ in
           yamlls.enable = true;
           hls.enable = true;
           lua-ls.enable = true;
-          metals.enable = true;
+          metals.enable = false; # conflicts with nvim-metals
           rust-analyzer.enable = true;
           texlab.enable = true;
         };
@@ -145,7 +174,9 @@ in
           { name = "tree_sitter"; groupIndex = 2; }
           { name = "fuzzy_buffer"; groupIndex = 3; keywordLength = 4; }
         ];
+        snippet.expand = "luasnip";
       };
+      luasnip.enable = true;
 
       trouble.enable = true;
 
@@ -180,7 +211,9 @@ in
       project-nvim =
         {
           enable = true;
-          ignoreLsp = [ "nixd" ];
+          extraOptions = {
+            detection_methods = mkRaw "({})";
+          };
         };
 
       auto-session = {
@@ -235,13 +268,31 @@ in
         autoScroll = false;
       };
 
-      dap.enable = true;
+      dap = {
+        enable = true;
+        extensions = {
+          dap-ui.enable = true;
+          dap-virtual-text.enable = true;
+        };
+        configurations = {
+          scala = [{
+            type = "scala";
+            request = "launch";
+            name = "Run test or target";
+            metals =
+              {
+                runType = "runOrTest";
+              };
+          }];
+        };
+      };
 
       neorg.enable = true;
 
-      lightline = {
+      lualine = {
         enable = true;
       };
+
       alpha = {
         enable = true;
         iconsEnabled = true;
@@ -288,7 +339,9 @@ in
     extraPlugins = with pkgs.vimPlugins; [
       lean-nvim
       nvim-web-devicons
+      nvim-metals
       vim-autoswap
+      dracula-nvim
     ];
 
     extraConfigLuaPre = ''
@@ -296,6 +349,25 @@ in
       vim.g.mapleader = ' '
       vim.o.sessionoptions="blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
       vim.o.foldenable = false
+
+      require('dracula').setup({})
+
+      metals_config = require("metals").bare_config()
+      -- metals_config.init_options.statusBarProvider = "on"
+
+      metals_config.find_root_dir_max_project_nesting = 3
+      metals_config.settings = {
+        showImplicitArguments = true,
+        metalsBinaryPath = "${pkgs.metals}/bin/metals",
+        excludedPackages = { "akka.actor.typed.javadsl", "com.github.swagger.akka.javadsl" },
+      }
+
+      -- Example if you are using cmp how to make sure the correct capabilities for snippets are set
+      metals_config.capabilities = require("cmp_nvim_lsp").default_capabilities()
+
+      metals_config.on_attach = function(client, bufnr)
+        require("metals").setup_dap()
+      end
     '';
 
     keymaps =
@@ -382,9 +454,76 @@ in
           }
 
           (leader {
+            key = "cl";
+            action = defer "vim.lsp.codelens.run()";
+            desc = "Run codelens";
+          })
+          (leader {
+            key = "cL";
+            action = defer "vim.lsp.codelens.refresh()";
+            desc = "Refresh codelens";
+          })
+
+          (leader {
+            key = "dt";
+            action = defer "require('dapui').toggle()";
+            desc = "REPL";
+          })
+          (leader {
+            key = "dr";
+            action = defer "require('dap').repl.toggle()";
+            desc = "REPL";
+          })
+          (leader {
+            key = "dK";
+            action = defer "require('dap.ui.widgets').hover()";
+            desc = "Hover";
+          })
+          (leader {
+            key = "db";
+            action = defer "require('dap').toggle_breakpoint()";
+            desc = "Toggle breakpoint";
+          })
+          (leader {
+            key = "dc";
+            action = defer "require('dap').continue()";
+            desc = "Continue";
+          })
+          (leader {
+            key = "dC";
+            action = defer "require('dap').run_to_cursor()";
+            desc = "Run to cursor";
+          })
+          (leader {
+            key = "ds";
+            action = defer "require('dap').terminate()";
+            desc = "Terminate";
+          })
+          (leader {
+            key = "dn";
+            action = defer "require('dap').step_over()";
+            desc = "Step over";
+          })
+          (leader {
+            key = "di";
+            action = defer "require('dap').step_into()";
+            desc = "Step into";
+          })
+          (leader {
+            key = "dl";
+            action = defer "require('dap').run_last()";
+            desc = "Run last";
+          })
+
+          (leader {
             key = "sp";
             action = tele "live_grep";
             desc = "Grep";
+          })
+          (leader {
+            key = "sd";
+            action = defer "require('telescope.builtin').live_grep({cwd = require('telescope.utils').buffer_dir()})";
+            desc = "Grep buffer dir";
           })
           (leader {
             key = "sc";
@@ -392,12 +531,17 @@ in
             desc = "Clear search highlight";
           })
           (leader {
+            key = "se";
+            action = defer "vim.lsp.buf.rename()";
+            desc = "Rename LSP symbol";
+          })
+          (leader {
             key = "ss";
             action = tele "treesitter";
             desc = "Treesitter symbols";
           })
           (leader {
-            key = "sD";
+            key = "sr";
             action = tele "lsp_references";
             desc = "LSP references";
           })
@@ -408,7 +552,7 @@ in
           })
           (leader {
             key = "sli";
-            action = tele "lsp_implmentations";
+            action = tele "lsp_implementations";
             desc = "LSP implementations";
           })
           (leader {
@@ -505,5 +649,7 @@ in
   home.packages = with pkgs; [
     neovim-remote
     chafa
+    metals
+    coursier
   ];
 }
