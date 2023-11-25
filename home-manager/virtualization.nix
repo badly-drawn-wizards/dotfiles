@@ -6,5 +6,6 @@
     virt-viewer
     quickemu
     vagrant
+    docker
   ];
 }

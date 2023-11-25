@@ -162,9 +162,6 @@ in
           "type:tablet_tool" = {
             map_to_output = io.monitor;
           };
-          "type:touchpad" = {
-            map_to_output = io.monitor;
-          };
         };
         output = {
           ${io.monitor} = {

@@ -32,9 +32,12 @@
   nix = {
     nixPath = [ "nixpkgs=${inputs.nixpkgs}" "nixos-config=/workspace/dotfiles" ];
     package = pkgs.nixVersions.stable;
-    extraOptions = ''
-      experimental-features = nix-command flakes repl-flake
-    '';
+    settings = {
+      extra-sandbox-paths = [ "/nix/var" ];
+      builders-use-substitutes = true;
+      experimental-features = [ "nix-command" "flakes" "repl-flake" "recursive-nix" ];
+      trusted-substituters = [ "https://cache.nixos.org/" ];
+    };
   };
 
   i18n.defaultLocale = "en_US.UTF-8";
@@ -70,10 +73,10 @@
     ratbagd.enable = true;
 
     # Somehow permissions are fucked, will figure out later
-    clamav = {
-      daemon.enable = true;
-      updater.enable = true;
-    };
+    # clamav = {
+    #   daemon.enable = true;
+    #   updater.enable = true;
+    # };
 
     fstrim.enable = true;
     devmon.enable = true;

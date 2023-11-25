@@ -5,8 +5,12 @@
     python3Packages.python-lsp-server
     (python3.withPackages (ps: with ps; [
       jupyterlab
-      numpy matplotlib
-      torch transformers
+      numpy
+      matplotlib
+      scipy
+      sympy
+      torch
+      transformers
       ipython
       python-uinput
     ]))

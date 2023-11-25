@@ -3,6 +3,8 @@
 {
   imports = [
     ./vagrant.nix
+    ./k3s.nix
+    ./kata.nix
   ];
 
   virtualisation = {
@@ -14,36 +16,37 @@
       ];
     };
 
-    docker = {
-      enable = true;
-    };
+    containerd.enable = true;
+
     podman = {
       enable = true;
+      dockerSocket.enable = true;
     };
+
+    cri-o.enable = true;
 
     libvirtd.enable = true;
 
-    virtualbox.host = {
-      enable = true;
-      enableExtensionPack = true;
-    };
+    virtualbox.host.enable = true;
   };
 
-  microvm = {
-    host.enable = true;
-    vms = {
-      k8s-vm = {
-        flake = inputs.k8s-vm;
-      };
-    };
-    autostart = [ ];
-  };
-
-  systemd.services."microvm-tap-interfaces@".serviceConfig = {
-    AmbientCapabilities = [ "CAP_NET_ADMIN" ];
-  };
+  # microvm = {
+  #   host.enable = true;
+  #   vms = {
+  #     k8s-vm = {
+  #       flake = inputs.k8s-vm;
+  #     };
+  #   };
+  #   autostart = [ ];
+  # };
 
   boot.kernelModules = [
-    "kvm-intel"
+    "kvm-amd"
   ];
+
+  environment.systemPackages = with pkgs; [
+    containerd
+    kata-runtime
+  ];
+
 }

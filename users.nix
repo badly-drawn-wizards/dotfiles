@@ -38,6 +38,7 @@
         "video"
         "systemd-journal"
         "docker"
+        "podman"
         "lpadmin"
         "lp"
         "dialout"
@@ -52,8 +53,8 @@
     defaultUserShell = "/run/current-system/sw/bin/zsh";
   };
 
-  services.udev.extraRules = ''
-    KERNEL=="tun", GROUP="netdev", MODE="0777", OPTIONS+="static_node=net/tun"
-  '';
+  # services.udev.extraRules = ''
+  #   KERNEL=="tun", GROUP="netdev", MODE="0777", OPTIONS+="static_node=net/tun"
+  # '';
 
 }

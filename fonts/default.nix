@@ -28,6 +28,7 @@
 
   fonts = {
     packages = with pkgs; [
+      ubuntu_font_family
       nerdfonts
       noto-fonts
       noto-fonts-emoji

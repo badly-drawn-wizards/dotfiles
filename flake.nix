@@ -161,7 +161,10 @@
       {
         inherit self inputs;
 
-        channelsConfig.allowUnfree = true;
+        channelsConfig = {
+          allowUnfree = true;
+          android_sdk.accept_license = true;
+        };
         channels.nixpkgs = {
           patches = import ./patches;
         };

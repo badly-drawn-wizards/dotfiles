@@ -46,39 +46,40 @@ with builtins;
   xdg = {
     mime.enable = true;
     configFile."mimeapps.list".force = true;
-    mimeApps = let
-      zathuraDesktop = "org.pwmt.zathura-pdf-mupdf.desktop";
-      firefoxDesktop = "firefox.desktop";
-      nautilusDesktop = "org.gnome.Nautilus.desktop";
-      codeDesktop = "code.desktop";
-      common = {
-        "application/pdf" = [ zathuraDesktop ];
-        "application/epub+zip" = [ zathuraDesktop ];
-        "x-scheme-handler/http" = [ firefoxDesktop  ];
-        "x-scheme-handler/https" = [ firefoxDesktop  ];
-        "x-scheme-handler/chrome" = [ firefoxDesktop  ];
-        "text/html" = [ firefoxDesktop  ];
-        "application/x-extension-htm" = [ firefoxDesktop  ];
-        "application/x-extension-html" = [ firefoxDesktop  ];
-        "application/x-extension-shtml" = [ firefoxDesktop  ];
-        "application/xhtml+xml" = [ firefoxDesktop  ];
-        "application/x-extension-xhtml" = [ firefoxDesktop  ];
-        "application/x-extension-xht" = [ firefoxDesktop  ];
-        "application/x-www-browser" = [ firefoxDesktop  ];
-      };
-    in {
-      enable = true;
-      associations = {
-        added = common // {
+    mimeApps =
+      let
+        zathuraDesktop = "org.pwmt.zathura-pdf-mupdf.desktop";
+        firefoxDesktop = "firefox.desktop";
+        nautilusDesktop = "org.gnome.Nautilus.desktop";
+        codeDesktop = "code.desktop";
+        common = {
+          "application/pdf" = [ zathuraDesktop ];
+          "application/epub+zip" = [ zathuraDesktop ];
+          "x-scheme-handler/http" = [ firefoxDesktop ];
+          "x-scheme-handler/https" = [ firefoxDesktop ];
+          "x-scheme-handler/chrome" = [ firefoxDesktop ];
+          "text/html" = [ firefoxDesktop ];
+          "application/x-extension-htm" = [ firefoxDesktop ];
+          "application/x-extension-html" = [ firefoxDesktop ];
+          "application/x-extension-shtml" = [ firefoxDesktop ];
+          "application/xhtml+xml" = [ firefoxDesktop ];
+          "application/x-extension-xhtml" = [ firefoxDesktop ];
+          "application/x-extension-xht" = [ firefoxDesktop ];
+          "application/x-www-browser" = [ firefoxDesktop ];
         };
-        removed = {
-          "inode/directory" = [ "code.desktop" ];
+      in
+      {
+        enable = true;
+        associations = {
+          added = common // { };
+          removed = {
+            "inode/directory" = [ "code.desktop" ];
+          };
+        };
+        defaultApplications = common // {
+          "inode/directory" = [ nautilusDesktop ];
         };
       };
-      defaultApplications = common // {
-        "inode/directory" = [ nautilusDesktop ];
-      };
-    };
   };
 
 
@@ -92,22 +93,39 @@ with builtins;
 
       tmux
 
-      tree less jq
-      btop lsof wget fzf
+      tree
+      less
+      jq
+      btop
+      lsof
+      wget
+      fzf
 
       transmission-qt
 
       wl-clipboard
 
-      unar unrar p7zip
+      unar
+      unrar
+      p7zip
 
-      pciutils usbutils iw nettools wirelesstools
+      pciutils
+      usbutils
+      iw
+      nettools
+      wirelesstools
       d-spy
 
       asusctl
 
       screenshot
       feh
+
+      milkytracker
+
+      bless
+
+      webnovel-android
     ];
 
     sessionVariables = {
@@ -123,7 +141,7 @@ with builtins;
 
     file = {
       ".config/gdb/gdbinit".text = ''
-      set auto-load safe-path /
+        set auto-load safe-path /
       '';
       ".tmux.conf".text = ''
         set-window-option -g mode-keys vi
