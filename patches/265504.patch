@@ -23,7 +23,7 @@ index 74e002bdd16f3c..f3b5eee72589ee 100644
 -, enableGPU ? false
 -, extraAVDFiles ? []
 +, enableGPU ? false # Enable GPU acceleration
-+, configOptions ? lib.optional enableGPU [ "hw.gpu.enabled=yes" ] # List of options to add in config.ini
++, configOptions ? lib.optionals enableGPU [ "hw.gpu.enabled=yes" ] # List of options to add in config.ini
 +, extraAVDFiles ? [ ]
  , package ? null
  , activity ? null

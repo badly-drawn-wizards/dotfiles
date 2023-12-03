@@ -31,6 +31,7 @@ in
 
           virtio_fs_daemon = "${pkgs.virtiofsd}/bin/virtiofsd";
           virtio_fs_daemon_paths = [ "${pkgs.virtiofsd}/bin/virtiofsd" ];
+          virtio_fs_extra_args = [ "--thread-pool-size=1" "--announce-submounts" "--log-level=debug" "--syslog" ];
           machine_type = "q35";
           rootfs_type = "ext4";
           disable_selinux = true;

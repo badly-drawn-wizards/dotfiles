@@ -126,6 +126,7 @@
     icons.enable = true;
     portal = {
       enable = true;
+      config.common.default = "*";
       xdgOpenUsePortal = false;
       extraPortals = with pkgs; [
         xdg-desktop-portal-wlr

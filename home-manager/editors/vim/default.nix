@@ -128,7 +128,11 @@ in
           hls.enable = true;
           lua-ls.enable = true;
           metals.enable = false; # conflicts with nvim-metals
-          rust-analyzer.enable = true;
+          rust-analyzer = {
+            enable = true;
+            installCargo = true;
+            installRustc = true;
+          };
           texlab.enable = true;
         };
       };

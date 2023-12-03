@@ -25,7 +25,7 @@ buildGoModule rec {
 
   sourceRoot = "source/src/runtime";
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   dontConfigure = true;
 

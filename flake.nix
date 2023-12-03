@@ -103,11 +103,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    k8s-vm = {
-      url = "git+file:///workspace/k8s-vm";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.microvm.follows = "microvm";
-    };
+    # k8s-vm = {
+    #   url = "git+file:///workspace/k8s-vm";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    #   inputs.microvm.follows = "microvm";
+    # };
 
   };
 

@@ -25,7 +25,18 @@
 
     cri-o.enable = true;
 
-    libvirtd.enable = true;
+    libvirtd = {
+      enable = true;
+      extraConfig = ''
+        unix_sock_group = "libvirtd"
+        unix_sock_rw_perms = "0770"
+      '';
+      qemu.ovmf = {
+        enable = true;
+        packages = [ pkgs.OVMFFull.fd ];
+      };
+      qemu.swtpm.enable = true;
+    };
 
     virtualbox.host.enable = true;
   };
