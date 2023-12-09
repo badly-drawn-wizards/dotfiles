@@ -22,7 +22,7 @@
       ./security.nix
 
       # To deploy elsewhere later
-      ./home-assistant.nix
+      # ./home-assistant.nix
 
       inputs.dwarffs.nixosModules.dwarffs
       inputs.microvm.nixosModules.host

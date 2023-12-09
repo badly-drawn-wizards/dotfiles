@@ -180,7 +180,7 @@
             inherit nix-colors;
             pkgs-master = import nixpkgs-master { inherit (self) system; };
             # linuxSrc_custom = linux;
-            lean4 = super.callPackage ({ system }: lean4.packages.${system}) { };
+            lean4-flake = super.callPackage ({ system }: lean4.packages.${system}) { };
           })
           nixd.overlays.default
         ] ++ import ./overlays;

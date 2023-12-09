@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 
 let
   inherit (builtins) head isString split concatLists concatStringsSep fromJSON readFile map filter;
@@ -212,7 +212,7 @@ in
       ms-vscode.powershell
       ms-azuretools.vscode-docker
       # ms-python.python
-      pkgs.lean4.vscode-lean4
+      pkgs.lean4-flake.vscode-lean4
     ] ++ extensionsFromVscodeMarketplace [
       {
         publisher = "herrmannplatz";

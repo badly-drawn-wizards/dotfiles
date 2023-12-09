@@ -3,8 +3,8 @@
 {
   imports = [
     ./vagrant.nix
-    ./k3s.nix
-    ./kata.nix
+    # ./k3s.nix
+    # ./kata.nix
   ];
 
   virtualisation = {
@@ -38,7 +38,6 @@
       qemu.swtpm.enable = true;
     };
 
-    virtualbox.host.enable = true;
   };
 
   # microvm = {
@@ -56,6 +55,7 @@
   ];
 
   environment.systemPackages = with pkgs; [
+    kubectl
     containerd
     kata-runtime
   ];

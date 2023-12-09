@@ -138,6 +138,7 @@ in
       };
       lsp-format.enable = true;
       lspkind.enable = true;
+      nvim-lightbulb.enable = true;
 
       vimtex.enable = true;
 
@@ -180,11 +181,18 @@ in
         ];
         snippet.expand = "luasnip";
       };
-      luasnip.enable = true;
+      luasnip = {
+        enable = true;
+      };
 
       trouble.enable = true;
 
       nix.enable = true;
+
+      lean = {
+        enable = true;
+        mappings = true;
+      };
 
       treesitter = {
         enable = true;
@@ -341,7 +349,6 @@ in
     };
 
     extraPlugins = with pkgs.vimPlugins; [
-      lean-nvim
       nvim-web-devicons
       nvim-metals
       vim-autoswap
@@ -349,8 +356,8 @@ in
     ];
 
     extraConfigLuaPre = ''
-      vim.mapleader   = ' '
       vim.g.mapleader = ' '
+      vim.g.maplocalleader = ' m'
       vim.o.sessionoptions="blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
       vim.o.foldenable = false
 

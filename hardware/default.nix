@@ -18,10 +18,10 @@
   hardware = {
     enableAllFirmware = true;
     enableRedistributableFirmware = true;
-    cpu.intel.updateMicrocode = true;
-    cpu.amd.updateMicrocode = true;
-
-
+    cpu.amd = {
+      updateMicrocode = true;
+      sev.enable = true;
+    };
   };
 
 
