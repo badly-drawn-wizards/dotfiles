@@ -191,6 +191,7 @@ in
 
       lean = {
         enable = true;
+        leanPackage = null;
         mappings = true;
       };
 
