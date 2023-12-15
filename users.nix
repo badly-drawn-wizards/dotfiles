@@ -28,6 +28,8 @@
       lpadmin = { };
       stapusr = { };
       netdev = { };
+      podman = { };
+      docker = { };
     };
     users.reuben = {
       isNormalUser = true;

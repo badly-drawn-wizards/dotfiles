@@ -18,10 +18,8 @@
 
     containerd.enable = true;
 
-    podman = {
-      enable = true;
-      dockerSocket.enable = true;
-    };
+    podman.enable = true;
+    docker.enable = true;
 
     cri-o.enable = true;
 
@@ -40,6 +38,10 @@
 
   };
 
+  services.dockerRegistry = {
+    enable = true;
+  };
+
   # microvm = {
   #   host.enable = true;
   #   vms = {
@@ -50,9 +52,9 @@
   #   autostart = [ ];
   # };
 
-  boot.kernelModules = [
-    "kvm-amd"
-  ];
+  # boot.kernelModules = [
+  #   "kvm-amd"
+  # ];
 
   environment.systemPackages = with pkgs; [
     kubectl
