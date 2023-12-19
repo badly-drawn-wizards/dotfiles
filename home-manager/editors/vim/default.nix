@@ -201,6 +201,7 @@ in
         folding = true;
         indent = true;
       };
+      treesitter-textobjects.enable = true;
       treesitter-refactor.enable = true;
 
       surround.enable = true;
@@ -249,6 +250,7 @@ in
           "<C-j>" = mkRaw "require('telescope.actions').move_selection_next";
           "<C-k>" = mkRaw "require('telescope.actions').move_selection_previous";
         };
+
         extensions = {
           file_browser = {
             enable = true;
@@ -300,7 +302,27 @@ in
         };
       };
 
-      neorg.enable = true;
+      neorg = {
+        enable = true;
+        modules = {
+          "core.defaults" = { __empty = null; };
+          "core.completion".config = {
+            engine = "nvim-cmp";
+            name = "[Norg]";
+          };
+          "core.keybinds".config = {
+            default_keybinds = true;
+            neorg_leader = "<LocalLeader>";
+          };
+          "core.integrations.nvim-cmp" = { __empty = null; };
+          "core.integrations.telescope" = { __empty = null; };
+          "core.dirman".config = {
+            workspaces = {
+              notes = "~/org/notes";
+            };
+          };
+        };
+      };
 
       lualine = {
         enable = true;
@@ -354,6 +376,7 @@ in
       nvim-metals
       vim-autoswap
       dracula-nvim
+      neorg-telescope
     ];
 
     extraConfigLuaPre = ''
@@ -618,6 +641,12 @@ in
             key = "pf";
             action = tele "find_files hidden=true";
             desc = "Find file";
+          })
+
+          (leader {
+            key = "ns";
+            action = tele "neorg";
+            desc = "Telescope neorg";
           })
 
           (leader {
