@@ -1,5 +1,8 @@
 { config, lib, pkgs, ... }:
 
 {
-  home.packages = [ pkgs.jdk ];
+  programs.java = {
+    enable = true;
+    package = pkgs.jdk21;
+  };
 }

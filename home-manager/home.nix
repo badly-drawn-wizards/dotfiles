@@ -125,7 +125,7 @@ with builtins;
 
       bless
 
-      webnovel-android
+      # webnovel-android
     ];
 
     sessionVariables = {

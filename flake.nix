@@ -172,7 +172,7 @@
         sharedOverlays = [
           # (emacs-overlay.overlay)
           (nur.overlay)
-          (nixpkgs-wayland.overlay)
+          # (nixpkgs-wayland.overlay)
           (self: super: {
             inherit os;
             inherit (nix-index) nix-index nix-locate;

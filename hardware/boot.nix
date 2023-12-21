@@ -17,7 +17,10 @@
 
     initrd = {
       availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
-      kernelModules = [ "nfs" "radeon" ];
+      kernelModules = [
+        "nfs"
+        # "radeon"
+      ];
     };
 
     kernelParams = [
@@ -25,12 +28,12 @@
     ];
 
     extraModulePackages = [
-      config.boot.kernelPackages.v4l2loopback.out
+      # config.boot.kernelPackages.v4l2loopback.out
       config.boot.kernelPackages.acpi_call.out
     ];
 
-    # kernelPackages = pkgs.linuxPackages_6_5;
-    kernelPackages = pkgs.linuxPackages_6_6;
+    kernelPackages = pkgs.linuxPackages_6_5;
+    # kernelPackages = pkgs.linuxPackages_6_6;
 
     kernelModules = [
     ];
