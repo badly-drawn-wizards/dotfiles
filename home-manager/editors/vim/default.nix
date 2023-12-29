@@ -197,7 +197,6 @@ in
 
       treesitter = {
         enable = true;
-        package = pkgs.vimPlugins.nvim-treesitter;
         folding = true;
         indent = true;
       };
@@ -209,7 +208,7 @@ in
       mini = {
         enable = true;
         modules = {
-          ai = { };
+          # ai = { };
           jump2d = {
             mappings = {
               start_jumping = "";
@@ -304,8 +303,16 @@ in
 
       neorg = {
         enable = true;
+        lazyLoading = false;
         modules = {
+          "core.dirman".config = {
+            workspaces = {
+              notes = "~/org/notes";
+            };
+          };
+
           "core.defaults" = { __empty = null; };
+          "core.concealer" = { __empty = null; };
           "core.completion".config = {
             engine = "nvim-cmp";
             name = "[Norg]";
@@ -316,11 +323,6 @@ in
           };
           "core.integrations.nvim-cmp" = { __empty = null; };
           "core.integrations.telescope" = { __empty = null; };
-          "core.dirman".config = {
-            workspaces = {
-              notes = "~/org/notes";
-            };
-          };
         };
       };
 
@@ -376,7 +378,6 @@ in
       nvim-metals
       vim-autoswap
       dracula-nvim
-      neorg-telescope
     ];
 
     extraConfigLuaPre = ''
@@ -421,6 +422,19 @@ in
       in
       (
         [
+          {
+            mode = "i";
+            key = "<M-h>";
+            lua = true;
+            action = defer "vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-d>', true, false, true), 'i', false)";
+          }
+          {
+            mode = "i";
+            key = "<M-l>";
+            lua = true;
+            action = defer "vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-t>', true, false, true), 'i', false)";
+          }
+
           (leader {
             key = " ";
             action = tele "commands";
@@ -644,9 +658,24 @@ in
           })
 
           (leader {
-            key = "ns";
-            action = tele "neorg";
-            desc = "Telescope neorg";
+            key = "nsh";
+            action = cmd "Neorg keybind neorg core.integrations.telescope.search_headings";
+            desc = "Search headings";
+          })
+          (leader {
+            key = "nsf";
+            action = cmd "Neorg keybind neorg core.integrations.telescope.find_norg_files";
+            desc = "Find norg files";
+          })
+          (leader {
+            key = "np";
+            action = cmd "Neorg keybind neorg core.integrations.telescope.switch_workspace";
+            desc = "Switch workspace";
+          })
+          (leader {
+            key = "nc";
+            action = cmd "Neorg keybind neorg core.dirman.new_note";
+            desc = "New note";
           })
 
           (leader {
