@@ -218,8 +218,11 @@ in
           comment = { };
         };
       };
-
       rainbow-delimiters.enable = true;
+      harpoon = {
+        enable = true;
+        enableTelescope = true;
+      };
 
       project-nvim =
         {
@@ -658,6 +661,32 @@ in
           })
 
           (leader {
+            key = "hh";
+            action = tele "harpoon marks";
+            desc = "Marks";
+          })
+          (leader {
+            key = "ha";
+            action = defer "require('harpoon.mark').add_file()";
+            desc = "Add mark";
+          })
+          (leader {
+            key = "ht";
+            action = defer "require('harpoon.ui').toggle_quick_menu()";
+            desc = "Toggle quick menu";
+          })
+          (leader {
+            key = "hj";
+            action = defer "require('harpoon.ui').nav_next()";
+            desc = "Next mark";
+          })
+          (leader {
+            key = "hk";
+            action = defer "require('harpoon.ui').nav_prev()";
+            desc = "Previous mark";
+          })
+
+          (leader {
             key = "nsh";
             action = cmd "Neorg keybind neorg core.integrations.telescope.search_headings";
             desc = "Search headings";
@@ -699,7 +728,7 @@ in
           (leader {
             key = "qQ";
             action = cmd "qa!";
-            desc = "Quit nvim";
+            desc = "Quit nvim without saving";
           })
           (leader {
             key = "qr";

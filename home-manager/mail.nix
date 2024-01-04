@@ -2,7 +2,6 @@
 
 {
   home.packages = with pkgs; [
-      thunderbird
-      betterbird
+    thunderbird
   ];
 }
