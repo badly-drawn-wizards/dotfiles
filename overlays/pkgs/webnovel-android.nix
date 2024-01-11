@@ -12,7 +12,6 @@ androidenv.emulateApp {
 
   abiVersion = "x86";
   systemImageType = "google_apis_playstore";
-  enableGPU = true;
 }
 
 
