@@ -134,6 +134,7 @@ in
             installRustc = true;
           };
           texlab.enable = true;
+          gopls.enable = true;
         };
       };
       lsp-format.enable = true;
@@ -205,6 +206,13 @@ in
 
       surround.enable = true;
       undotree.enable = true;
+      yanky = {
+        enable = true;
+        picker.telescope = {
+          enable = true;
+          useDefaultMappings = true;
+        };
+      };
       mini = {
         enable = true;
         modules = {
@@ -260,6 +268,7 @@ in
           };
           media_files.enable = true;
           project-nvim.enable = true;
+          frecency.enable = true;
         };
       };
       which-key.enable = true;
@@ -450,6 +459,10 @@ in
           (leader {
             key = "ff";
             action = tele "file_browser";
+          })
+          (leader {
+            key = "fr";
+            action = tele "frecency";
           })
           (leader {
             key = "fed";
