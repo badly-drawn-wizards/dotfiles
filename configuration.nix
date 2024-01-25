@@ -24,7 +24,7 @@
       # To deploy elsewhere later
       # ./home-assistant.nix
 
-      inputs.dwarffs.nixosModules.dwarffs
+      # inputs.dwarffs.nixosModules.dwarffs
       inputs.microvm.nixosModules.host
       inputs.dotfiles-private.nixosModules.dotfiles-private
     ];
