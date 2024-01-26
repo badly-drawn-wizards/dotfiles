@@ -91,11 +91,11 @@
     },
     "dotfiles-private": {
       "locked": {
-        "lastModified": 1706200409,
-        "narHash": "sha256-Mq0AUOq6MrL31c6wBQJrSQlYsCBczmLM5pCszI6IOzI=",
+        "lastModified": 1706205040,
+        "narHash": "sha256-RUzrjN9P2foM5ErItsizv1555Y9JSVZs874QAqQqEAY=",
         "ref": "master",
-        "rev": "926f8f246291e0bf847205115f3f75bfe7ebfffc",
-        "revCount": 7,
+        "rev": "18f87ae69cc063fac82a957c743deed70be79d52",
+        "revCount": 9,
         "type": "git",
         "url": "file:///workspace/dotfiles-private"
       },
