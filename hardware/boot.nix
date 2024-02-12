@@ -32,8 +32,8 @@
       config.boot.kernelPackages.acpi_call.out
     ];
 
-    kernelPackages = pkgs.linuxPackages_6_5;
-    # kernelPackages = pkgs.linuxPackages_6_6;
+    # kernelPackages = pkgs.linuxPackages_6_5;
+    kernelPackages = pkgs.linuxPackages_latest;
 
     kernelModules = [
     ];

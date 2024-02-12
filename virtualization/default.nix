@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ./vagrant.nix
+    # ./vagrant.nix
     # ./k3s.nix
     # ./kata.nix
   ];
