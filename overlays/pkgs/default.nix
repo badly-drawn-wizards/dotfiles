@@ -12,4 +12,5 @@ in
   kata-images = callPackage (import ./kata-images) { };
 
   webnovel-android = callPackage (import ./webnovel-android.nix) { };
+  pomo = callPackage (import ./pomo) { };
 }

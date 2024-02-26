@@ -3,7 +3,7 @@ let
   inherit (config) icons;
   inherit (builtins)
     floor;
-  inherit (pkgs) writeScript writeScriptBin jq;
+  inherit (pkgs) writeScript writeScriptBin jq pomo taskwarrior;
   inherit (pkgs.nix-colors.lib.conversions)
     hexToRGB;
   inherit (lib)
@@ -85,7 +85,7 @@ in
         layer = "top";
         position = "top";
         modules-left =
-          [ "sway/workspaces" "sway/mode" ];
+          [ "sway/workspaces" "sway/mode" "custom/taskwarrior" ];
         modules-center = [ "sway/window" ];
         modules-right =
           [
@@ -111,6 +111,16 @@ in
           "sway/workspaces" = {
             disable-scroll = true;
             all-outputs = false;
+          };
+
+          "custom/pomo" = {
+            interval = 1;
+            exec = "${pomo}/bin/pomo status";
+          };
+
+          "custom/taskwarrior" = {
+            interval = 1;
+            exec = ''${taskwarrior}/bin/task export descr | ${jq}/bin/jq -r '. | map(select(.status == "pending")) | sort_by(-.urgency) | .[0] | if . then "\(.description) [\(if .["start"] then "*" else "" end)\(.status)]" else "No pending task" end' '';
           };
 
           "custom/rotate-on" = {

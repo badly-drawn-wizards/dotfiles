@@ -9,6 +9,7 @@
 
   home.packages = with pkgs; [
       mpv
+      vlc
       spotify
       spotify-tui
 
@@ -39,6 +40,10 @@
         };
       };
     };
+  };
+
+  home.file = {
+    ".local/share/soundfonts/fluid.sf2".source = "${pkgs.soundfont-fluid}/share/soundfonts/FluidR3_GM2-2.sf2";
   };
 
 }

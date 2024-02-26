@@ -31,6 +31,8 @@ with builtins;
     ./gpg.nix
     ./security.nix
     ./image-editor.nix
+    ./pomo
+    ./task-management
   ];
 
   manual = {
