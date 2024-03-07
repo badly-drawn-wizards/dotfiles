@@ -140,6 +140,7 @@ in
       lsp-format.enable = true;
       lspkind.enable = true;
       nvim-lightbulb.enable = true;
+      fidget.enable = true;
 
       vimtex.enable = true;
 
@@ -340,6 +341,9 @@ in
 
       lualine = {
         enable = true;
+        sections.lualine_x = [ 
+          "g:metals_status" "encoding" "fileformat" "filetype" 
+        ];
       };
 
       alpha = {
@@ -390,6 +394,7 @@ in
       nvim-metals
       vim-autoswap
       dracula-nvim
+      nvim-focus
     ];
 
     extraConfigLuaPre = ''
@@ -401,7 +406,7 @@ in
       require('dracula').setup({})
 
       metals_config = require("metals").bare_config()
-      -- metals_config.init_options.statusBarProvider = "on"
+      metals_config.init_options.statusBarProvider = "off"
 
       metals_config.find_root_dir_max_project_nesting = 3
       metals_config.settings = {
@@ -416,6 +421,8 @@ in
       metals_config.on_attach = function(client, bufnr)
         require("metals").setup_dap()
       end
+
+      require("focus").setup()
     '';
 
     keymaps =
