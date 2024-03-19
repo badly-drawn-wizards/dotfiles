@@ -21,26 +21,26 @@ in
   #   support32Bit = true;
   # };
 
-  environment.etc."pipewire/pipewire.d/echo-cancel.conf".text = ''
-    context.modules = [
-      {
-        name = libpipewire-module-echo-cancel
-        args = {
-          capture.props = {
-            node.name = "Echo Cancellation Capture"
-          }
-          source.props = {
-            node.name = "Echo Cancellation Source"
-          }
-          sink.props = {
-            node.name = "Echo Cancellation Sink"
-          }
-          playback.props = {
-            node.name = "Echo Cancellation Playback"
-          }
-        }
-      }
-    ]
-  '';
+  # environment.etc."pipewire/pipewire.d/echo-cancel.conf".text = ''
+  #   context.modules = [
+  #     {
+  #       name = libpipewire-module-echo-cancel
+  #       args = {
+  #         capture.props = {
+  #           node.name = "Echo Cancellation Capture"
+  #         }
+  #         source.props = {
+  #           node.name = "Echo Cancellation Source"
+  #         }
+  #         sink.props = {
+  #           node.name = "Echo Cancellation Sink"
+  #         }
+  #         playback.props = {
+  #           node.name = "Echo Cancellation Playback"
+  #         }
+  #       }
+  #     }
+  #   ]
+  # '';
 
 }

@@ -128,6 +128,7 @@ with builtins;
       bless
 
       # webnovel-android
+      github-desktop
     ];
 
     sessionVariables = {

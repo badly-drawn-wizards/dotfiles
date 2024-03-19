@@ -1,5 +1,5 @@
 { config, lib, pkgs, ... }:
 
 {
-  home.packages = [ pkgs.nyxt ];
+  # home.packages = [ pkgs.nyxt ];
 }
