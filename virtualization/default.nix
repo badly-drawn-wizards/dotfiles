@@ -8,20 +8,20 @@
   ];
 
   virtualisation = {
-    containers = {
-      enable = true;
-      containersConf.cniPlugins = with pkgs; [
-        cni-plugins
-        cni-plugin-flannel
-      ];
-    };
+    # containers = {
+    #   enable = true;
+    #   containersConf.cniPlugins = with pkgs; [
+    #     cni-plugins
+    #     cni-plugin-flannel
+    #   ];
+    # };
 
-    containerd.enable = true;
+    # containerd.enable = true;
 
-    podman.enable = true;
+    # podman.enable = true;
     docker.enable = true;
 
-    cri-o.enable = true;
+    # cri-o.enable = true;
 
     libvirtd = {
       enable = true;
