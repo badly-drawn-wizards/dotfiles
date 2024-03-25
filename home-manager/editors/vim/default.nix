@@ -290,7 +290,7 @@ in
 
       neogit = {
         enable = true;
-        integrations.diffview = true;
+        settings.integrations.diffview = true;
       };
       diffview.enable = true;
       gitsigns.enable = true;
@@ -407,6 +407,7 @@ in
       vim.g.maplocalleader = ' m'
       vim.o.sessionoptions="blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
       vim.o.foldenable = false
+      vim.o.signcolumn="yes"
 
       require('dracula').setup({})
 

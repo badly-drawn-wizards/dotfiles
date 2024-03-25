@@ -152,7 +152,7 @@
           }
 
           function vwl() {
-            v /workspace/worklog/day/$(date +%Y-%m-%d)
+            nvim /workspace/worklog/day/$(date +%Y-%m-%d)
           }
         '';
       };
