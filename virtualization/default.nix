@@ -16,9 +16,9 @@
     #   ];
     # };
 
-    # containerd.enable = true;
+    containerd.enable = true;
 
-    # podman.enable = true;
+    podman.enable = true;
     docker.enable = true;
 
     # cri-o.enable = true;
@@ -59,7 +59,6 @@
   environment.systemPackages = with pkgs; [
     kubectl
     containerd
-    kata-runtime
   ];
 
 }

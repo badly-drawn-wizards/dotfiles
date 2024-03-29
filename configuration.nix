@@ -100,7 +100,7 @@
 
     flatpak.enable = true;
 
-    fprintd.enable = true;
+    # fprintd.enable = true;
 
     fwupd.enable = true;
 

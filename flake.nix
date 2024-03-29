@@ -24,25 +24,21 @@
         nixpkgs.follows = "/nixpkgs";
       };
     };
-    doom-emacs = {
-      url = "github:doomemacs/doomemacs/develop";
-      flake = false;
-    };
     nix-straight = {
       url = "github:badly-drawn-wizards/nix-straight.el";
       flake = false;
     };
-    nix-doom-emacs = {
-      url = "github:nix-community/nix-doom-emacs";
-      #url = "github:badly-drawn-wizards/nix-doom-emacs";
-      #url = "/workspace/nix-doom-emacs";
-      inputs = {
-        nixpkgs.follows = "/nixpkgs";
-        nix-straight.follows = "/nix-straight";
-        # doom-emacs.follows = "/doom-emacs";
-        # emacs-overlay.follows = "/emacs-overlay";
-      };
-    };
+    # nix-doom-emacs = {
+    #   url = "github:nix-community/nix-doom-emacs";
+    #   #url = "github:badly-drawn-wizards/nix-doom-emacs";
+    #   #url = "/workspace/nix-doom-emacs";
+    #   inputs = {
+    #     nixpkgs.follows = "/nixpkgs";
+    #     nix-straight.follows = "/nix-straight";
+    #     # doom-emacs.follows = "/doom-emacs";
+    #     # emacs-overlay.follows = "/emacs-overlay";
+    #   };
+    # };
     flake-compat = {
       url = "github:edolstra/flake-compat";
       flake = false;

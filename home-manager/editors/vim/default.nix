@@ -11,7 +11,6 @@ in
     ./extra-functions.nix
     ./which-key-alias.nix
     ./reloadable-session.nix
-    ./transparent.nix
   ];
 
   programs.nixvim = {

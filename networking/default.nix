@@ -9,8 +9,7 @@
 
     firewall = {
       enable = true;
-      checkReversePath = false;
-      # allowedTCPPorts = [ 6443 ];
+      allowedTCPPorts = [ 8081 ];
     };
 
   };

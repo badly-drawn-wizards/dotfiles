@@ -11,7 +11,6 @@
       mpv
       vlc
       spotify
-      spotify-tui
 
       libva-utils glxinfo
 
