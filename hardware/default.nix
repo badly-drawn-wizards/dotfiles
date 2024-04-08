@@ -12,15 +12,14 @@
       ./iio.nix
     ];
 
-  nix.settings.max-jobs = 8;
-  powerManagement.cpuFreqGovernor = "powersave";
+  nix.settings.max-jobs = 4;
+  #powerManagement.cpuFreqGovernor = "powersave";
 
   hardware = {
     enableAllFirmware = true;
     enableRedistributableFirmware = true;
     cpu.amd = {
       updateMicrocode = true;
-      sev.enable = true;
     };
   };
 

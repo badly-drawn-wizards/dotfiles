@@ -16,8 +16,8 @@
       element-desktop
       slack
       zulip
-      franz
-      skypeforlinux
-      whatsapp-for-linux
+      #franz
+      #skypeforlinux
+      #whatsapp-for-linux
   ];
 }

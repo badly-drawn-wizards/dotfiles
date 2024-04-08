@@ -11,7 +11,7 @@
     steam-run
 
     winetricks
-    wine64Packages.waylandFull
+    winePackages.waylandFull
   ];
 
   home.file = {

@@ -1,4 +1,4 @@
 self: super:
 {
-  inherit (self.pkgs-master) jetbrains;
+  inherit (self.pkgs.staging-next) jetbrains;
 }

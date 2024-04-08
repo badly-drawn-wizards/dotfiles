@@ -27,7 +27,7 @@ with builtins;
     ./sync.nix
     ./virtualization.nix
     ./lang
-    ./tts.nix
+    # ./tts.nix
     ./gpg.nix
     ./security.nix
     ./image-editor.nix

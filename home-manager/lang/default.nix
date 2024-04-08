@@ -9,6 +9,6 @@
     ./scala.nix
     ./nix.nix
     ./latex.nix
-    ./sage.nix
+    # ./sage.nix
   ];
 }

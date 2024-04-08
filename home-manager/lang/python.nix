@@ -9,8 +9,8 @@
       matplotlib
       scipy
       sympy
-      torch
-      transformers
+      #torch
+      #transformers
       ipython
       python-uinput
     ]))

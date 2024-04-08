@@ -3,8 +3,8 @@
     nixpkgs = {
       url = "github:NixOS/nixpkgs/nixos-unstable";
     };
-    nixpkgs-master = {
-      url = "github:NixOS/nixpkgs/master";
+    nixpkgs-staging-next = {
+      url = "github:NixOS/nixpkgs/staging-next";
     };
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -109,7 +109,7 @@
 
   outputs =
     { nixpkgs
-    , nixpkgs-master
+    , nixpkgs-staging-next
     , utils
     , emacs-overlay
     , nur
@@ -174,7 +174,7 @@
             inherit (nix-index) nix-index nix-locate;
             inherit vs-code-default-keybindings;
             inherit nix-colors;
-            pkgs-master = import nixpkgs-master { inherit (self) system; };
+            staging-next = import nixpkgs-staging-next { inherit (self) system; };
             # linuxSrc_custom = linux;
             lean4-flake = super.callPackage ({ system }: lean4.packages.${system}) { };
           })
