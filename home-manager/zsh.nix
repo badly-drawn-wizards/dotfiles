@@ -40,7 +40,7 @@
         ];
       };
       enableCompletion = true;
-      enableAutosuggestions = true;
+      autosuggestion.enable = true;
       shellAliases = {
         t = "tmux attach || tmux new";
         ls = "eza";

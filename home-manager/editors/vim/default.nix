@@ -148,15 +148,15 @@ in
         autoEnableSources = true;
         settings.mapping = {
           __raw = ''
-          cmp.mapping.preset.insert({
-            ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-            ['<C-f>'] = cmp.mapping.scroll_docs(4),
-            ['<C-Space>'] = cmp.mapping.complete(),
-            ['<C-e>'] = cmp.mapping.abort(),
-            ['<CR>'] = cmp.mapping.confirm({ select = true }),
-            ['<C-j>'] = cmp.mapping.select_next_item(),
-            ['<C-k>'] = cmp.mapping.select_prev_item(),
-          })
+            cmp.mapping.preset.insert({
+              ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+              ['<C-f>'] = cmp.mapping.scroll_docs(4),
+              ['<C-Space>'] = cmp.mapping.complete(),
+              ['<C-e>'] = cmp.mapping.abort(),
+              ['<CR>'] = cmp.mapping.confirm({ select = true }),
+              ['<C-j>'] = cmp.mapping.select_next_item(),
+              ['<C-k>'] = cmp.mapping.select_prev_item(),
+            })
           '';
           # "<Tab>" = {
           #   modes = [ "i" "s" ];
@@ -164,18 +164,18 @@ in
           # };
         };
 
-        settings.sorting.comparators = 
-            [
-              "require('cmp.config.compare').offset"
-              "require('cmp.config.compare').exact"
-              "require('cmp.config.compare').score"
-              "require('cmp.config.compare').recently_used"
-              "require('cmp.config.compare').locality"
-              "require('cmp.config.compare').kind"
-              "require('cmp.config.compare').length"
-              "require('cmp.config.compare').order"
-              "require('cmp_fuzzy_buffer.compare')"
-            ];
+        settings.sorting.comparators =
+          [
+            "require('cmp.config.compare').offset"
+            "require('cmp.config.compare').exact"
+            "require('cmp.config.compare').score"
+            "require('cmp.config.compare').recently_used"
+            "require('cmp.config.compare').locality"
+            "require('cmp.config.compare').kind"
+            "require('cmp.config.compare').length"
+            "require('cmp.config.compare').order"
+            "require('cmp_fuzzy_buffer.compare')"
+          ];
         settings.snippet.expand = "luasnip";
         settings.sources = [
           { name = "nvim_lsp"; groupIndex = 1; }
@@ -261,12 +261,12 @@ in
 
       telescope = {
         enable = true;
-        defaults.mappings.i = {
+        settings.defaults.mappings.i = {
           "<C-j>" = mkRaw "require('telescope.actions').move_selection_next";
           "<C-k>" = mkRaw "require('telescope.actions').move_selection_previous";
         };
 
-        extensions = {
+        settings.extensions = {
           file_browser = {
             enable = true;
             hidden = true;
@@ -296,7 +296,7 @@ in
 
       toggleterm = {
         enable = true;
-        autoScroll = false;
+        settings.autoScroll = false;
       };
 
       dap = {
@@ -345,8 +345,11 @@ in
 
       lualine = {
         enable = true;
-        sections.lualine_x = [ 
-          "g:metals_status" "encoding" "fileformat" "filetype" 
+        sections.lualine_x = [
+          "g:metals_status"
+          "encoding"
+          "fileformat"
+          "filetype"
         ];
       };
 
