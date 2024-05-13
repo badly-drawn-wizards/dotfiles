@@ -3,26 +3,29 @@
 , lib
 , ...
 }:
+let
+  inherit (pkgs) fetchFromGitHub;
+in
 {
   options = with lib; with types; with hm.types; {
     programs.zsh = {
       initExtraDag = mkOption {
         type = dagOf lines;
-        default = {};
+        default = { };
       };
     };
   };
   config = {
     programs.zsh = {
       enable = true;
-      plugins = with pkgs; [
+      plugins = [
         {
           name = "fast-syntax-highlighting";
-          src = "${zsh-fast-syntax-highlighting}/share/zsh/site-functions";
+          src = "${pkgs.zsh-fast-syntax-highlighting}/share/zsh/site-functions";
         }
         {
           name = "fzf-tab";
-          src = "${zsh-fzf-tab}/share/fzf-tab";
+          src = "${pkgs.zsh-fzf-tab}/share/fzf-tab";
         }
         {
           name = "zsh-hooks";
@@ -33,11 +36,19 @@
             sha256 = "sha256-n33jaUlti1S2G2Oxc+KuMZcHqd2FO/knivHam47EK78=";
           };
         }
+        {
+          name = "zsh-system-clipboard";
+          src = fetchFromGitHub {
+            owner = "kutsan";
+            repo = "zsh-system-clipboard";
+            rev = "2d94918c7fbba175a9b47845db8c664a04cffeaa";
+            sha256 = "sha256-dhvvvgfFFMBNQvZvfsidrPZiJmmhsMloaOTGfTc5PwE=";
+          };
+        }
       ];
       package = pkgs.buildEnv {
         name = "zsh-packages";
-        paths = with pkgs; [
-        ];
+        paths = [ ];
       };
       enableCompletion = true;
       autosuggestion.enable = true;
@@ -66,6 +77,8 @@
       };
 
       initExtraFirst = ''
+        ZSH_SYSTEM_CLIPBOARD_METHOD=wlc
+
         SPACESHIP_TIME_SHOW=true
         SPACESHIP_BATTERY_SHOW=true
         SPACESHIP_CHAR_SYMBOL="λ "
@@ -166,7 +179,7 @@
     };
 
     home.file = {
-      ".oh-my-zsh/custom/themes".source = pkgs.runCommandLocal "omz-custom-themes" {}
+      ".oh-my-zsh/custom/themes".source = pkgs.runCommandLocal "omz-custom-themes" { }
         ''
           mkdir -p $out/spaceship-prompt
           cd $out

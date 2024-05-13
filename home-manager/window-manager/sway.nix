@@ -126,9 +126,9 @@ in
         gtk = true;
       };
 
-      extraSessionCommands = ''
-        . "${config.home.profileDirectory}/etc/profile.d/hm-session-vars.sh"
-      '';
+      # extraSessionCommands = ''
+      #   . "${config.home.profileDirectory}/etc/profile.d/hm-session-vars.sh"
+      # '';
 
       config = {
         terminal = "${pkgs.kitty}/bin/kitty";

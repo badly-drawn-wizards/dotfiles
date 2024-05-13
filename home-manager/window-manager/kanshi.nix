@@ -9,7 +9,7 @@
         { criteria = "eDP-1"; }
       ];
 
-      docked.outputs = [
+      docked-wide.outputs = [
         {
           criteria = "Dell Inc. DELL S3422DW CVD1TH3";
           position = "0,0";
@@ -18,6 +18,18 @@
         {
           criteria = "eDP-1";
           position = "750,1440";
+        }
+      ];
+
+      docked-work.outputs = [
+        {
+          criteria = "Dell Inc. DELL S2722DC 49Q4HD3";
+          position = "0,0";
+          mode = "2560x1440@59.951000Hz";
+        }
+        {
+          criteria = "eDP-1";
+          position = "320,1440";
         }
       ];
 
