@@ -4,7 +4,6 @@ let
   cfg = config.nixvim;
   inherit (cfg.helpers) mkRaw toLuaObject;
   fn = config.programs.nixvim.extraFunction;
-
 in
 {
   imports = [
@@ -107,8 +106,7 @@ in
           nixd = {
             enable = true;
             settings = {
-              options.enable = true;
-              formatting.command = "nixpkgs-fmt";
+              formatting.command = [ "nixpkgs-fmt" ];
             };
             rootDir = "require('lspconfig.util').root_pattern('.nixd.json', '.git')";
           };

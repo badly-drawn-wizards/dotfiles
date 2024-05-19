@@ -3,7 +3,7 @@
 {
   imports = [
     ./sway.nix
-    ./hyprland.nix
+    # ./hyprland.nix
     ./waybar
     ./swaylock.nix
     ./mako.nix
@@ -13,5 +13,6 @@
 
   home.packages = with pkgs; [
     wdisplays
+    wlr-randr
   ];
 }

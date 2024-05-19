@@ -5,7 +5,6 @@
     virt-manager
     virt-viewer
     quickemu
-    vagrant
     docker
   ];
 }

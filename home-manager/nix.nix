@@ -3,10 +3,11 @@
 {
 
   home.packages = with pkgs; [
-      nix-prefetch
-      cachix
-      fup-repl
-      nixpkgs-fmt
+    nix-prefetch
+    cachix
+    fup-repl
+    nixpkgs-fmt
+    nh
   ];
 
   programs = {
