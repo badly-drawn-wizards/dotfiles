@@ -104,6 +104,8 @@
 
     fwupd.enable = true;
 
+    tailscale.enable = true;
+
   };
 
 
