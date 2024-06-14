@@ -127,8 +127,8 @@ in
           metals.enable = false; # conflicts with nvim-metals
           rust-analyzer = {
             enable = true;
-            installCargo = true;
-            installRustc = true;
+            installCargo = false;
+            installRustc = false;
           };
           texlab.enable = true;
           gopls.enable = true;
@@ -434,7 +434,7 @@ in
     keymaps =
       let
         leader = { key, action, desc ? null, lua ? true, options ? { } }: {
-          inherit action lua;
+          action = if lua then { __raw = action; } else action;
           mode = "n";
           key = "<leader>${key}";
           options = { silent = true; } // options // { inherit desc; };
@@ -450,14 +450,12 @@ in
           {
             mode = "i";
             key = "<M-h>";
-            lua = true;
-            action = defer "vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-d>', true, false, true), 'i', false)";
+            action.__raw = defer "vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-d>', true, false, true), 'i', false)";
           }
           {
             mode = "i";
             key = "<M-l>";
-            lua = true;
-            action = defer "vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-t>', true, false, true), 'i', false)";
+            action.__raw = defer "vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-t>', true, false, true), 'i', false)";
           }
 
           (leader {
@@ -506,7 +504,6 @@ in
           {
             mode = "n";
             key = "<C-w>d";
-            lua = false;
             action = "<C-w>q";
             options.desc = "Quit window";
           }
@@ -526,7 +523,6 @@ in
             mode = "t";
             key = "<Esc><Esc>";
             action = "<C-\\><C-n>";
-            lua = false;
             options.desc = "Escape terminal mode";
             options.remap = false;
           }

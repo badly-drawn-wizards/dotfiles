@@ -9,9 +9,7 @@
   ];
 
   home.packages = with pkgs; [
-    tree-sitter
-    espeak
     ripgrep
-    libnotify
+    postman
   ];
 }

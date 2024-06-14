@@ -2,7 +2,7 @@
 
 {
   imports = [
-    # ./vagrant.nix
+    ./vagrant.nix
     # ./k3s.nix
     # ./kata.nix
   ];
@@ -16,10 +16,10 @@
     #   ];
     # };
 
-    containerd.enable = true;
+    # containerd.enable = true;
 
-    podman.enable = true;
-    docker.enable = true;
+    # podman.enable = true;
+    # docker.enable = true;
 
     # cri-o.enable = true;
 

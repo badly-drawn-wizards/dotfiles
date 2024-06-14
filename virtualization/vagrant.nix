@@ -3,7 +3,7 @@
 {
   virtualisation.virtualbox.host = {
     enable = true;
-    enableExtensionPack = true;
+    enableExtensionPack = false;
   };
 
   # https://nixos.wiki/wiki/Vagrant

@@ -31,7 +31,7 @@ with builtins;
     ./gpg.nix
     ./security.nix
     ./image-editor.nix
-    ./pomo
+    # ./pomo
     ./task-management
   ];
 
@@ -123,12 +123,14 @@ with builtins;
       screenshot
       feh
 
-      milkytracker
-
-      bless
-
       # webnovel-android
       github-desktop
+
+      nettools
+
+      cura
+
+      burpsuite
     ];
 
     sessionVariables = {

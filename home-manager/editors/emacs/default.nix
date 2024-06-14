@@ -63,7 +63,6 @@ in
         (load "${configName}")
       '';
       extraPackages = with pkgs; [
-        cargo
       ];
       emacsPackage = emacs;
       emacsPackagesOverlay = eself: esuper: {
