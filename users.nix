@@ -28,6 +28,7 @@
       lpadmin = { };
       stapusr = { };
       netdev = { };
+      plugdev = { };
       podman = { };
       docker = { };
     };
@@ -50,6 +51,7 @@
         "kvm"
         "libvirtd"
         "netdev"
+        "plugdev"
       ];
     };
     defaultUserShell = "/run/current-system/sw/bin/zsh";

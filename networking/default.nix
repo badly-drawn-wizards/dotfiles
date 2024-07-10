@@ -9,7 +9,11 @@
 
     firewall = {
       enable = true;
-      allowedTCPPorts = [ 8081 ];
+      allowedTCPPorts = [
+        # 8007
+        # 8080
+        # 8081
+      ];
     };
 
   };

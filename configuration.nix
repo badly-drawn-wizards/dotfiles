@@ -27,6 +27,7 @@
       # inputs.dwarffs.nixosModules.dwarffs
       inputs.microvm.nixosModules.host
       inputs.dotfiles-private.nixosModules.dotfiles-private
+      inputs.waveforms.nixosModule
     ];
 
   nix = {
@@ -66,7 +67,7 @@
   };
 
   services = {
-    openssh.enable = true;
+    # openssh.enable = true;
 
     acpid.enable = true;
     asusd.enable = true;

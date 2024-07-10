@@ -20,14 +20,8 @@
     '';
     ".ssh/config".text = ''
       IdentitiesOnly yes
-      Host github.com
-        User git
-        HostName github.com
-        PreferredAuthentications publickey
-        IdentityFile ~/.ssh/id_ed25519
-
-      Host *.whirlylabs.com
-        IdentityFile ~/.ssh/id_ed25519_whirly
+      IdentityFile ~/.ssh/id_ed25519
+      IdentityFile ~/.ssh/id_ed25519_whirly
 
     '';
   };

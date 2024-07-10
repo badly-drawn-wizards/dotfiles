@@ -28,17 +28,10 @@
       url = "github:badly-drawn-wizards/nix-straight.el";
       flake = false;
     };
-    # nix-doom-emacs = {
-    #   url = "github:nix-community/nix-doom-emacs";
-    #   #url = "github:badly-drawn-wizards/nix-doom-emacs";
-    #   #url = "/workspace/nix-doom-emacs";
-    #   inputs = {
-    #     nixpkgs.follows = "/nixpkgs";
-    #     nix-straight.follows = "/nix-straight";
-    #     # doom-emacs.follows = "/doom-emacs";
-    #     # emacs-overlay.follows = "/emacs-overlay";
-    #   };
-    # };
+    nix-doom-emacs-unstraightened = {
+      url = "github:marienz/nix-doom-emacs-unstraightened";
+      inputs.nixpkgs.follows = "";
+    };
     flake-compat = {
       url = "github:edolstra/flake-compat";
       flake = false;
@@ -49,7 +42,6 @@
     };
     utils.url = "github:gytis-ivaskevicius/flake-utils-plus";
     hyprland.url = "github:hyprwm/Hyprland";
-    unhinged.url = "github:badly-drawn-wizards/unhinged";
 
     nix-index.url = "github:bennofs/nix-index";
     nix-index-database = {
@@ -73,11 +65,6 @@
       flake = false;
     };
 
-    dream2nix = {
-      url = "github:nix-community/dream2nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     nix-colors.url = "github:Misterio77/nix-colors";
 
     dotfiles-private = {
@@ -98,6 +85,7 @@
       url = "github:astro/microvm.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    waveforms.url = "github:liff/waveforms-flake";
 
     # k8s-vm = {
     #   url = "git+file:///workspace/k8s-vm";
@@ -108,21 +96,16 @@
   };
 
   outputs =
-    { nixpkgs
-    , nixpkgs-staging-next
+    { nixpkgs-staging-next
     , utils
-    , emacs-overlay
     , nur
-    , nixpkgs-wayland
     , nix-index
     , nixfs
     , lean4
     , vs-code-default-keybindings
     , nix-colors
-    , unhinged
     , nixd
-    , # linux,
-      self
+    , self
     , ...
     }@inputs:
     let

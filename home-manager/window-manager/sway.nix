@@ -4,12 +4,9 @@
 , ...
 }:
 
-with builtins;
-with config.theme;
 let
   inherit (config.wayland.windowManager.sway.config) modifier assigns;
   inherit (config.windowManager) io;
-  inherit (config.programs.doom-emacs) org-clock;
   inherit (lib) concatStrings;
 
   mkColorSet = bg: txt: {
@@ -19,15 +16,10 @@ let
     indicator = "#${bg}";
     text = "#${txt}";
   };
-  mkBarColorSet = bg: txt: {
-    border = "#${bg}";
-    background = "#${bg}";
-    text = "#${txt}";
-  };
 
   mod = modifier;
   rofi-startup-workspaces =
-    concatStrings (map (s: ''echo "${s}";'') (attrNames assigns));
+    concatStrings (map (s: ''echo "${s}";'') (builtins.attrNames assigns));
   # Adapted from
   # https://blog.sarine.nl/2014/08/03/rofi-updates.html
   rofi-workspace = name: cmd:
@@ -184,6 +176,7 @@ in
             { class = "^Slack$"; }
             { class = "^Element$"; }
             { class = "^Zulip$"; }
+            { class = "^Mattermost$"; }
             { app_id = "^thunderbird$"; }
             { app_id = "^whatsapp-for-linux$"; }
           ];
@@ -237,7 +230,7 @@ in
           otherKeybinds //
           config.windowManager.extraBinds
         );
-        colors = {
+        colors = with config.theme; {
           focused = mkColorSet color5 color0;
           focusedInactive = mkColorSet color0 color12;
           unfocused = mkColorSet color0 color12;

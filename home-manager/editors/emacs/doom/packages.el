@@ -52,9 +52,6 @@
 
 
 ; (package! editorconfig)
-(package! lean4-mode)
-(package! org-drill)
+; (package! lean4-mode)
+; (package! org-drill)
 
-(package! tree-sitter)
-(package! tree-sitter-langs)
-(package! tsc)
