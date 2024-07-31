@@ -16,10 +16,10 @@
     #   ];
     # };
 
-    # containerd.enable = true;
+    containerd.enable = true;
 
     # podman.enable = true;
-    # docker.enable = true;
+    docker.enable = true;
 
     # cri-o.enable = true;
 
