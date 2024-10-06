@@ -2,7 +2,7 @@
 
 {
   home.package = with pkgs; [
-    gnome.nautilus
+    nautilus
     ranger
   ];
 }

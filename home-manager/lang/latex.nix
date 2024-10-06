@@ -4,13 +4,14 @@
 
   programs.texlive = {
     enable = true;
-    extraPackages = tpkgs: { 
-      inherit (tpkgs) 
-      scheme-medium
-      ticket
-      datatool
-      graphics
-      graphicxbox;
+    extraPackages = tpkgs: {
+      inherit (tpkgs)
+        scheme-medium
+        ticket
+        datatool
+        graphics
+        graphicxbox
+        minted;
     };
   };
 }

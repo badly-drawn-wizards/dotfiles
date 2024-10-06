@@ -15,8 +15,7 @@ in
   programs.nixvim = {
     enable = true;
 
-    luaLoader.enable = true;
-
+    # luaLoader.enable = true;
 
     clipboard = {
       register = "unnamedplus";
@@ -202,7 +201,7 @@ in
       treesitter = {
         enable = true;
         folding = true;
-        indent = true;
+        settings.indent.enable = true;
       };
       treesitter-textobjects.enable = true;
       treesitter-refactor.enable = true;
@@ -211,8 +210,8 @@ in
       undotree.enable = true;
       yanky = {
         enable = true;
+        enableTelescope = true;
         picker.telescope = {
-          enable = true;
           useDefaultMappings = true;
         };
       };
@@ -316,30 +315,30 @@ in
         };
       };
 
-      neorg = {
-        enable = true;
-        lazyLoading = false;
-        modules = {
-          "core.dirman".config = {
-            workspaces = {
-              notes = "~/org/notes";
-            };
-          };
-
-          "core.defaults" = { __empty = null; };
-          "core.concealer" = { __empty = null; };
-          "core.completion".config = {
-            engine = "nvim-cmp";
-            name = "[Norg]";
-          };
-          "core.keybinds".config = {
-            default_keybinds = true;
-            neorg_leader = "<LocalLeader>";
-          };
-          "core.integrations.nvim-cmp" = { __empty = null; };
-          "core.integrations.telescope" = { __empty = null; };
-        };
-      };
+      # neorg = {
+      #   enable = true;
+      #   lazyLoading = false;
+      #   modules = {
+      #     "core.dirman".config = {
+      #       workspaces = {
+      #         notes = "~/org/notes";
+      #       };
+      #     };
+      #
+      #     "core.defaults" = { __empty = null; };
+      #     "core.concealer" = { __empty = null; };
+      #     "core.completion".config = {
+      #       engine = "nvim-cmp";
+      #       name = "[Norg]";
+      #     };
+      #     "core.keybinds".config = {
+      #       default_keybinds = true;
+      #       neorg_leader = "<LocalLeader>";
+      #     };
+      #     "core.integrations.nvim-cmp" = { __empty = null; };
+      #     "core.integrations.telescope" = { __empty = null; };
+      #   };
+      # };
 
       lualine = {
         enable = true;
@@ -365,10 +364,10 @@ in
               "   _    _    __                                  _   "
               "  F L  J J   LJ   _____     ___ _    _ ___    ___FJ  "
               " J J .. L L      [__   F   F __` L  J '__ \", F __  L "
-              " | |/  \| |  FJ  `-.'.'/  | |--| |  | |__|-J| |--| | "
-              " F   /\   J J  L .' (_(_  F L__J J  F L  `-'F L__J J "
-              "J___//\\___LJ__LJ_______LJ\____,__LJ__L    J\____,__L"
-              "|___/  \___||__||_______| J____,__F|__L     J____,__F"
+              " | |/  \\| |  FJ  `-.'.'/  | |--| |  | |__|-J| |--| | "
+              " F   /\\   J J  L .' (_(_  F L__J J  F L  `-'F L__J J "
+              "J___//\\___LJ__LJ_______LJ\\____,__LJ__L    J\\____,__L"
+              "|___/  \\___||__||_______| J____,__F|__L     J____,__F"
             ];
 
             opts = {

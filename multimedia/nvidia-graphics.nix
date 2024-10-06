@@ -4,14 +4,10 @@
   environment.variables = {
     WLR_NO_HARDWARE_CURSORS = "1";
   };
-  hardware.opengl = {
+  hardware.graphics = {
     enable = true;
     driSupport = true;
     driSupport32Bit = true;
-    extraPackages = with pkgs; [
-    ];
-    extraPackages32 = with pkgs.pkgsi686Linux; [
-    ];
   };
 
   services.xserver.videoDrivers = [ "nvidia" ];

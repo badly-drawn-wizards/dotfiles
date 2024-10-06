@@ -1,9 +1,8 @@
 { config, lib, pkgs, ... }:
 
 {
-  hardware.opengl = {
+  hardware.graphics = {
     enable = true;
-    driSupport32Bit = true;
     extraPackages = with pkgs; with rocmPackages; [
       amdvlk
       clr

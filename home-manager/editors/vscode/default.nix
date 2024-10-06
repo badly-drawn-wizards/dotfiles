@@ -211,7 +211,7 @@ in
       ms-vscode.powershell
       ms-azuretools.vscode-docker
       # ms-python.python
-      pkgs.lean4-flake.vscode-lean4
+      #pkgs.lean4-flake.vscode-lean4
     ] ++ extensionsFromVscodeMarketplace [
       {
         publisher = "herrmannplatz";

@@ -216,7 +216,7 @@ in
             "${mod}+p" = "exec bash -c \"${pkgs.sway}/bin/swaymsg focus output $(${sway-other-monitor})\"";
             "${mod}+Shift+p" = "exec bash -c \"${pkgs.sway}/bin/swaymsg move workspace to output $(${sway-other-monitor})\"";
 
-            "${mod}+t" = "exec ${pkgs.gnome.nautilus}/bin/nautilus";
+            "${mod}+t" = "exec ${pkgs.nautilus}/bin/nautilus";
             "${mod}+Shift+s" = "exec ${pkgs.screenshot}/bin/screenshot";
             "XF86MonBrightnessUp" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set +10%";
             "XF86MonBrightnessDown" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set 10%-";

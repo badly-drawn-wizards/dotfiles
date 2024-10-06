@@ -5,12 +5,13 @@
     enable = true;
     config = {
       report.descr.columns = "description,status,start.active";
-      report.descr.labels  = "description,status,active";
+      report.descr.labels = "description,status,active";
     };
   };
 
   home.packages = [
     pkgs.timewarrior
+    pkgs.obsidian
   ];
 
   home.file = {

@@ -103,7 +103,7 @@ with builtins;
       wget
       fzf
 
-      transmission-qt
+      transmission_4-qt
 
       wl-clipboard
 
@@ -128,7 +128,7 @@ with builtins;
 
       nettools
 
-      cura
+      # cura
 
       burpsuite
     ];
