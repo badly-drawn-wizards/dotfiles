@@ -25,9 +25,9 @@
 
 
   services.udev = {
-    # extraRules = ''
-    #   KERNEL=="ttyUSB*", MODE="0777"
-    # '';
+    extraRules = ''
+      KERNEL=="ttyUSB*", MODE="0777"
+    '';
   };
 
 }

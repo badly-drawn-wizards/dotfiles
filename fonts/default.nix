@@ -29,7 +29,7 @@
   fonts = {
     packages = with pkgs; [
       ubuntu_font_family
-      nerdfonts
+      nerd-fonts.droid-sans-mono
       noto-fonts
       noto-fonts-emoji
       font-awesome

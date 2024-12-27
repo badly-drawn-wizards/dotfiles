@@ -36,7 +36,7 @@
     settings = {
       extra-sandbox-paths = [ "/nix/var" ];
       builders-use-substitutes = true;
-      experimental-features = [ "nix-command" "flakes" "repl-flake" "recursive-nix" ];
+      experimental-features = [ "nix-command" "flakes" "recursive-nix" ];
       trusted-substituters = [ "https://cache.nixos.org/" ];
     };
   };

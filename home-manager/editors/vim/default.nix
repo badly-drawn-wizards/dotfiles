@@ -238,7 +238,7 @@ in
         {
           enable = true;
           extraOptions = {
-            detection_methods = mkRaw "({})";
+            detection_methods = [ ];
           };
         };
 
