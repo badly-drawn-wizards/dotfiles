@@ -2,10 +2,9 @@
 
 {
   home.packages = with pkgs; [
-    virt-manager
-    virt-viewer
-    quickemu
-    docker
-    vagrant
+    # virt-manager
+    # virt-viewer
+    # quickemu
+    # docker
   ];
 }

@@ -1,10 +1,10 @@
 { config, lib, pkgs, ... }:
 
 {
-  virtualisation.virtualbox.host = {
-    enable = true;
-    enableExtensionPack = false;
-  };
+  # virtualisation.virtualbox.host = {
+  #   enable = true;
+  #   enableExtensionPack = false;
+  # };
 
   # https://nixos.wiki/wiki/Vagrant
 

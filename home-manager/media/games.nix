@@ -5,7 +5,6 @@
   home.packages = with pkgs; [
     nethack
     lutris
-    xboxdrv
 
     steam
     steam-run
@@ -16,7 +15,7 @@
 
   home.file = {
     ".nethackrc".text = ''
-    OPTIONS=windowtype:curses, color, guicolor, clicklook
+      OPTIONS=windowtype:curses, color, guicolor, clicklook
     '';
   };
 
