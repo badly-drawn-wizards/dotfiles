@@ -3,10 +3,11 @@
 {
   programs.taskwarrior = {
     enable = true;
-    config = {
-      report.descr.columns = "description,status,start.active";
-      report.descr.labels = "description,status,active";
-    };
+    package = pkgs.taskwarrior3;
+    # config = {
+    #   report.descr.columns = "description,status,start.active";
+    #   report.descr.labels = "description,status,active";
+    # };
   };
 
   home.packages = [

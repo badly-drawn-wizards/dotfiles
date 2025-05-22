@@ -61,7 +61,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     vs-code-default-keybindings = {
-      url = "github:codebling/vs-code-default-keybindings";
+      url = "github:badly-drawn-wizards/vs-code-default-keybindings";
       flake = false;
     };
 

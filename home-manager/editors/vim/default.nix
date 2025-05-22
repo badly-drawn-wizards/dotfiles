@@ -107,7 +107,7 @@ in
             settings = {
               formatting.command = [ "nixpkgs-fmt" ];
             };
-            rootDir = "require('lspconfig.util').root_pattern('.nixd.json', '.git')";
+            rootMarkers = [ ".nixd.json" ".git" ];
           };
           pylsp = {
             enable = true;
@@ -117,14 +117,17 @@ in
           };
           omnisharp.enable = true;
           terraformls.enable = true;
-          tsserver.enable = true;
+          ts_ls.enable = true;
           cssls.enable = true;
           tailwindcss.enable = true;
           yamlls.enable = true;
-          hls.enable = true;
-          lua-ls.enable = true;
+          hls = {
+            enable = true;
+            installGhc = false;
+          };
+          lua_ls.enable = true;
           metals.enable = false; # conflicts with nvim-metals
-          rust-analyzer = {
+          rust_analyzer = {
             enable = true;
             installCargo = false;
             installRustc = false;
@@ -194,8 +197,7 @@ in
 
       lean = {
         enable = true;
-        leanPackage = null;
-        mappings = true;
+        settings.mappings = true;
       };
 
       treesitter = {
@@ -206,13 +208,13 @@ in
       treesitter-textobjects.enable = true;
       treesitter-refactor.enable = true;
 
-      surround.enable = true;
+      vim-surround.enable = true;
       undotree.enable = true;
       yanky = {
         enable = true;
         enableTelescope = true;
-        picker.telescope = {
-          useDefaultMappings = true;
+        settings.picker.telescope = {
+          use_default_mappings = true;
         };
       };
       mini = {
@@ -237,22 +239,22 @@ in
       project-nvim =
         {
           enable = true;
-          extraOptions = {
+          settings = {
             detection_methods = [ ];
           };
         };
 
       auto-session = {
         enable = true;
-        logLevel = "error";
-        autoSession = {
+        settings = {
           enabled = true;
-          enableLastSession = true;
-        };
-        autoSave.enabled = true;
-        autoRestore.enabled = false;
-        sessionLens = {
-          loadOnSetup = true;
+          auto_restore_last_session = false;
+          auto_auto_restore = true;
+          auto_save = true;
+          log_Level = "error";
+          session_lens = {
+            load_on_setup = true;
+          };
         };
       };
 
@@ -298,10 +300,6 @@ in
 
       dap = {
         enable = true;
-        extensions = {
-          dap-ui.enable = true;
-          dap-virtual-text.enable = true;
-        };
         configurations = {
           scala = [{
             type = "scala";
@@ -314,6 +312,8 @@ in
           }];
         };
       };
+      dap-ui.enable = true;
+      dap-virtual-text.enable = true;
 
       # neorg = {
       #   enable = true;
@@ -342,7 +342,7 @@ in
 
       lualine = {
         enable = true;
-        sections.lualine_x = [
+        settings.sections.lualine_x = [
           "g:metals_status"
           "encoding"
           "fileformat"
@@ -352,7 +352,6 @@ in
 
       alpha = {
         enable = true;
-        iconsEnabled = true;
         layout = [
           {
             type = "padding";
@@ -391,10 +390,13 @@ in
       };
 
       transparent.enable = true;
+
+      web-devicons.enable = true;
     };
 
+    dependencies.lean.enable = false;
+
     extraPlugins = with pkgs.vimPlugins; [
-      nvim-web-devicons
       nvim-metals
       vim-autoswap
       dracula-nvim
