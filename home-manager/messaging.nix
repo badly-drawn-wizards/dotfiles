@@ -7,7 +7,6 @@
     "${zulip}/bin/zulip"
     "${discord}/bin/discord"
     "${element-desktop}/bin/element-desktop --profile personal"
-    "${mattermost-desktop}/bin/mattermost-desktop"
   ];
   home.packages = with pkgs; [
     # teams
@@ -16,7 +15,6 @@
     element-desktop
     slack
     zulip
-    mattermost-desktop
     #franz
     #skypeforlinux
     #whatsapp-for-linux

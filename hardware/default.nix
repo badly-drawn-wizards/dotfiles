@@ -9,7 +9,7 @@
       ./bluetooth.nix
       ./joycon.nix
       ./avloopback.nix
-      ./iio.nix
+      # ./iio.nix
     ];
 
   nix.settings.max-jobs = 4;

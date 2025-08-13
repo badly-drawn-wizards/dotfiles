@@ -6,7 +6,7 @@ in
 {
   services.mako = {
     enable = true;
-    layer = "overlay";
+    settings.layer = "overlay";
   };
   windowManager.extraBinds = {
     "${mod}+n" = "exec ${pkgs.mako}/bin/makoctl dismiss -a";

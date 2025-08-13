@@ -3,9 +3,9 @@
     nixpkgs = {
       url = "github:NixOS/nixpkgs/nixos-unstable";
     };
-    nixpkgs-staging-next = {
-      url = "github:NixOS/nixpkgs/staging-next";
-    };
+    # nixpkgs-staging-next = {
+    #   url = "github:NixOS/nixpkgs/staging-next";
+    # };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs = {
@@ -14,9 +14,6 @@
     };
     nixpkgs-wayland = {
       url = "github:nix-community/nixpkgs-wayland";
-    };
-    nur = {
-      url = "github:nix-community/NUR";
     };
     emacs-overlay = {
       url = "github:nix-community/emacs-overlay";
@@ -96,9 +93,7 @@
   };
 
   outputs =
-    { nixpkgs-staging-next
-    , utils
-    , nur
+    { utils
     , nix-index
     , nixfs
     , lean4
@@ -150,14 +145,13 @@
 
         sharedOverlays = [
           # (emacs-overlay.overlay)
-          (nur.overlay)
           # (nixpkgs-wayland.overlay)
           (self: super: {
             inherit os;
             inherit (nix-index) nix-index nix-locate;
             inherit vs-code-default-keybindings;
             inherit nix-colors;
-            staging-next = import nixpkgs-staging-next { inherit (self) system; };
+            # staging-next = import nixpkgs-staging-next { inherit (self) system; };
             # linuxSrc_custom = linux;
             lean4-flake = super.callPackage ({ system }: lean4.packages.${system}) { };
           })
@@ -175,11 +169,6 @@
 
         outputsBuilder = channels: {
           packages = channels.nixpkgs;
-          # devShell = channels.nixpkgs.mkShell {
-          #   buildInputs = [
-          #     channels.nixpkgs.nur.repos.rycee.mozilla-addons-to-nix
-          #   ];
-          # };
         };
       } // { inherit os; };
 }

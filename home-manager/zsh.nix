@@ -162,10 +162,6 @@ in
             local file="$HOME/$1"
             nix eval "dot#os.hm.home.file.\"$file\".source" --apply builtins.readFile --raw
           }
-
-          function vwl() {
-            nvim /workspace/worklog/day/$(date +%Y-%m-%d)
-          }
         '';
       };
 

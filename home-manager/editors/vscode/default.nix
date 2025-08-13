@@ -169,81 +169,60 @@ in
   programs.vscode = {
     enable = true;
     mutableExtensionsDir = false;
-    userSettings =
-      settings //
-      vspacecodeSettings //
-      {
-        "whichkey.bindingOverrides" = whichkeyOverrides;
-        # "omnisharp.path" = "${pkgs.omnisharp-roslyn}/bin/OmniSharp";
-        "omnisharp.loggingLevel" = "trace";
-        "omnisharp.enableDecompilationSupport" = true;
-        "extensions.autoCheckUpdates" = false;
-        "extensions.autoUpdate" = false;
-        "terminal.integrated.commandsToSkipShell" = commandsToSkipShell;
-      };
-    keybindings = [
-      {
-        key = "ctrl+o";
-        command = "workbench.action.navigateBack";
-      }
-      {
-        key = "ctrl+i";
-        command = "workbench.action.navigateForward";
-      }
-    ]
-    ++ excludeDefaultKeybinding "ctrl+o"
-    ++ vspacecodeKeybindings;
-    extensions = with pkgs.vscode-extensions; [
-      bbenoist.nix
-      vscodevim.vim
-      kahole.magit
-      vspacecode.whichkey
-      vspacecode.vspacecode
-      bodil.file-browser
-      ms-dotnettools.csharp
-      dracula-theme.theme-dracula
-      esbenp.prettier-vscode
-      angular.ng-template
-      ms-vscode.cpptools
-      ms-vscode.makefile-tools
-      ms-vscode.cmake-tools
-      ms-vscode.hexeditor
-      ms-vscode.powershell
-      ms-azuretools.vscode-docker
-      # ms-python.python
-      #pkgs.lean4-flake.vscode-lean4
-    ] ++ extensionsFromVscodeMarketplace [
-      {
-        publisher = "herrmannplatz";
-        name = "npm-dependency-links";
-        version = "1.0.0";
-        sha256 = "sha256-rvllC1KYNcstSW/mBRdiQvUdNicpwbI0YA9Sz/2Fbqc=";
-      }
-      {
-        publisher = "pflannery";
-        name = "vscode-versionlens";
-        version = "1.5.0";
-        sha256 = "sha256-J6iTVnaOaARrBSR0iaxlwUiRB4Gstkam4uHMYmtR0C4=";
-      }
-      {
-        publisher = "mkhl";
-        name = "direnv";
-        version = "0.13.0";
-        sha256 = "sha256-KdLJ7QTi9jz+JbbQuhXqyE3WV9oF+wyC/9ZJ/XTFOYc=";
-      }
-      {
-        publisher = "syler";
-        name = "sass-indented";
-        version = "1.8.26";
-        sha256 = "sha256-e3Y6qW+xsvvT1fby59X5VVkP2WmvYWtoajRiks0lLFM=";
-      }
-      # {
-      #   publisher = "jakubstepien";
-      #   name = "angular-template-style-suggestions";
-      #   version = "xxxx";
-      #   sha256 = lib.fakeSha256;
-      # }
-    ];
+    profiles.default = {
+      userSettings =
+        settings //
+        vspacecodeSettings //
+        {
+          "whichkey.bindingOverrides" = whichkeyOverrides;
+          # "omnisharp.path" = "${pkgs.omnisharp-roslyn}/bin/OmniSharp";
+          "omnisharp.loggingLevel" = "trace";
+          "omnisharp.enableDecompilationSupport" = true;
+          "extensions.autoCheckUpdates" = false;
+          "extensions.autoUpdate" = false;
+          "terminal.integrated.commandsToSkipShell" = commandsToSkipShell;
+        };
+      keybindings = [
+        {
+          key = "ctrl+o";
+          command = "workbench.action.navigateBack";
+        }
+        {
+          key = "ctrl+i";
+          command = "workbench.action.navigateForward";
+        }
+      ]
+      ++ excludeDefaultKeybinding "ctrl+o"
+      ++ vspacecodeKeybindings;
+      extensions = with pkgs.vscode-extensions; [
+        bbenoist.nix
+        vscodevim.vim
+        kahole.magit
+        vspacecode.whichkey
+        vspacecode.vspacecode
+        bodil.file-browser
+        ms-dotnettools.csharp
+        dracula-theme.theme-dracula
+        esbenp.prettier-vscode
+        angular.ng-template
+        ms-vscode.cpptools
+        ms-vscode.makefile-tools
+        ms-vscode.cmake-tools
+        ms-vscode.hexeditor
+        ms-vscode.powershell
+        ms-azuretools.vscode-docker
+        mkhl.direnv
+        # ms-python.python
+        #pkgs.lean4-flake.vscode-lean4
+      ] ++ extensionsFromVscodeMarketplace [
+        {
+          publisher = "leanprover";
+          name = "lean4";
+          version = "0.0.207";
+          sha256 = "sha256-QySYHdrjsG0FirkdS2y6lFicsLx4wdcGnA7FoHXHbJ8=";
+        }
+      ];
+    };
   };
 
   home.packages = with pkgs; [

@@ -21,13 +21,10 @@
       ./users.nix
       ./security.nix
 
-      # To deploy elsewhere later
-      # ./home-assistant.nix
-
       # inputs.dwarffs.nixosModules.dwarffs
       inputs.microvm.nixosModules.host
       inputs.dotfiles-private.nixosModules.dotfiles-private
-      inputs.waveforms.nixosModule
+      # inputs.waveforms.nixosModule
     ];
 
   nix = {
@@ -71,13 +68,6 @@
 
     acpid.enable = true;
     asusd.enable = true;
-    ratbagd.enable = true;
-
-    # Somehow permissions are fucked, will figure out later
-    # clamav = {
-    #   daemon.enable = true;
-    #   updater.enable = true;
-    # };
 
     fstrim.enable = true;
     devmon.enable = true;
@@ -104,8 +94,6 @@
     # fprintd.enable = true;
 
     fwupd.enable = true;
-
-    tailscale.enable = true;
 
   };
 
