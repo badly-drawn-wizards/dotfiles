@@ -70,7 +70,6 @@ in
         theme = "spaceship";
         custom = "${config.home.homeDirectory}/.oh-my-zsh/custom";
         plugins = [
-          "thefuck"
           "git"
         ];
 
@@ -185,7 +184,7 @@ in
     };
 
     home.packages = with pkgs; [
-      thefuck
+      pay-respects
       eza
     ];
   };
