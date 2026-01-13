@@ -113,16 +113,6 @@ in
             all-outputs = false;
           };
 
-          "custom/pomo" = {
-            interval = 1;
-            exec = "${pomo}/bin/pomo status";
-          };
-
-          "custom/taskwarrior" = {
-            interval = 1;
-            exec = ''${taskwarrior}/bin/task export descr | ${jq}/bin/jq -r '. | map(select(.status == "pending")) | sort_by(-.urgency) | .[0] | if . then "\(.description) [\(if .["start"] then "*" else "" end)\(.status)]" else "No pending task" end' '';
-          };
-
           "custom/rotate-on" = {
             format = "[ ";
             on-click = writeScript "sway-tablet" ''
@@ -209,7 +199,7 @@ in
           };
 
           "clock" = {
-            format = "| ${icons.clock}: {:%H:%M}]";
+            format = "[${icons.clock}: {:%H:%M}]";
             tooltip-format = "[{:%y-%m-%d}]";
             interval = 2;
           };

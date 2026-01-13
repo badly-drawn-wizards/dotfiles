@@ -30,9 +30,7 @@ in
             "file:///dot"
             "file://${config.home.homeDirectory}/Downloads"
             "file://${config.home.homeDirectory}/Dropbox"
-            # "sftp://reuben@gateway.whirlylabs.com:25218/whirly whirly"
-            # "sftp://reuben@gateway.whirlylabs.com:25218/reuben whirly-home"
-            "sftp://reuben@files.whirlylabs.com whirly"
+            "file://${config.home.homeDirectory}/screenshots"
           ];
         };
         gtk4 = { inherit extraConfig; };

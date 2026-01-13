@@ -239,6 +239,7 @@ in
       project-nvim =
         {
           enable = true;
+          autoLoad = true;
           settings = {
             detection_methods = [ ];
           };
