@@ -13,7 +13,6 @@
     spotify
 
     libva-utils
-    glxinfo
 
     qpwgraph
   ];

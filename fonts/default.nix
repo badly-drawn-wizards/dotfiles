@@ -28,10 +28,10 @@
 
   fonts = {
     packages = with pkgs; [
-      ubuntu_font_family
+      ubuntu-classic
       nerd-fonts.droid-sans-mono
       noto-fonts
-      noto-fonts-emoji
+      noto-fonts-color-emoji
       font-awesome
       fira-code
       fira-code-symbols

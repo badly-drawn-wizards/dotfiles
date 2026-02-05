@@ -11,18 +11,18 @@ let
   idea-jdk = pkgs.jetbrains.jdk.overrideAttrs (attrs: {
     passthru = attrs.passthru // { home = "${config.home.homeDirectory}/${jdk-home}"; };
   });
-  idea-community = pkgs.jetbrains.idea-community.override {
+  idea = pkgs.jetbrains.idea.override {
     jdk = idea-jdk;
   };
-  fernflower-jar = "${idea-community}/idea-community/plugins/java-decompiler/lib/java-decompiler.jar";
+  fernflower-jar = "${idea}/idea-community/plugins/java-decompiler/lib/java-decompiler.jar";
   fernflower = pkgs.writeScriptBin "fernflower" ''
-  #!/usr/bin/env bash
-  ${idea-jdk}/bin/java -jar ${lib.escapeShellArg fernflower-jar} "$@"
+    #!/usr/bin/env bash
+    ${idea-jdk}/bin/java -jar ${lib.escapeShellArg fernflower-jar} "$@"
   '';
 in
 {
-  home.packages = with pkgs; [
-    idea-community
+  home.packages = [
+    idea
     fernflower
   ];
 

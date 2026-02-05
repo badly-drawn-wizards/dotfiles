@@ -140,9 +140,6 @@ in
               sudo           # Sudo indicator
               char           # Prompt character
           )
-
-          # Interferes with spaceship-prompt when loaded after it for some reason
-          source ${pkgs.fzf-zsh}/share/zsh/plugins/fzf-zsh/fzf-zsh.plugin.zsh
         '';
         init = entryAfter [ "preinit" ] ''
           stty -ixon

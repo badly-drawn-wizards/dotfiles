@@ -38,7 +38,7 @@
       inputs.nixpkgs.follows = "/nixpkgs";
     };
     utils.url = "github:gytis-ivaskevicius/flake-utils-plus";
-    hyprland.url = "github:hyprwm/Hyprland";
+    #hyprland.url = "github:hyprwm/Hyprland";
 
     nix-index.url = "github:bennofs/nix-index";
     nix-index-database = {
@@ -64,9 +64,9 @@
 
     nix-colors.url = "github:Misterio77/nix-colors";
 
-#    dotfiles-private = {
-#      url = "git+file:///workspace/dotfiles-private?ref=master";
-#    };
+    #    dotfiles-private = {
+    #      url = "git+file:///workspace/dotfiles-private?ref=master";
+    #    };
 
     nixvim = {
       url = "github:nix-community/nixvim";

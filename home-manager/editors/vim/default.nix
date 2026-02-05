@@ -202,11 +202,11 @@ in
 
       treesitter = {
         enable = true;
-        folding = true;
+        folding.enable = true;
         settings.indent.enable = true;
       };
-      treesitter-textobjects.enable = true;
-      treesitter-refactor.enable = true;
+      # treesitter-textobjects.enable = true;
+      # treesitter-refactor.enable = true;
 
       vim-surround.enable = true;
       undotree.enable = true;
@@ -281,9 +281,8 @@ in
       neo-tree = {
         enable = true;
         filesystem = {
-          bindToCwd = false;
-          hijackNetrwBehavior = "open_current";
-          useLibuvFileWatcher = true;
+          bind_to_cwd = false;
+          use_libuv_file_watcher = true;
         };
       };
 
@@ -353,7 +352,7 @@ in
 
       alpha = {
         enable = true;
-        layout = [
+        settings.layout = [
           {
             type = "padding";
             val = 4;

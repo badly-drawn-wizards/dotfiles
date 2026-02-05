@@ -8,7 +8,7 @@ in
     programs.rofi = with lib; with types; {
       modi = mkOption {
         type = attrsOf (nullOr (either str path));
-        default = {};
+        default = { };
       };
       cmd = {
         base = mkOption {
@@ -31,12 +31,13 @@ in
     programs.rofi = {
       enable = true;
       theme = "${pkgs.dracula-rofi-theme}/theme/config2.rasi";
-      package = pkgs.rofi-wayland;
+      package = pkgs.rofi;
       font = "{config.font} ${builtins.toString config.fontSize}";
       extraConfig = {
         modi = builtins.concatStringsSep "," (lib.mapAttrsToList
           (name: script:
-            name + (if isNull script then "" else ":${script}")) config.programs.rofi.modi);
+            name + (if isNull script then "" else ":${script}"))
+          config.programs.rofi.modi);
         kb-row-tab = "";
         kb-remove-to-eol = "";
         kb-element-next = "";

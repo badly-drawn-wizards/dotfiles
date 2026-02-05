@@ -158,7 +158,8 @@ in
         output = {
           ${io.monitor} = {
             scale = "1.5";
-            mode = "2560x1600@60";
+            mode = "2560x1600";
+            adaptive_sync = "on";
           };
         };
         assigns = {

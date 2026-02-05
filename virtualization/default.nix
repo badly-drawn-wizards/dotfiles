@@ -19,7 +19,7 @@
     containerd.enable = true;
 
     # podman.enable = true;
-    #docker.enable = true;
+    docker.enable = true;
 
     # cri-o.enable = true;
 
@@ -29,17 +29,9 @@
         unix_sock_group = "libvirtd"
         unix_sock_rw_perms = "0770"
       '';
-      qemu.ovmf = {
-        enable = true;
-        packages = [ pkgs.OVMFFull.fd ];
-      };
       qemu.swtpm.enable = true;
     };
 
-  };
-
-  services.dockerRegistry = {
-    enable = true;
   };
 
   # microvm = {

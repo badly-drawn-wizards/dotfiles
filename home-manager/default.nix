@@ -6,9 +6,9 @@
   home-manager.users.reuben = {
     imports = [
       inputs.nix-doom-emacs-unstraightened.hmModule
-      inputs.nixvim.homeManagerModules.nixvim
-      inputs.hyprland.homeManagerModules.default
-      inputs.nix-index-database.hmModules.nix-index
+      inputs.nixvim.homeModules.nixvim
+      # inputs.hyprland.homeManagerModules.default
+      inputs.nix-index-database.homeModules.nix-index
       ./home.nix
     ];
   };

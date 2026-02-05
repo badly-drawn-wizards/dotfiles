@@ -131,6 +131,8 @@ with builtins;
       # cura
 
       burpsuite
+
+      claude-code
     ];
 
     sessionVariables = {
