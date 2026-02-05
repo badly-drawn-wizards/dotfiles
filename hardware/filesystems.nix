@@ -3,7 +3,7 @@
 {
   boot.initrd.luks.devices = {
     root = {
-      device = "/dev/nvme0n1p2";
+      device = "/dev/nvme0n1p7";
       preLVM = true;
     };
   };
@@ -13,18 +13,18 @@
       fsType = "vfat";
     };
     "/" = {
-      device = "/dev/vg/nixos";
+      device = "/dev/vg/root";
       fsType = "btrfs";
       options = [ "subvol=root" "compress=zstd" "noatime" ];
     };
     "/nix" = {
-      device = "/dev/vg/nixos";
+      device = "/dev/vg/root";
       fsType = "btrfs";
       options = [ "subvol=nix" "compress=zstd" "noatime" ];
       
     };
     "/home" = {
-      device = "/dev/vg/nixos";
+      device = "/dev/vg/root";
       fsType = "btrfs";
       options = [ "subvol=home" "compress=zstd" "noatime" ];
     };

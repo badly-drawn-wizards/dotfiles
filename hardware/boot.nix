@@ -12,6 +12,7 @@
         theme = pkgs.dracula-grub-theme;
         # gfxmodeEfi = "1920x1440,3840x2160,auto";
         device = "nodev";
+	useOSProber = true;
       };
     };
 

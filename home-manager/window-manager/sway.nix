@@ -157,8 +157,8 @@ in
         };
         output = {
           ${io.monitor} = {
-            scale = "1";
-            #   mode = "3840x2168";
+            scale = "1.5";
+            mode = "2560x1600@60";
           };
         };
         assigns = {

@@ -23,7 +23,7 @@
 
       # inputs.dwarffs.nixosModules.dwarffs
       inputs.microvm.nixosModules.host
-      inputs.dotfiles-private.nixosModules.dotfiles-private
+      # inputs.dotfiles-private.nixosModules.dotfiles-private
       # inputs.waveforms.nixosModule
     ];
 

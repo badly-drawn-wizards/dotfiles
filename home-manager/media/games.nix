@@ -1,5 +1,13 @@
 { config, lib, pkgs, ... }:
 
+let
+  steam' = pkgs.steam.override {
+    extraPacakges = pkgs: with pkgs; [
+      gamescope
+      mangohud
+    ];
+  };
+in
 {
 
   home.packages = with pkgs; [

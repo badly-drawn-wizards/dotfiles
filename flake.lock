@@ -88,22 +88,6 @@
         "type": "github"
       }
     },
-    "dotfiles-private": {
-      "locked": {
-        "lastModified": 1734263374,
-        "narHash": "sha256-SQqIGonPYLGUTQ/f0AhpWBnbs5ImmP9gIiq5eAj/SPQ=",
-        "ref": "master",
-        "rev": "42eb29db07fdafcd6b39f94438181da1547d5424",
-        "revCount": 18,
-        "type": "git",
-        "url": "file:///workspace/dotfiles-private"
-      },
-      "original": {
-        "ref": "master",
-        "type": "git",
-        "url": "file:///workspace/dotfiles-private"
-      }
-    },
     "dwarffs": {
       "inputs": {
         "nix": "nix",
@@ -1378,7 +1362,6 @@
     "root": {
       "inputs": {
         "comma": "comma",
-        "dotfiles-private": "dotfiles-private",
         "dwarffs": "dwarffs",
         "emacs-overlay": "emacs-overlay",
         "flake-compat": "flake-compat_3",
