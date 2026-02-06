@@ -200,6 +200,9 @@ in
           " music" = [
             { class = "^Spotify$"; }
           ];
+          " pass" = [
+            { app_id = "^org.keepassxc.KeePassXC$"; }
+          ];
         };
 
         keybindings = with lib.attrsets; let
