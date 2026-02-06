@@ -111,7 +111,7 @@
             linkInputs = true;
             registry.dot.to = {
               type = "path";
-              path = "/workspace/dotfiles";
+              path = "/etc/nixos";
             };
           };
         });

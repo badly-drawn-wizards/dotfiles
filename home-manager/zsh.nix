@@ -63,7 +63,7 @@ in
       dirHashes = {
         org = "$HOME/org";
         ws = "/workspace";
-        dot = "/workspace/dotfiles";
+        dot = "/etc/nixos";
       };
       oh-my-zsh = {
         enable = true;

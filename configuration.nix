@@ -28,7 +28,7 @@
     ];
 
   nix = {
-    nixPath = [ "nixpkgs=${inputs.nixpkgs}" "nixos-config=/workspace/dotfiles" ];
+    nixPath = [ "nixpkgs=${inputs.nixpkgs}" "nixos-config=/etc/nixos" ];
     package = pkgs.nixVersions.stable;
     settings = {
       extra-sandbox-paths = [ "/nix/var" ];

@@ -1,1 +1,1 @@
-"/workspace/dotfiles/home-manager/editors/emacs"
+"/etc/nixos/home-manager/editors/emacs"
