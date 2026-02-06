@@ -9,6 +9,8 @@ let
   inherit (config.windowManager) io;
   inherit (lib) concatStrings;
 
+  defaultScale = "1.5";
+
   mkColorSet = bg: txt: {
     border = "#${bg}";
     childBorder = "#${bg}";
@@ -40,6 +42,16 @@ let
   sway-other-monitor = pkgs.writeScript "sway-other-monitor" ''
     #!${pkgs.bash}/bin/bash
     swaymsg -t get_outputs | jq -r '. | sort_by(.focused) | .[0].name'
+  '';
+
+  toggle-edp-scale = pkgs.writeScriptBin "toggle-edp-scale" ''
+    #!${pkgs.bash}/bin/bash
+    current_scale=$(swaymsg -t get_outputs | ${pkgs.jq}/bin/jq -r '.[] | select(.name == "${io.monitor}") | .scale')
+    if [ "$current_scale" = "${defaultScale}" ]; then
+      swaymsg output ${io.monitor} scale 1
+    else
+      swaymsg output ${io.monitor} scale ${defaultScale}
+    fi
   '';
 
 in
@@ -157,7 +169,7 @@ in
         };
         output = {
           ${io.monitor} = {
-            scale = "1.5";
+            scale = defaultScale;
             mode = "2560x1600";
             adaptive_sync = "on";
           };
@@ -222,6 +234,7 @@ in
             "XF86MonBrightnessUp" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set +10%";
             "XF86MonBrightnessDown" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set 10%-";
             "XF86Launch1" = "exec ${config.windowManager.kb-events.toggle}";
+            "${mod}+bracketright" = "exec ${toggle-edp-scale}/bin/toggle-edp-scale";
           };
 
         in
