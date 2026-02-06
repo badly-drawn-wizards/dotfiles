@@ -21,8 +21,7 @@
     ".ssh/config".text = ''
       IdentitiesOnly yes
       IdentityFile ~/.ssh/id_ed25519
-      IdentityFile ~/.ssh/id_ed25519_whirly
-
+      IdentityFile ~/.ssh/id_rsa
     '';
   };
 
