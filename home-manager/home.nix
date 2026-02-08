@@ -133,6 +133,8 @@ with builtins;
       burpsuite
 
       claude-code
+
+      devenv
     ];
 
     sessionVariables = {

@@ -9,8 +9,8 @@
     "${element-desktop}/bin/element-desktop --profile personal"
   ];
   home.packages = with pkgs; [
-    # teams
     # zoom-us
+    teams-for-linux
     discord
     element-desktop
     slack

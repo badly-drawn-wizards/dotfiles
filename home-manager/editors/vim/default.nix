@@ -283,6 +283,7 @@ in
         filesystem = {
           bind_to_cwd = false;
           use_libuv_file_watcher = true;
+          hijack_netrw_behavior = "disabled";
         };
       };
 
@@ -314,31 +315,6 @@ in
       };
       dap-ui.enable = true;
       dap-virtual-text.enable = true;
-
-      # neorg = {
-      #   enable = true;
-      #   lazyLoading = false;
-      #   modules = {
-      #     "core.dirman".config = {
-      #       workspaces = {
-      #         notes = "~/org/notes";
-      #       };
-      #     };
-      #
-      #     "core.defaults" = { __empty = null; };
-      #     "core.concealer" = { __empty = null; };
-      #     "core.completion".config = {
-      #       engine = "nvim-cmp";
-      #       name = "[Norg]";
-      #     };
-      #     "core.keybinds".config = {
-      #       default_keybinds = true;
-      #       neorg_leader = "<LocalLeader>";
-      #     };
-      #     "core.integrations.nvim-cmp" = { __empty = null; };
-      #     "core.integrations.telescope" = { __empty = null; };
-      #   };
-      # };
 
       lualine = {
         enable = true;

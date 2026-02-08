@@ -11,5 +11,6 @@
     ./latex.nix
     ./rust.nix
     # ./sage.nix
+    ./dotnet.nix
   ];
 }
