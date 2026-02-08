@@ -192,6 +192,7 @@ in
             { class = "^Mattermost$"; }
             { app_id = "^thunderbird$"; }
             { app_id = "^whatsapp-for-linux$"; }
+            { app_id = "^teams-for-linux$"; }
           ];
           " write" = [
             { class = "^Write$"; }
