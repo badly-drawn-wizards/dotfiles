@@ -212,15 +212,9 @@ in
         ms-vscode.powershell
         ms-azuretools.vscode-docker
         mkhl.direnv
+        leanprover.lean4
         # ms-python.python
         #pkgs.lean4-flake.vscode-lean4
-      ] ++ extensionsFromVscodeMarketplace [
-        {
-          publisher = "leanprover";
-          name = "lean4";
-          version = "0.0.207";
-          sha256 = "sha256-QySYHdrjsG0FirkdS2y6lFicsLx4wdcGnA7FoHXHbJ8=";
-        }
       ];
     };
   };
