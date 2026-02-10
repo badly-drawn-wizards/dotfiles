@@ -50,8 +50,14 @@ in
         name = "zsh-packages";
         paths = [ ];
       };
+
       enableCompletion = true;
+      enableVteIntegration = true;
+
       autosuggestion.enable = true;
+      history.append = true;
+      historySubstringSearch.enable = true;
+
       shellAliases = {
         t = "tmux attach || tmux new";
         ls = "eza";
@@ -152,6 +158,7 @@ in
           bindkey "^J" history-search-forward
           bindkey "^P" history-search-backward
           bindkey "^N" history-search-forward
+          bindkey "^R" history-incremental-search-backward
         '';
         functions = entryAfter [ "preinit" ] ''
           function hm-cat() {

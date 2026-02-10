@@ -12,7 +12,7 @@
       # ./iio.nix
     ];
 
-  nix.settings.max-jobs = 4;
+  nix.settings.max-jobs = 8;
   #powerManagement.cpuFreqGovernor = "powersave";
 
   hardware = {
