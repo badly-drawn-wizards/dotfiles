@@ -136,12 +136,14 @@ in
 
       config = {
         terminal = "${pkgs.kitty}/bin/kitty";
-        startup = map
+        startup = [
+          { command = "${pkgs.dbus}/bin/dbus-update-activation-environment --all"; }
+        ] ++ (map
           (command:
             if builtins.isString command then {
               inherit command;
             } else command)
-          config.windowManager.startupPrograms;
+          config.windowManager.startupPrograms);
         fonts = {
           names = [ "Font Awesome" "Fira Code" ];
         };
