@@ -196,6 +196,10 @@ in
   };
 
   systemd.user.services.waybar = {
+    Unit = {
+      After = [ "xdg-desktop-portal.service" ];
+      Wants = [ "xdg-desktop-portal.service" ];
+    };
     Service.Environment = [
       "PATH=${lib.makeBinPath [ pkgs.coreutils config.home.profileDirectory ]}"
     ];
