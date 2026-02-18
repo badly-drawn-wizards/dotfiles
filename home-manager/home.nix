@@ -27,11 +27,9 @@ with builtins;
     ./sync.nix
     ./virtualization.nix
     ./lang
-    # ./tts.nix
     ./gpg.nix
     ./security.nix
     ./image-editor.nix
-    # ./pomo
     ./task-management
   ];
 

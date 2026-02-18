@@ -3,8 +3,6 @@
 {
   imports = [
     ./vagrant.nix
-    # ./k3s.nix
-    # ./kata.nix
   ];
 
   virtualisation = {
@@ -33,16 +31,6 @@
     };
 
   };
-
-  # microvm = {
-  #   host.enable = true;
-  #   vms = {
-  #     k8s-vm = {
-  #       flake = inputs.k8s-vm;
-  #     };
-  #   };
-  #   autostart = [ ];
-  # };
 
   # boot.kernelModules = [
   #   "kvm-amd"

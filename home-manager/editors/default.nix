@@ -2,7 +2,6 @@
 
 {
   imports = [
-    # ./emacs
     ./vscode
     ./intellij
     ./vim
