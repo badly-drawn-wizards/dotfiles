@@ -6,7 +6,7 @@
     # ./hyprland.nix
     ./waybar
     ./swaylock.nix
-    ./mako.nix
+    ./swaync.nix
     ./rofi.nix
     ./kanshi.nix
   ];
