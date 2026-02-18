@@ -56,7 +56,7 @@
     margin-right: 5px;
 }
 
-#custom-mpris-start, #idle_inhibitor, #battery, #custom-org-agenda, #tray {
+#custom-notification, #idle_inhibitor, #battery, #clock, #custom-org-agenda, #tray {
     margin-left: 10px;
 }
 
