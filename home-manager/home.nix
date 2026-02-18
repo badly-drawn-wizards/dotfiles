@@ -106,6 +106,7 @@ with builtins;
       transmission_4-qt
 
       wl-clipboard
+      wdisplays
 
       unar
       unrar
