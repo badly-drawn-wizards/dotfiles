@@ -7,13 +7,12 @@ let
   inherit (pkgs.nix-colors.lib.conversions)
     hexToRGB;
   inherit (lib)
-    mod length min max toHexString readFile
-    escapeShellArg
+    length min max toHexString readFile
     mapAttrsToList;
   inherit (lib.strings)
     removePrefix concatStrings concatMapStrings fixedWidthString;
   inherit (lib.lists)
-    map mapAttrs genList zipListsWith reverseList elemAt;
+    map genList zipListsWith reverseList elemAt;
   theme = {
     background-darker = "#${rgb-to-hex [30 31 41]}";
     background = "#282a36";
@@ -58,20 +57,6 @@ let
   colored = text: color:
     "${tag-open "span" { inherit color; }}${text}${tag-close "span"}";
 
-  playerctld-shift = "${pkgs.dbus}/bin/dbus-send --session --type=method_call --dest=org.mpris.MediaPlayer2.playerctld /org/mpris/MediaPlayer2 com.github.altdesktop.playerctld.Shift";
-  mpris-config = {
-    format = " | {player_icon}: {status_icon}";
-    status-icons = {
-      playing = icons.play;
-      paused = icons.pause;
-      stopped = icons.stop;
-    };
-    player-icons = {
-      default = colored "" theme.purple;
-      spotifyd = colored "" theme.green;
-      firefox = colored "" theme.red;
-    };
-  };
 in
 {
   programs.waybar = {
@@ -130,17 +115,17 @@ in
           "custom/notification" = {
             format = "{icon}";
             format-icons = {
-              notification = "<span foreground='${theme.red}'><sup></sup></span>";
-              none = "";
-              dnd-notification = "<span foreground='${theme.red}'><sup></sup></span>";
-              dnd-none = "";
-              inhibited-notification = "<span foreground='${theme.red}'><sup></sup></span>";
-              inhibited-none = "";
-              dnd-inhibited-notification = "<span foreground='${theme.red}'><sup></sup></span>";
-              dnd-inhibited-none = "";
+              notification = "[<span foreground='${theme.red}'><sup>●</sup></span>]";
+              none = "[]";
+              dnd-notification = "[<span foreground='${theme.red}'><sup>●</sup></span>]";
+              dnd-none = "[]";
+              inhibited-notification = "[<span foreground='${theme.red}'><sup>●</sup></span>]";
+              inhibited-none = "[]";
+              dnd-inhibited-notification = "[<span foreground='${theme.red}'><sup>●</sup></span>]";
+              dnd-inhibited-none = "[]";
             };
             return-type = "json";
-            exec-if = "which swaync-client";
+            exec-if = "test -x ${pkgs.swaynotificationcenter}/bin/swaync-client";
             exec = "${pkgs.swaynotificationcenter}/bin/swaync-client -swb";
             on-click = "sleep 0.1 && ${pkgs.swaynotificationcenter}/bin/swaync-client -t -sw";
             on-click-right = "sleep 0.1 && ${pkgs.swaynotificationcenter}/bin/swaync-client -d -sw";
