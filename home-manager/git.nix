@@ -19,9 +19,20 @@
         autosquash = true
     '';
     ".ssh/config".text = ''
-      IdentitiesOnly yes
-      IdentityFile ~/.ssh/id_ed25519
-      IdentityFile ~/.ssh/id_rsa
+      Host github.com
+        IdentitiesOnly yes
+        IdentityFile ~/.ssh/id_rsa
+        IdentityFile ~/.ssh/id_ed25519
+
+      Host ssh.dev.azure.com vs-ssh.visualstudio.com *.visualstudio.com
+        IdentitiesOnly yes
+        IdentityFile ~/.ssh/id_rsa
+        IdentityFile ~/.ssh/id_ed25519
+
+      Host *
+        IdentitiesOnly yes
+        IdentityFile ~/.ssh/id_ed25519
+        IdentityFile ~/.ssh/id_rsa
     '';
   };
 
