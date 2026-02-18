@@ -45,7 +45,12 @@
   environment = {
     enableDebugInfo = true;
     systemPackages = with pkgs; [ vim git ];
-    pathsToLink = [ "/share" "/share/zsh" ];
+    pathsToLink = [
+      "/share"
+      "/share/zsh"
+      "/share/xdg-desktop-portal"
+      "/share/applications"
+    ];
   };
 
   programs = {
@@ -117,12 +122,12 @@
     icons.enable = true;
     portal = {
       enable = true;
-      config.common.default = "*";
-      xdgOpenUsePortal = false;
+      wlr.enable = true;
+      xdgOpenUsePortal = true;
       extraPortals = with pkgs; [
-        xdg-desktop-portal-wlr
         xdg-desktop-portal-gtk
       ];
+      config.common.default = [ "wlr" "gtk" ];
     };
   };
 
