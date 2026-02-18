@@ -7,6 +7,7 @@
     "${zulip}/bin/zulip"
     "${discord}/bin/discord"
     "${element-desktop}/bin/element-desktop --profile personal"
+    "${teams-for-linux}/bin/teams-for-linux"
   ];
   home.packages = with pkgs; [
     # zoom-us
