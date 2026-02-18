@@ -201,8 +201,8 @@ in
             { class = "^discord$"; }
             { class = "^Riot$"; }
             { class = "^Slack$"; }
-            { class = "^Element$"; }
-            { class = "^Zulip$"; }
+            { app_id = "^Element$"; }
+            { app_id = "^Zulip$"; }
             { class = "^Mattermost$"; }
             { app_id = "^thunderbird$"; }
             { app_id = "^whatsapp-for-linux$"; }
