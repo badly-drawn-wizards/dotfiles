@@ -3,9 +3,6 @@
 , lib
 , ...
 }:
-let
-  inherit (pkgs) fetchFromGitHub;
-in
 {
   options = with lib; with types; with hm.types; {
     programs.zsh = {
@@ -28,22 +25,8 @@ in
           src = "${pkgs.zsh-fzf-tab}/share/fzf-tab";
         }
         {
-          name = "zsh-hooks";
-          src = fetchFromGitHub {
-            owner = "zsh-hooks";
-            repo = "zsh-hooks";
-            rev = "283346c132d61baa4c6b81961c217f9b238d023b";
-            sha256 = "sha256-n33jaUlti1S2G2Oxc+KuMZcHqd2FO/knivHam47EK78=";
-          };
-        }
-        {
           name = "zsh-system-clipboard";
-          src = fetchFromGitHub {
-            owner = "kutsan";
-            repo = "zsh-system-clipboard";
-            rev = "2d94918c7fbba175a9b47845db8c664a04cffeaa";
-            sha256 = "sha256-dhvvvgfFFMBNQvZvfsidrPZiJmmhsMloaOTGfTc5PwE=";
-          };
+          src = "${pkgs.zsh-system-clipboard}/share/zsh-system-clipboard";
         }
       ];
       package = pkgs.buildEnv {
