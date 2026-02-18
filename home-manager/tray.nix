@@ -1,6 +1,10 @@
 { config, lib, pkgs, ... }:
 
 {
+  windowManager.startupPrograms = with pkgs; [
+    "${rog-control-center}/bin/rog-control-center"
+  ];
+
   services = {
     clipman.enable = true;
     batsignal = {
