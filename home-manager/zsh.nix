@@ -141,7 +141,14 @@
           bindkey "^J" history-search-forward
           bindkey "^P" history-search-backward
           bindkey "^N" history-search-forward
-          bindkey "^R" history-incremental-search-backward
+
+          # Emacs keybindings on top of vi mode
+          bindkey "^A" beginning-of-line
+          bindkey "^E" end-of-line
+          bindkey "^F" forward-char
+          bindkey "^B" backward-char
+          bindkey "^[f" forward-word
+          bindkey "^[b" backward-word
         '';
         functions = entryAfter [ "preinit" ] ''
           function hm-cat() {
@@ -168,6 +175,11 @@
           cp -R ${pkgs.spaceship-prompt}/lib/spaceship-prompt/* ./spaceship-prompt/
           ln -s ./spaceship-prompt/spaceship.zsh-theme
         '';
+    };
+
+    programs.fzf = {
+      enable = true;
+      enableZshIntegration = true;
     };
 
     home.packages = with pkgs; [
