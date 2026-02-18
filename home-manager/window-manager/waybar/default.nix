@@ -91,11 +91,8 @@ in
           [
             "custom/rotate-on"
             "custom/rotate-off"
-            "custom/mpris-start"
-            "mpris#other"
-            "mpris#spotify"
-            "mpris#firefox"
-            "custom/mpris-end"
+
+            "custom/notification"
 
             "idle_inhibitor"
             "custom/keyboard"
@@ -130,26 +127,24 @@ in
 
           "sway/window".max-length = 70;
 
-          "custom/mpris-start" = {
-            format = "[";
-            tooltip = false;
-            on-click = playerctld-shift;
-          };
-          "mpris#other" = mpris-config // {
-            ignored-players = [
-              "spotify"
-              "firefox"
-            ];
-          };
-          "mpris#spotify" = mpris-config // {
-            player = "spotify";
-          };
-          "mpris#firefox" = mpris-config // {
-            player = "firefox";
-          };
-          "custom/mpris-end" = {
-            format = "]";
-            tooltip = false;
+          "custom/notification" = {
+            format = "{icon}";
+            format-icons = {
+              notification = "<span foreground='${theme.red}'><sup></sup></span>";
+              none = "";
+              dnd-notification = "<span foreground='${theme.red}'><sup></sup></span>";
+              dnd-none = "";
+              inhibited-notification = "<span foreground='${theme.red}'><sup></sup></span>";
+              inhibited-none = "";
+              dnd-inhibited-notification = "<span foreground='${theme.red}'><sup></sup></span>";
+              dnd-inhibited-none = "";
+            };
+            return-type = "json";
+            exec-if = "which swaync-client";
+            exec = "${pkgs.swaynotificationcenter}/bin/swaync-client -swb";
+            on-click = "sleep 0.1 && ${pkgs.swaynotificationcenter}/bin/swaync-client -t -sw";
+            on-click-right = "sleep 0.1 && ${pkgs.swaynotificationcenter}/bin/swaync-client -d -sw";
+            escape = true;
           };
 
           "idle_inhibitor" = {
