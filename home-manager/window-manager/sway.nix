@@ -199,11 +199,8 @@ in
           ];
           " chat" = [
             { class = "^discord$"; }
-            { class = "^Riot$"; }
-            { class = "^Slack$"; }
             { app_id = "^Element$"; }
             { app_id = "^Zulip$"; }
-            { class = "^Mattermost$"; }
             { app_id = "^thunderbird$"; }
             { app_id = "^whatsapp-for-linux$"; }
             { app_id = "^teams-for-linux$"; }

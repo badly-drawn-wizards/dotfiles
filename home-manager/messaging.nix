@@ -14,10 +14,7 @@
     teams-for-linux
     discord
     element-desktop
-    slack
     zulip
-    #franz
-    #skypeforlinux
     #whatsapp-for-linux
   ];
 }
