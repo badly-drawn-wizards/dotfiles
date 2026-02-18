@@ -25,10 +25,10 @@ in
     timeouts = [
       { timeout = 300; command = swaylock-cmd; }
     ];
-    events = [
-      { event = "before-sleep"; command = swaylock-cmd; }
-      { event = "lock"; command = swaylock-cmd; }
-    ];
+    events = {
+      before-sleep = swaylock-cmd;
+      lock = swaylock-cmd;
+    };
   };
 
   windowManager.extraBinds = {
