@@ -6,7 +6,7 @@
     "${thunderbird}/bin/thunderbird"
     "${zulip}/bin/zulip"
     "${discord}/bin/discord"
-    "${element-desktop}/bin/element-desktop --profile personal"
+    ''${element-desktop}/bin/element-desktop --profile personal --password-store="gnome-libsecret"''
     "${teams-for-linux}/bin/teams-for-linux"
   ];
   home.packages = with pkgs; [
