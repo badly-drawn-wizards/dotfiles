@@ -120,7 +120,6 @@ with builtins;
       d-spy
 
       asusctl
-      rog-control-center
 
       screenshot
       feh

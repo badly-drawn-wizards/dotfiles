@@ -1,8 +1,8 @@
 { config, lib, pkgs, ... }:
 
 {
-  windowManager.startupPrograms = with pkgs; [
-    "${rog-control-center}/bin/rog-control-center"
+  windowManager.startupPrograms = [
+    "${pkgs.asusctl}/bin/rog-control-center"
   ];
 
   services = {
