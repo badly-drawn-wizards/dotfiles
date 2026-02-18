@@ -237,6 +237,9 @@ in
             "${mod}+Shift+s" = "exec ${pkgs.screenshot}/bin/screenshot";
             "XF86MonBrightnessUp" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set +10%";
             "XF86MonBrightnessDown" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set 10%-";
+            "XF86AudioRaiseVolume" = "exec ${pkgs.wireplumber}/bin/wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+";
+            "XF86AudioLowerVolume" = "exec ${pkgs.wireplumber}/bin/wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-";
+            "XF86AudioMute" = "exec ${pkgs.wireplumber}/bin/wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
             "XF86Launch1" = "exec ${config.windowManager.kb-events.toggle}";
             "${mod}+bracketright" = "exec ${toggle-edp-scale}/bin/toggle-edp-scale";
           };
