@@ -38,6 +38,6 @@
 
   home.file.".tridactylrc".text = ''
     colors quake
-    set editorcmd reloadable-nvim
+    set editorcmd nvim
   '';
 }

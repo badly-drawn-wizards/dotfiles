@@ -234,7 +234,7 @@ in
             "${mod}+minus" = "scratchpad show";
 
             "${mod}+Shift+r" = "reload";
-            "${mod}+i" = "exec kitty reloadable-nvim";
+            "${mod}+i" = "exec kitty nvim";
             "${mod}+Shift+i" = "exec em";
 
             "${mod}+Tab" = "workspace back_and_forth";

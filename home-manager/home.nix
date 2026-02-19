@@ -138,7 +138,7 @@ with builtins;
 
     sessionVariables = {
       PAGER = "less";
-      EDITOR = "reloadable-nvim";
+      EDITOR = "nvim";
     };
 
 
