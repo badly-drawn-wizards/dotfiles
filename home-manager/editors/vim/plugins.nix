@@ -55,7 +55,12 @@ in
           indent.enable = true;
         };
       };
-      treesitter-context.enable = true;
+      treesitter-context = {
+        enable = true;
+        settings = {
+          separator = "─";
+        };
+      };
       treesitter-textobjects = {
         enable = true;
         settings = {
