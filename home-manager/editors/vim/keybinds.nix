@@ -813,6 +813,14 @@ in
         action = mkRaw "function() vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-t>', true, false, true), 'i', false) end";
         desc = "Increase indent";
       }
+
+      # Terminal mode escape with timeout
+      {
+        key = "<Esc>";
+        mode = "t";
+        action = mkRaw "function() terminal_escape() end";
+        desc = "Terminal escape (double tap to exit)";
+      }
     ];
   };
 }
