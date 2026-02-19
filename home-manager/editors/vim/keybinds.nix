@@ -707,6 +707,12 @@ in
               }
             ];
           }
+          # Treesitter context
+          {
+            key = "t";
+            action = "<cmd>TSContext toggle<CR>";
+            desc = "Toggle treesitter context";
+          }
         ];
       }
 
