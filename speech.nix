@@ -1,15 +1,10 @@
 { config, lib, pkgs, ... }:
 
 let
-  # Fetch piper model files
+  # Fetch piper model
   piperModel = pkgs.fetchurl {
-    url = "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_US/ryan/high/en_US-ryan-high.onnx?download=true";
-    hash = "sha256-s5kNdgbhg+yNv7pwpGBwdPFi3hoMQS4BgNH/YLsVTso=";
-  };
-
-  piperModelJson = pkgs.fetchurl {
-    url = "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_US/ryan/high/en_US-ryan-high.onnx.json?download=true";
-    hash = lib.fakeHash;
+    url = "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_GB/alan/medium/en_GB-alan-medium.onnx?download=true";
+    hash = "sha256-CjCWaJMiBedigB8e/Cc2zUsBIDKWIq32K+CeVjOdMzA=";
   };
 
   # Piper module configuration file
@@ -26,7 +21,7 @@ let
     GenericRateMultiply 1
     GenericPitchMultiply 1000
 
-    AddVoice "en_US" "MALE1" "Piper"
+    AddVoice "en_GB" "MALE1" "Piper"
   '';
 in
 {
