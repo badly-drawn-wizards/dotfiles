@@ -444,6 +444,11 @@ in
             desc = "Format";
           }
           {
+            key = "s";
+            action = mkRaw "vim.lsp.buf.signature_help";
+            desc = "Signature help";
+          }
+          {
             key = "l";
             action = mkRaw "vim.lsp.codelens.run";
             desc = "Run codelens";
@@ -757,6 +762,11 @@ in
       }
 
       # Additional non-leader keybinds
+      {
+        key = "K";
+        action = mkRaw "vim.lsp.buf.hover";
+        desc = "Hover documentation";
+      }
       {
         key = "gd";
         action = mkRaw "vim.lsp.buf.definition";

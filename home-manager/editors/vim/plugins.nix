@@ -56,6 +56,38 @@ in
         };
       };
       treesitter-context.enable = true;
+      treesitter-textobjects = {
+        enable = true;
+        settings = {
+          select = {
+            enable = true;
+            lookahead = true;
+            keymaps = {
+              af = "@function.outer";
+              "if" = "@function.inner";
+              ac = "@class.outer";
+              ic = "@class.inner";
+              aa = "@parameter.outer";
+              ia = "@parameter.inner";
+              ab = "@block.outer";
+              ib = "@block.inner";
+            };
+          };
+          move = {
+            enable = true;
+            goto_next_start = {
+              "]f" = "@function.outer";
+              "]c" = "@class.outer";
+              "]a" = "@parameter.inner";
+            };
+            goto_previous_start = {
+              "[f" = "@function.outer";
+              "[c" = "@class.outer";
+              "[a" = "@parameter.inner";
+            };
+          };
+        };
+      };
 
       # Rainbow delimiters
       rainbow-delimiters.enable = true;
@@ -63,7 +95,13 @@ in
       # Git integration
       gitsigns = {
         enable = true;
-        settings.current_line_blame = false;
+        settings = {
+          current_line_blame = true;
+          current_line_blame_opts = {
+            delay = 500;
+            virt_text_pos = "eol";
+          };
+        };
       };
       neogit = {
         enable = true;
