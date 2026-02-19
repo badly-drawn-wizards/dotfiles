@@ -109,8 +109,6 @@
 
     fwupd.enable = true;
 
-    speechd.enable = true;
-
     wyoming.piper.servers.piper = {
       enable = true;
       uri = "tcp://0.0.0.0:10200";

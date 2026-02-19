@@ -11,10 +11,9 @@ let
     url = "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_US/ryan/high/en_US-ryan-high.onnx.json?download=true";
     hash = lib.fakeHash;
   };
-in
-{
-  # Configure speechd piper module
-  services.speechd.modules.piper = ''
+
+  # Piper module configuration
+  piperModuleConfig = pkgs.writeText "piper.conf" ''
     GenericExecuteSynth "export PATH=${lib.makeBinPath [ pkgs.sox pkgs.pulseaudio pkgs.piper-tts ]}:$PATH; \
     export PLAY_COMMAND=paplay; \
     echo '$DATA' | piper --model ${piperModel} -s 0 --output_raw | \
@@ -26,7 +25,17 @@ in
     GenericVolumeAdd 1
     GenericRateMultiply 1
     GenericPitchMultiply 1000
+  '';
+in
+{
+  # Enable speechd
+  services.speechd.enable = true;
 
+  # Deploy piper module config
+  environment.etc."speech-dispatcher/modules/piper.conf".source = piperModuleConfig;
+
+  # Configure voice for piper module
+  services.speechd.modules.piper = ''
     AddVoice "en_US" "MALE1" "Piper"
   '';
 }
