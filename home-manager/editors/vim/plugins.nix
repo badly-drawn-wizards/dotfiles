@@ -378,6 +378,14 @@ in
           ];
         };
       };
+
+      # Lean theorem prover (handles LSP setup internally)
+      lean = {
+        enable = true;
+        settings = {
+          mappings = true;
+        };
+      };
     };
   };
 }
