@@ -617,6 +617,13 @@ in
         ];
       }
 
+      # Terminal toggle
+      {
+        key = "<leader>'";
+        action = "<cmd>exe v:count1 . 'ToggleTerm'<CR>";
+        desc = "Toggle terminal";
+      }
+
       # Application specific
       {
         key = "<leader>a";
@@ -673,18 +680,6 @@ in
                 key = "h";
                 action = "<cmd>Telescope git_stash<CR>";
                 desc = "Stash";
-              }
-            ];
-          }
-          # Terminal
-          {
-            key = "t";
-            desc = "Terminal";
-            keybinds = [
-              {
-                key = "t";
-                action = "<cmd>exe v:count1 . 'ToggleTerm'<CR>";
-                desc = "Toggle terminal";
               }
             ];
           }
