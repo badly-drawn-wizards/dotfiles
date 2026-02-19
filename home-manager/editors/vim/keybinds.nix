@@ -249,6 +249,21 @@ in
             action = "<C-w>=";
             desc = "Balance windows";
           }
+          {
+            key = "m";
+            action = "<C-w>_<C-w>|";
+            desc = "Maximize window";
+          }
+          {
+            key = "<";
+            action = "<C-w>5<";
+            desc = "Decrease width";
+          }
+          {
+            key = ">";
+            action = "<C-w>5>";
+            desc = "Increase width";
+          }
         ];
       }
 
@@ -306,6 +321,11 @@ in
             key = "S";
             action = "<cmd>wall<CR>";
             desc = "Save all files";
+          }
+          {
+            key = "R";
+            action = "<cmd>e!<CR>";
+            desc = "Reload file";
           }
           {
             key = "e";
@@ -415,8 +435,8 @@ in
           }
           {
             key = "r";
-            action = mkRaw "vim.lsp.buf.rename";
-            desc = "Rename";
+            action = "<cmd>IncRename <CR>";
+            desc = "Rename (inc)";
           }
           {
             key = "f";
@@ -444,8 +464,13 @@ in
         keybinds = [
           {
             key = "e";
-            action = "<cmd>Telescope diagnostics<CR>";
-            desc = "Diagnostics";
+            action = "<cmd>Trouble diagnostics toggle<CR>";
+            desc = "Diagnostics (Trouble)";
+          }
+          {
+            key = "E";
+            action = "<cmd>Trouble diagnostics toggle filter.buf=0<CR>";
+            desc = "Buffer diagnostics";
           }
           {
             key = "l";
@@ -464,8 +489,18 @@ in
           }
           {
             key = "q";
-            action = mkRaw "vim.diagnostic.setloclist";
-            desc = "Location list";
+            action = "<cmd>Trouble qflist toggle<CR>";
+            desc = "Quickfix list";
+          }
+          {
+            key = "s";
+            action = "<cmd>Trouble symbols toggle focus=false<CR>";
+            desc = "Symbols (Trouble)";
+          }
+          {
+            key = "r";
+            action = "<cmd>Trouble lsp toggle focus=false win.position=right<CR>";
+            desc = "LSP references";
           }
         ];
       }
@@ -615,9 +650,24 @@ in
                 desc = "Commits";
               }
               {
+                key = "C";
+                action = "<cmd>Telescope git_bcommits<CR>";
+                desc = "Buffer commits";
+              }
+              {
                 key = "b";
                 action = "<cmd>Telescope git_branches<CR>";
                 desc = "Branches";
+              }
+              {
+                key = "t";
+                action = "<cmd>Telescope git_status<CR>";
+                desc = "Status";
+              }
+              {
+                key = "h";
+                action = "<cmd>Telescope git_stash<CR>";
+                desc = "Stash";
               }
             ];
           }
@@ -692,6 +742,18 @@ in
             desc = "Previous buffer";
           }
         ];
+      }
+
+      # Git hunk navigation
+      {
+        key = "<leader>]";
+        action = mkRaw "function() require('gitsigns').nav_hunk('next') end";
+        desc = "Next git hunk";
+      }
+      {
+        key = "<leader>[";
+        action = mkRaw "function() require('gitsigns').nav_hunk('prev') end";
+        desc = "Previous git hunk";
       }
 
       # Additional non-leader keybinds

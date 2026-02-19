@@ -273,6 +273,24 @@ in
         };
       };
 
+      # Better UI/UX
+      trouble = {
+        enable = true;
+        settings = {
+          auto_close = true;
+          focus = true;
+        };
+      };
+      inc-rename = {
+        enable = true;
+        settings = {
+          input_buffer_type = "dressing";
+        };
+      };
+      lsp-lines = {
+        enable = true;
+      };
+
       # Startup screen with wizard
       alpha = {
         enable = true;
