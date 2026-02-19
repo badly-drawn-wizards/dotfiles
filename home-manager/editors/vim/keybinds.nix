@@ -751,12 +751,12 @@ in
 
       # Git hunk navigation
       {
-        key = "<leader>]";
+        key = "]h";
         action = mkRaw "function() require('gitsigns').nav_hunk('next') end";
         desc = "Next git hunk";
       }
       {
-        key = "<leader>[";
+        key = "[h";
         action = mkRaw "function() require('gitsigns').nav_hunk('prev') end";
         desc = "Previous git hunk";
       }
