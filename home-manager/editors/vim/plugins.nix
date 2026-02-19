@@ -335,6 +335,26 @@ in
         settings.layout = [
           {
             type = "padding";
+            val = 4;
+          }
+          {
+            type = "text";
+            val = [
+              "   _    _    __                                  _   "
+              "  F L  J J   LJ   _____     ___ _    _ ___    ___FJ  "
+              " J J .. L L      [__   F   F __` L  J '__ \", F __  L "
+              " | |/  \\| |  FJ  `-.'.'/  | |--| |  | |__|-J| |--| | "
+              " F   /\\   J J  L .' (_(_  F L__J J  F L  `-'F L__J J "
+              "J___//\\___LJ__LJ_______LJ\\____,__LJ__L    J\\____,__L"
+              "|___/  \\___||__||_______| J____,__F|__L     J____,__F"
+            ];
+            opts = {
+              position = "center";
+              hl = "DraculaPink";
+            };
+          }
+          {
+            type = "padding";
             val = 8;
           }
           {

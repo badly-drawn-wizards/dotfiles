@@ -38,7 +38,7 @@ in
     opts = {
       # Display
       number = true;
-      relativenumber = true;
+      relativenumber = false;
       signcolumn = "yes";
       cursorline = true;
 
