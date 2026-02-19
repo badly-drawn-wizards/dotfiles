@@ -108,6 +108,10 @@
 
     fwupd.enable = true;
 
+    speechd.enable = true;
+
+    wyoming.piper.servers.piper.enable = true;
+
   };
 
 

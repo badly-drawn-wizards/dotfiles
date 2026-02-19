@@ -134,6 +134,8 @@ with builtins;
       claude-code
 
       devenv
+
+      pied
     ];
 
     sessionVariables = {
