@@ -20,6 +20,7 @@
       ./ccache.nix
       ./users.nix
       ./security.nix
+      ./speech.nix
     ];
 
   nix = {
