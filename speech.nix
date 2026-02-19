@@ -7,13 +7,19 @@ let
     hash = "sha256-CjCWaJMiBedigB8e/Cc2zUsBIDKWIq32K+CeVjOdMzA=";
   };
 
+  # Piper synthesis script
+  piperSynthScript = pkgs.writeShellScriptBin "piper-synth" ''
+    export PATH=${lib.makeBinPath [ pkgs.sox pkgs.pulseaudio pkgs.piper-tts ]}:$PATH
+    export PLAY_COMMAND=paplay
+
+    echo "$DATA" | piper --model ${piperModel} -s 0 --output_raw | \
+    sox -r 22050 -c 1 -b 16 -e signed-integer -t raw - -t wav - tempo $RATE pitch $PITCH norm | \
+    $PLAY_COMMAND
+  '';
+
   # Piper module configuration file
   piperConf = pkgs.writeText "piper.conf" ''
-    GenericExecuteSynth "export PATH=${lib.makeBinPath [ pkgs.sox pkgs.pulseaudio pkgs.piper-tts ]}:$PATH; \
-    export PLAY_COMMAND=paplay; \
-    echo '$DATA' | piper --model ${piperModel} -s 0 --output_raw | \
-    sox -r 22050 -c 1 -b 16 -e signed-integer -t raw - -t wav - tempo $RATE pitch $PITCH norm | \
-    $PLAY_COMMAND;"
+    GenericExecuteSynth "${piperSynthScript}/bin/piper-synth"
 
     GenericRateAdd 1
     GenericPitchAdd 1
@@ -29,6 +35,7 @@ in
   services.speechd = {
     enable = true;
     config = ''
+      LogDir "/var/log/speech-dispatcher/"
       AddModule "piper" "sd_generic" "${piperConf}"
       DefaultModule "piper"
     '';
