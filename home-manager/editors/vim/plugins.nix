@@ -157,8 +157,8 @@ in
       toggleterm = {
         enable = true;
         settings = {
-          autoscroll = false;
-          direction = "float";
+          autoscroll = true;
+          direction = "horizontal";
         };
       };
 
