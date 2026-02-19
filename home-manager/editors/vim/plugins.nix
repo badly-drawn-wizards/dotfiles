@@ -347,6 +347,17 @@ in
           }
         ];
       };
+
+      # Transparent background
+      transparent = {
+        enable = true;
+        settings = {
+          extra_groups = [
+            "NormalFloat"
+            "NvimTreeNormal"
+          ];
+        };
+      };
     };
   };
 }
