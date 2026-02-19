@@ -219,6 +219,60 @@ in
       nvim-autopairs.enable = true;
       undotree.enable = true;
 
+      # Visual enhancements
+      indent-blankline = {
+        enable = true;
+        settings = {
+          scope.enabled = true;
+        };
+      };
+      nvim-colorizer = {
+        enable = true;
+        settings = {
+          user_default_options = {
+            names = false;
+            rgb_fn = true;
+            hsl_fn = true;
+          };
+        };
+      };
+      todo-comments = {
+        enable = true;
+        settings = {
+          signs = true;
+          keywords = {
+            FIX = { icon = " "; color = "error"; alt = [ "FIXME" "BUG" "FIXIT" "ISSUE" ]; };
+            TODO = { icon = " "; color = "info"; };
+            HACK = { icon = " "; color = "warning"; };
+            WARN = { icon = " "; color = "warning"; alt = [ "WARNING" "XXX" ]; };
+            PERF = { icon = " "; alt = [ "OPTIM" "PERFORMANCE" "OPTIMIZE" ]; };
+            NOTE = { icon = " "; color = "hint"; alt = [ "INFO" ]; };
+          };
+        };
+      };
+      fidget = {
+        enable = true;
+        settings = {
+          notification = {
+            window = {
+              winblend = 0;
+            };
+          };
+        };
+      };
+      nvim-lightbulb = {
+        enable = true;
+        settings = {
+          autocmd = {
+            enabled = true;
+          };
+          sign = {
+            enabled = true;
+            text = "💡";
+          };
+        };
+      };
+
       # Startup screen with wizard
       alpha = {
         enable = true;
