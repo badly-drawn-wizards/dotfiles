@@ -31,6 +31,19 @@
       experimental-features = [ "nix-command" "flakes" "recursive-nix" ];
       trusted-substituters = [ "https://cache.nixos.org/" ];
     };
+
+    # Automatic garbage collection
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 30d";
+    };
+
+    # Automatic store deduplication
+    optimise = {
+      automatic = true;
+      dates = [ "weekly" ];
+    };
   };
 
   i18n.defaultLocale = "en_US.UTF-8";
