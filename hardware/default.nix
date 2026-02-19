@@ -8,7 +8,6 @@
       ./printing.nix
       ./bluetooth.nix
       ./joycon.nix
-      ./avloopback.nix
     ];
 
   nix.settings.max-jobs = 8;

@@ -9,6 +9,5 @@
 
   boot.kernelModules = [
     "hid-nintendo"
-    "ledtrig-audio"
   ];
 }
