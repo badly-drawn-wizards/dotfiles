@@ -2,7 +2,8 @@ self: super:
 
 let
   pkgs = self;
-  inherit (pkgs) lib recurseIntoAttrs;
+  inherit (pkgs) lib;
+  inherit (lib) recurseIntoAttrs;
   structuredExtraConfig = with lib.kernel; {
     ACPI_DEBUG = yes;
     ACPI_DEBUGGER = yes;
