@@ -143,6 +143,7 @@ with builtins;
     sessionVariables = {
       PAGER = "less";
       EDITOR = "nvim";
+      SSH_AUTH_SOCK = "$XDG_RUNTIME_DIR/gcr/ssh";
     };
 
 
