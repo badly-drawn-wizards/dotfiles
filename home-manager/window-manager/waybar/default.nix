@@ -1,18 +1,17 @@
 { config, lib, pkgs, ... }:
 let
   inherit (config) icons;
-  inherit (builtins)
-    floor;
   inherit (pkgs) writeScript writeScriptBin jq pomo taskwarrior;
-  inherit (pkgs.nix-colors.lib.conversions)
-    hexToRGB;
   inherit (lib)
-    length min max toHexString readFile
-    mapAttrsToList;
+    readFile mapAttrsToList;
   inherit (lib.strings)
-    removePrefix concatStrings concatMapStrings fixedWidthString;
+    concatStrings;
   inherit (lib.lists)
-    map genList zipListsWith reverseList elemAt;
+    map;
+
+  colors = import ../../../lib/colors.nix { inherit lib pkgs; };
+  inherit (colors) rgb-to-hex color-tiers-asc color-tiers-desc;
+
   theme = {
     background-darker = "#${rgb-to-hex [30 31 41]}";
     background = "#282a36";
@@ -28,26 +27,9 @@ let
     yellow = "#f1fa8c";
     white = "#ffffff";
   };
-  rgb-to-hex = concatMapStrings (v: fixedWidthString 2 "0" (toHexString v));
-  color-mix-rgb = a: zipListsWith (c1: c2: floor ((1 - a) * c1 + a * c2));
-  color-mix-hex = a: h1: h2:
-    "#" + rgb-to-hex (color-mix-rgb a (hexToRGB (removePrefix "#" h1)) (hexToRGB (removePrefix "#" h2)));
-  clamp = x: y: a: max x (min y a);
-  lerp-list-with = f: xs: a:
-    let
-      a' = clamp 0 1 a;
-      n = length xs - 1;
-      x1 = floor (a' * n);
-      x2 = min n (x1 + 1);
-      b = a' - x1;
-    in
-    assert n > 0;
-    f b (elemAt xs x1) (elemAt xs x2);
-  arange1 = n: genList (x: 1.0 * x / (n - 1)) n;
-  color-tiers-asc = map
-    (lerp-list-with color-mix-hex [ theme.red theme.yellow theme.white ])
-    (arange1 15);
-  color-tiers-desc = reverseList color-tiers-asc;
+
+  color-tiers-asc-15 = color-tiers-asc theme 15;
+  color-tiers-desc-15 = color-tiers-desc theme 15;
   tag-open = tag: attrs:
     let
       body = concatStrings (mapAttrsToList (k: v: if v == null then "" else " ${k}=\"${v}\"") attrs);
@@ -160,17 +142,17 @@ in
             format = "[{icon}: {capacity} ";
             format-charging = "[${colored icons.battery theme.purple}: {capacity} ";
             format-full = "[${colored icons.battery theme.green}: {capacity} ";
-            format-icons = map (colored icons.battery) color-tiers-asc;
+            format-icons = map (colored icons.battery) color-tiers-asc-15;
             interval = 2;
           };
           "cpu" = {
             format = "| {icon}: {usage} ";
-            format-icons = map (colored icons.cpu) color-tiers-desc;
+            format-icons = map (colored icons.cpu) color-tiers-desc-15;
             interval = 2;
           };
           "memory" = {
             format = "| {icon}: {percentage} ";
-            format-icons = map (colored icons.memory) color-tiers-desc;
+            format-icons = map (colored icons.memory) color-tiers-desc-15;
             interval = 2;
           };
           "disk" = {
