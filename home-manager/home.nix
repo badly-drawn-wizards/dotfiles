@@ -45,6 +45,41 @@ with builtins;
 
   xdg = {
     mime.enable = true;
+    configFile."mimeapps.list".force = true;
+
+    # Override zathura desktop entries to remove NoDisplay
+    desktopEntries = {
+      "org.pwmt.zathura-pdf-mupdf" = {
+        name = "Zathura (PDF)";
+        noDisplay = false;
+        mimeType = [
+          "application/pdf"
+          "application/oxps"
+          "application/epub+zip"
+          "application/x-fictionbook"
+          "application/x-mobipocket-ebook"
+        ];
+        exec = "zathura %U";
+      };
+      "org.pwmt.zathura" = {
+        name = "Zathura";
+        noDisplay = false;
+        exec = "zathura %U";
+      };
+    };
+
+    # Set explicit MIME defaults
+    mimeApps = {
+      enable = true;
+      defaultApplications = {
+        "inode/directory" = [ "org.gnome.Nautilus.desktop" ];
+        "application/pdf" = [ "org.pwmt.zathura-pdf-mupdf.desktop" ];
+        "application/epub+zip" = [ "org.pwmt.zathura-pdf-mupdf.desktop" ];
+        "text/html" = [ "firefox.desktop" ];
+        "x-scheme-handler/http" = [ "firefox.desktop" ];
+        "x-scheme-handler/https" = [ "firefox.desktop" ];
+      };
+    };
   };
 
 
