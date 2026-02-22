@@ -45,41 +45,6 @@ with builtins;
 
   xdg = {
     mime.enable = true;
-    configFile."mimeapps.list".force = true;
-    mimeApps =
-      let
-        zathuraDesktop = "org.pwmt.zathura-pdf-mupdf.desktop";
-        firefoxDesktop = "firefox.desktop";
-        nautilusDesktop = "org.gnome.Nautilus.desktop";
-        codeDesktop = "code.desktop";
-        common = {
-          "application/pdf" = [ zathuraDesktop ];
-          "application/epub+zip" = [ zathuraDesktop ];
-          "x-scheme-handler/http" = [ firefoxDesktop ];
-          "x-scheme-handler/https" = [ firefoxDesktop ];
-          "x-scheme-handler/chrome" = [ firefoxDesktop ];
-          "text/html" = [ firefoxDesktop ];
-          "application/x-extension-htm" = [ firefoxDesktop ];
-          "application/x-extension-html" = [ firefoxDesktop ];
-          "application/x-extension-shtml" = [ firefoxDesktop ];
-          "application/xhtml+xml" = [ firefoxDesktop ];
-          "application/x-extension-xhtml" = [ firefoxDesktop ];
-          "application/x-extension-xht" = [ firefoxDesktop ];
-          "application/x-www-browser" = [ firefoxDesktop ];
-        };
-      in
-      {
-        enable = true;
-        associations = {
-          added = common // { };
-          removed = {
-            "inode/directory" = [ "code.desktop" ];
-          };
-        };
-        defaultApplications = common // {
-          "inode/directory" = [ nautilusDesktop ];
-        };
-      };
   };
 
 
@@ -90,6 +55,8 @@ with builtins;
       libreoffice
 
       pulsemixer
+
+      nautilus
 
       tmux
 
