@@ -1,8 +1,5 @@
 { config, lib, pkgs, ... }:
 
-let
-  helpers = config.lib.nixvim;
-in
 {
   programs.nixvim = {
     plugins = {
@@ -31,9 +28,10 @@ in
             enable = true;
             settings = {
               formatting.command = [ "nixpkgs-fmt" ];
+              nixpkgs.expr = "import <nixpkgs> { }";
               options = {
                 nixos.expr = "(builtins.getFlake (toString ./.)).nixosConfigurations.noobnoob.options";
-                home-manager.expr = "(builtins.getFlake (toString ./.)).nixosConfigurations.noobnoob.config.home-manager.users.reuben.options";
+                home_manager.expr = "(builtins.getFlake (builtins.toString ./.)).nixosConfigurations.noobnoob.options.home-manager.users.type.getSubOptions []";
               };
             };
           };
