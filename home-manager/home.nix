@@ -137,7 +137,7 @@ with builtins;
 
       devenv
 
-      pied
+      clickup
     ];
 
     sessionVariables = {
