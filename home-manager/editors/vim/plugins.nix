@@ -172,6 +172,7 @@ in
           timeout = 3000;
           render = "default";
           stages = "fade";
+          background_colour = "#000000";
         };
       };
 
