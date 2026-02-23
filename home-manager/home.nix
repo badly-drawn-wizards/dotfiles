@@ -17,6 +17,7 @@ with builtins;
     ./messaging.nix
     ./zsh.nix
     ./git.nix
+    ./ssh.nix
     ./xresources.nix
     ./screen-rotation.nix
     ./backgrounds.nix
