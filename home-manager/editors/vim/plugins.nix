@@ -9,7 +9,7 @@ in
     # Colorscheme
     colorschemes.dracula-nvim = {
       enable = true;
-      settings = {};
+      settings = { };
     };
 
     plugins = {
@@ -132,10 +132,8 @@ in
       # Project management
       project-nvim = {
         enable = true;
-        settings = {
-          detection_methods = [ "pattern" ];
-          patterns = [ ".git" "package.json" "Cargo.toml" "go.mod" ];
-        };
+        enableTelescope = true;
+        settings = { };
       };
 
       # Yank history
@@ -172,8 +170,6 @@ in
         enable = true;
         settings = {
           timeout = 3000;
-          max_width = 60;
-          max_height = 10;
           render = "default";
           stages = "fade";
         };
@@ -283,14 +279,6 @@ in
         enable = true;
         settings = {
           signs = true;
-          keywords = {
-            FIX = { icon = " "; color = "error"; alt = [ "FIXME" "BUG" "FIXIT" "ISSUE" ]; };
-            TODO = { icon = " "; color = "info"; };
-            HACK = { icon = " "; color = "warning"; };
-            WARN = { icon = " "; color = "warning"; alt = [ "WARNING" "XXX" ]; };
-            PERF = { icon = " "; alt = [ "OPTIM" "PERFORMANCE" "OPTIMIZE" ]; };
-            NOTE = { icon = " "; color = "hint"; alt = [ "INFO" ]; };
-          };
         };
       };
       fidget = {
