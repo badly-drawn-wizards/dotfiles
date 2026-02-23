@@ -8,7 +8,8 @@
   ];
 
   home.packages = with pkgs; [
-    ripgrep
     postman
   ];
+
+  programs.ripgrep.enable = true;
 }

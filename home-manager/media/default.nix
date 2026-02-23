@@ -8,7 +8,6 @@
   ];
 
   home.packages = with pkgs; [
-    mpv
     vlc
     spotify
 
@@ -16,6 +15,8 @@
 
     qpwgraph
   ];
+
+  programs.mpv.enable = true;
 
   services = {
     easyeffects.enable = true;

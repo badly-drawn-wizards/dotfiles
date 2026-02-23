@@ -184,7 +184,8 @@
 
     home.packages = with pkgs; [
       pay-respects
-      eza
     ];
+
+    programs.eza.enable = true;
   };
 }
