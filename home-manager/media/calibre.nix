@@ -1,8 +1,7 @@
 { config, lib, pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    calibre
-  ];
+  programs.calibre.enable = true;
+
   home.sessionVariables.CALIBRE_USE_DARK_PALETTE = "1";
 }
