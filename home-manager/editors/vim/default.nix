@@ -43,7 +43,6 @@ in
       cursorline = true;
 
       # Behavior
-      autochdir = true;
       mouse = "a";
 
       # Session options for auto-session
