@@ -84,10 +84,6 @@
         hm = config.home-manager.users.reuben;
         emacs = hm.programs.doom-emacs.package;
         epkgs = pkgs.emacsPackages;
-        nixd = {
-          nixos = nixos.options;
-          hm = nixos.options.home-manager.users.type.getSubOptions [ ];
-        };
       };
     in
     utils.lib.mkFlake

@@ -31,6 +31,10 @@ in
             enable = true;
             settings = {
               formatting.command = [ "nixpkgs-fmt" ];
+              options = {
+                nixos.expr = "(builtins.getFlake (toString ./.)).nixosConfigurations.noobnoob.options";
+                home-manager.expr = "(builtins.getFlake (toString ./.)).nixosConfigurations.noobnoob.config.home-manager.users.reuben.options";
+              };
             };
           };
 
