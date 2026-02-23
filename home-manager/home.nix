@@ -41,6 +41,12 @@ with builtins;
 
   programs = {
     zathura.enable = true;
+    claude-code.enable = true;
+    tmux.enable = true;
+    fzf.enable = true;
+    btop.enable = true;
+    jq.enable = true;
+    less.enable = true;
   };
 
   xdg = {
@@ -93,15 +99,9 @@ with builtins;
 
       nautilus
 
-      tmux
-
       tree
-      less
-      jq
-      btop
       lsof
       wget
-      fzf
 
       transmission_4-qt
 
@@ -132,8 +132,6 @@ with builtins;
       # cura
 
       burpsuite
-
-      claude-code
 
       devenv
 
