@@ -1,7 +1,5 @@
 { config, lib, pkgs, ... }:
 
 {
-  home.packages = [
-    pkgs.obsidian
-  ];
+  programs.obsidian.enable = true;
 }
