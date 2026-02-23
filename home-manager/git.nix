@@ -4,9 +4,11 @@
   programs.git = {
     enable = true;
     lfs.enable = true;
-    userName = "Reuben Steenekamp";
-    userEmail = "reuben.steenekamp@gmail.com";
-    extraConfig = {
+    settings = {
+      user = {
+        name = "Reuben Steenekamp";
+        email = "reuben.steenekamp@gmail.com";
+      };
       init.defaultBranch = "master";
       push.default = "simple";
       rebase = {
