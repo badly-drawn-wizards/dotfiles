@@ -48,6 +48,7 @@ with builtins;
     btop.enable = true;
     jq.enable = true;
     less.enable = true;
+    feh.enable = true;
   };
 
   xdg = {
@@ -123,7 +124,6 @@ with builtins;
       asusctl
 
       screenshot
-      feh
 
       # webnovel-android
       github-desktop
