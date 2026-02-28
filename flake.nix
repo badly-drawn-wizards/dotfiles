@@ -28,10 +28,6 @@
       url = "github:nix-community/comma";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    lean4 = {
-      url = "github:leanprover/lean4";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     vs-code-default-keybindings = {
       url = "github:badly-drawn-wizards/vs-code-default-keybindings";
       flake = false;
@@ -55,7 +51,6 @@
     { utils
     , nix-index
     , nixfs
-    , lean4
     , vs-code-default-keybindings
     , nix-colors
     , nixd
@@ -104,7 +99,6 @@
             inherit (nix-index) nix-index nix-locate;
             inherit vs-code-default-keybindings;
             inherit nix-colors;
-            lean4-flake = super.callPackage ({ system }: lean4.packages.${system}) { };
           })
           nixd.overlays.default
         ] ++ import ./overlays;
