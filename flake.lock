@@ -202,28 +202,6 @@
         "type": "github"
       }
     },
-    "lean4": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "nixpkgs-old": "nixpkgs-old",
-        "nixpkgs-older": "nixpkgs-older"
-      },
-      "locked": {
-        "lastModified": 1771845460,
-        "narHash": "sha256-LQyK0u9sQm5osnD9QllI8VrMBAJfJfEAM/RGsNnBv2E=",
-        "owner": "leanprover",
-        "repo": "lean4",
-        "rev": "8b0440383037ffbd1e992368277c4da4211b6c88",
-        "type": "github"
-      },
-      "original": {
-        "owner": "leanprover",
-        "repo": "lean4",
-        "type": "github"
-      }
-    },
     "naersk": {
       "inputs": {
         "fenix": "fenix",
@@ -388,32 +366,6 @@
         "url": "https://github.com/NixOS/nixpkgs/archive/5487e69da40cbd611ab2cadee0b4637225f7cfae.tar.gz"
       }
     },
-    "nixpkgs-old": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1582018169,
-        "narHash": "sha256-qv1iK1IchpZKSeWL3NEs4U5Jl5QVyNHDdiMJvLOI4Yc=",
-        "type": "tarball",
-        "url": "https://releases.nixos.org/nixos/19.03/nixos-19.03.173691.34c7eb7545d/nixexprs.tar.xz"
-      },
-      "original": {
-        "type": "tarball",
-        "url": "https://channels.nixos.org/nixos-19.03/nixexprs.tar.xz"
-      }
-    },
-    "nixpkgs-older": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1550657948,
-        "narHash": "sha256-BE0XqzNfzvhhtTXv37LyySyq4moL7z1i1hMvwbFNL/I=",
-        "type": "tarball",
-        "url": "https://releases.nixos.org/nixos/18.03/nixos-18.03.133402.cb0e20d6db9/nixexprs.tar.xz"
-      },
-      "original": {
-        "type": "tarball",
-        "url": "https://channels.nixos.org/nixos-18.03/nixexprs.tar.xz"
-      }
-    },
     "nixpkgs_2": {
       "locked": {
         "lastModified": 1754800730,
@@ -473,7 +425,6 @@
         "comma": "comma",
         "flake-compat": "flake-compat_2",
         "home-manager": "home-manager",
-        "lean4": "lean4",
         "nix-colors": "nix-colors",
         "nix-index": "nix-index",
         "nix-index-database": "nix-index-database",
