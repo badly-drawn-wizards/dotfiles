@@ -100,10 +100,9 @@
 
     dbus = {
       enable = true;
+
       packages = with pkgs; [ dconf gcr ];
     };
-
-    flatpak.enable = true;
 
     # fprintd.enable = true;
 
