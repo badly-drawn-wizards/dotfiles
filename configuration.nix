@@ -134,15 +134,6 @@
   xdg = {
     mime.enable = true;
     icons.enable = true;
-    portal = {
-      enable = true;
-      wlr.enable = true;
-      xdgOpenUsePortal = true;
-      extraPortals = with pkgs; [
-        xdg-desktop-portal-gtk
-      ];
-      config.common.default = [ "wlr" "gtk" ];
-    };
   };
 
   system.stateVersion = "23.11";
