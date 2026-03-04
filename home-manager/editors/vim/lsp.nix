@@ -28,7 +28,6 @@
             enable = true;
             settings = {
               formatting.command = [ "nixpkgs-fmt" ];
-              nixpkgs.expr = "import <nixpkgs> { }";
               options = {
                 nixos.expr = "(builtins.getFlake (toString ./.)).nixosConfigurations.noobnoob.options";
                 home_manager.expr = "(builtins.getFlake (builtins.toString ./.)).nixosConfigurations.noobnoob.options.home-manager.users.type.getSubOptions []";
