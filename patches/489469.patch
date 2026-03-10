@@ -1,0 +1,338 @@
+From aac0b83b8b877360898a70958af46c6e67ce9e09 Mon Sep 17 00:00:00 2001
+From: "R. Ryantm" <ryantm-bot@ryantm.com>
+Date: Mon, 16 Feb 2026 02:16:48 +0000
+Subject: [PATCH 1/4] kmscon: 9.3.1 -> 9.3.2
+
+---
+ pkgs/by-name/km/kmscon/package.nix | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/pkgs/by-name/km/kmscon/package.nix b/pkgs/by-name/km/kmscon/package.nix
+index 5723f7bc1568a..8b3eb391ffc69 100644
+--- a/pkgs/by-name/km/kmscon/package.nix
++++ b/pkgs/by-name/km/kmscon/package.nix
+@@ -24,13 +24,13 @@
+ }:
+ stdenv.mkDerivation (finalAttrs: {
+   pname = "kmscon";
+-  version = "9.3.1";
++  version = "9.3.2";
+ 
+   src = fetchFromGitHub {
+     owner = "kmscon";
+     repo = "kmscon";
+     tag = "v${finalAttrs.version}";
+-    hash = "sha256-pH+dBcUKXrVh9/y6mNWmYBx6HVbuSZX/F2sCG/Yj5UQ=";
++    hash = "sha256-a1H9/j92Z/vjvFp226Ps9PFy5dAS8yg+RErgJWIb9HQ=";
+   };
+ 
+   strictDeps = true;
+
+From d4b40134bbe67add331b73cc861f4f6b5a8fa76d Mon Sep 17 00:00:00 2001
+From: ccicnce113424 <ccicnce113424@gmail.com>
+Date: Thu, 12 Feb 2026 00:19:13 +0800
+Subject: [PATCH 2/4] kmscon: fix systemd unit path and runtime dependency
+
+---
+ pkgs/by-name/km/kmscon/package.nix   | 11 +++++++++++
+ pkgs/by-name/km/kmscon/sandbox.patch |  2 +-
+ 2 files changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/pkgs/by-name/km/kmscon/package.nix b/pkgs/by-name/km/kmscon/package.nix
+index 8b3eb391ffc69..ec080dde3add4 100644
+--- a/pkgs/by-name/km/kmscon/package.nix
++++ b/pkgs/by-name/km/kmscon/package.nix
+@@ -2,6 +2,7 @@
+   lib,
+   stdenv,
+   fetchFromGitHub,
++  makeWrapper,
+   meson,
+   libtsm,
+   systemdLibs,
+@@ -18,6 +19,8 @@
+   ninja,
+   check,
+   bash,
++  gawk,
++  inotify-tools,
+   buildPackages,
+   nix-update-script,
+   nixosTests,
+@@ -54,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
+   ];
+ 
+   nativeBuildInputs = [
++    makeWrapper
+     meson
+     ninja
+     docbook_xsl
+@@ -78,6 +82,13 @@ stdenv.mkDerivation (finalAttrs: {
+     done
+   '';
+ 
++  postFixup = ''
++    substituteInPlace $out/bin/kmscon \
++      --replace-fail "awk" "${gawk}/bin/awk"
++    substituteInPlace $out/bin/kmscon-launch-gui \
++      --replace-fail "inotifywait" "${inotify-tools}/bin/inotifywait"
++  '';
++
+   passthru = {
+     tests.kmscon = nixosTests.kmscon;
+     updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
+diff --git a/pkgs/by-name/km/kmscon/sandbox.patch b/pkgs/by-name/km/kmscon/sandbox.patch
+index 0a9292328aa3e..9f896b7611437 100644
+--- a/pkgs/by-name/km/kmscon/sandbox.patch
++++ b/pkgs/by-name/km/kmscon/sandbox.patch
+@@ -7,7 +7,7 @@ index de29a32..e731bbd 100644
+  
+  systemd_deps = dependency('systemd', required: false)
+ -systemdsystemunitdir = systemd_deps.get_variable('systemdsystemunitdir', default_value: 'lib/systemd/system')
+-+systemdsystemunitdir = get_option('libdir') / 'systemd'
+++systemdsystemunitdir = get_option('libdir') / 'systemd' / 'system'
+  
+  #
+  # Required dependencies
+
+From bf4be8f82c83c92727bfb0bfdf54ab31f45cb6e3 Mon Sep 17 00:00:00 2001
+From: hustlerone <nine-ball@tutanota.com>
+Date: Fri, 16 May 2025 20:31:30 +0200
+Subject: [PATCH 3/4] nixos/kmscon: refactor
+
+Cherry-picked from NixOS/nixpkgs#391574
+
+Co-authored-by: ccicnce113424 <ccicnce113424@gmail.com>
+---
+ nixos/modules/services/ttys/getty.nix  |  12 +++
+ nixos/modules/services/ttys/kmscon.nix | 114 ++++++++++++++++---------
+ 2 files changed, 88 insertions(+), 38 deletions(-)
+
+diff --git a/nixos/modules/services/ttys/getty.nix b/nixos/modules/services/ttys/getty.nix
+index 01d2858602b6a..027dbd0be6dad 100644
+--- a/nixos/modules/services/ttys/getty.nix
++++ b/nixos/modules/services/ttys/getty.nix
+@@ -125,6 +125,18 @@ in
+         '';
+       };
+ 
++      kmsconGettyArgs = mkOption {
++        type = types.str;
++        default = gettyCmd "-8 --noclear -- - $$TERM";
++        readOnly = true;
++        visible = false;
++        description = ''
++          This is a read-only option.
++
++          This passes through the arguments required to run agetty under kmscon.
++        '';
++      };
++
+     };
+ 
+   };
+diff --git a/nixos/modules/services/ttys/kmscon.nix b/nixos/modules/services/ttys/kmscon.nix
+index 70d3e15e6e363..b510f38aec59a 100644
+--- a/nixos/modules/services/ttys/kmscon.nix
++++ b/nixos/modules/services/ttys/kmscon.nix
+@@ -17,28 +17,54 @@ let
+ 
+   cfg = config.services.kmscon;
+ 
+-  autologinArg = lib.optionalString (cfg.autologinUser != null) "-f ${cfg.autologinUser}";
++  gettyCfg = config.services.getty;
+ 
+   configDir = pkgs.writeTextFile {
+     name = "kmscon-config";
+     destination = "/kmscon.conf";
+     text = cfg.extraConfig;
+   };
++
++  loginWrapper = pkgs.writeShellScriptBin "kmscon-login-wrapper" ''
++    kms_tty=
++    active_tty_file=/sys/class/tty/tty0/active
++    if [ -f "$active_tty_file" ]; then
++      read -r kms_tty < "$active_tty_file"
++    fi
++
++    ${lib.optionalString gettyCfg.autologinOnce ''
++      autologged="/run/kmscon.autologged"
++      if [ "$kms_tty" = tty1 ] && [ ! -f "$autologged" ]; then
++        touch "$autologged"
++        exec ${gettyCfg.loginProgram} -f ${gettyCfg.autologinUser} "$@"
++      fi
++    ''}
++    exec ${gettyCfg.loginProgram} "$@"
++  '';
+ in
+ {
++  imports = [
++    (lib.mkRemovedOptionModule [ "services" "kmscon" "autologinUser" ] ''
++      Autologin is now handled by the agetty module.
++
++      Check `services.getty.autologinUser` instead.
++    '')
++  ];
++
+   options = {
+     services.kmscon = {
+       enable = mkEnableOption ''
+-        kmscon as the virtual console instead of gettys.
+-        kmscon is a kms/dri-based userspace virtual terminal implementation.
+-        It supports a richer feature set than the standard linux console VT,
+-        including full unicode support, and when the video card supports drm
+-        should be much faster
++        Use kmscon instead of autovt.
++
++        Kmscon is a simple terminal emulator based on linux kernel mode setting (KMS).
++        It is an attempt to replace the in-kernel VT implementation with a userspace console.
+       '';
+ 
+       package = mkPackageOption pkgs "kmscon" { };
+ 
+-      hwRender = mkEnableOption "3D hardware acceleration to render the console";
++      hwRender = mkEnableOption "hardware acceleration + DRM backend";
++
++      agetty = mkEnableOption "use agetty as the login program";
+ 
+       fonts = mkOption {
+         description = "Fonts used by kmscon, in order of priority.";
+@@ -63,8 +89,13 @@ in
+           nullOr (nonEmptyListOf fontType);
+       };
+ 
+-      useXkbConfig = mkEnableOption "" // {
+-        description = "Whether to configure keymap from xserver keyboard settings.";
++      useXkbConfig = mkEnableOption "configure keymap from xserver keyboard settings.";
++
++      term = mkOption {
++        description = "Value for the TERM environment variable.";
++        type = types.nullOr types.str;
++        default = null;
++        example = "xterm-256color";
+       };
+ 
+       extraConfig = mkOption {
+@@ -80,44 +111,46 @@ in
+         default = "";
+         example = "--term xterm-256color";
+       };
+-
+-      autologinUser = mkOption {
+-        type = types.nullOr types.str;
+-        default = null;
+-        description = ''
+-          Username of the account that will be automatically logged in at the console.
+-          If unspecified, a login prompt is shown as usual.
+-        '';
+-      };
+     };
+   };
+ 
+   config = mkIf cfg.enable {
++    meta.maintainers = with lib.maintainers; [
++      hustlerone
++      ccicnce113424
++    ];
++
++    environment.systemPackages = [ cfg.package ];
+     systemd.packages = [ cfg.package ];
+ 
+     systemd.services."kmsconvt@" = {
+-      after = [
+-        "systemd-logind.service"
+-        "systemd-vconsole-setup.service"
+-      ];
+-      requires = [ "systemd-logind.service" ];
+-
+       serviceConfig.ExecStart = [
+-        ""
+-        ''
+-          ${cfg.package}/bin/kmscon "--vt=%I" ${cfg.extraOptions} --seats=seat0 --no-switchvt --configdir ${configDir} --login -- ${pkgs.shadow}/bin/login -p ${autologinArg}
+-        ''
++        "" # override upstream default with an empty ExecStart
++        (builtins.concatStringsSep " " (
++          [
++            "${cfg.package}/bin/kmscon"
++            "--configdir"
++            configDir
++            "--vt=%I"
++            "--no-switchvt"
++            "--login"
++          ]
++          ++ lib.optional (cfg.extraOptions != "") cfg.extraOptions
++          ++ [ "--" ]
++          ++ lib.optional (cfg.agetty) gettyCfg.kmsconGettyArgs
++          ++ lib.optionals (!cfg.agetty) [
++            "${lib.getExe loginWrapper}"
++            "-p"
++            (toString gettyCfg.loginOptions)
++          ]
++
++        ))
+       ];
+-
+-      restartIfChanged = false;
+       aliases = [ "autovt@.service" ];
+     };
+ 
+     systemd.suppressedSystemUnits = [ "autovt@.service" ];
+ 
+-    systemd.services.systemd-vconsole-setup.enable = false;
+-    systemd.services.reload-systemd-vconsole-setup.enable = false;
+-
+     services.kmscon.extraConfig =
+       let
+         xkb = optionals cfg.useXkbConfig (
+@@ -134,15 +167,20 @@ in
+             ) config.services.xserver.xkb
+           )
+         );
+-        render = optionals cfg.hwRender [
+-          "drm"
+-          "hwaccel"
+-        ];
++        render =
++          if cfg.hwRender then
++            [
++              "drm"
++              "hwaccel"
++            ]
++          else
++            [ "no-drm" ];
+         fonts =
+           optional (cfg.fonts != null)
+             "font-name=${lib.concatMapStringsSep ", " (f: f.name) cfg.fonts}";
++        term = optional (cfg.term != null) "term=${cfg.term}";
+       in
+-      lib.concatLines (xkb ++ render ++ fonts);
++      lib.concatLines (xkb ++ render ++ fonts ++ term);
+ 
+     hardware.graphics.enable = mkIf cfg.hwRender true;
+ 
+
+From 774214c4e9d52c58d473ad28bf06217c2376f626 Mon Sep 17 00:00:00 2001
+From: ccicnce113424 <ccicnce113424@gmail.com>
+Date: Tue, 17 Feb 2026 09:55:26 +0800
+Subject: [PATCH 4/4] nixosTests.kmscon: remove `$TERM` test
+
+---
+ nixos/tests/kmscon.nix | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/nixos/tests/kmscon.nix b/nixos/tests/kmscon.nix
+index cb20274c6ece2..c59ca56e3abd3 100644
+--- a/nixos/tests/kmscon.nix
++++ b/nixos/tests/kmscon.nix
+@@ -40,11 +40,6 @@
+       machine.send_chars("foobar\n")
+       machine.wait_for_text("alice@machine")
+ 
+-      machine.send_chars("echo $TERM | tee /tmp/term.txt\n")
+-      machine.wait_until_succeeds("test -s /tmp/term.txt")
+-      term = machine.succeed("cat /tmp/term.txt").strip()
+-      assert term == "xterm-256color", f"Unexpected TERM value: {term!r}"
+-
+       machine.screenshot("tty.png")
+   '';
+ }

@@ -45,7 +45,10 @@ with builtins;
     claude-code.enable = true;
     tmux.enable = true;
     fzf.enable = true;
-    btop.enable = true;
+    btop = {
+      enable = true;
+      package = pkgs.btop-rocm;
+    };
     jq.enable = true;
     less.enable = true;
     feh.enable = true;

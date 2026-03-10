@@ -16,6 +16,7 @@ in
       enable = true;
       defaultCursor = "Adwaita";
     };
+    sway.enable = true;
   };
   gtk = {
     theme = draculaTheme;

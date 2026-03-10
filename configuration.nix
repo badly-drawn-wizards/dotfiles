@@ -78,7 +78,18 @@
   };
 
   services = {
-    # openssh.enable = true;
+    kmscon = {
+      # Enable when sway issue fixed
+      enable = false;
+      hwRender = false;
+    };
+
+    hardware = {
+      openrgb = {
+        enable = true;
+        package = pkgs.openrgb-with-all-plugins;
+      };
+    };
 
     acpid.enable = true;
     asusd.enable = true;

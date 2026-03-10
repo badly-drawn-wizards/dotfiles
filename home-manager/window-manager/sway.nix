@@ -44,18 +44,6 @@ let
     swaymsg -t get_outputs | jq -r '. | sort_by(.focused) | .[0].name'
   '';
 
-  sway-session-init = pkgs.writeScriptBin "sway-session-init" ''
-    #!${pkgs.bash}/bin/bash
-    # Set SSH_AUTH_SOCK to gcr-ssh-agent socket
-    export SSH_AUTH_SOCK="''${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/gcr/ssh"
-
-    # Update dbus activation environment with all variables
-    ${pkgs.dbus}/bin/dbus-update-activation-environment --systemd \
-      WAYLAND_DISPLAY \
-      XDG_CURRENT_DESKTOP=sway \
-      SSH_AUTH_SOCK
-  '';
-
   toggle-edp-scale = pkgs.writeScriptBin "toggle-edp-scale" ''
     #!${pkgs.bash}/bin/bash
     current_scale=$(swaymsg -t get_outputs | ${pkgs.jq}/bin/jq -r '.[] | select(.name == "${io.monitor}") | .scale')
@@ -118,6 +106,7 @@ in
       XDG_CONFIG_HOME = config.xdg.configHome;
       XDG_SESSION_TYPE = "wayland";
       XDG_CURRENT_DESKTOP = "sway";
+      WLR_RENDERER = "vulkan";
 
       # Get sway to play nicely with IntelliJ
       _JAVA_AWT_WM_NONREPARENTING = 1;
@@ -134,6 +123,7 @@ in
 
       systemd = {
         enable = true;
+        variables = [ "--all" ];
         xdgAutostart = true;
       };
 
@@ -142,15 +132,9 @@ in
         gtk = true;
       };
 
-      # extraSessionCommands = ''
-      #   . "${config.home.profileDirectory}/etc/profile.d/hm-session-vars.sh"
-      # '';
-
       config = {
         terminal = "${pkgs.kitty}/bin/kitty";
-        startup = [
-          { command = "${sway-session-init}/bin/sway-session-init"; }
-        ] ++ (map
+        startup = (map
           (command:
             if builtins.isString command then {
               inherit command;
@@ -184,8 +168,9 @@ in
         output = {
           ${io.monitor} = {
             scale = defaultScale;
-            mode = "2560x1600";
             adaptive_sync = "on";
+            render_bit_depth = "10";
+            hdr = "off";
           };
         };
         assigns = {

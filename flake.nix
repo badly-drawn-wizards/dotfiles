@@ -45,6 +45,11 @@
       url = "github:nix-community/nixd";
     };
 
+    nixpkgs-wayland = {
+      url = "github:nix-community/nixpkgs-wayland";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
   outputs =
@@ -54,6 +59,7 @@
     , vs-code-default-keybindings
     , nix-colors
     , nixd
+    , nixpkgs-wayland
     , self
     , ...
     }@inputs:
@@ -101,6 +107,7 @@
             inherit nix-colors;
           })
           nixd.overlays.default
+          nixpkgs-wayland.overlay
         ] ++ import ./overlays;
 
         hosts.noobnoob = {
