@@ -10,7 +10,7 @@ with builtins;
     ./theme.nix
     ./window-manager
     ./browsers
-    ./tray.nix
+    ./asus.nix
     ./editors
     ./mail.nix
     ./media
@@ -24,7 +24,6 @@ with builtins;
     ./nix.nix
     ./kitty.nix
     ./gtk.nix
-    ./osk
     ./sync.nix
     ./virtualization.nix
     ./lang
@@ -53,6 +52,8 @@ with builtins;
     less.enable = true;
     feh.enable = true;
   };
+
+  services.clipman.enable = true;
 
   xdg = {
     mime.enable = true;
@@ -98,8 +99,6 @@ with builtins;
       wirelesstools
       d-spy
       glib
-
-      asusctl
 
       screenshot
 

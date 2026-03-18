@@ -39,6 +39,7 @@ let
     in
     pkgs.writeScript name script;
   rofi-modi-cmd = config.programs.rofi.cmd.modi;
+  ipc = "${pkgs.noctalia-shell}/bin/noctalia-shell ipc call";
   sway-other-monitor = pkgs.writeScript "sway-other-monitor" ''
     #!${pkgs.bash}/bin/bash
     swaymsg -t get_outputs | jq -r '. | sort_by(.focused) | .[0].name'
@@ -113,7 +114,6 @@ in
     };
 
     programs.rofi.modi = {
-      "run" = null;
       "workspace" = rofi-workspace "rofi-workspace" (ws: "workspace ${ws}");
       "move" = rofi-workspace "rofi-move" (ws: "move window to workspace ${ws}");
     };
@@ -144,7 +144,7 @@ in
           names = [ "Font Awesome" "Fira Code" ];
         };
         modifier = "Mod4";
-        menu = rofi-modi-cmd "run";
+        menu = "${ipc} launcher toggle";
         focus = {
           mouseWarping = false;
           followMouse = false;
@@ -189,6 +189,7 @@ in
             { app_id = "^thunderbird$"; }
             { app_id = "^whatsapp-for-linux$"; }
             { app_id = "^teams-for-linux$"; }
+            { app_id = "^org.gnome.Evolution$"; }
           ];
           " write" = [
             { class = "^Write$"; }
@@ -230,12 +231,17 @@ in
             "${mod}+Shift+p" = "exec bash -c \"${pkgs.sway}/bin/swaymsg move workspace to output $(${sway-other-monitor})\"";
 
             "${mod}+t" = "exec ${pkgs.nautilus}/bin/nautilus";
+            "${mod}+Shift+a" = "exec ${ipc} lockScreen lock";
+            "${mod}+grave" = "exec ${ipc} notifications dismissAll";
+            "${mod}+n" = "exec ${ipc} notifications toggleHistory";
+            "${mod}+Shift+n" = "exec ${ipc} notifications toggleDND";
             "${mod}+Shift+s" = "exec ${pkgs.screenshot}/bin/screenshot";
-            "XF86MonBrightnessUp" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set +10%";
-            "XF86MonBrightnessDown" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set 10%-";
-            "XF86AudioRaiseVolume" = "exec ${pkgs.wireplumber}/bin/wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+";
-            "XF86AudioLowerVolume" = "exec ${pkgs.wireplumber}/bin/wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-";
-            "XF86AudioMute" = "exec ${pkgs.wireplumber}/bin/wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
+            "XF86Launch3" = "exec ${pkgs.rot8}/bin/rot8 --oneshot";
+            "--locked XF86MonBrightnessUp" = "exec ${ipc} brightness increase";
+            "--locked XF86MonBrightnessDown" = "exec ${ipc} brightness decrease";
+            "--locked XF86AudioRaiseVolume" = "exec ${ipc} volume increase";
+            "--locked XF86AudioLowerVolume" = "exec ${ipc} volume decrease";
+            "--locked XF86AudioMute" = "exec ${ipc} volume muteOutput";
             "XF86Launch1" = "exec ${config.windowManager.kb-events.toggle}";
             "${mod}+bracketright" = "exec ${toggle-edp-scale}/bin/toggle-edp-scale";
           };

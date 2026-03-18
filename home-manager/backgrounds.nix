@@ -40,15 +40,6 @@ in
     };
   };
   config = {
-    windowManager = {
-      extraBinds = {
-        "${mod}+b" = "exec ${config.backgrounds.set-background}/bin/set-background";
-      };
-      startupPrograms = [
-        "${config.backgrounds.set-background}/bin/set-background .current"
-      ];
-    };
-
     home.packages = [ config.backgrounds.set-background ];
   };
 }

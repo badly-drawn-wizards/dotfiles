@@ -4,9 +4,7 @@
   imports = [
     ./sway.nix
     # ./hyprland.nix
-    ./waybar
-    ./swaylock.nix
-    ./swaync.nix
+    ./noctalia.nix
     ./rofi.nix
     ./kanshi.nix
   ];

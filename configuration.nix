@@ -75,7 +75,14 @@
 
     # systemtap.enable = true;
     nix-ld.enable = true;
+
+    evolution = {
+      enable = true;
+      plugins = [ pkgs.evolution-ews ];
+    };
   };
+
+  hardware.sensor.iio.enable = true;
 
   services = {
     kmscon = {

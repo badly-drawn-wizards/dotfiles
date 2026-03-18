@@ -8,6 +8,7 @@
     imports = [
       inputs.nixvim.homeModules.nixvim
       inputs.nix-index-database.homeModules.nix-index
+      inputs.noctalia.homeModules.default
       ./home.nix
     ];
   };
