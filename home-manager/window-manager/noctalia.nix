@@ -45,10 +45,16 @@
         { id = "profile-card"; enabled = true; }
         { id = "shortcuts-card"; enabled = true; }
         { id = "audio-card"; enabled = true; }
-        { id = "brightness-card"; enabled = false; }
+        { id = "brightness-card"; enabled = true; }
         { id = "weather-card"; enabled = false; }
         { id = "media-sysmon-card"; enabled = true; }
       ];
+      general = {
+        compactLockScreen = true;
+        clockStyle = "digital";
+        showSessionButtonsOnLockScreen = false;
+        lockScreenAnimations = true;
+      };
       wallpaper.directory = "${config.home.homeDirectory}/backgrounds";
     };
   };

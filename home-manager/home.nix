@@ -131,6 +131,7 @@ with builtins;
     ];
 
     file = {
+      ".face".source = ./profile.jpeg;
       ".config/gdb/gdbinit".text = ''
         set auto-load safe-path /
       '';

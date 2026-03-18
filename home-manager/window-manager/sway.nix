@@ -39,7 +39,7 @@ let
     in
     pkgs.writeScript name script;
   rofi-modi-cmd = config.programs.rofi.cmd.modi;
-  ipc = "${pkgs.noctalia-shell}/bin/noctalia-shell ipc call";
+  ipc = "${config.programs.noctalia-shell.package}/bin/noctalia-shell ipc call";
   sway-other-monitor = pkgs.writeScript "sway-other-monitor" ''
     #!${pkgs.bash}/bin/bash
     swaymsg -t get_outputs | jq -r '. | sort_by(.focused) | .[0].name'
