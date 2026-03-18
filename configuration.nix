@@ -17,7 +17,6 @@
       ./home-manager
       ./virtualization
       ./cachix.nix
-      ./ccache.nix
       ./users.nix
       ./security.nix
       ./speech.nix

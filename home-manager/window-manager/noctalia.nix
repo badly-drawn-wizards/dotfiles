@@ -27,6 +27,11 @@
           }
         ];
         right = [
+          {
+            id = "CustomButton";
+            icon = "rotate";
+            leftClickExec = "iio-rotate";
+          }
           { id = "Tray"; }
           { id = "NotificationHistory"; }
           { id = "Battery"; }

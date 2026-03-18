@@ -1,0 +1,37 @@
+From babe5086f3be25585d65f09e211d861fcfc45dfd Mon Sep 17 00:00:00 2001
+From: Reuben Steenekamp <reuben.steenekamp@gmail.com>
+Date: Wed, 18 Mar 2026 21:53:12 +0200
+Subject: [PATCH] i3/workspace: Use name instead of id for activate
+
+---
+ changelog/next.md            | 1 +
+ src/x11/i3/ipc/workspace.cpp | 2 +-
+ src/x11/i3/ipc/workspace.hpp | 2 +-
+ 3 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/src/x11/i3/ipc/workspace.cpp b/src/x11/i3/ipc/workspace.cpp
+index 03fadc26..5d276b4e 100644
+--- a/src/x11/i3/ipc/workspace.cpp
++++ b/src/x11/i3/ipc/workspace.cpp
+@@ -55,7 +55,7 @@ void I3Workspace::updateFromObject(const QVariantMap& obj) {
+ }
+ 
+ void I3Workspace::activate() {
+-	this->ipc->dispatch(QString("workspace number %1").arg(this->bNumber.value()));
++	this->ipc->dispatch(QString("workspace %1").arg(this->bName.value()));
+ }
+ 
+ } // namespace qs::i3::ipc
+diff --git a/src/x11/i3/ipc/workspace.hpp b/src/x11/i3/ipc/workspace.hpp
+index f540545d..3da08f3f 100644
+--- a/src/x11/i3/ipc/workspace.hpp
++++ b/src/x11/i3/ipc/workspace.hpp
+@@ -47,7 +47,7 @@ class I3Workspace: public QObject {
+ 	///
+ 	/// > [!NOTE] This is equivalent to running
+ 	/// > ```qml
+-	/// > I3.dispatch(`workspace number ${workspace.number}`);
++	/// > I3.dispatch(`workspace ${workspace.name}`);
+ 	/// > ```
+ 	Q_INVOKABLE void activate();
+ 

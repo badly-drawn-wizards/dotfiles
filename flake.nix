@@ -71,6 +71,7 @@
     , nixd
     , nixpkgs-wayland
     , noctalia
+    , noctalia-qs
     , self
     , ...
     }@inputs:
@@ -119,6 +120,16 @@
           })
           nixd.overlays.default
           nixpkgs-wayland.overlay
+          noctalia-qs.overlays.default
+          noctalia.overlays.default
+          (self: super: {
+            quickshell = super.quickshell.overrideAttrs (old: {
+              patches = (old.patches or [ ]) ++ [ ./patches/qs-643.patch ];
+            });
+            noctalia-shell = super.noctalia-shell.override {
+              quickshell = self.quickshell;
+            };
+          })
         ] ++ import ./overlays;
 
         hosts.noobnoob = {

@@ -236,13 +236,13 @@ in
             "${mod}+n" = "exec ${ipc} notifications toggleHistory";
             "${mod}+Shift+n" = "exec ${ipc} notifications toggleDND";
             "${mod}+Shift+s" = "exec ${pkgs.screenshot}/bin/screenshot";
-            "XF86Launch3" = "exec ${pkgs.rot8}/bin/rot8 --oneshot";
             "--locked XF86MonBrightnessUp" = "exec ${ipc} brightness increase";
             "--locked XF86MonBrightnessDown" = "exec ${ipc} brightness decrease";
             "--locked XF86AudioRaiseVolume" = "exec ${ipc} volume increase";
             "--locked XF86AudioLowerVolume" = "exec ${ipc} volume decrease";
             "--locked XF86AudioMute" = "exec ${ipc} volume muteOutput";
             "XF86Launch1" = "exec ${config.windowManager.kb-events.toggle}";
+            "XF86Launch3" = "exec iio-rotate";
             "${mod}+bracketright" = "exec ${toggle-edp-scale}/bin/toggle-edp-scale";
           };
 
