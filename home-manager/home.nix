@@ -115,6 +115,8 @@ with builtins;
       devenv
 
       clickup
+
+      sox
     ];
 
     sessionVariables = {

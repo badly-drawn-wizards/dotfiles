@@ -4,14 +4,17 @@ let
   intellimacs = pkgs.fetchFromGitHub {
     owner = "MarcoIeni";
     repo = "intellimacs";
-    rev = "116e566bafb4c7fe9a2962a746281053e59b1f49";
-    sha256 = "sha256-Aomn1sS2ZlruWy8UMKkPLn1bOX3kLThRTgLgzFUo/yk=";
+    rev = "cf9706cfeaf18e2247ee8f8c8289f1d196ce04b9";
+    sha256 = "sha256-uANOwkA9EB3n1Kd+55420LJD7wrc4EDQ7z127HLvM2o=";
   };
   jdk-home = ".local/share/jetbrains-jdk";
   idea-jdk = pkgs.jetbrains.jdk.overrideAttrs (attrs: {
     passthru = attrs.passthru // { home = "${config.home.homeDirectory}/${jdk-home}"; };
   });
   idea = pkgs.jetbrains.idea.override {
+    jdk = idea-jdk;
+  };
+  rider = pkgs.jetbrains.rider.override {
     jdk = idea-jdk;
   };
   fernflower-jar = "${idea}/idea-community/plugins/java-decompiler/lib/java-decompiler.jar";
@@ -23,6 +26,7 @@ in
 {
   home.packages = [
     idea
+    rider
     fernflower
   ];
 

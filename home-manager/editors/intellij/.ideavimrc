@@ -9,3 +9,8 @@ vmap s S
 
 # Enable incremental search
 set incsearch
+
+# By setting visualbell (which ideavim does not implement, but understands),
+# we disable audible bell
+set visualbell
+set clipboard=unnamedplus
