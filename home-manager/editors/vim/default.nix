@@ -71,6 +71,12 @@ in
       maplocalleader = " m";
     };
 
+    diagnostics = {
+      virtual_lines = true;
+      virtual_text = false;
+      float.border = "rounded";
+    };
+
     # Terminal escape with timeout
     extraConfigLua = builtins.readFile ./terminal-escape.lua;
   };
