@@ -262,6 +262,26 @@
         "type": "github"
       }
     },
+    "nix-azurevpn-client": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1769728675,
+        "narHash": "sha256-kCE7Mu2jTQoTr6oHvSNWRLMkCiLVaYXhxrS6H5hsgh4=",
+        "owner": "cpuguy83",
+        "repo": "nix-azurevpn-client",
+        "rev": "16f83801eb50a244e417590bdedefa3278078036",
+        "type": "github"
+      },
+      "original": {
+        "owner": "cpuguy83",
+        "repo": "nix-azurevpn-client",
+        "type": "github"
+      }
+    },
     "nix-colors": {
       "inputs": {
         "base16-schemes": "base16-schemes",
@@ -559,6 +579,7 @@
         "comma": "comma",
         "flake-compat": "flake-compat_2",
         "home-manager": "home-manager",
+        "nix-azurevpn-client": "nix-azurevpn-client",
         "nix-colors": "nix-colors",
         "nix-index": "nix-index",
         "nix-index-database": "nix-index-database",

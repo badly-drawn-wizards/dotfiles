@@ -31,6 +31,7 @@
       plugdev = { };
       podman = { };
       docker = { };
+      network = { };
     };
     users.reuben = {
       isNormalUser = true;
@@ -52,6 +53,7 @@
         "libvirtd"
         "netdev"
         "plugdev"
+        "network"
       ];
     };
     defaultUserShell = "/run/current-system/sw/bin/zsh";

@@ -5,4 +5,5 @@
   (import ./vim.nix)
   (import ./upstream.nix)
   (import ./steam.nix)
+  (import ./azurevpn.nix)
 ]

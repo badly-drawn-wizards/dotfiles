@@ -54,6 +54,9 @@ with builtins;
   };
 
   services.clipman.enable = true;
+  services.network-manager-applet = {
+    enable = true;
+  };
 
   xdg = {
     mime.enable = true;

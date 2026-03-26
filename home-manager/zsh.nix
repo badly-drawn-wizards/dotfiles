@@ -149,6 +149,8 @@
           bindkey "^B" backward-char
           bindkey "^[f" forward-word
           bindkey "^[b" backward-word
+          bindkey "^D" delete-char
+          bindkey "^[d" kill-word
         '';
         functions = entryAfter [ "preinit" ] ''
           function hm-cat() {

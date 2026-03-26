@@ -469,12 +469,12 @@ in
         keybinds = [
           {
             key = "e";
-            action = "<cmd>Trouble diagnostics toggle<CR>";
-            desc = "Diagnostics (Trouble)";
+            action = "<cmd>Telescope diagnostics<CR>";
+            desc = "Diagnostics (Telescope)";
           }
           {
             key = "E";
-            action = "<cmd>Trouble diagnostics toggle filter.buf=0<CR>";
+            action = "<cmd>Telescope diagnostics bufnr=0<CR>";
             desc = "Buffer diagnostics";
           }
           {
@@ -787,6 +787,17 @@ in
         key = "gi";
         action = mkRaw "vim.lsp.buf.implementation";
         desc = "Go to implementation";
+      }
+      {
+        key = "gl";
+        action = mkRaw "vim.diagnostic.open_float";
+        desc = "Line diagnostic";
+      }
+      {
+        key = "<C-.>";
+        mode = [ "n" "i" ];
+        action = mkRaw "vim.lsp.buf.code_action";
+        desc = "Code action";
       }
       {
         key = "[d";

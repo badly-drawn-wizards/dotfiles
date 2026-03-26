@@ -60,6 +60,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nix-azurevpn-client = {
+      url = "github:cpuguy83/nix-azurevpn-client";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
   outputs =
@@ -72,6 +77,7 @@
     , nixpkgs-wayland
     , noctalia
     , noctalia-qs
+    , nix-azurevpn-client
     , self
     , ...
     }@inputs:
@@ -130,12 +136,14 @@
               quickshell = self.quickshell;
             };
           })
+          nix-azurevpn-client.overlays.default
         ] ++ import ./overlays;
 
         hosts.noobnoob = {
           modules = [
             flake-plus-module
             nixfs.nixosModules.nixfs
+            nix-azurevpn-client.nixosModules.azurevpnclient
             ./configuration.nix
           ];
           specialArgs = { inherit inputs; };

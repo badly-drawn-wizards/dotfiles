@@ -5,6 +5,11 @@
     hostName = "noobnoob";
     networkmanager = {
       enable = true;
+      plugins = with pkgs; [
+        networkmanager-openvpn
+        networkmanager-openconnect
+        networkmanager-strongswan
+      ];
     };
 
     firewall = {
@@ -17,6 +22,8 @@
     };
 
   };
+
+  services.strongswan.enable = true;
 
   systemd.services.NetworkManager-wait-online.enable = false;
 }

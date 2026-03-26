@@ -79,6 +79,11 @@
       enable = true;
       plugins = [ pkgs.evolution-ews ];
     };
+
+    azurevpnclient = {
+      enable = true;
+      package = pkgs.microsoft-azurevpnclient;
+    };
   };
 
   hardware.sensor.iio.enable = true;
