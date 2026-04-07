@@ -4,5 +4,8 @@ self: super: {
       gamescope
       mangohud
     ];
+    extraEnv = {
+      STEAM_EXTRA_COMPAT_TOOLS_PATHS = self.lib.makeSearchPathOutput "steamcompattool" "" [self.proton-ge-bin];
+    };
   };
 }
