@@ -41,10 +41,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nixd = {
-      url = "github:nix-community/nixd";
-    };
-
     nixpkgs-wayland = {
       url = "github:nix-community/nixpkgs-wayland";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -73,7 +69,6 @@
     , nixfs
     , vs-code-default-keybindings
     , nix-colors
-    , nixd
     , nixpkgs-wayland
     , noctalia
     , noctalia-qs
@@ -124,7 +119,6 @@
             inherit vs-code-default-keybindings;
             inherit nix-colors;
           })
-          nixd.overlays.default
           nixpkgs-wayland.overlay
           noctalia-qs.overlays.default
           noctalia.overlays.default

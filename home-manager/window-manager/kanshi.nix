@@ -25,6 +25,21 @@
           }
         ];
       }
+
+      {
+        profile.name = "docked-lg";
+        profile.outputs = [
+          {
+            criteria = "LG Electronics LG HDR QHD 109NTCZ61731";
+            position = "0,0";
+            mode = "2560x1440@59.951Hz";
+          }
+          {
+            criteria = "eDP-1";
+            position = "450,1440";
+          }
+        ];
+      }
     ];
   };
 }
