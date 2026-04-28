@@ -4,7 +4,7 @@
 
   home.packages = with pkgs; [
     nethack
-    lutris
+    # lutris
 
     steam
     steam-run
