@@ -58,18 +58,7 @@ with builtins;
     enable = true;
   };
 
-  xdg = {
-    mime.enable = true;
-    portal = {
-      enable = true;
-      xdgOpenUsePortal = true;
-      extraPortals = with pkgs; [
-        xdg-desktop-portal-wlr
-        xdg-desktop-portal-gtk
-      ];
-      config.common.default = [ "wlr" "gtk" ];
-    };
-  };
+  xdg.mime.enable = true;
 
 
   home = {

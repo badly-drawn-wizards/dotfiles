@@ -108,6 +108,7 @@
     fstrim.enable = true;
     devmon.enable = true;
     gvfs.enable = true;
+    flatpak.enable = true;
 
     xserver = {
       enable = true;
@@ -156,6 +157,15 @@
   xdg = {
     mime.enable = true;
     icons.enable = true;
+    portal = {
+      enable = true;
+      xdgOpenUsePortal = true;
+      extraPortals = with pkgs; [
+        xdg-desktop-portal-wlr
+        xdg-desktop-portal-gtk
+      ];
+      config.common.default = [ "wlr" "gtk" ];
+    };
   };
 
   system.stateVersion = "23.11";
