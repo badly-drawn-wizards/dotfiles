@@ -80,11 +80,44 @@
       plugins = [ pkgs.evolution-ews ];
     };
 
-    azurevpnclient = {
-      enable = true;
-      package = pkgs.microsoft-azurevpnclient;
-    };
+    azurevpnclient.enable = true;
+    azurevpnclient.package = pkgs.microsoft-azurevpnclient;
   };
+
+  # Populate /etc/ssl/certs/ with cacert.hashed contents:
+  #   - <subjectHash>.N symlinks (X509_LOOKUP_hash_dir; PR #370023)
+  #   - per-cert .crt files (TRUSTED CERTIFICATE / X509_AUX format)
+  # PLUS plain-PEM .pem aliases (each .crt run through `openssl x509`
+  # to strip the X509_AUX trust extensions and human-readable "Trusted
+  # for:" annotations). cacert ships X509_AUX format, but the Dart
+  # parser in AzureVPNClient only handles plain "BEGIN CERTIFICATE"
+  # PEM and FormatException's on TRUSTED CERTIFICATE blocks.
+  # https://discourse.nixos.org/t/help-getting-azure-vpn-to-work/60309/2
+  environment.etc =
+    let
+      hashedCertsDir = "${pkgs.cacert.hashed}/etc/ssl/certs";
+      hashedContents = builtins.readDir hashedCertsDir;
+      hashedEntries = lib.mapAttrs'
+        (name: _: lib.nameValuePair "ssl/certs/${name}" {
+          source = "${hashedCertsDir}/${name}";
+        })
+        hashedContents;
+
+      plainPems = pkgs.runCommand "cacert-plain-pem"
+        { nativeBuildInputs = [ pkgs.openssl ]; } ''
+        mkdir -p $out
+        for f in ${pkgs.cacert.unbundled}/etc/ssl/certs/*.crt; do
+          name=$(basename "$f" .crt)
+          openssl x509 -in "$f" -out "$out/$name.pem"
+        done
+      '';
+      plainPemEntries = lib.mapAttrs'
+        (name: _: lib.nameValuePair "ssl/certs/${name}" {
+          source = "${plainPems}/${name}";
+        })
+        (builtins.readDir plainPems);
+    in
+    hashedEntries // plainPemEntries;
 
   hardware.sensor.iio.enable = true;
 

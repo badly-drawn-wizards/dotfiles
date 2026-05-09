@@ -364,7 +364,7 @@ in
 
       # Transparent background
       transparent = {
-        enable = true;
+        enable = false;
         settings = {
           extra_groups = [
             "NormalFloat"

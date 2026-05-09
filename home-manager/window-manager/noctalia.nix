@@ -37,6 +37,7 @@
           { id = "Battery"; }
           { id = "Volume"; }
           { id = "Brightness"; }
+          { id = "VPN"; }
           { id = "ControlCenter"; }
         ];
       };
