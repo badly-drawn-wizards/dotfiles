@@ -194,13 +194,14 @@ in
       ]
       ++ excludeDefaultKeybinding "ctrl+o"
       ++ vspacecodeKeybindings;
-      extensions = with pkgs.vscode-extensions; [
+      extensions = (with pkgs.vscode-extensions; [
         bbenoist.nix
         vscodevim.vim
         kahole.magit
         vspacecode.whichkey
         vspacecode.vspacecode
         bodil.file-browser
+        ms-dotnettools.vscode-dotnet-runtime
         ms-dotnettools.csharp
         dracula-theme.theme-dracula
         esbenp.prettier-vscode
@@ -212,9 +213,17 @@ in
         ms-vscode.powershell
         ms-azuretools.vscode-docker
         mkhl.direnv
+        tamasfe.even-better-toml
         leanprover.lean4
         # ms-python.python
         #pkgs.lean4-flake.vscode-lean4
+      ]) ++ extensionsFromVscodeMarketplace [
+        {
+          name = "mssql";
+          publisher = "ms-mssql";
+          version = "1.42.2";
+          sha256 = "sha256-hTZRljG2USbXPVmTJ1DKJn2HI7kE0xv56opyyrrUAw0=";
+        }
       ];
     };
   };
