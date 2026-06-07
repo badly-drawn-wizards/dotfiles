@@ -7,7 +7,9 @@ in
     dotnet-sdk
   ];
 
+  home.file.".dotnet-root".source = "${dotnet-sdk}/share/dotnet";
+
   home.sessionVariables = {
-    "DOTNET_ROOT" = "${dotnet-sdk}/share/dotnet";
+    "DOTNET_ROOT" = "${config.home.homeDirectory}/.dotnet-root";
   };
 }

@@ -11,7 +11,6 @@
         sshAgentAuth.enable = true;
         gnupg.enable = true;
       };
-      swaylock.enableGnomeKeyring = true;
     };
   };
 }
