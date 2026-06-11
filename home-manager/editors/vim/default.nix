@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 
 let
   helpers = config.lib.nixvim;
@@ -18,6 +18,7 @@ in
 
   programs.nixvim = {
     enable = true;
+    nixpkgs.source = inputs.nixpkgs;
 
     # Core Neovim settings
     clipboard = {

@@ -33,7 +33,7 @@ in
             "file://${config.home.homeDirectory}/screenshots"
           ];
         };
-        gtk4 = { inherit extraConfig; };
+        gtk4 = { inherit extraConfig; theme = config.gtk.theme; };
       };
   };
 }

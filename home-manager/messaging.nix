@@ -3,7 +3,7 @@
 {
 
   windowManager.startupPrograms = with pkgs; [
-    "${zulip}/bin/zulip"
+    # "${zulip}/bin/zulip"
     "${discord}/bin/discord"
     ''${element-desktop}/bin/element-desktop --profile personal --password-store="gnome-libsecret"''
     "${teams-for-linux}/bin/teams-for-linux"
@@ -13,7 +13,7 @@
     teams-for-linux
     discord
     element-desktop
-    zulip
+    # zulip
     #whatsapp-for-linux
   ];
 }

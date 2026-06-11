@@ -4,7 +4,7 @@
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
-    matchBlocks = {
+    settings = {
       "ssh.dev.azure.com vs-ssh.visualstudio.com *.visualstudio.com" = {
         identitiesOnly = true;
         identityFile = [

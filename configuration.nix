@@ -121,11 +121,13 @@
 
   hardware.sensor.iio.enable = true;
 
+  boot.kernel.sysctl."fs.inotify.max_user_watches" = 1048576;
+
   services = {
     kmscon = {
       # Enable when sway issue fixed
       enable = false;
-      hwRender = false;
+      config.hwaccel = false;
     };
 
     hardware = {
