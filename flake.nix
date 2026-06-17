@@ -47,12 +47,7 @@
     };
 
     noctalia = {
-      url = "github:noctalia-dev/noctalia-shell";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.noctalia-qs.follows = "noctalia-qs";
-    };
-    noctalia-qs = {
-      url = "github:noctalia-dev/noctalia-qs";
+      url = "github:noctalia-dev/noctalia";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -71,7 +66,6 @@
     , nix-colors
     , nixpkgs-wayland
     , noctalia
-    , noctalia-qs
     , nix-azurevpn-client
     , self
     , ...
@@ -120,16 +114,6 @@
             inherit nix-colors;
           })
           nixpkgs-wayland.overlay
-          noctalia-qs.overlays.default
-          noctalia.overlays.default
-          (self: super: {
-            quickshell = super.quickshell.overrideAttrs (old: {
-              patches = (old.patches or [ ]) ++ [ ./patches/qs-643.patch ];
-            });
-            noctalia-shell = super.noctalia-shell.override {
-              quickshell = self.quickshell;
-            };
-          })
           nix-azurevpn-client.overlays.default
         ] ++ import ./overlays;
 

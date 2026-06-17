@@ -39,7 +39,7 @@ let
     in
     pkgs.writeScript name script;
   rofi-modi-cmd = config.programs.rofi.cmd.modi;
-  ipc = "${config.programs.noctalia-shell.package}/bin/noctalia-shell ipc call";
+  ipc = "${config.programs.noctalia.package}/bin/noctalia msg";
   sway-other-monitor = pkgs.writeScript "sway-other-monitor" ''
     #!${pkgs.bash}/bin/bash
     swaymsg -t get_outputs | jq -r '. | sort_by(.focused) | .[0].name'
@@ -74,28 +74,6 @@ in
           external-monitor = "DP-1";
           keyboard = "1:1:AT_Translated_Set_2_keyboard";
           touchpad = "type:touchpad";
-        };
-      };
-
-      kb-events = mkOption {
-        type = attrsOf package;
-        readOnly = true;
-        default = rec {
-          get = pkgs.writeScript "kb-events-get" ''
-            #!${pkgs.bash}/bin/bash
-            ${pkgs.sway}/bin/swaymsg -t get_inputs -r | jq -r '.[] | select (.identifier == "${io.keyboard}") | .libinput.send_events'
-          '';
-
-          do = pkgs.writeScript "kb-events-do" ''
-            #!${pkgs.bash}/bin/bash
-            ${pkgs.sway}/bin/swaymsg input ${io.keyboard} events "$@"
-            ${pkgs.sway}/bin/swaymsg input ${io.touchpad} events $(${get})
-          '';
-
-          toggle = pkgs.writeScript "kb-events-do" ''
-            #!${pkgs.bash}/bin/bash
-            ${do} toggle enabled disabled
-          '';
         };
       };
     };
@@ -144,7 +122,7 @@ in
           names = [ "Font Awesome" "Fira Code" ];
         };
         modifier = "Mod4";
-        menu = "${ipc} launcher toggle";
+        menu = "${ipc} panel-toggle launcher";
         focus = {
           mouseWarping = false;
           followMouse = false;
@@ -184,7 +162,7 @@ in
           ];
           " chat" = [
             { class = "^discord$"; }
-            { app_id = "^Element$"; }
+            { app_id = "^element$"; }
             { app_id = "^Zulip$"; }
             { app_id = "^thunderbird$"; }
             { app_id = "^whatsapp-for-linux$"; }
@@ -231,17 +209,16 @@ in
             "${mod}+Shift+p" = "exec bash -c \"${pkgs.sway}/bin/swaymsg move workspace to output $(${sway-other-monitor})\"";
 
             "${mod}+t" = "exec ${pkgs.nautilus}/bin/nautilus";
-            "${mod}+Shift+a" = "exec ${ipc} lockScreen lock";
-            "${mod}+grave" = "exec ${ipc} notifications dismissAll";
-            "${mod}+n" = "exec ${ipc} notifications toggleHistory";
-            "${mod}+Shift+n" = "exec ${ipc} notifications toggleDND";
-            "${mod}+Shift+s" = "exec ${pkgs.screenshot}/bin/screenshot";
-            "--locked XF86MonBrightnessUp" = "exec ${ipc} brightness increase";
-            "--locked XF86MonBrightnessDown" = "exec ${ipc} brightness decrease";
-            "--locked XF86AudioRaiseVolume" = "exec ${ipc} volume increase";
-            "--locked XF86AudioLowerVolume" = "exec ${ipc} volume decrease";
-            "--locked XF86AudioMute" = "exec ${ipc} volume muteOutput";
-            "XF86Launch1" = "exec ${config.windowManager.kb-events.toggle}";
+            "${mod}+Shift+a" = "exec ${ipc} session lock";
+            "${mod}+grave" = "exec ${ipc} notifications-clear-active";
+            "${mod}+Shift+n" = "exec ${ipc} notification-dnd-toggle";
+            "${mod}+Shift+s" = "exec ${ipc} screenshot-region";
+            "${mod}+b" = "exec ${ipc} panel-toggle wallpaper";
+            "--locked XF86MonBrightnessUp" = "exec ${ipc} brightness-up";
+            "--locked XF86MonBrightnessDown" = "exec ${ipc} brightness-down";
+            "--locked XF86AudioRaiseVolume" = "exec ${ipc} volume-up";
+            "--locked XF86AudioLowerVolume" = "exec ${ipc} volume-down";
+            "--locked XF86AudioMute" = "exec ${ipc} volume-mute";
             "XF86Launch3" = "exec iio-rotate";
             "${mod}+bracketright" = "exec ${toggle-edp-scale}/bin/toggle-edp-scale";
           };
