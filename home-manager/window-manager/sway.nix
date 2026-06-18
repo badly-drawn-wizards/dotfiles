@@ -177,7 +177,7 @@ in
             { class = "^Spotify$"; }
           ];
           " pass" = [
-            { app_id = "^org.keepassxc.KeePassXC$"; }
+            { floating = "^user_on$"; app_id = "^org.keepassxc.KeePassXC$"; }
           ];
         };
 

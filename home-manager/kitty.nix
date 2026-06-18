@@ -17,6 +17,8 @@ in
       background_opacity = "0.95";
       window_margin_width = 6;
       confirm_os_window_close = -1;
+      # temporary until the fix for https://github.com/kovidgoyal/kitty/issues/10102 in nixpkgs
+      auto_reload_config = -1;
     } // hashColors config.theme;
   };
 }
