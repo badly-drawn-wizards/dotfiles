@@ -72,7 +72,7 @@ in
       maplocalleader = " m";
     };
 
-    diagnostics = {
+    diagnostic.settings = {
       virtual_lines = true;
       virtual_text = false;
       float.border = "rounded";

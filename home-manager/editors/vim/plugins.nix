@@ -192,7 +192,7 @@ in
       };
       dap-ui = {
         enable = true;
-        floating.mappings = {
+        settings.floating.mappings = {
           close = [ "<ESC>" "q" ];
         };
       };
@@ -266,15 +266,8 @@ in
           scope.enabled = true;
         };
       };
-      nvim-colorizer = {
+      highlight-colors = {
         enable = true;
-        settings = {
-          user_default_options = {
-            names = false;
-            rgb_fn = true;
-            hsl_fn = true;
-          };
-        };
       };
       todo-comments = {
         enable = true;
