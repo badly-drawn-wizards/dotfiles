@@ -25,9 +25,9 @@ let
 in
 {
   home.packages = [
-    idea
-    rider
-    fernflower
+    # idea
+    # rider
+    # fernflower
   ];
 
   home.file = {

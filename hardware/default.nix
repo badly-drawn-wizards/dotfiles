@@ -8,6 +8,7 @@
       ./printing.nix
       ./bluetooth.nix
       ./joycon.nix
+      ./logitune.nix
     ];
 
   nix.settings.max-jobs = 8;

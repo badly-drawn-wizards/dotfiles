@@ -80,8 +80,8 @@
       plugins = [ pkgs.evolution-ews ];
     };
 
-    azurevpnclient.enable = true;
-    azurevpnclient.package = pkgs.microsoft-azurevpnclient;
+    # azurevpnclient.enable = true;
+    # azurevpnclient.package = pkgs.microsoft-azurevpnclient;
   };
 
   # Populate /etc/ssl/certs/ with cacert.hashed contents:
