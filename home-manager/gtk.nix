@@ -12,8 +12,8 @@ in
   };
   config = {
     home.sessionVariables = {
-      GTK_DPI_SCALE = 1;
-      GTK_SCALE = 2;
+      # GTK_DPI_SCALE = 1;
+      # GTK_SCALE = 2;
     };
     gtk =
       let

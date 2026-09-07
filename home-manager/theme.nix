@@ -21,7 +21,10 @@ in
   };
   gtk = {
     theme = draculaTheme;
-    iconTheme = draculaTheme;
+    iconTheme = {
+      package = pkgs.dracula-icon-theme;
+      name = "Dracula";
+    };
   };
 
   dconf = {
