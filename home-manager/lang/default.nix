@@ -1,8 +1,9 @@
-{ config, lib, pkgs, ... }:
+{ ... }:
 
 {
   imports = [
     ./lean.nix
+    ./javascript.nix
     ./python.nix
     ./java.nix
     ./scala.nix

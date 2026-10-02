@@ -159,7 +159,7 @@
     dbus = {
       enable = true;
 
-      packages = with pkgs; [ dconf gcr ];
+      packages = with pkgs; [ dconf gcr_4 ];
     };
 
     # fprintd.enable = true;
