@@ -3,18 +3,9 @@
 {
   hardware.bluetooth = {
     enable = true;
-    package = pkgs.bluez;
-    settings = {
-      General = {
-        Enable = "Source,Sink,Media,Socket";
-        MultiProfile = "multiple";
-        Experimental = true;
-      };
-      Policy = {
-        AutoEnable = true;
-      };
-    };
   };
+
+  hardware.xpadneo.enable = true;
 
   services.blueman.enable = true;
 }
