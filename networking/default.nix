@@ -21,11 +21,6 @@
       ];
     };
 
-    extraHosts = ''
-      10.240.0.129 masscloud-recon-staging.database.windows.net
-      10.250.5.5 masscloud-prod.database.windows.net
-    '';
-
   };
 
   services.strongswan.enable = true;

@@ -56,6 +56,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Private config kept in a separate repo. Local path rather than a remote so the
+    # working tree is picked up directly; no lock churn when it changes.
+    dotfiles-private.url = "path:/workspace/dotfiles-private";
+
   };
 
   outputs =
@@ -67,6 +71,7 @@
     , nixpkgs-wayland
     , noctalia
     , nix-azurevpn-client
+    , dotfiles-private
     , self
     , ...
     }@inputs:
@@ -122,6 +127,7 @@
             flake-plus-module
             nixfs.nixosModules.nixfs
             nix-azurevpn-client.nixosModules.azurevpnclient
+            dotfiles-private.nixosModules.default
             ./configuration.nix
           ];
           specialArgs = { inherit inputs; };
