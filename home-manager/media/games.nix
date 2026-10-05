@@ -11,6 +11,8 @@
 
     winetricks
     winePackages.waylandFull
+
+    prismlauncher
   ];
 
   home.file = {
