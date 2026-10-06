@@ -26,6 +26,7 @@ with builtins;
     ./gtk.nix
     ./sync.nix
     ./virtualization.nix
+    ./cloud.nix
     ./lang
     ./gpg.nix
     ./security.nix

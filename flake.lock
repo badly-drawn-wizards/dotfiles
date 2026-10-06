@@ -44,8 +44,8 @@
         "sops-nix": "sops-nix"
       },
       "locked": {
-        "lastModified": 1791191601,
-        "narHash": "sha256-N7jtZn7q1GOqJ55aqtRVIzRU/DHGU5Spf11mbmPS8ic=",
+        "lastModified": 1791197893,
+        "narHash": "sha256-mEXuV0ZHrVc5C/wxlQFf2E/XZwe8U0Te7S1L80El43E=",
         "path": "/workspace/dotfiles-private",
         "type": "path"
       },
