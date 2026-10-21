@@ -66,7 +66,7 @@ with builtins;
     packages = with pkgs; [
       xournalpp
 
-      libreoffice
+      # libreoffice # TODO: re-enable once it's in the binary cache again
 
       pulsemixer
 

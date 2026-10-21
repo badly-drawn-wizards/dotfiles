@@ -19,7 +19,7 @@
       ./cachix.nix
       ./users.nix
       ./security.nix
-      ./speech.nix
+      # ./speech.nix # TODO: re-enable once piper-tts has a cached torch (it compiles torch from source)
     ];
 
   nix = {
@@ -174,7 +174,8 @@
     fwupd.enable = true;
 
     wyoming.piper.servers.piper = {
-      enable = true;
+      # TODO: re-enable with speech.nix; piper-tts needs torch built from source.
+      enable = false;
       uri = "tcp://0.0.0.0:10200";
       voice = "en-us-ryan-medium";
     };
