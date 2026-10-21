@@ -9,7 +9,10 @@
   };
   fileSystems = {
     "/boot" = {
-      device = "/dev/disk/by-partuuid/be7c42a1-9f73-4e94-92b5-542549624b93"; # nvme0n1p1, EFI system partition
+      # nvme0n1p8, 4G ESP in the gap after the LUKS partition (room to grow
+      # into the free space after it). The original 260M ESP is nvme0n1p1,
+      # PARTUUID be7c42a1-9f73-4e94-92b5-542549624b93.
+      device = "/dev/disk/by-partuuid/4e4504c7-e646-4ed9-b150-ba78d57f2b6e";
       fsType = "vfat";
       # Root-only: bootctl's random seed (and later Secure Boot files) live here.
       options = [ "fmask=0077" "dmask=0077" ];
