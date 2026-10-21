@@ -1,0 +1,68 @@
+// Dracula wizard Plymouth theme.
+// Palette: background #282a36, foreground #f8f8f2, purple #bd93f9, comment #6272a4.
+
+font = "DejaVu Sans";
+
+Window.SetBackgroundTopColor(0.157, 0.165, 0.212);    // #282a36
+Window.SetBackgroundBottomColor(0.118, 0.122, 0.157); // #1e1f28, a faint vignette
+
+screen_w = Window.GetWidth();
+screen_h = Window.GetHeight();
+
+// The wizard, scaled to 40% of the screen height, centred a little above middle.
+wizard_image = Image("logo.png");
+wizard_scale = (screen_h * 0.40) / wizard_image.GetHeight();
+wizard_image = wizard_image.Scale(wizard_image.GetWidth() * wizard_scale,
+                                  wizard_image.GetHeight() * wizard_scale);
+wizard = Sprite(wizard_image);
+wizard_x = screen_w / 2 - wizard_image.GetWidth() / 2;
+wizard_y = screen_h * 0.40 - wizard_image.GetHeight() / 2;
+wizard.SetPosition(wizard_x, wizard_y, 10);
+
+// Prompt text sits below the wizard's island.
+text_y = wizard_y + wizard_image.GetHeight() + screen_h * 0.04;
+bob = screen_h * 0.006;
+
+prompt_sprite = Sprite();
+bullets_sprite = Sprite();
+message_sprite = Sprite();
+
+// Gentle float: one cycle every ~3 s at the 50 Hz refresh rate.
+tick = 0;
+fun refresh_callback () {
+  global.tick = global.tick + 1;
+  wizard.SetY(wizard_y + Math.Sin(global.tick / 25) * bob);
+}
+Plymouth.SetRefreshFunction(refresh_callback);
+
+fun display_password_callback (prompt, bullets) {
+  prompt_image = Image.Text(prompt, 0.973, 0.973, 0.949, 1, font + " 16"); // #f8f8f2
+  prompt_sprite.SetImage(prompt_image);
+  prompt_sprite.SetPosition(screen_w / 2 - prompt_image.GetWidth() / 2, text_y, 20);
+  prompt_sprite.SetOpacity(1);
+
+  dots = "";
+  for (i = 0; i < bullets; i++) {
+    if (i < 32) dots = dots + "●";
+  }
+  if (dots == "") dots = " ";
+  bullets_image = Image.Text(dots, 0.741, 0.576, 0.976, 1, font + " 18"); // #bd93f9
+  bullets_sprite.SetImage(bullets_image);
+  bullets_sprite.SetPosition(screen_w / 2 - bullets_image.GetWidth() / 2,
+                             text_y + prompt_image.GetHeight() + screen_h * 0.015, 20);
+  bullets_sprite.SetOpacity(1);
+}
+Plymouth.SetDisplayPasswordFunction(display_password_callback);
+
+fun display_normal_callback () {
+  prompt_sprite.SetOpacity(0);
+  bullets_sprite.SetOpacity(0);
+}
+Plymouth.SetDisplayNormalFunction(display_normal_callback);
+
+fun message_callback (text) {
+  message_image = Image.Text(text, 0.384, 0.447, 0.643, 1, font + " 12"); // #6272a4
+  message_sprite.SetImage(message_image);
+  message_sprite.SetPosition(screen_w / 2 - message_image.GetWidth() / 2, screen_h * 0.92, 20);
+}
+Plymouth.SetMessageFunction(message_callback);

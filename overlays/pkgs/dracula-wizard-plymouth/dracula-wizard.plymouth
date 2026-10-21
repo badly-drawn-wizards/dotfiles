@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=Dracula Wizard
+Description=The GRUB theme's wizard, floating on Dracula, with a matching passphrase prompt
+ModuleName=script
+
+[script]
+ImageDir=@out@/share/plymouth/themes/dracula-wizard
+ScriptFile=@out@/share/plymouth/themes/dracula-wizard/dracula-wizard.script
