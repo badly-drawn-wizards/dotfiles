@@ -70,7 +70,7 @@
           gopls.enable = true;
 
           # Web
-          ts_ls.enable = true;
+          ts_ls.enable = false; # temporary
           cssls.enable = true;
           tailwindcss.enable = true;
 
