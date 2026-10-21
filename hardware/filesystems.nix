@@ -3,7 +3,7 @@
 {
   boot.initrd.luks.devices = {
     root = {
-      device = "/dev/nvme0n1p7";
+      device = "/dev/nvme0n1p5";
       preLVM = true;
     };
   };
