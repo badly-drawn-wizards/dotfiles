@@ -3,13 +3,13 @@
 {
   boot.initrd.luks.devices = {
     root = {
-      device = "/dev/nvme0n1p5";
+      device = "/dev/disk/by-partuuid/fc10d25a-fd48-480d-969d-148df73c61ba"; # nvme0n1p5, "nixos"
       preLVM = true;
     };
   };
   fileSystems = {
     "/boot" = {
-      device = "/dev/nvme0n1p1";
+      device = "/dev/disk/by-partuuid/be7c42a1-9f73-4e94-92b5-542549624b93"; # nvme0n1p1, EFI system partition
       fsType = "vfat";
     };
     "/" = {
