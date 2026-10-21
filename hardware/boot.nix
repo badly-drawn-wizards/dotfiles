@@ -3,17 +3,17 @@
 {
   boot = {
     loader = {
-      # systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
-      grub = {
+      # systemd-boot (Lanzaboote needs it for Secure Boot). Windows Boot
+      # Manager on the same ESP gets a menu entry automatically, so no
+      # os-prober equivalent is needed.
+      systemd-boot = {
         enable = true;
-        efiSupport = true;
-        enableCryptodisk = true;
-        theme = pkgs.dracula-grub-theme;
-        device = "nodev";
-        useOSProber = true;
-        # Kernels + initrds live on the 260M ESP; ~50-60M per distinct kernel.
-        configurationLimit = 10;
+        # Each distinct kernel+initrd is ~51M on the 260M ESP (~185M usable
+        # after Microsoft's 32M); with linuxPackages_latest every generation
+        # can carry a new kernel.
+        configurationLimit = 3;
+        editor = false; # no kernel cmdline editing at boot (init=/bin/sh)
       };
     };
 
