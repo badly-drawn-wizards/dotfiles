@@ -12,6 +12,8 @@
         theme = pkgs.dracula-grub-theme;
         device = "nodev";
         useOSProber = true;
+        # Kernels + initrds live on the 260M ESP; ~50-60M per distinct kernel.
+        configurationLimit = 10;
       };
     };
 
