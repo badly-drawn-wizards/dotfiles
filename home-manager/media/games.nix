@@ -12,7 +12,7 @@
     winetricks
     winePackages.waylandFull
 
-    prismlauncher
+    ryubing
   ];
 
   home.file = {
