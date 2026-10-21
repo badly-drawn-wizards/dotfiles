@@ -75,6 +75,13 @@
     # systemtap.enable = true;
     nix-ld.enable = true;
 
+    # nixos-rebuild wrapper with nix-output-monitor progress and a package
+    # diff. Backs the nrb/nrs aliases. GC stays with nix.gc, not nh clean.
+    nh = {
+      enable = true;
+      flake = "/etc/nixos";
+    };
+
     evolution = {
       enable = true;
       plugins = [ pkgs.evolution-ews ];
