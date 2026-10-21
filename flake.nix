@@ -56,6 +56,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Secure Boot: signed systemd-boot stubs, keys from sbctl.
+    lanzaboote = {
+      url = "github:nix-community/lanzaboote/v1.2.0";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # Private config kept in a separate repo. Local path rather than a remote so the
     # working tree is picked up directly; no lock churn when it changes.
     dotfiles-private.url = "path:/workspace/dotfiles-private";
@@ -71,6 +77,7 @@
     , nixpkgs-wayland
     , noctalia
     , nix-azurevpn-client
+    , lanzaboote
     , dotfiles-private
     , self
     , ...
@@ -127,6 +134,7 @@
             flake-plus-module
             nixfs.nixosModules.nixfs
             nix-azurevpn-client.nixosModules.azurevpnclient
+            lanzaboote.nixosModules.lanzaboote
             dotfiles-private.nixosModules.default
             ./configuration.nix
           ];

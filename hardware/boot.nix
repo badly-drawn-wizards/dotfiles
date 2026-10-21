@@ -4,16 +4,22 @@
   boot = {
     loader = {
       efi.canTouchEfiVariables = true;
-      # systemd-boot (Lanzaboote needs it for Secure Boot). Windows Boot
-      # Manager on the same ESP gets a menu entry automatically, so no
-      # os-prober equivalent is needed.
-      systemd-boot = {
-        enable = true;
-        # Each distinct kernel+initrd is ~51M; the 4G ESP fits far more than
-        # 10, this just keeps the menu short.
-        configurationLimit = 10;
-        editor = false; # no kernel cmdline editing at boot (init=/bin/sh)
-      };
+      # Lanzaboote replaces the systemd-boot module: it installs systemd-boot
+      # and signs a stub per generation with the sbctl keys below.
+      systemd-boot.enable = lib.mkForce false;
+    };
+
+    # Secure Boot. Keys: sudo sbctl create-keys (in /var/lib/sbctl, root
+    # only); enroll with sbctl enroll-keys --microsoft --firmware-builtin
+    # once the firmware is in setup mode. Windows Boot Manager on the ESP
+    # still gets a menu entry automatically.
+    lanzaboote = {
+      enable = true;
+      pkiBundle = "/var/lib/sbctl";
+      configurationLimit = 10; # the 4G ESP fits far more; keeps the menu short
+      # No kernel cmdline editing at boot (init=/bin/sh). Defaults to
+      # systemd-boot.editor, which is true.
+      settings.editor = false;
     };
 
     initrd = {
@@ -47,4 +53,7 @@
 
     supportedFilesystems = [ "btrfs" "ntfs" ];
   };
+
+  # Secure Boot key management and verification (sbctl status / verify).
+  environment.systemPackages = [ pkgs.sbctl ];
 }
