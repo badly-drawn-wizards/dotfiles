@@ -9,10 +9,9 @@
       # os-prober equivalent is needed.
       systemd-boot = {
         enable = true;
-        # Each distinct kernel+initrd is ~51M on the 260M ESP (~185M usable
-        # after Microsoft's 32M); with linuxPackages_latest every generation
-        # can carry a new kernel.
-        configurationLimit = 3;
+        # Each distinct kernel+initrd is ~51M; the 4G ESP fits far more than
+        # 10, this just keeps the menu short.
+        configurationLimit = 10;
         editor = false; # no kernel cmdline editing at boot (init=/bin/sh)
       };
     };
