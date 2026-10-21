@@ -11,8 +11,7 @@
       ./logitune.nix
     ];
 
-  # ~15G usable RAM vs 32 threads: the old max-jobs 8 x cores 0 (= all 32)
-  # allowed 256 compiler processes and thrashed swap until the box froze.
+  # Keep parallel compilers within what RAM can hold.
   nix.settings = {
     max-jobs = 4; # parallel derivations
     cores = 8; # threads per derivation's make/ninja
@@ -20,7 +19,7 @@
 
   # Cap the daemon's cgroup (all builds run under it): past MemoryHigh the
   # kernel reclaims from builds first; past MemoryMax the build is OOM-killed
-  # and fails, instead of the whole desktop swapping to a standstill.
+  # rather than the desktop swapping to a halt.
   systemd.services.nix-daemon.serviceConfig = {
     MemoryHigh = "9G";
     MemoryMax = "11G";

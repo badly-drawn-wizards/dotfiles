@@ -41,8 +41,8 @@
     ];
 
     # Wizard boot splash; also draws the LUKS passphrase prompt (systemd
-    # initrd). No early amdgpu: its firmware would bloat the initrd on the
-    # 260M ESP, and Plymouth draws on the firmware framebuffer without it.
+    # initrd). Plymouth uses the firmware framebuffer, so no early amdgpu
+    # (its firmware would bloat the initrd).
     plymouth = {
       enable = true;
       theme = "dracula-wizard";
