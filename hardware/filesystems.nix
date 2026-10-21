@@ -11,6 +11,8 @@
     "/boot" = {
       device = "/dev/disk/by-partuuid/be7c42a1-9f73-4e94-92b5-542549624b93"; # nvme0n1p1, EFI system partition
       fsType = "vfat";
+      # Root-only: bootctl's random seed (and later Secure Boot files) live here.
+      options = [ "fmask=0077" "dmask=0077" ];
     };
     "/" = {
       device = "/dev/vg/root";
