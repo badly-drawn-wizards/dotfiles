@@ -48,6 +48,8 @@
         nr = "nix repl dot#os";
         nrb = "nh os build --show-trace --keep-going";
         nrs = "nh os switch --show-trace --keep-going"; # nh elevates itself
+        # Enter millionants' LUKS passphrase over its initrd SSH (LAN only).
+        millionants-unlock = "ssh -t -p 2222 root@192.168.0.110 systemd-tty-ask-password-agent";
       };
       dirHashes = {
         org = "$HOME/org";
