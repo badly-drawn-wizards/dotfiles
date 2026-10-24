@@ -10,6 +10,14 @@
         networkmanager-openconnect
         networkmanager-strongswan
       ];
+      # Probe each connection for internet access. One that fails gets its
+      # default route penalised, so e.g. a phone hotspot wins over Ethernet
+      # to a router whose uplink is down.
+      settings.connectivity = {
+        uri = "http://nmcheck.gnome.org/check_network_status.txt";
+        response = "NetworkManager is online";
+        interval = 30;
+      };
     };
 
     firewall = {
@@ -25,8 +33,8 @@
 
   services.strongswan.enable = true;
 
-  # Tailnet client. "client" lets it use subnet routes (millionants
-  # advertises 192.168.0.109/32). One-time: sudo tailscale up --accept-routes
+  # Tailnet client. "client" lets it use subnet routes if a node advertises
+  # any. One-time: sudo tailscale up --accept-routes
   services.tailscale = {
     enable = true;
     useRoutingFeatures = "client";
