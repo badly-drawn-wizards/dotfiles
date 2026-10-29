@@ -32,6 +32,17 @@
       fsType = "btrfs";
       options = [ "subvol=home" "compress=zstd" "noatime" ];
     };
+    # OPLSS 2012 lecture videos, too big for this disk: millionants'
+    # read-only guest share, mounted on first access over Tailscale.
+    "/workspace/oplss12" = {
+      device = "//millionants/Lectures/oplss12";
+      fsType = "cifs";
+      options = [
+        "guest" "ro" "uid=1000" "gid=100"
+        "noauto" "x-systemd.automount" "x-systemd.idle-timeout=10min"
+        "x-systemd.mount-timeout=15s" "_netdev"
+      ];
+    };
   };
   swapDevices = [ { device = "/dev/vg/swap"; } ];
   }
