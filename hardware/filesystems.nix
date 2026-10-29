@@ -32,17 +32,19 @@
       fsType = "btrfs";
       options = [ "subvol=home" "compress=zstd" "noatime" ];
     };
-    # OPLSS 2012 lecture videos, too big for this disk: millionants'
-    # read-only guest share, mounted on first access over Tailscale.
-    "/workspace/oplss12" = {
-      device = "//millionants/Lectures/oplss12";
-      fsType = "cifs";
-      options = [
-        "guest" "ro" "uid=1000" "gid=100"
-        "noauto" "x-systemd.automount" "x-systemd.idle-timeout=10min"
-        "x-systemd.mount-timeout=15s" "_netdev"
-      ];
-    };
-  };
+  }
+  # millionants' read-only guest shares under /millionants, mounted on first
+  # access over Tailscale.
+  // lib.genAttrs' [ "TV" "Movies" "Lectures" ] (share: lib.nameValuePair "/millionants/${share}" {
+    device = "//millionants/${share}";
+    fsType = "cifs";
+    options = [
+      "guest" "ro" "uid=1000" "gid=100"
+      "noauto" "x-systemd.automount" "x-systemd.idle-timeout=10min"
+      "x-systemd.mount-timeout=15s" "_netdev"
+    ];
+  });
+  # The OPLSS 2012 lectures, too big for this disk, where they were asked for.
+  systemd.tmpfiles.rules = [ "L+ /workspace/oplss12 - - - - /millionants/Lectures/oplss12" ];
   swapDevices = [ { device = "/dev/vg/swap"; } ];
   }
