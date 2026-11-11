@@ -786,11 +786,11 @@
         "nixpkgs": "nixpkgs_4"
       },
       "locked": {
-        "lastModified": 1794368310,
-        "narHash": "sha256-/GmjMMH08jlYk4rteAYMGntEzXyYlHhjohoueQelUTo=",
+        "lastModified": 1794371102,
+        "narHash": "sha256-sx/J0zgkxM3kobRq1tawKzmd2AMA1S7g4WSYB/ZkK50=",
         "owner": "badly-drawn-wizards",
         "repo": "wiz",
-        "rev": "5e8bbb286cccfbdb45751d4ea4172795cb49b907",
+        "rev": "fd63740d3719e0454b437c81495d8137aa21bb75",
         "type": "github"
       },
       "original": {
