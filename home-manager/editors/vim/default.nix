@@ -9,6 +9,7 @@ in
     ./keybinds.nix
     ./plugins.nix
     ./lsp.nix
+    ./wiz.nix
   ];
 
   home.shellAliases = {

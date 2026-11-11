@@ -48,6 +48,8 @@
   services.udev = {
     extraRules = ''
       KERNEL=="ttyUSB*", MODE="0777"
+      # Lattice iCEstick (FTDI FT2232H): let iceprog open the raw USB device.
+      SUBSYSTEM=="usb", ATTR{idVendor}=="0403", ATTR{idProduct}=="6010", MODE="0660", GROUP="plugdev", TAG+="uaccess"
     '';
   };
 
