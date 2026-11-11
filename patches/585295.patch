@@ -1,0 +1,83 @@
+From eb102951363747f3690765e50f1528174dff5f3e Mon Sep 17 00:00:00 2001
+From: seeker <gmx472@qq.com>
+Date: Mon, 9 Nov 2026 15:22:28 +0800
+Subject: [PATCH] taskwarrior3: fix build with system SQLite
+
+Provide SQLite and pkg-config for libsqlite3-sys when the Cargo setup
+hook requests system libraries.
+
+The Rust archive then leaves SQLite symbols unresolved. Link SQLite
+through taskchampion_lib-static, which Corrosion's C++ bridge uses
+directly, so task, calc, and test_runner receive the dependency.
+
+Related to https://github.com/NixOS/nixpkgs/issues/570940
+
+Assisted-by: Codex (GPT-6)
+---
+ pkgs/by-name/ta/taskwarrior3/package.nix           |  8 ++++++++
+ .../ta/taskwarrior3/use-system-sqlite.patch        | 14 ++++++++++++++
+ 2 files changed, 22 insertions(+)
+ create mode 100644 pkgs/by-name/ta/taskwarrior3/use-system-sqlite.patch
+
+diff --git a/pkgs/by-name/ta/taskwarrior3/package.nix b/pkgs/by-name/ta/taskwarrior3/package.nix
+index 1349172cdbbd8..1f8201b94f9c9 100644
+--- a/pkgs/by-name/ta/taskwarrior3/package.nix
++++ b/pkgs/by-name/ta/taskwarrior3/package.nix
+@@ -10,10 +10,12 @@
+   rustc,
+   cargo,
+   installShellFiles,
++  pkg-config,
+ 
+   # buildInputs
+   corrosion,
+   libuuid,
++  sqlite,
+ 
+   # passthru.tests
+   nixosTests,
+@@ -39,6 +41,10 @@ stdenv.mkDerivation (finalAttrs: {
+     hash = "sha256-vNi/gVzIzTXuuPkWNimDwPJG7COWJATzGaT6J4UrrTk=";
+   };
+   patches = [
++    # Nixpkgs-specific: cargoSetupHook selects system SQLite, so propagate
++    # its link dependency through the CMake/Rust bridge as well.
++    ./use-system-sqlite.patch
++
+     # Installs properly Bash scripts, just like fish. See:
+     # https://github.com/GothenburgBitFactory/taskwarrior/pull/4173
+     (fetchpatch {
+@@ -83,11 +89,13 @@ stdenv.mkDerivation (finalAttrs: {
+     rustc
+     cargo
+     installShellFiles
++    pkg-config
+   ];
+ 
+   buildInputs = [
+     corrosion
+     libuuid
++    sqlite
+   ];
+ 
+   # The test suite is run as an installCheck instead of a check: since
+diff --git a/pkgs/by-name/ta/taskwarrior3/use-system-sqlite.patch b/pkgs/by-name/ta/taskwarrior3/use-system-sqlite.patch
+new file mode 100644
+index 0000000000000..7e06cae78c3e8
+--- /dev/null
++++ b/pkgs/by-name/ta/taskwarrior3/use-system-sqlite.patch
+@@ -0,0 +1,14 @@
++When libsqlite3-sys uses system SQLite, the Rust static library does not
++contain SQLite itself. Corrosion's C++ bridge links taskchampion_lib-static
++directly, so propagate the dependency through that target.
++
++diff --git a/src/taskchampion-cpp/CMakeLists.txt b/src/taskchampion-cpp/CMakeLists.txt
++--- a/src/taskchampion-cpp/CMakeLists.txt
+++++ b/src/taskchampion-cpp/CMakeLists.txt
++@@ -68,3 +68,6 @@ corrosion_add_cxxbridge(taskchampion-cpp
++   CRATE taskchampion_lib
++   FILES lib.rs
++ )
+++
+++find_package(SQLite3 REQUIRED)
+++target_link_libraries(taskchampion_lib-static INTERFACE SQLite::SQLite3)

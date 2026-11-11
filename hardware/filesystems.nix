@@ -5,7 +5,6 @@
     root = {
       # By PARTUUID: Windows renumbers partitions.
       device = "/dev/disk/by-partuuid/fc10d25a-fd48-480d-969d-148df73c61ba";
-      preLVM = true;
     };
   };
   fileSystems = {
