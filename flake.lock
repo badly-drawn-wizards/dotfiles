@@ -786,11 +786,11 @@
         "nixpkgs": "nixpkgs_4"
       },
       "locked": {
-        "lastModified": 1794445428,
-        "narHash": "sha256-470sV2/DQksprgDQt919uY1pDt2VEh4DX1fuat4Jn2s=",
+        "lastModified": 1794447425,
+        "narHash": "sha256-MbTBAtYilc/+vhbrhbZhGT4XOpAP+8/3v/V3eqpaIsY=",
         "owner": "wiz-pl",
         "repo": "wiz",
-        "rev": "50cd3e7691dd7e63ff72c33aa24b68a032179c8d",
+        "rev": "7d4c0186fd401c14ccea4f2d64ba186750184ad3",
         "type": "github"
       },
       "original": {
