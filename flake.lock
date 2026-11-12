@@ -786,15 +786,15 @@
         "nixpkgs": "nixpkgs_4"
       },
       "locked": {
-        "lastModified": 1794394496,
-        "narHash": "sha256-zSEHasxQxrKp2ja0ROJXMWCF+pZeRjeS7YXWPR8mK2Q=",
-        "owner": "badly-drawn-wizards",
+        "lastModified": 1794445428,
+        "narHash": "sha256-470sV2/DQksprgDQt919uY1pDt2VEh4DX1fuat4Jn2s=",
+        "owner": "wiz-pl",
         "repo": "wiz",
-        "rev": "b6ad475e3baf753c93d4818d3598f5ba1af64f51",
+        "rev": "50cd3e7691dd7e63ff72c33aa24b68a032179c8d",
         "type": "github"
       },
       "original": {
-        "owner": "badly-drawn-wizards",
+        "owner": "wiz-pl",
         "repo": "wiz",
         "type": "github"
       }

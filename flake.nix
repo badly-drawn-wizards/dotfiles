@@ -43,7 +43,7 @@
 
     # Wiz: tower (toolchain manager) and the wiz.nvim plugin. Its own nixpkgs pin is kept
     # (no follows), so builds match the badlydrawnwizards Cachix cache.
-    wiz.url = "github:badly-drawn-wizards/wiz";
+    wiz.url = "github:wiz-pl/wiz";
 
     nixpkgs-wayland = {
       url = "github:nix-community/nixpkgs-wayland";
