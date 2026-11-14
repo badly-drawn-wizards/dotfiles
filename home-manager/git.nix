@@ -21,6 +21,6 @@
   # GitHub CLI; also git's credential helper for github.com.
   programs.gh = {
     enable = true;
-    settings.git_protocol = "ssh";
+    settings.git_protocol = "https";
   };
 }

@@ -21,6 +21,14 @@
         requestTTY = "yes";
         remoteCommand = "systemd-tty-ask-password-agent";
       };
+      # Automation to the aarch64 builder: a passphrase-less key, so background
+      # `ssh millionants` / Nix copy jobs never open a KeePassXC prompt.
+      "millionants" = {
+        hostname = "millionants";
+        user = "reuben";
+        identitiesOnly = true;
+        identityFile = [ "~/.ssh/millionants_auto" ];
+      };
       "*" = {
         identitiesOnly = true;
         identityFile = [
