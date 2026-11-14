@@ -17,6 +17,7 @@
       ./home-manager
       ./virtualization
       ./cachix.nix
+      ./millionants-builder.nix
       ./users.nix
       ./security.nix
       # ./speech.nix # TODO: re-enable once piper-tts has a cached torch (it compiles torch from source)
