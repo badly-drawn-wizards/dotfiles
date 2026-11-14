@@ -10,6 +10,7 @@
       inputs.nixvim.homeModules.nixvim
       inputs.nix-index-database.homeModules.nix-index
       inputs.noctalia.homeModules.default
+      ./wiz-coordinator.nix
       ./home.nix
     ];
   };
