@@ -43,6 +43,7 @@ with builtins;
   programs = {
     zathura.enable = true;
     claude-code.enable = true;
+    opencode.enable = true;
     tmux.enable = true;
     fzf.enable = true;
     btop = {
@@ -66,7 +67,7 @@ with builtins;
     packages = with pkgs; [
       xournalpp
 
-      # libreoffice # TODO: re-enable once it's in the binary cache again
+      libreoffice
 
       pulsemixer
 
