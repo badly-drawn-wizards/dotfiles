@@ -148,6 +148,21 @@ in
       "w /sys/kernel/mm/lru_gen/min_ttl_ms - - - - 1000"
     ];
 
+    # --- journald: bound it, and restart it ---
+    # journald was killed by its own watchdog on 2026-11-13 after reading 32.8 GB and
+    # writing 12.2 GB in 2d20h; with no restart it silently stopped logging for two days,
+    # so the next incident had no evidence at all.
+    services.journald.extraConfig = lib.mkDefault ''
+      SystemMaxUse=2G
+      SystemMaxFileSize=256M
+      RateLimitIntervalSec=30s
+      RateLimitBurst=20000
+    '';
+    systemd.services.systemd-journald.serviceConfig = {
+      Restart = lib.mkDefault "always";
+      RestartSec = lib.mkDefault "2s";
+    };
+
     # --- zram: cap the hidden RAM, keep the disk size ---
     # Already enabled with memoryPercent = 50 by hardware/default.nix. The
     # *resident* limit (kernel mem_limit) is what was missing: 11.9 GiB of
