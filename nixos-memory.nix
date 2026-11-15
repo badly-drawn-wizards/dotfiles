@@ -76,16 +76,20 @@ in
       # user@ holds terminals, OpenCode and (transitively) wiz-heavy.slice.
       # 13G = wiz-heavy's 10G ceiling + ~3G for the agents/terminals that
       # launch the jobs. High below Max so reclaim starts first.
-      memoryHigh = lib.mkOption { type = lib.types.str; default = "11G"; };
-      memoryMax = lib.mkOption { type = lib.types.str; default = "13G"; };
+      # No MemoryHigh: a high limit on an ancestor throttles every task below it
+      # (OpenCode, kitty, pipewire). Builds are capped by their own wiz.slice
+      # (~/.config/systemd/user/wiz.slice). Max is a backstop. 2026-11-16.
+      memoryHigh = lib.mkOption { type = lib.types.str; default = "infinity"; };
+      memoryMax = lib.mkOption { type = lib.types.str; default = "20G"; };
+      memoryLow = lib.mkOption { type = lib.types.str; default = "4G"; };
       memorySwapMax = lib.mkOption { type = lib.types.str; default = "6G"; };
     };
 
     userSlice = {
       # Outer guard: session-1 (desktop) + user@ (builds/terminals). 17G of
       # 27 GiB leaves ~8G for nix-daemon + system.slice + kernel.
-      memoryHigh = lib.mkOption { type = lib.types.str; default = "15G"; };
-      memoryMax = lib.mkOption { type = lib.types.str; default = "17G"; };
+      memoryHigh = lib.mkOption { type = lib.types.str; default = "infinity"; };
+      memoryMax = lib.mkOption { type = lib.types.str; default = "24G"; };
     };
 
     oomd = {
@@ -219,6 +223,7 @@ in
     systemd.services."user@".serviceConfig = {
       MemoryHigh = cfg.userManager.memoryHigh;
       MemoryMax = cfg.userManager.memoryMax;
+      MemoryLow = cfg.userManager.memoryLow;
       MemorySwapMax = cfg.userManager.memorySwapMax;
       ManagedOOMSwap = "kill";
       # Explicit: do not kill terminals on routine PSI. Swap-based selection is
