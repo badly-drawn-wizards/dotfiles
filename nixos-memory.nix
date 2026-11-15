@@ -240,6 +240,10 @@ in
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = false;
+        # The .path watches /run/systemd/sessions, which systemd rewrites on session
+        # metadata changes; a burst hit the default start limit and left the unit
+        # "failed", so the next login silently lost desktop protection.
+        StartLimitIntervalSec = 0;
       };
       script = ''
         set -u
