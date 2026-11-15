@@ -152,8 +152,8 @@ in
     # journald was killed by its own watchdog on 2026-11-13 after reading 32.8 GB and
     # writing 12.2 GB in 2d20h; with no restart it silently stopped logging for two days,
     # so the next incident had no evidence at all.
-    # (26.11: `extraConfig` is gone; the journal options live under `settings.Journal`.)
-    services.journald.settings.Journal = lib.mkDefault {
+    # (26.11: `extraConfig` is gone; `settings` are written into `[Journal]` directly.)
+    services.journald.settings = lib.mkDefault {
       SystemMaxUse = "2G";
       SystemMaxFileSize = "256M";
       RateLimitIntervalSec = "30s";
