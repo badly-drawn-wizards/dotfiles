@@ -264,6 +264,7 @@ in
                  MemoryMin=${cfg.desktop.memoryMin} \
                  MemoryLow=${cfg.desktop.memoryLow} \
                  MemorySwapMax=${cfg.desktop.memorySwapMax} \
+                 IOAccounting=yes IOWeight=200 \
                  ManagedOOMPreference=avoid; then
               applied=1
               echo "wiz-session-protect: $unit protected (min ${cfg.desktop.memoryMin}, low ${cfg.desktop.memoryLow})"
