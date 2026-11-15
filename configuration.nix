@@ -20,6 +20,7 @@
       ./millionants-builder.nix
       ./users.nix
       ./security.nix
+      ./nixos-memory.nix
       # ./speech.nix # TODO: re-enable once piper-tts has a cached torch (it compiles torch from source)
     ];
 
