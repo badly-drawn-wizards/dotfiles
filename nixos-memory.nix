@@ -152,8 +152,10 @@ in
     # journald was killed by its own watchdog on 2026-11-13 after reading 32.8 GB and
     # writing 12.2 GB in 2d20h; with no restart it silently stopped logging for two days,
     # so the next incident had no evidence at all.
-    # (26.11: `extraConfig` is gone; `settings` are written into `[Journal]` directly.)
-    services.journald.settings = lib.mkDefault {
+    # (26.11: `extraConfig` is gone; the section is `settings.Journal`. Do not use
+    # mkDefault: NixOS also sets this attrset (Audit=keep), and a default-priority
+    # definition loses the merge, which silently dropped every key on the first try.)
+    services.journald.settings.Journal = {
       SystemMaxUse = "2G";
       SystemMaxFileSize = "256M";
       RateLimitIntervalSec = "30s";
