@@ -299,6 +299,33 @@ in
       '';
     };
 
+    # --- interactive *user* units: kitty scopes, opencode, app.slice ---
+    # The session scope above covers the compositor and Firefox, but kitty runs in
+    # `kitty-*.scope` directly under user@ and the OpenCode server in app.slice, so both
+    # were unprotected: under build reclaim they thrashed even though the WM kept
+    # responding. A 30 s user timer re-applies, which also catches new kitty scopes.
+    systemd.user.services.wiz-user-protect = {
+      description = "Protect interactive user units (app.slice, kitty scopes, OpenCode)";
+      path = [ config.systemd.package pkgs.gawk pkgs.coreutils ];
+      serviceConfig = { Type = "oneshot"; RemainAfterExit = false; };
+      script = ''
+        set -u
+        systemctl --user set-property --runtime app.slice \
+          MemoryLow=2G IOWeight=200 ManagedOOMPreference=avoid 2>/dev/null || true
+        systemctl --user set-property --runtime opencode-serve.service \
+          MemoryMin=512M MemoryLow=1G IOWeight=200 ManagedOOMPreference=avoid 2>/dev/null || true
+        for u in $(systemctl --user list-units --type=scope --no-legend 'kitty-*.scope' | awk '{print $1}'); do
+          systemctl --user set-property --runtime "$u" \
+            MemoryMin=256M MemoryLow=512M IOWeight=200 ManagedOOMPreference=avoid 2>/dev/null || true
+        done
+      '';
+    };
+    systemd.user.timers.wiz-user-protect = {
+      description = "Re-apply interactive user-unit protection";
+      wantedBy = [ "timers.target" ];
+      timerConfig = { OnBootSec = "20s"; OnUnitActiveSec = "30s"; };
+    };
+
     systemd.paths.wiz-session-protect = {
       description = "Re-apply session memory protection on every logind login";
       wantedBy = [ "paths.target" ];
