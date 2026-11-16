@@ -80,7 +80,7 @@ in
       # (OpenCode, kitty, pipewire). Builds are capped by their own wiz.slice
       # (~/.config/systemd/user/wiz.slice). Max is a backstop. 2026-11-16.
       memoryHigh = lib.mkOption { type = lib.types.str; default = "infinity"; };
-      memoryMax = lib.mkOption { type = lib.types.str; default = "20G"; };
+      memoryMax = lib.mkOption { type = lib.types.str; default = "22G"; };
       memoryLow = lib.mkOption { type = lib.types.str; default = "4G"; };
       memorySwapMax = lib.mkOption { type = lib.types.str; default = "6G"; };
     };
@@ -89,7 +89,7 @@ in
       # Outer guard: session-1 (desktop) + user@ (builds/terminals). 17G of
       # 27 GiB leaves ~8G for nix-daemon + system.slice + kernel.
       memoryHigh = lib.mkOption { type = lib.types.str; default = "infinity"; };
-      memoryMax = lib.mkOption { type = lib.types.str; default = "24G"; };
+      memoryMax = lib.mkOption { type = lib.types.str; default = "25G"; };
     };
 
     oomd = {
