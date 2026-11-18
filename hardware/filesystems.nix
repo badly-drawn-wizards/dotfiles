@@ -39,7 +39,11 @@
     fsType = "cifs";
     options = [
       "guest" "ro" "uid=1000" "gid=100"
-      "noauto" "x-systemd.automount" "x-systemd.idle-timeout=10min"
+      # `nofail`: with only automount, a NAS that is off still fails the .mount unit
+      # and takes `switch-to-configuration` down with it (exit 4, which reads as
+      # "your config is broken" and aborts the rest of the activation — that is how
+      # /etc/slurm went missing on 2026-11-18).
+      "nofail" "noauto" "x-systemd.automount" "x-systemd.idle-timeout=10min"
       "x-systemd.mount-timeout=15s" "_netdev"
     ];
   });
