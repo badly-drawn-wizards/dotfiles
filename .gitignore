@@ -1,5 +1,7 @@
 *.swp
 result
+# ad-hoc backups of edited modules (e.g. nixos-memory.nix.bak-20261117)
+*.bak-*
 
 home-manager/emacs/config.clean.el
 home-manager/dracula

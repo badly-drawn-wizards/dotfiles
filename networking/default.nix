@@ -33,8 +33,14 @@
 
   services.strongswan.enable = true;
 
-  # Tailnet client. "client" lets it use subnet routes if a node advertises
-  # any. One-time: sudo tailscale up --accept-routes
+  # Tailnet client. "client" lets it use subnet routes if a node advertises any.
+  # The prefs live in /var/lib/tailscale/tailscaled.state, and RouteAll=true is
+  # persisted there, so `--accept-routes` does not need repeating.
+  # There is no tailscaled-autoconnect unit in this nixpkgs and none is needed:
+  # tailscaled reconnects by itself at boot. Verified 2026-11-18 — it registered
+  # with the control server and had 100.76.41.56 one second after eth0 got an
+  # address, with no manual `tailscale up`. If the tailnet is unreachable at boot
+  # the fault is below it (link/DHCP), so diagnose that instead of adding a unit.
   services.tailscale = {
     enable = true;
     useRoutingFeatures = "client";
