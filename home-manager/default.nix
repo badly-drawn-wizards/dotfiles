@@ -11,6 +11,7 @@
       inputs.nix-index-database.homeModules.nix-index
       inputs.noctalia.homeModules.default
       ./wiz-coordinator.nix
+      ./wiz-agents.nix
       ./home.nix
     ];
   };
