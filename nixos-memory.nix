@@ -2,9 +2,9 @@
 # on this NixOS 26.11pre host, so it survives reboot without a `switch` being run now.
 #
 # Scope of this module: everything that needs a *system* unit, a kernel sysctl or
-# /etc. The two user-level slices (`wiz-heavy.slice`, `desktop.slice`) live in
-# ~/.config/systemd/user/ and are already persistent; `heavy` is a file in
-# /workspace/wiz-tools. Nothing here duplicates them.
+# /etc, plus the Wiz build slices (wiz, wiz-heavy, wiz-light) as user units.
+# `desktop.slice` still lives in ~/.config/systemd/user/; `heavy` is a file in
+# /workspace/wiz-tools.
 #
 # What this module deliberately does NOT do:
 #   * it does not touch vm.swappiness, overcommit, the swap devices, or zram size
@@ -59,14 +59,16 @@ in
       };
       memorySwapMax = lib.mkOption {
         type = lib.types.str;
-        default = "6G";
+        # 6G filled (5.1G used) and anon at swap.max cannot be evicted: the
+        # 2026-11-16 08:36 global OOM had 35G of swap free. slice-limits-plan-2026-11-17.
+        default = "8G";
         description = "Swap ceiling for the graphical session scope (desktop peak was 8.5 GiB).";
       };
     };
 
     nixDaemon = {
-      memoryHigh = lib.mkOption { type = lib.types.str; default = "6G"; };
-      memoryMax = lib.mkOption { type = lib.types.str; default = "8G"; };
+      memoryHigh = lib.mkOption { type = lib.types.str; default = "4G"; };
+      memoryMax = lib.mkOption { type = lib.types.str; default = "6G"; };
       memorySwapMax = lib.mkOption { type = lib.types.str; default = "1G"; };
       maxJobs = lib.mkOption { type = lib.types.int; default = 2; };
       cores = lib.mkOption { type = lib.types.int; default = 6; };
@@ -74,35 +76,38 @@ in
 
     userManager = {
       # user@ holds terminals, OpenCode and (transitively) wiz-heavy.slice.
-      # 13G = wiz-heavy's 10G ceiling + ~3G for the agents/terminals that
+      # 16G = wiz-heavy's 13G ceiling + ~3G for the agents/terminals that
       # launch the jobs. High below Max so reclaim starts first.
       # No MemoryHigh: a high limit on an ancestor throttles every task below it
       # (OpenCode, kitty, pipewire). Builds are capped by their own wiz.slice
       # (~/.config/systemd/user/wiz.slice). Max is a backstop. 2026-11-16.
       memoryHigh = lib.mkOption { type = lib.types.str; default = "infinity"; };
-      memoryMax = lib.mkOption { type = lib.types.str; default = "22G"; };
-      memoryLow = lib.mkOption { type = lib.types.str; default = "4G"; };
-      memorySwapMax = lib.mkOption { type = lib.types.str; default = "6G"; };
+      memoryMax = lib.mkOption { type = lib.types.str; default = "16G"; };
+      memoryLow = lib.mkOption { type = lib.types.str; default = "3G"; };
+      # 6G was full (6.42/6.44G) at the 08:36 global OOM with 35G swap free.
+      memorySwapMax = lib.mkOption { type = lib.types.str; default = "8G"; };
     };
 
     userSlice = {
-      # Outer guard: session-1 (desktop) + user@ (builds/terminals). 17G of
-      # 27 GiB leaves ~8G for nix-daemon + system.slice + kernel.
+      # Outer guard: session-1 (desktop) + user@ (builds/terminals). 16G of
+      # 27 GiB leaves ~11G for nix-daemon + system.slice + kernel.
       memoryHigh = lib.mkOption { type = lib.types.str; default = "infinity"; };
-      memoryMax = lib.mkOption { type = lib.types.str; default = "25G"; };
+      memoryMax = lib.mkOption { type = lib.types.str; default = "16G"; };
     };
 
     oomd = {
       swapUsedLimit = lib.mkOption { type = lib.types.str; default = "50%"; };
-      memoryPressureLimit = lib.mkOption { type = lib.types.str; default = "25%"; };
-      pressureDuration = lib.mkOption { type = lib.types.str; default = "20s"; };
+      memoryPressureLimit = lib.mkOption { type = lib.types.str; default = "60%"; };
+      pressureDuration = lib.mkOption { type = lib.types.str; default = "60s"; };
     };
 
     zramResidentLimit = lib.mkOption {
       type = lib.types.str;
-      default = "6 * 1024 * 1024 * 1024";
+      # zram-generator reads this in MiB: the old "6 * 1024 * 1024 * 1024"
+      # became 6 PiB (no limit). 5120 MiB = 5 GiB; max seen in use 3.72 GiB.
+      default = "5120";
       description = ''
-        Cap on the RAM the zram device may consume for compressed pages
+        Cap (MiB) on the RAM the zram device may consume for compressed pages
         (/sys/block/zram0/mem_limit). zram pages are kernel memory and are not
         charged to any cgroup, so an unbounded zram can eat the RAM it saves.
       '';
@@ -180,6 +185,55 @@ in
     };
     services.zram-generator.settings."zram0"."zram-resident-limit" =
       cfg.zramResidentLimit;
+
+    # --- Wiz build slices (user manager) ---
+    # Declarative since 2026-11-17 (were ~/.config/systemd/user/*.slice plus
+    # set-property drop-ins). `heavy` jobs go in wiz-heavy.slice, `light` probes in
+    # wiz-light.slice; wiz.slice is their aggregate cap. MemoryHigh only on these
+    # build slices, never on an ancestor of interactive work.
+    # See wiz-notes/slice-limits-plan-2026-11-17.md.
+    systemd.user.slices = {
+      wiz = {
+        description = "Wiz build and probe jobs (aggregate cap)";
+        sliceConfig = {
+          # 2026-11-18: the ceilings summed to ~36G on a 27 GiB box, so reclaim
+          # thrashed (load 73, PSI 86 %) before any cap bound. Budget now:
+          # user.slice 16 + desktop 3 + nix 6 + kernel/system ~2 = 27.
+          MemoryHigh = "13G";
+          MemoryMax = "14G";
+          MemorySwapMax = "2G";
+          CPUWeight = 50;
+          IOWeight = 50;
+        };
+      };
+      wiz-heavy = {
+        description = "Wiz heavy build jobs (aggregate memory cap)";
+        sliceConfig = {
+          # 13G max so one `heavy --mem 12G` job (plus its step overhead) fits.
+          MemoryHigh = "12G";
+          MemoryMax = "13G";
+          MemorySwapMax = "3G";
+          CPUWeight = 50;
+          IOWeight = 50;
+          ManagedOOMMemoryPressure = "kill";
+          ManagedOOMMemoryPressureLimit = "20%";
+          ManagedOOMSwap = "kill";
+          IOAccounting = true;
+          IOWriteBandwidthMax = "/dev/mapper/vg-root 700M";
+        };
+      };
+      wiz-light = {
+        description = "Wiz light probes (aggregate cap)";
+        sliceConfig = {
+          MemoryHigh = "3584M";
+          MemoryMax = "4G";
+          MemorySwapMax = "0";
+          CPUWeight = 50;
+          IOWeight = 50;
+          ManagedOOMPreference = "none";
+        };
+      };
+    };
 
     # --- systemd-oomd: actually monitor something ---
     # `kill` is the only value that enables monitoring; the default `auto` is why
@@ -317,11 +371,21 @@ in
         set -u
         systemctl --user set-property --runtime app.slice \
           MemoryLow=2G IOWeight=200 ManagedOOMPreference=avoid 2>/dev/null || true
+        # The server is protected, not capped: its tool shells now run in
+        # wiz-agents.slice (via SHELL=agent-shell), which carries the cap. A Max here
+        # would let a single escaped spawn take the server with it.
         systemctl --user set-property --runtime opencode-serve.service \
           MemoryMin=512M MemoryLow=1G IOWeight=200 ManagedOOMPreference=avoid 2>/dev/null || true
+        # A kitty scope is also where every shell command runs — including the OpenCode
+        # server and the agents' tool calls, which inherit its cgroup. A bare `lake build`
+        # in that scope is unbounded (two 30 MB generated C units at ~2 GiB each is the
+        # usual shape); the 2026-11-17 hang had four of them there. Cap it so a build that
+        # skipped `heavy`/`light` dies inside its own scope instead of competing with the
+        # scheduler. `heavy` jobs are in wiz-heavy.slice and do not count here.
         for u in $(systemctl --user list-units --type=scope --no-legend 'kitty-*.scope' | awk '{print $1}'); do
           systemctl --user set-property --runtime "$u" \
-            MemoryMin=256M MemoryLow=512M IOWeight=200 ManagedOOMPreference=avoid 2>/dev/null || true
+            MemoryMin=256M MemoryLow=512M MemoryHigh=3G MemoryMax=4G \
+            IOWeight=200 ManagedOOMPreference=avoid 2>/dev/null || true
         done
       '';
     };
