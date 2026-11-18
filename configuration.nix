@@ -21,8 +21,26 @@
       ./users.nix
       ./security.nix
       ./nixos-memory.nix
+      ./slurm.nix
       # ./speech.nix # TODO: re-enable once piper-tts has a cached torch (it compiles torch from source)
     ];
+
+  # The WAN path MTU is below 1500: `ping -M do -s 1472` to 8.8.8.8 fails, 1400 passes.
+  # A full-size TLS handshake is dropped, so every HTTPS call (GitHub, Cachix, `nix copy`)
+  # times out while ICMP and the LAN look healthy. NetworkManager resets the link MTU on
+  # every reconnect, so a dispatcher script re-applies it; the udev rule covers the first
+  # appearance before a connection profile exists.
+  networking.networkmanager.dispatcherScripts = [
+    {
+      type = "basic";
+      source = pkgs.writeShellScript "mtu-1400" ''
+        [ "$1" = "eth0" ] && ${pkgs.iproute2}/bin/ip link set dev eth0 mtu 1400 || true
+      '';
+    }
+  ];
+  services.udev.extraRules = ''
+    ACTION=="add", SUBSYSTEM=="net", KERNEL=="eth0", ATTR{mtu}="1400"
+  '';
 
   nix = {
     nixPath = [ "nixpkgs=${inputs.nixpkgs}" "nixos-config=/etc/nixos" ];
@@ -212,6 +230,28 @@
       config.common.default = [ "wlr" "gtk" ];
     };
   };
+
+  # SSH for the tailnet only: the Steam Deck mounts the worktrees over SFTP/sshfs. The
+  # firewall is enabled, so port 22 is opened on tailscale0 and nowhere else; key-only
+  # auth, no root login, SFTP on for sshfs.
+  services.openssh = {
+    enable = true;
+    allowSFTP = true;
+    # `openFirewall` defaults to true and would open 22 on every interface; the
+    # tailscale0 rule below is the only opening.
+    openFirewall = false;
+    settings = {
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
+      PermitRootLogin = "no";
+    };
+  };
+  # 6817/6818 are Slurm's controller and node ports. They must be open on the
+  # tailscale interface, not just loopback: a connection to this host's own
+  # tailnet address does not traverse `lo`, and the worker nodes reach the
+  # controller only over the tailnet (2026-11-18: with only 22 allowed, `scontrol`
+  # timed out and both Windows nodes could not register).
+  networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 22 6817 6818 ];
 
   system.stateVersion = "23.11";
 }
