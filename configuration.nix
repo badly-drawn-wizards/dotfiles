@@ -246,12 +246,13 @@
       PermitRootLogin = "no";
     };
   };
-  # 6817/6818 are Slurm's controller and node ports. They must be open on the
-  # tailscale interface, not just loopback: a connection to this host's own
+  # 6817/6818 are Slurm's controller and node ports and are opened on
+  # tailscale0 by modules/slurm.nix (the nodes share that rule). They must be on
+  # the tailnet interface, not just loopback: a connection to this host's own
   # tailnet address does not traverse `lo`, and the worker nodes reach the
   # controller only over the tailnet (2026-11-18: with only 22 allowed, `scontrol`
   # timed out and both Windows nodes could not register).
-  networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 22 6817 6818 ];
+  networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 22 ];
 
   system.stateVersion = "23.11";
 }
