@@ -110,7 +110,12 @@ in
       MemoryHigh = "2G";
       MemoryMax = "4G";
       OOMPolicy = "continue";
-      TasksMax = 512;
+      # 512 was hit by the server's own children: the MCP servers (playwright's
+      # headless Chromium alone is ~50 tasks) and the per-session runtime all live
+      # in this cgroup, so at 510/512 every fork failed with EAGAIN
+      # (`failed to spawn terminal reader`), which looks like a spawn regression.
+      # pids.events showed `max 100`. Keep the memory caps as the real bound.
+      TasksMax = 4096;
       LimitNOFILE = 65536;
     };
     Install.WantedBy = [ "default.target" ];

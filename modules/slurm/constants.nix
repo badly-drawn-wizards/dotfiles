@@ -57,6 +57,10 @@ in
   # /etc/slurm: its config is a /nix/store path from services.slurm.
   paths = {
     slurmConf = "/etc/slurm/slurm.conf";
+    # The controller's Slurm module renders cgroup.conf beside slurm.conf; a node
+    # must fetch it too, or slurmd starts with Slurm's defaults (ConstrainCores=no,
+    # ConstrainRAMSpace=no) and `--mem`/`-c` are advisory on that node.
+    cgroupConf = "/etc/slurm/cgroup.conf";
     mungeKey = "/etc/munge/munge.key";
   };
 

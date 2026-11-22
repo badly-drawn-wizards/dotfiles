@@ -1,0 +1,159 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "servers": {
+      "playwright": {
+        "type": "local",
+        "command": [
+          "npx",
+          "-y",
+          "@playwright/mcp@0.0.86",
+          "--headless",
+          "--isolated",
+          "--browser",
+          "chromium",
+          "--allowed-origins",
+          "http://127.0.0.1:*;http://localhost:*",
+          "--idle-timeout",
+          "600000",
+          "--output-dir",
+          "/tmp/opencode/playwright"
+        ],
+        "timeout": {
+          "startup": 60000,
+          "catalog": 30000,
+          "execution": 120000
+        },
+        "codemode": true
+      },
+      "github": {
+        "type": "local",
+        "command": [
+          "sh",
+          "-c",
+          "exec env GITHUB_TOKEN=\"$(gh auth token)\" MCP_IDLE_TIMEOUT_MS=0 npx -y github-mcp-server-kosta"
+        ],
+        "timeout": {
+          "startup": 90000,
+          "catalog": 30000,
+          "execution": 120000
+        },
+        "codemode": true
+      },
+      "agent-bus": {
+        "type": "local",
+        "command": [
+          "npx",
+          "-y",
+          "ghostbus",
+          "--store",
+          "/home/reuben/.local/share/ghostbus/bus.json"
+        ],
+        "timeout": {
+          "startup": 90000,
+          "catalog": 30000,
+          "execution": 120000
+        },
+        "codemode": true
+      },
+      "nixos": {
+        "type": "local",
+        "command": [
+          "nix",
+          "run",
+          "github:utensils/mcp-nixos/v3.1.1",
+          "--"
+        ],
+        "timeout": {
+          "startup": 180000,
+          "catalog": 30000,
+          "execution": 60000
+        },
+        "codemode": true
+      }
+    }
+  },
+  "permissions": [
+    {
+      "action": "playwright_browser_run_code_unsafe",
+      "resource": "*",
+      "effect": "deny"
+    },
+    {
+      "action": "playwright_browser_file_upload",
+      "resource": "*",
+      "effect": "deny"
+    },
+    {
+      "action": "github_merge_pull_request",
+      "resource": "*",
+      "effect": "deny"
+    },
+    {
+      "action": "github_create_pull_request",
+      "resource": "*",
+      "effect": "deny"
+    },
+    {
+      "action": "github_update_pull_request",
+      "resource": "*",
+      "effect": "deny"
+    },
+    {
+      "action": "github_create_issue",
+      "resource": "*",
+      "effect": "deny"
+    },
+    {
+      "action": "github_update_issue",
+      "resource": "*",
+      "effect": "deny"
+    },
+    {
+      "action": "github_create_issue_comment",
+      "resource": "*",
+      "effect": "deny"
+    },
+    {
+      "action": "github_create_repo",
+      "resource": "*",
+      "effect": "deny"
+    },
+    {
+      "action": "github_fork_repo",
+      "resource": "*",
+      "effect": "deny"
+    }
+  ],
+  "experimental": {
+    "todo": true
+  },
+  "plugins": [
+    {
+      "package": "@max10240/opencode-plugin-unicorn",
+      "options": {
+        "features": {
+          "god": false,
+          "imageGen": false,
+          "showImg": false,
+          "opencodeGoUsage": false,
+          "notepad": false,
+          "recommendedOpencodeConfig": false,
+          "nonBlocking": true,
+          "delayedQueue": true,
+          "infiniteLoop": true,
+          "retry": true,
+          "promptSearch": true,
+          "sessionSearch": true,
+          "sendMessageAcrossSessions": true,
+          "sensitiveEncrypt": true,
+          "sensitiveProtection": true
+        },
+        "nonBlocking": { "thresholdMs": 10000 }
+      }
+    },
+    {
+      "package": "@ramtinj95/opencode-tokenscope@2.1.0"
+    }
+  ]
+}

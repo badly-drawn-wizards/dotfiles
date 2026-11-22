@@ -12,6 +12,7 @@
       inputs.noctalia.homeModules.default
       ./wiz-coordinator.nix
       ./wiz-agents.nix
+      ./opencode.nix
       ./home.nix
     ];
   };

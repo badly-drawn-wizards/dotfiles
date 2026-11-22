@@ -65,6 +65,7 @@ let
     key=${lib.escapeShellArg constants.bootstrapKey}
     host=${lib.escapeShellArg "${constants.bootstrapUser}@${cfg.controllerAddr}"}
     conf=${lib.escapeShellArg constants.paths.slurmConf}
+    cgroup=${lib.escapeShellArg constants.paths.cgroupConf}
     keyfile=${lib.escapeShellArg constants.paths.mungeKey}
     marker=/run/slurm-bootstrap/conf-path
     apply=0
@@ -110,6 +111,7 @@ let
 
     conf_changed=0
     key_changed=0
+    cgroup_changed=0
 
     # Ask the controller where its SLURM_CONF is *right now*. The path changes
     # on every controller rebuild, so it is resolved, never remembered.
@@ -133,6 +135,31 @@ let
       fi
     else
       echo "slurm-fetch: could not refresh slurm.conf; keeping the cached one" >&2
+    fi
+
+    # cgroup.conf is rendered beside slurm.conf by the controller's Slurm module
+    # (ConstrainCores=yes, ConstrainRAMSpace=yes). A node that starts slurmd
+    # without it gets Slurm's defaults, where `--mem` and `-c` are only advisory:
+    # a job then oversubscribes the node and a later spawn fails with ENOMEM
+    # (measured on win2/win3, 2026-11-22 — both had no /etc/slurm/cgroup.conf and
+    # `srun -c 4` still saw all 20 CPUs). The task plugin reads this file when it
+    # initialises, so a SIGHUP is not enough: a live change waits for the node to
+    # be idle, and the marker carries it across timer runs.
+    if [ -n "''${remote_conf:-}" ] \
+      && timeout 30 scp -q "''${ssh_opts[@]}" "$host:''${remote_conf%/*}/cgroup.conf" "$tmp/cgroup.conf" \
+      && [ -s "$tmp/cgroup.conf" ]; then
+      if [ -s "$cgroup" ] && cmp -s "$tmp/cgroup.conf" "$cgroup"; then
+        echo "slurm-fetch: cgroup.conf unchanged"
+      else
+        install -m 0644 -o root -g root "$tmp/cgroup.conf" "$cgroup"
+        cgroup_changed=1
+        if [ "$apply" = 1 ]; then
+          touch /run/slurm-bootstrap/cgroup-changed
+        fi
+        echo "slurm-fetch: installed cgroup.conf from $remote_conf"
+      fi
+    else
+      echo "slurm-fetch: could not refresh cgroup.conf; slurmd runs unconstrained" >&2
     fi
 
     # The munge key is 0400 munge:munge on the controller, so it is read with
@@ -162,8 +189,23 @@ let
       if [ "$key_changed" = 1 ]; then
         systemctl try-restart munged.service || true
         systemctl try-restart slurmd.service || true
+        rm -f /run/slurm-bootstrap/cgroup-changed
       elif [ "$conf_changed" = 1 ]; then
         systemctl try-reload-or-restart slurmd.service || true
+      fi
+      # A cgroup.conf change needs a slurmd *restart* — the task plugin reads the
+      # file at init — and a restart kills the node's steps, so wait until none
+      # run. The marker set when the file changed keeps this pending.
+      if [ -e /run/slurm-bootstrap/cgroup-changed ]; then
+        if ! command -v squeue >/dev/null 2>&1; then
+          echo "slurm-fetch: cgroup.conf changed but squeue is missing; not restarting slurmd" >&2
+        elif [ -n "$(squeue -h -w "$(hostname -s)" -t RUNNING 2>/dev/null)" ]; then
+          echo "slurm-fetch: cgroup.conf changed; waiting for the node to be idle before restarting slurmd" >&2
+        else
+          systemctl try-restart slurmd.service || true
+          rm -f /run/slurm-bootstrap/cgroup-changed
+          echo "slurm-fetch: restarted slurmd for the new cgroup.conf"
+        fi
       fi
     fi
   '';
