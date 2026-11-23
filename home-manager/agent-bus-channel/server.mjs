@@ -14,7 +14,11 @@
  *     capabilities.experimental["claude/channel"] and emits
  *     notifications/claude/channel. It does NOT declare
  *     claude/channel/permission: this channel cannot authenticate a replier, so
- *     it must never be allowed to approve tool use.
+ *     it must never be allowed to approve tool use. Claude Code's v2 MCP
+ *     runtime does not register a channel server that negotiates 2026-07-28,
+ *     so claude-only mode rejects that revision and stays on the earlier
+ *     handshake even when asked for it (see
+ *     https://code.claude.com/docs/en/mcp.md#push-messages-with-channels).
  *
  *   - OpenCode 2.4 (MCP 2026-07-28 "server/discover"): declares the
  *     io.modelcontextprotocol/events extension, answers events/list, and
@@ -41,6 +45,7 @@ const TAG = '[ghostbus-channel]';
 const SERVER_NAME = 'ghostbus-channel';
 const SERVER_VERSION = '1.0.0';
 const MODERN_PROTOCOL = '2026-07-28';
+const LEGACY_PROTOCOL = '2025-11-25';
 const SUPPORTED_MODERN = [MODERN_PROTOCOL];
 const EVENTS_EXTENSION = 'io.modelcontextprotocol/events';
 const SUBSCRIPTION_ID = 'io.modelcontextprotocol/subscriptionId';
@@ -514,10 +519,21 @@ const INSTRUCTIONS = [
   'Reply through the agent-bus tools (bus_send / bus_inbox), not this one-way channel.',
 ].join(' ');
 
+// The Claude Code v2 runtime refuses to register a channel server that
+// negotiates MCP revision 2026-07-28, even though this server declares the
+// channel capability in the legacy (experimental) shape. Claude-only mode
+// therefore never negotiates that revision; OpenCode mode keeps it for the
+// events extension.
+function modernNegotiationAllowed() {
+  return config.wantsEvents;
+}
+
 function handleInitialize(id, params) {
-  const requested = params && typeof params.protocolVersion === 'string' ? params.protocolVersion : '2025-11-25';
+  const requested = params && typeof params.protocolVersion === 'string' ? params.protocolVersion : LEGACY_PROTOCOL;
+  const protocolVersion =
+    requested === MODERN_PROTOCOL && !modernNegotiationAllowed() ? LEGACY_PROTOCOL : requested;
   reply(id, {
-    protocolVersion: requested,
+    protocolVersion,
     capabilities: capabilitiesForLegacy(),
     serverInfo: { name: SERVER_NAME, version: SERVER_VERSION },
     instructions: INSTRUCTIONS,
@@ -530,7 +546,9 @@ function handleDiscover(id) {
     modernResult({
       ttlMs: 0,
       cacheScope: 'private',
-      supportedVersions: SUPPORTED_MODERN,
+      // Claude-only mode advertises no modern revision, so the v2 runtime falls
+      // back to the earlier handshake and registers the channel.
+      supportedVersions: modernNegotiationAllowed() ? SUPPORTED_MODERN : [],
       capabilities: capabilitiesForModern(),
       instructions: INSTRUCTIONS,
     })

@@ -1,5 +1,5 @@
 # Claude Code's machine-wide config, declared here instead of hand-edited in
-# ~/.claude. The parity target is home-manager/opencode/opencode.json: the same
+# ~/.claude. The parity target is home-manager/opencode/settings.nix: the same
 # MCP servers, with the same commands and the same shared agent-bus store.
 #
 # How the MCP servers are stored (and why ~/.claude.json is untouched):
@@ -99,9 +99,12 @@ in
         args = [ ];
       };
 
-      # The push channel is not a plugin server. It is a top-level user MCP
-      # server added by the activation below and backed by a systemd socket;
-      # that is what makes the accepted `server:ghostbus-channel` tag resolve.
+      # The push channel is not a plugin server. It is declared as a project
+      # server in the Wiz repo's `.mcp.json` and enabled with
+      # `settings.enabledMcpjsonServers`; systemd backs it. That is what makes
+      # the accepted `server:ghostbus-channel` tag resolve. `~/.claude.json`
+      # shadows project scope and is not written here.
+
 
       github = {
         type = "stdio";
@@ -244,8 +247,10 @@ in
     };
   };
 
-  # The channel entry lives in the managed settings (`settings.mcpServers`
-  # above); there is no activation that writes ~/.claude.json.
+  # The channel entry is not in these settings: Claude Code ignores
+  # `settings.mcpServers`, and a project `.mcp.json` entry is the file-based
+  # route it reads (enabled by `settings.enabledMcpjsonServers` above). There is
+  # no activation that writes ~/.claude.json.
 
   # NOTE: the ghostbus store directory is created by the
   # home.file.".local/share/ghostbus/.keep" declaration in opencode.nix. Do not

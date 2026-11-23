@@ -273,9 +273,51 @@ class ChannelTest(unittest.TestCase):
             and "still alive" in m["params"]["content"]
         )
 
+    def test_claude_caps_modern_revision(self):
+        """Claude's v2 runtime asks for 2026-07-28; the channel must stay legacy."""
+        write_store(self.store, [])
+        server = self.start("claude", "claude-code")
+        server.send(
+            request(
+                1,
+                "initialize",
+                {
+                    "protocolVersion": "2026-07-28",
+                    "capabilities": {},
+                    "clientInfo": {"name": "smoke-v2", "version": "1"},
+                },
+            )
+        )
+        init = server.recv_until(lambda m: m.get("id") == 1)["result"]
+        self.assertEqual(init["protocolVersion"], "2025-11-25")
+        self.assertEqual(init["capabilities"]["experimental"]["claude/channel"], {})
+        self.assertNotIn("claude/channel/permission", init["capabilities"]["experimental"])
+
+    def test_claude_discover_advertises_no_modern(self):
+        """v2 skips the modern probe when claude mode advertises no revision."""
+        write_store(self.store, [])
+        server = self.start("claude", "claude-code")
+        server.send(request(1, "server/discover", {}))
+        discover = server.recv_until(lambda m: m.get("id") == 1)["result"]
+        self.assertEqual(discover["supportedVersions"], [])
+
     def test_opencode_modern_events(self):
         write_store(self.store, [message(1, "lane-old", "opencode", "old")])
         server = self.start("opencode", "opencode", "--heartbeat-ms", "200")
+
+        server.send(
+            request(
+                0,
+                "initialize",
+                {
+                    "protocolVersion": "2026-07-28",
+                    "capabilities": {},
+                    "clientInfo": {"name": "smoke", "version": "1"},
+                },
+            )
+        )
+        init = server.recv_until(lambda m: m.get("id") == 0)["result"]
+        self.assertEqual(init["protocolVersion"], "2026-07-28")
 
         server.send(
             request(

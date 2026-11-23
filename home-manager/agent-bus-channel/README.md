@@ -24,7 +24,15 @@ store. Replies go through the existing `agent-bus` server.
 
 `home-manager/agent-bus-wait/module.nix` adds the wrapper to `home.packages`
 and rewrites OpenCode's generated config to use its Nix store path.
-`home-manager/claude-code.nix` adds it to Claude Code's `mcpServers`.
+`home-manager/claude-code.nix` enables the Wiz project's `.mcp.json` entry via
+`settings.enabledMcpjsonServers`; systemd hosts the server per connection.
+
+The per-connection unit sets `StandardInput=socket`, `StandardOutput=socket`
+and `StandardError=journal`, so stdout is the JSON-RPC stream and logs never
+enter it. A probe that disconnects before systemd forks the instance can log
+`Expected exactly one socket, got 0` and `Failed at step ... spawning ...:
+Invalid argument`; that instance has no client and is harmless, and the next
+connection gets a fresh instance.
 
 ## Invocation
 
@@ -87,6 +95,15 @@ cuckcode /resume
   }
 }
 ```
+
+The protocol revision is negotiated per mode. Claude Code's v2 MCP runtime does
+not register a channel server that negotiates MCP `2026-07-28`
+([mcp reference](https://code.claude.com/docs/en/mcp.md#push-messages-with-channels)),
+so `--mode claude` answers `initialize` with `2025-11-25` and `server/discover`
+with `supportedVersions: []`. The runtime then uses the earlier handshake and
+registers the channel. `--mode opencode` keeps `2026-07-28` for the events
+extension. `cuckcode` sets `MCP_PROTOCOL_NEGOTIATION=auto` so Claude re-asks
+rather than reusing its 7-day negotiation cache.
 
 It deliberately does **not** declare `claude/channel/permission`. That capability
 lets a channel relay approve/deny decisions for tool calls; the bus cannot

@@ -60,6 +60,12 @@ The `.mcp.json` is a store symlink under `home-manager-files`, so removing a
 server from the module removes it from the next generation. `claude mcp list`
 shows the result; `claude mcp get plugin:hm:agent-bus` inspects one entry.
 
+The push channel is the exception. Claude Code ignores `mcpServers` in
+`settings.json` (verified with a temporary `HOME`), so `ghostbus-channel` is
+declared in the Wiz project's `.mcp.json` and enabled with the Nix setting
+`settings.enabledMcpjsonServers = [ "ghostbus-channel" ]`. `~/.claude.json`
+shadows the project file with local/user scope and stays unmanaged.
+
 ## The shared bus (ghostbus)
 
 There is exactly one bus, and it is a file:
@@ -133,9 +139,18 @@ Limits, from the Claude Code channels reference:
   launch (per entry, not extended by `--channels`);
 - interactive sessions only — ignored with `-p` / the Agent SDK;
 - organization `channelsEnabled` / `allowedChannelPlugins` policy still applies;
+- **protocol revision**: Claude Code's v2 MCP runtime does not register a
+  channel server that negotiates MCP `2026-07-28`
+  (`mcp.md#push-messages-with-channels`). The server therefore answers
+  `initialize` with `2025-11-25` in `--mode claude` (and `server/discover` with
+  `supportedVersions: []`), so the runtime falls back to the earlier handshake.
+  `cuckcode` sets `MCP_PROTOCOL_NEGOTIATION=auto` so Claude re-asks instead of
+  reusing the 7-day negotiation cache. OpenCode mode keeps `2026-07-28` for its
+  events extension;
 - unacknowledged notifications are silently dropped if the session did not load
   the server as a channel. Diagnose with `claude --debug mcp` and
-  `/mcp`.
+  `/mcp`; the skip reason names the gate (allowlist, session, capability or
+  protocol era).
 
 The server deliberately omits `claude/channel/permission`: the local bus cannot
 authenticate a replier, so it must never relay tool approvals. The selector is
@@ -148,6 +163,13 @@ scope and is left untouched. The plugin forms are deliberately not used:
 `plugin:hm` is rejected as untagged and `plugin:hm@skills-dir` says "plugin not
 installed". Override the tag with `CLAUDE_CHANNEL_SELECTOR`. Full design:
 `home-manager/agent-bus-channel/README.md`.
+
+The service unit keeps the protocol stream and the logs separate:
+`StandardInput=socket`, `StandardOutput=socket`, `StandardError=journal`. A
+probe that disconnects before systemd forks the per-connection instance can log
+`Expected exactly one socket, got 0` and `Failed at step ... spawning ...:
+Invalid argument`. That instance has no client left to serve and is harmless;
+the next connection gets its own instance.
 
 ## Validate and apply
 

@@ -1,16 +1,25 @@
 #!/usr/bin/env bash
 # cuckcode — Claude Code with the ghostbus push channel loaded.
 #
-# The channel server is a top-level user MCP server named `ghostbus-channel`,
-# added by home-manager's activation (`claude mcp add --scope user`) and hosted
-# by systemd as a per-connection service on
-# $XDG_RUNTIME_DIR/ghostbus-channel.sock. A top-level configured server is what
-# the accepted `server:ghostbus-channel` channel tag resolves; neither the
+# The channel server is a top-level project MCP server named `ghostbus-channel`
+# in the Wiz project's `.mcp.json`; the Nix setting
+# `settings.enabledMcpjsonServers` enables it. systemd hosts it per connection
+# on $XDG_RUNTIME_DIR/ghostbus-channel.sock, and
+# ~/.local/bin/ghostbus-channel-client is the socat bridge. `~/.claude.json`
+# shadows project scope and is left untouched. The accepted
+# `server:ghostbus-channel` selector is what the flag resolves; neither the
 # skills-dir `hm` plugin nor a per-session `--mcp-config` entry is used.
 #
 # Bind the flag with `=` and put the user's arguments after it: the
 # space-separated spelling consumes following positional arguments as channel
 # selectors, so `/resume` or a prompt never reaches Claude Code.
 set -euo pipefail
+
+# Claude Code caches a stdio server's protocol negotiation for up to 7 days. The
+# channel server deliberately answers the legacy revision (Claude's v2 runtime
+# does not register a channel server on 2026-07-28), so ask every launch instead
+# of reusing a cached modern answer.
+export MCP_PROTOCOL_NEGOTIATION=${MCP_PROTOCOL_NEGOTIATION:-auto}
+
 selector=${CLAUDE_CHANNEL_SELECTOR:-server:ghostbus-channel}
 exec claude --dangerously-load-development-channels="$selector" "$@"
