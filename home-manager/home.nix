@@ -42,7 +42,6 @@ with builtins;
 
   programs = {
     zathura.enable = true;
-    claude-code.enable = true;
     opencode.enable = true;
     tmux.enable = true;
     fzf.enable = true;

@@ -13,6 +13,7 @@
       ./wiz-coordinator.nix
       ./wiz-agents.nix
       ./opencode.nix
+      ./claude-code.nix
       ./home.nix
     ];
   };
