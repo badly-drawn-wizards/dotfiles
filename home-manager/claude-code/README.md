@@ -33,7 +33,7 @@ it.
 | `playwright` | `plugin:playwright:playwright` | `npx @playwright/mcp@latest` | Provided by the `playwright@claude-plugins-official` plugin already enabled in `settings.enabledPlugins`. Deliberately **not** duplicated in `mcpServers`. |
 | `github` | `plugin:hm:github` | `sh -c 'exec env GITHUB_TOKEN="$(gh auth token)" MCP_IDLE_TIMEOUT_MS=0 npx -y github-mcp-server-kosta'` | Token is read at runtime from `gh`; no secret is in the Nix store. |
 | `agent-bus` | `plugin:hm:agent-bus` | `/nix/store/...-ghostbus-wait/bin/ghostbus-wait` | Same wrapper and same file as every OpenCode session. The wrapper adds `bus_wait`; it still launches `npx -y ghostbus --store /home/reuben/.local/share/ghostbus/bus.json`. |
-| `ghostbus-channel` | `ghostbus-channel` (per session via `--mcp-config`) | `/nix/store/...-ghostbus-channel/bin/ghostbus-channel --mode claude --agent claude-code` | One-way push channel over the same store. `cuckcode` adds it with `--mcp-config ~/.claude/ghostbus-channel.mcp.json` and starts with `--dangerously-load-development-channels=server:ghostbus-channel`. It is deliberately not a plugin server (`plugin:hm` is untagged; `plugin:hm@skills-dir` is not installed). Declares `claude/channel`, never `claude/channel/permission`. |
+| `ghostbus-channel` | `ghostbus-channel` (user scope) | `~/.local/bin/ghostbus-channel-client` (socat to the systemd socket; the server runs under `ghostbus-channel@.service`) | One-way push channel over the same store. The activation runs `claude mcp add --scope user ghostbus-channel -- …/ghostbus-channel-client`; `cuckcode` starts with `--dangerously-load-development-channels=server:ghostbus-channel`. It is deliberately not a plugin server (`plugin:hm` is untagged; `plugin:hm@skills-dir` is not installed). Declares `claude/channel`, never `claude/channel/permission`. |
 | `nixos` | `plugin:hm:nixos` | `nix run github:utensils/mcp-nixos/v3.1.1 --` | Same pinned rev as OpenCode. |
 | `wiz`, `scry` | project/local scope in `/workspace` | `sh /workspace/wiz-tools/{wiz,scry}-mcp` | Workspace-specific; they stay out of the machine-wide config. |
 
@@ -139,12 +139,12 @@ Limits, from the Claude Code channels reference:
 
 The server deliberately omits `claude/channel/permission`: the local bus cannot
 authenticate a replier, so it must never relay tool approvals. The selector is
-`server:ghostbus-channel` because `cuckcode` adds the server as a per-session
-top-level MCP server with `--mcp-config`. The plugin forms are deliberately not
-used: `plugin:hm` is rejected as untagged and `plugin:hm@skills-dir` says
-"plugin not installed" (the generated `hm` plugin is skills-dir, not an
-installed marketplace plugin). Override the file or tag with
-`CLAUDE_MCP_CONFIG` / `CLAUDE_CHANNEL_SELECTOR`. Full design:
+`server:ghostbus-channel` because the activation adds a **top-level user MCP
+server** named `ghostbus-channel`; the server itself is hosted by systemd
+(`ghostbus-channel.socket` / `ghostbus-channel@.service`) and the client is a
+`socat` bridge. The plugin forms are deliberately not used: `plugin:hm` is
+rejected as untagged and `plugin:hm@skills-dir` says "plugin not installed".
+Override the tag with `CLAUDE_CHANNEL_SELECTOR`. Full design:
 `home-manager/agent-bus-channel/README.md`.
 
 ## Validate and apply
@@ -188,8 +188,9 @@ Verify after activation:
 ```bash
 claude mcp list | grep 'plugin:hm'   # github, agent-bus, nixos
 claude mcp get plugin:hm:agent-bus
-# the channel appears only in a cuckcode session, from the per-session config:
-claude mcp list --mcp-config "$HOME/.claude/ghostbus-channel.mcp.json" | grep ghostbus-channel
+# the channel is a top-level user server (hosted by systemd):
+claude mcp get ghostbus-channel
+systemctl --user status ghostbus-channel.socket
 nix run nixpkgs#jq -- .mcpServers ~/.claude.json   # should be unchanged by the switch
 ```
 

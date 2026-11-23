@@ -1,19 +1,16 @@
 #!/usr/bin/env bash
 # cuckcode — Claude Code with the ghostbus push channel loaded.
 #
-# The channel server is supplied as a per-session top-level MCP server with
-# `--mcp-config`, so the accepted channel tag is `server:ghostbus-channel`.
-# The generated `hm` plugin is a skills-dir plugin, not an installed marketplace
-# plugin: `plugin:hm` is rejected as untagged and `plugin:hm@skills-dir` says
-# "plugin not installed". Keeping the channel out of the always-loaded plugin
-# also avoids a duplicate connection in sessions that do not opt in.
+# The channel server is a top-level user MCP server named `ghostbus-channel`,
+# added by home-manager's activation (`claude mcp add --scope user`) and hosted
+# by systemd as a per-connection service on
+# $XDG_RUNTIME_DIR/ghostbus-channel.sock. A top-level configured server is what
+# the accepted `server:ghostbus-channel` channel tag resolves; neither the
+# skills-dir `hm` plugin nor a per-session `--mcp-config` entry is used.
 #
 # Bind the flag with `=` and put the user's arguments after it: the
 # space-separated spelling consumes following positional arguments as channel
 # selectors, so `/resume` or a prompt never reaches Claude Code.
-#
-# Override with `CLAUDE_MCP_CONFIG` or `CLAUDE_CHANNEL_SELECTOR`.
 set -euo pipefail
-config=${CLAUDE_MCP_CONFIG:-"$HOME/.claude/ghostbus-channel.mcp.json"}
 selector=${CLAUDE_CHANNEL_SELECTOR:-server:ghostbus-channel}
-exec claude --mcp-config "$config" --dangerously-load-development-channels="$selector" "$@"
+exec claude --dangerously-load-development-channels="$selector" "$@"

@@ -56,17 +56,18 @@ Old messages are not replayed on restart. An MCP Events stream opened with a
 ```json
 "ghostbus-channel": {
   "type": "stdio",
-  "command": "/nix/store/...-ghostbus-channel/bin/ghostbus-channel",
-  "args": ["--mode", "claude", "--agent", "claude-code"]
+  "command": "/home/reuben/.local/bin/ghostbus-channel-client"
 }
 ```
 
-`cuckcode` adds it as a per-session top-level server with
-`--mcp-config ~/.claude/ghostbus-channel.mcp.json`, so it appears as
-`ghostbus-channel` and the channel selector is `server:ghostbus-channel`. It is
-deliberately **not** in the generated `hm` plugin: that plugin is a skills-dir
-plugin, and `plugin:hm` is rejected as untagged while `plugin:hm@skills-dir`
-says "plugin not installed". Start a session with:
+The activation runs `claude mcp add --scope user ghostbus-channel -- …/ghostbus-channel-client`,
+so it is a **top-level user MCP server** and the channel selector is
+`server:ghostbus-channel`. The client is a `socat` bridge to the systemd socket
+`$XDG_RUNTIME_DIR/ghostbus-channel.sock`; the actual server runs under the
+per-connection `ghostbus-channel@.service`. It is deliberately **not** in the
+generated `hm` plugin: that plugin is a skills-dir plugin, and `plugin:hm` is
+rejected as untagged while `plugin:hm@skills-dir` says "plugin not installed".
+Start a session with:
 
 ```bash
 # wrapper installed in ~/.local/bin; the flag value is bound with `=`, so
@@ -111,12 +112,14 @@ tag body. The server's `instructions` string repeats the same rule.
   flag is ignored and the channel does not register.
 * The `channelsEnabled` organization policy still applies. On Team/Enterprise,
   an admin must enable channels (and may restrict which plugins are allowed).
-* The session must be allowed to use the server from the generated `hm` plugin.
-  Plugin-provided channels must be tagged `plugin:<name>@<marketplace>`, so the
-  selector is `plugin:hm@skills-dir`; the short `plugin:hm` is rejected as
-  untagged, and `server:ghostbus-channel` only addresses top-level MCP servers.
-  If the marketplace tag changes, override it via `CLAUDE_CHANNEL_SELECTOR` and
-  check `claude --debug mcp` for `Channel notifications skipped` lines.
+* The session must be allowed to use the top-level user server
+  `ghostbus-channel`. It is added by activation (`claude mcp add --scope user`)
+  and backed by `ghostbus-channel.socket` / `ghostbus-channel@.service`; the
+  selector is `server:ghostbus-channel`. The plugin forms are not used
+  (`plugin:hm` is untagged; `plugin:hm@skills-dir` reports "plugin not
+  installed"). If the socket path changes, override the client via
+  `CLAUDE_CHANNEL_SELECTOR` and check `claude --debug mcp` for `Channel
+  notifications skipped` lines.
 * Notifications are queued and delivered together on the next turn if Claude is
   busy. There is no delivery acknowledgement; a session started without the flag
   silently drops them.
@@ -245,8 +248,8 @@ nix build -o /tmp/opencode/result-hm \
 # Inspect the generated commands/aliases:
 jq -r '.mcp.servers["ghostbus-channel"].command' \
   /tmp/opencode/result-hm/home-files/.config/opencode/opencode.json
-jq -r '.mcpServers["ghostbus-channel"]' \
-  /tmp/opencode/result-hm/home-files/.claude/ghostbus-channel.mcp.json
+ls /tmp/opencode/result-hm/home-files/.config/systemd/user/ghostbus-channel.*
+grep -n "ghostbus-channel-client\|mcp add" /tmp/opencode/result-hm/activate
 grep -n "dangerously-load-development-channels" \
   /tmp/opencode/result-hm/home-files/.local/bin/cuckcode
 ```
@@ -265,8 +268,8 @@ writes `~/.claude.json` or the shared bus.
 
 * Claude Code's allowlist/preview path cannot be exercised without an
   interactive TTY and human confirmation. The notification contract is tested
-  directly; the server is a per-session top-level server supplied by
-  `--mcp-config`, so 2.1.318 selects it as `server:ghostbus-channel`. The
+  directly; the server is a top-level user MCP server added by activation and
+  backed by systemd, so 2.1.318 selects it as `server:ghostbus-channel`. The
   plugin forms are deliberately not used (`plugin:hm` is untagged;
   `plugin:hm@skills-dir` reports "plugin not installed"). The interactive
   allowlist confirmation remains the runtime check.
