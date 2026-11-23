@@ -33,7 +33,7 @@ it.
 | `playwright` | `plugin:playwright:playwright` | `npx @playwright/mcp@latest` | Provided by the `playwright@claude-plugins-official` plugin already enabled in `settings.enabledPlugins`. Deliberately **not** duplicated in `mcpServers`. |
 | `github` | `plugin:hm:github` | `sh -c 'exec env GITHUB_TOKEN="$(gh auth token)" MCP_IDLE_TIMEOUT_MS=0 npx -y github-mcp-server-kosta'` | Token is read at runtime from `gh`; no secret is in the Nix store. |
 | `agent-bus` | `plugin:hm:agent-bus` | `/nix/store/...-ghostbus-wait/bin/ghostbus-wait` | Same wrapper and same file as every OpenCode session. The wrapper adds `bus_wait`; it still launches `npx -y ghostbus --store /home/reuben/.local/share/ghostbus/bus.json`. |
-| `ghostbus-channel` | `plugin:hm:ghostbus-channel` | `/nix/store/...-ghostbus-channel/bin/ghostbus-channel --mode claude --agent claude-code` | One-way push channel over the same store. Only active in a session started with `claude --dangerously-load-development-channels server:ghostbus-channel` (alias `claude-dev-channels`). Declares `claude/channel`, never `claude/channel/permission`. |
+| `ghostbus-channel` | `plugin:hm:ghostbus-channel` | `/nix/store/...-ghostbus-channel/bin/ghostbus-channel --mode claude --agent claude-code` | One-way push channel over the same store. Only active in a session started with `claude --dangerously-load-development-channels=server:ghostbus-channel` (wrapper `cuckcode`). Declares `claude/channel`, never `claude/channel/permission`. |
 | `nixos` | `plugin:hm:nixos` | `nix run github:utensils/mcp-nixos/v3.1.1 --` | Same pinned rev as OpenCode. |
 | `wiz`, `scry` | project/local scope in `/workspace` | `sh /workspace/wiz-tools/{wiz,scry}-mcp` | Workspace-specific; they stay out of the machine-wide config. |
 
@@ -115,9 +115,9 @@ to the bus name `claude-code` and emits `notifications/claude/channel` for new
 direct or broadcast messages. Start an interactive session with:
 
 ```sh
-claude --dangerously-load-development-channels server:ghostbus-channel
-# alias declared in home-manager/zsh.nix:
-claude-dev-channels
+# wrapper installed in ~/.local/bin; the flag value is bound with `=`, so
+# arguments after it are not eaten as channel server names:
+cuckcode /resume
 ```
 
 Each message arrives as `<channel source="ghostbus-channel" user="..." to="..."

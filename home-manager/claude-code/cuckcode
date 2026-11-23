@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# cuckcode — Claude Code with the ghostbus push channel loaded.
+#
+# Bind the hidden flag's value with `=` and put the user's arguments after it.
+# With the space-separated spelling the parser consumes following positional
+# arguments as additional channel server names, so `/resume`, `-c`, or a prompt
+# never reaches Claude Code. `cuckcode /resume` now keeps `/resume` as the
+# argument Claude sees.
+set -euo pipefail
+exec claude --dangerously-load-development-channels=server:ghostbus-channel "$@"

@@ -65,9 +65,9 @@ It appears as `plugin:hm:ghostbus-channel` because Home Manager stores Claude
 Code servers in a generated personal plugin. Start a session with:
 
 ```bash
-claude --dangerously-load-development-channels server:ghostbus-channel
-# alias:
-claude-dev-channels
+# wrapper installed in ~/.local/bin; the flag value is bound with `=`, so
+# arguments after it are not eaten as channel server names:
+cuckcode /resume
 ```
 
 ### What the server declares
@@ -241,7 +241,8 @@ jq -r '.mcp.servers["ghostbus-channel"].command' \
   /tmp/opencode/result-hm/home-files/.config/opencode/opencode.json
 jq -r '.mcpServers["ghostbus-channel"]' \
   /tmp/opencode/result-hm/home-files/.claude/skills/claude-code-home-manager/.mcp.json
-grep -n "claude-dev-channels" /tmp/opencode/result-hm/home-files/.zshrc
+grep -n "dangerously-load-development-channels" \
+  /tmp/opencode/result-hm/home-files/.local/bin/cuckcode
 ```
 
 ## Apply
@@ -251,7 +252,7 @@ sudo nixos-rebuild switch --flake .#noobnoob
 ```
 
 Then restart OpenCode so it reconnects with `protocol: "2026-07-28"` and use
-`claude-dev-channels` for a new interactive Claude Code session. No command
+`cuckcode` for a new interactive Claude Code session. No command
 writes `~/.claude.json` or the shared bus.
 
 ## What remains unverified here
