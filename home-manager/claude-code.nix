@@ -150,6 +150,13 @@ in
       - every build/test goes through `/workspace/wiz-tools/heavy`; no local builds
         on the controller; single probes use `/workspace/wiz-tools/light`;
       - the bus above is shared; register as `claude-<topic>`.
+
+      # Git pushes
+
+      Never run `git push` (or open a pull request) unless Reuben explicitly asks
+      for it in this conversation, or the coordinator/main agent explicitly
+      instructs it (a bus message or a task). A local commit is not permission to
+      push. If unsure, leave the branch local and report the commit sha.
     '';
   };
 
