@@ -13,7 +13,9 @@
 #   * the *constants* live in modules/slurm/constants.nix (one table);
 #   * this module turns a host description into a role's NixOS configuration;
 #   * the controller fragment (modules/slurm/controller.nix) renders every
-#     NodeName=/PartitionName= line from the same inventory.
+#     NodeName=/PartitionName= line from the same inventory;
+#   * a node's host configuration (NixOS-WSL, users, sshd, tailnet, toolchain)
+#     lives in modules/slurm/node-common.nix, which imports this file.
 #
 # Refreshing the controller's slurm.conf: the controller's `SLURM_CONF` is a
 # /nix/store path that changes on every controller rebuild, and the nodes have
@@ -39,8 +41,8 @@ let
   inventory = import ./slurm/inventory.nix;
   render = import ./slurm/render.nix { inherit lib inventory; };
 
-  # The host's entry in the single inventory. `name` is always set by the
-  # fragment or the node flake; the throw is for a typo, not a supported state.
+  # The host's entry in the single inventory. `name` is always set by a host
+  # file (hosts/win2.nix, …); the throw is for a typo, not a supported state.
   entry =
     inventory.byName.${cfg.name}
       or (throw "slurmCluster.name = \"${cfg.name}\" is not in modules/slurm/inventory.nix");
@@ -559,28 +561,10 @@ in
       # when the platform's hostname differs (deck/steamdeck).
       networking.hostName = lib.mkDefault cfg.name;
 
-      users.groups.users.gid = constants.gids.users;
+      # The `reuben` account, sshd, the tailnet and the job toolchain are the
+      # host's, in modules/slurm/node-common.nix. This module owns only what
+      # slurmd itself needs: the slurm user and the binaries.
       users.users.slurm.isSystemUser = true;
-      users.users.reuben = {
-        isNormalUser = true;
-        uid = constants.uids.reuben;
-        extraGroups = [ "wheel" "slurm" ];
-        # The automation key and the human's key(s), from the single table.
-        openssh.authorizedKeys.keys = constants.authorizedKeys;
-      };
-
-      services.openssh = {
-        enable = true;
-        # The controller's policy: key-only, no root, and 22 on tailscale0 only
-        # (openFirewall would open it on every interface).
-        openFirewall = false;
-        settings = {
-          PermitRootLogin = "no";
-          PasswordAuthentication = false;
-          KbdInteractiveAuthentication = false;
-        };
-      };
-      networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 22 ];
 
       environment.systemPackages =
         [

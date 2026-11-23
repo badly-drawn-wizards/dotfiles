@@ -3,7 +3,7 @@
 # It turns the single host inventory (modules/slurm/inventory.nix) into the
 # `NodeName=` and `PartitionName=` lines of the cluster's slurm.conf. Neither
 # line is written in /etc/nixos/slurm.nix any more: a host is described in
-# exactly one place, and that place is also what the node flake reads for its
+# exactly one place, and that place is also what each node host reads for its
 # own CPUs, memory and features.
 #
 # Imported by /etc/nixos/slurm.nix. The host-specific tuning (extraConfig,
@@ -19,7 +19,7 @@ in
 {
   imports = [ ../slurm.nix ];
 
-  # The node flake sets `role = "node"` explicitly, which wins over this.
+  # A node host sets `role = "node"` explicitly, which wins over this.
   slurmCluster.role = lib.mkDefault "controller";
 
   services.slurm = {

@@ -1,29 +1,40 @@
-# The nodes of the wiz Slurm cluster, as NixOS-WSL systems.
+# Thin on-node entry point for the NixOS-WSL Slurm nodes (win2, win3).
 #
-# There is ONE Slurm module: ../modules/slurm.nix. This flake only says which
-# host is being built; CPUs, memory, features, partitions and the tailnet
-# address come from ../modules/slurm/inventory.nix, the same file the controller
-# renders its slurm.conf from.
+# The configuration is NOT here. The host files and the shared modules live in
+# the main configuration:
+#
+#   hosts/win2.nix, hosts/win3.nix      which host is being built
+#   modules/slurm/node-common.nix       WSL, nix, users, ssh/tailnet, toolchain
+#   modules/slurm.nix                   the Slurm service (munge, slurmd, fetcher,
+#                                       /workspace) both roles import
+#   modules/slurm/inventory.nix         CPUs/memory/features/addresses, also read
+#                                       by the controller's slurm.conf renderer
+#
+# The main flake exposes the same nodes as `nixosConfigurations.win2`/`win3`
+# from those same files, so the controller and CI can build them. This wrapper
+# exists so a node can fetch just `...?dir=wsl-flake#win2` and does not have to
+# evaluate the controller's full input set: nixvim, wiz, home-manager and the
+# `path:/workspace/dotfiles-private` input need not exist on a node.
 #
 # Apply on a node (do NOT run this on noobnoob):
 #
 #   sudo nixos-rebuild switch --flake \
-#     'git+ssh://reuben@100.76.41.56/etc/nixos?ref=slurm-parity&dir=wsl-flake#win2'
+#     'git+ssh://reuben@100.76.41.56/etc/nixos?ref=agent/slurm-nodes&dir=wsl-flake#win2'
 #
 # and `#win3` for the laptop. The git+ssh form means the node fetches the same
 # commit the controller's repo has; there is no copied /etc/nixos-wsl to drift.
 # The node's root account must be able to read the controller as `reuben` (the
-# bootstrap key already installed at /etc/slurm-bootstrap/workspace_ed25519 is
-# one way; put it in /root/.ssh/config or pass GIT_SSH_COMMAND). Alternatively
-# copy this directory once and use `--flake /etc/nixos-wsl#win2`, keeping the
-# repo layout: ../modules and ../flake.lock are read.
+# bootstrap key at /etc/slurm-bootstrap/workspace_ed25519 is one way; put it in
+# /root/.ssh/config or pass GIT_SSH_COMMAND). Alternatively copy this directory
+# once and use `--flake /etc/nixos-wsl#win2`, keeping the repo layout: ../hosts,
+# ../modules and ../flake.lock are read.
 #
 # KNOWN LIMITATION, on purpose: this flake reads `../flake.lock` for the
 # controller's nixpkgs revision. It is not a standalone flake; it is a
 # subdirectory of /etc/nixos. That is what makes the protocol versions match
 # without a second pin (see the `nixpkgs-matches-controller` check below).
 {
-  description = "NixOS-WSL nodes (win2, win3) of the wiz Slurm cluster";
+  description = "On-node entry point for the NixOS-WSL Slurm nodes (win2, win3)";
 
   inputs = {
     # nixos-unstable, pinned by flake.lock to the controller's revision. The
@@ -32,7 +43,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     # `wsl.enable` and the distro integration. follows keeps one nixpkgs.
     nixos-wsl = {
-      url = "github:nix-community/NixOS-WSL";
+      url = "github:nix-community/NixOS-WSL/05721a428830972f025a8575b1a19c418d422d1b";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -48,51 +59,26 @@
       lib = nixpkgs.lib;
       pkgs = nixpkgs.legacyPackages.${system};
 
-      inventory = import ../modules/slurm/inventory.nix;
-
       # The controller's own nixpkgs pin. Used only by the drift check; the
       # node's inputs are pinned by this flake's lock.
       controllerLock = builtins.fromJSON (builtins.readFile ../flake.lock);
       controllerNixpkgsRev = controllerLock.nodes.${controllerLock.nodes.root.inputs.nixpkgs}.locked.rev;
 
-      nixos = modules: lib.nixosSystem { inherit system modules; };
-
+      # The host file, node-common and the Slurm module are the main config's
+      # files; this flake only chooses the input set they are evaluated with.
       mkNode =
         name:
-        nixos [
-          nixos-wsl.nixosModules.default
-          ./common.nix
-          ../modules/slurm.nix
-          {
-            slurmCluster = {
-              role = "node";
-              inherit name;
-              # Everything else (cpus, realMemoryMb, features, partition, ...)
-              # defaults from inventory.${name} inside the module.
-            };
-          }
-        ];
+        lib.nixosSystem {
+          inherit system;
+          modules = [
+            nixos-wsl.nixosModules.default
+            (../hosts + "/${name}.nix")
+          ];
+        };
 
-      # INERT. The Steam Deck runs SteamOS, not NixOS, and is NOT being
-      # switched: its jobs come from wiz-tools/deck/deck-ns-exec, not from a
-      # NixOS slurmd. This entry exists only so a future NixOS install has a
-      # description to build from. It is deliberately not a
-      # `nixosConfigurations` output, so `nixos-rebuild switch --flake ...#deck`
-      # cannot replace SteamOS by accident; the only thing CI does with it is
-      # evaluate its Slurm options (see `checks.deck-is-evaluable`).
-      deck = nixos [
-        ../modules/slurm.nix
-        {
-          slurmCluster = {
-            role = "node";
-            name = "deck";
-            # SteamOS's / is read-only, so the Deck mounts /workspace per job
-            # inside a user namespace; there is no host mount to make.
-            workspaceMount.enable = false;
-          };
-          system.stateVersion = "26.11";
-        }
-      ];
+      # INERT. See ../hosts/deck.nix: SteamOS is not NixOS and is not switched.
+      # This is deliberately not a `nixosConfigurations` output.
+      deck = mkNode "deck";
     in
     {
       nixosConfigurations = {
@@ -100,7 +86,6 @@
         win3 = mkNode "win3";
       };
 
-      # Not a nixosConfiguration on purpose: see the comment above.
       inertConfigurations.deck = deck;
 
       checks.${system} = {

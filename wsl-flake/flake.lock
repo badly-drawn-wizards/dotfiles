@@ -34,6 +34,7 @@
       "original": {
         "owner": "nix-community",
         "repo": "NixOS-WSL",
+        "rev": "05721a428830972f025a8575b1a19c418d422d1b",
         "type": "github"
       }
     },

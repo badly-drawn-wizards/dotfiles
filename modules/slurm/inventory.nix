@@ -1,11 +1,11 @@
 # The cluster's hosts, described ONCE.
 #
 # The controller fragment (modules/slurm/controller.nix) turns this list into the
-# `NodeName=`/`PartitionName=` lines of slurm.conf, and the node flake
-# (wsl-flake/flake.nix) reads the same entry for the node it is building. There
-# is therefore no second place where win2's CPUs, win3's memory or deck's state
-# can be edited: change the entry here and the controller's config and the
-# node's module options move together.
+# `NodeName=`/`PartitionName=` lines of slurm.conf, and each node host
+# (hosts/win2.nix, hosts/win3.nix, the inert hosts/deck.nix) reads the same
+# entry for the node it is building. There is therefore no second place where
+# win2's CPUs, win3's memory or deck's state can be edited: change the entry
+# here and the controller's config and the node's module options move together.
 #
 # Field meanings:
 #   addr          tailnet address the controller dials (null: the controller)
@@ -110,7 +110,7 @@ in
 {
   inherit nodes;
 
-  # Lookup for the node flake and for the module's defaults.
+  # Lookup for the node hosts and for the module's defaults.
   byName = builtins.listToAttrs (map (n: { name = n.name; value = n; }) nodes);
 
   # Partition parameters. Membership is derived from each node's `partition`

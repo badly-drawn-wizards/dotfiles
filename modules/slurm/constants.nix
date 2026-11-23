@@ -5,9 +5,9 @@
 #
 #   * modules/slurm.nix            — the NixOS module (both roles)
 #   * modules/slurm/controller.nix — the controller fragment
-#   * modules/slurm/inventory.nix  — the host list, which the node flake reads
+#   * modules/slurm/inventory.nix  — the host list, which the node hosts read
 #
-# The node flake reaches it through the inventory, so the address, the ports,
+# The node hosts reach it through the inventory, so the address, the ports,
 # the ids and the keys cannot drift between the controller and the nodes by a
 # copy-paste edit.
 let

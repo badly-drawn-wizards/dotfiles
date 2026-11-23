@@ -10,9 +10,10 @@
 #                                   firmware-independent service settings
 #   modules/slurm/constants.nix   — address, ports, ids, keys (one table)
 #
-# The nodes are described in the inventory, not here: win2/win3/deck each read
-# their own entry from the same file in wsl-flake/flake.nix, so the controller
-# and the node cannot disagree about a node's CPUs, memory or features.
+# The nodes are described in the inventory, not here: each node host
+# (hosts/win2.nix, hosts/win3.nix, the inert hosts/deck.nix) reads its own
+# entry from the same file, so the controller and the node cannot disagree
+# about a node's CPUs, memory or features.
 #
 # Accounting: Slurm reports MiB. The box has 27 GiB; RealMemory leaves room for
 # the OS, the desktop session and nix-daemon (which runs outside any job).
