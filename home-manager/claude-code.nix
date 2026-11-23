@@ -134,6 +134,19 @@ in
 
       Full protocol, parity table and apply steps:
       /etc/nixos/home-manager/claude-code/README.md
+
+      # The Wiz workspace
+
+      When working in `/workspace/wiz-lang` or a worktree under `/workspace/wt`:
+      - read `/workspace/wiz-tools/agent-preamble.txt` and `AGENTS.md` in full; they
+        are the toolkit rules (zsh, one heavy job per lane, check-in, no PR, only
+        `integration/*` runs CI);
+      - `integration/train11` is frozen except the stated exceptions;
+        `integration/train12` is the new line; create worktrees from train12, not
+        `master`;
+      - every build/test goes through `/workspace/wiz-tools/heavy`; no local builds
+        on the controller; single probes use `/workspace/wiz-tools/light`;
+      - the bus above is shared; register as `claude-<topic>`.
     '';
   };
 
