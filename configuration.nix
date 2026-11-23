@@ -6,7 +6,7 @@
 
 
 {
-  # Latest OpenCode (2.3.0 from nixpkgs master) instead of the nixpkgs pin's 2.2.5.
+  # Latest OpenCode (2.4.0 from nixpkgs master) instead of the nixpkgs pin's 2.2.5.
   # `pkgs/opencode.nix` is master's derivation with its verified src/node_modules
   # hashes, so this is a version bump rather than a rebuild of the packaging.
   nixpkgs.overlays = [

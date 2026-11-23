@@ -79,7 +79,7 @@ let
 
       outputHash =
         if stdenv.hostPlatform.isLinux then
-          "sha256-zaRjXditlZ8C741SeBv8n0ChlfYFrD/l0fKcuo2dxrI="
+          "sha256-4PJINKZ1f5syNHT3xGezCX78GECIiCgKZG8BXm0Ethw="
         else if stdenv.hostPlatform.isDarwin then
           "sha256-LVqM4EJpSYmAFOJpyXwj0YySJx/ip2aXR8SrufVOHtE="
         else
@@ -89,7 +89,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "2.3.0";
+  version = "2.4.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "anomalyco";
     repo = "opencode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7vw0TcaFsMN+XbZoU1gwHE1r8ppPPK0CTQqPbVQozT8=";
+    hash = "sha256-J3qtS+MbceoXu7bvlrSHWIvlP7+PQpKi+NtHIeyEYu8=";
   };
 
   postPatch =

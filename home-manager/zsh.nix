@@ -50,6 +50,9 @@
         nrs = "nh os switch --show-trace --keep-going"; # nh elevates itself
         # Enter millionants' LUKS passphrase (Host in ssh.nix).
         millionants-unlock = "ssh millionants-initrd";
+        # Claude Code research-preview push channel over the shared agent bus.
+        # Interactive sessions only; the flag prompts once per launch.
+        claude-dev-channels = "claude --dangerously-load-development-channels server:ghostbus-channel";
       };
       dirHashes = {
         org = "$HOME/org";

@@ -11,13 +11,18 @@ notifications. The package's HTTP relay has `/api/wait` and `/api/stream`, but
 that process is not running here; the shared state is the file store
 `~/.local/share/ghostbus/bus.json`.
 
+The push side lives in `../agent-bus-channel/`: the same file watcher pattern,
+but it emits Claude Code channel notifications and OpenCode 2.4 MCP Events
+instead of a tool result. This proxy stays the pull side (`bus_wait`, then
+`bus_inbox`).
+
 ## Layout
 
 | File | Purpose |
 | --- | --- |
 | `proxy.mjs` | The stdio proxy and the local `bus_wait` implementation. |
 | `package.nix` | Wraps `proxy.mjs` as `ghostbus-wait` and gives it the shared store path. |
-| `module.nix` | Home Manager module: adds the wrapper to `home.packages` and forces OpenCode's generated `agent-bus` command to the wrapper's Nix store path. |
+| `module.nix` | Home Manager module: adds both bus wrappers (`ghostbus-wait`, `ghostbus-channel`) to `home.packages` and forces OpenCode's generated `agent-bus` and `ghostbus-channel` commands to their Nix store paths. |
 | `README.md` | This document. |
 
 Both clients launch the same wrapper with no arguments:
@@ -100,12 +105,17 @@ progress cannot crash a waiter.
   `~/.config/opencode/opencode.json` from `home-manager/opencode/opencode.json`.
   `module.nix` forces only that file's `source` to a generated copy whose
   `mcp.servers.agent-bus.command` is
-  `[ "/nix/store/...-ghostbus-wait/bin/ghostbus-wait" ]`. All other OpenCode
+  `[ "/nix/store/...-ghostbus-wait/bin/ghostbus-wait" ]` and whose
+  `mcp.servers.ghostbus-channel.command` is the `ghostbus-channel` wrapper
+  store path followed by `--mode opencode --agent opencode`. All other OpenCode
   settings come from the checked-in JSON unchanged.
 - Claude Code: `home-manager/claude-code.nix` declares
   `programs.claude-code.mcpServers.agent-bus.command` as the same wrapper store
-  path, with an empty `args` list. The generated personal plugin
-  (`plugin:hm:agent-bus`) is discovered on the next start.
+  path, with an empty `args` list. It also declares `ghostbus-channel` with
+  `--mode claude --agent claude-code`; that one is only a channel in a session
+  started with `--dangerously-load-development-channels`. The generated personal
+  plugin (`plugin:hm:agent-bus`, `plugin:hm:ghostbus-channel`) is discovered on
+  the next start.
 
 There is still exactly one bus: the same `bus.json` for both clients. Do not
 run the HTTP relay or start a second store.

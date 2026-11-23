@@ -52,6 +52,23 @@
         },
         "codemode": true
       },
+      "ghostbus-channel": {
+        "type": "local",
+        "command": [
+          "ghostbus-channel",
+          "--mode",
+          "opencode",
+          "--agent",
+          "opencode"
+        ],
+        "timeout": {
+          "startup": 30000,
+          "catalog": 30000,
+          "execution": 120000
+        },
+        "codemode": false,
+        "protocol": "2026-07-28"
+      },
       "nixos": {
         "type": "local",
         "command": [

@@ -1,36 +1,51 @@
-# Wire the agent-bus-wait proxy into the clients that share the ghostbus store.
+# Wire the agent-bus wrappers into the clients that share the ghostbus store.
 #
-# The proxy is a superset of ghostbus's stdio MCP server: the same 29 tools,
-# plus bus_wait. Both clients must launch the wrapper (a Nix store path), not
-# `npx -y ghostbus` directly, or they keep the pull-only server.
+# `ghostbus-wait` is a superset of ghostbus's stdio MCP server: the same 29
+# tools, plus bus_wait. `ghostbus-channel` is the push side: it watches the same
+# file and emits Claude Code channel notifications and OpenCode MCP Events.
+# Both clients must launch the wrappers (Nix store paths), not bare command
+# names, or they keep the pull-only server or miss the channel.
 #
 # OpenCode reads a static JSON file declared in ../opencode.nix. This module
-# overrides only that file's `source` with a generated copy whose agent-bus
-# command is the wrapper's store path. The rest of the JSON is read from
-# ../opencode/opencode.json unchanged.
+# overrides only that file's `source` with a generated copy whose agent-bus and
+# ghostbus-channel commands are the wrappers' store paths. The rest of the JSON
+# is read from ../opencode/opencode.json unchanged. One module owns this file:
+# two modules each forcing the same home.file target would conflict.
 { config, lib, pkgs, ... }:
 let
   homeDir = config.home.homeDirectory;
   ghostbusStore = "${homeDir}/.local/share/ghostbus/bus.json";
   agentBusWait = pkgs.callPackage ./package.nix { store = ghostbusStore; };
+  ghostbusChannel = pkgs.callPackage ../agent-bus-channel/package.nix { store = ghostbusStore; };
 
   opencodeBase = builtins.fromJSON (builtins.readFile ../opencode/opencode.json);
+  servers = opencodeBase.mcp.servers;
+  channelBase = servers."ghostbus-channel" or {
+    type = "local";
+    command = [ "ghostbus-channel" ];
+  };
   opencode = opencodeBase // {
     mcp = opencodeBase.mcp // {
-      servers = opencodeBase.mcp.servers // {
+      servers = servers // {
         agent-bus =
-          (opencodeBase.mcp.servers."agent-bus" or { type = "local"; })
+          (servers."agent-bus" or { type = "local"; })
             // {
-            command = [ "${agentBusWait}/bin/ghostbus-wait" ];
-          };
+              command = [ "${agentBusWait}/bin/ghostbus-wait" ];
+            };
+        ghostbus-channel = channelBase // {
+          command = [ "${ghostbusChannel}/bin/ghostbus-channel" ] ++ builtins.tail channelBase.command;
+        };
       };
     };
   };
 in
 {
-  # Also puts `ghostbus-wait` on PATH for manual checks and for any tool that
-  # wants to speak MCP to the same store.
-  home.packages = [ agentBusWait ];
+  # Also put the wrappers on PATH for manual checks and for any tool that wants
+  # to speak MCP to the same store.
+  home.packages = [
+    agentBusWait
+    ghostbusChannel
+  ];
 
   # ../opencode.nix already declares this home.file target; force only the
   # source so the generated config wins without a duplicate definition.
