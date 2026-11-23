@@ -61,8 +61,12 @@ Old messages are not replayed on restart. An MCP Events stream opened with a
 }
 ```
 
-It appears as `plugin:hm:ghostbus-channel` because Home Manager stores Claude
-Code servers in a generated personal plugin. Start a session with:
+`cuckcode` adds it as a per-session top-level server with
+`--mcp-config ~/.claude/ghostbus-channel.mcp.json`, so it appears as
+`ghostbus-channel` and the channel selector is `server:ghostbus-channel`. It is
+deliberately **not** in the generated `hm` plugin: that plugin is a skills-dir
+plugin, and `plugin:hm` is rejected as untagged while `plugin:hm@skills-dir`
+says "plugin not installed". Start a session with:
 
 ```bash
 # wrapper installed in ~/.local/bin; the flag value is bound with `=`, so
@@ -242,7 +246,7 @@ nix build -o /tmp/opencode/result-hm \
 jq -r '.mcp.servers["ghostbus-channel"].command' \
   /tmp/opencode/result-hm/home-files/.config/opencode/opencode.json
 jq -r '.mcpServers["ghostbus-channel"]' \
-  /tmp/opencode/result-hm/home-files/.claude/skills/claude-code-home-manager/.mcp.json
+  /tmp/opencode/result-hm/home-files/.claude/ghostbus-channel.mcp.json
 grep -n "dangerously-load-development-channels" \
   /tmp/opencode/result-hm/home-files/.local/bin/cuckcode
 ```
@@ -261,10 +265,11 @@ writes `~/.claude.json` or the shared bus.
 
 * Claude Code's allowlist/preview path cannot be exercised without an
   interactive TTY and human confirmation. The notification contract is tested
-  directly; the server lives in the generated `hm` skills-dir plugin, so
-  2.1.318 selects it as `plugin:hm@skills-dir`, not `plugin:hm` (untagged) or
-  `server:ghostbus-channel` (top-level only). The interactive allowlist
-  confirmation remains the runtime check.
+  directly; the server is a per-session top-level server supplied by
+  `--mcp-config`, so 2.1.318 selects it as `server:ghostbus-channel`. The
+  plugin forms are deliberately not used (`plugin:hm` is untagged;
+  `plugin:hm@skills-dir` reports "plugin not installed"). The interactive
+  allowlist confirmation remains the runtime check.
 * OpenCode's `events/list`/`events/stream` are tested at the JSON-RPC level and
   against the 2.4 source contract. A full automation run needs a live model
   session; `opencode mcp list` is the cheap connection check after applying.
