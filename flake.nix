@@ -146,7 +146,11 @@
         };
 
         outputsBuilder = channels: {
-          packages = channels.nixpkgs;
+          # `nix build .#opencode` uses the same derivation as the NixOS
+          # overlay in configuration.nix, not the older nixpkgs package.
+          packages = channels.nixpkgs // {
+            opencode = channels.nixpkgs.callPackage ./pkgs/opencode.nix { };
+          };
         };
       } // { inherit os; };
 }
