@@ -51,23 +51,26 @@ Old messages are not replayed on restart. An MCP Events stream opened with a
 
 ## Claude Code side
 
-`home-manager/claude-code.nix` declares:
+The Wiz project's `.mcp.json` declares:
 
 ```json
 "ghostbus-channel": {
   "type": "stdio",
-  "command": "/home/reuben/.local/bin/ghostbus-channel-client"
+  "command": "sh",
+  "args": ["-c", "exec \"$HOME/.local/bin/ghostbus-channel-client\""]
 }
 ```
 
-The activation runs `claude mcp add --scope user ghostbus-channel -- …/ghostbus-channel-client`,
-so it is a **top-level user MCP server** and the channel selector is
-`server:ghostbus-channel`. The client is a `socat` bridge to the systemd socket
-`$XDG_RUNTIME_DIR/ghostbus-channel.sock`; the actual server runs under the
-per-connection `ghostbus-channel@.service`. It is deliberately **not** in the
-generated `hm` plugin: that plugin is a skills-dir plugin, and `plugin:hm` is
-rejected as untagged while `plugin:hm@skills-dir` says "plugin not installed".
-Start a session with:
+and `home-manager/claude-code.nix` sets
+`settings.enabledMcpjsonServers = [ "ghostbus-channel" ]`. It is therefore a
+**top-level project MCP server**, and the channel selector is
+`server:ghostbus-channel`. `~/.claude.json` shadows project scope with
+local/user entries and is left untouched. The client is a `socat` bridge to the
+systemd socket `$XDG_RUNTIME_DIR/ghostbus-channel.sock`; the actual server runs
+under the per-connection `ghostbus-channel@.service`. It is deliberately
+**not** in the generated `hm` plugin: that plugin is a skills-dir plugin, and
+`plugin:hm` is rejected as untagged while `plugin:hm@skills-dir` says "plugin
+not installed". Start a session with:
 
 ```bash
 # wrapper installed in ~/.local/bin; the flag value is bound with `=`, so
@@ -112,14 +115,14 @@ tag body. The server's `instructions` string repeats the same rule.
   flag is ignored and the channel does not register.
 * The `channelsEnabled` organization policy still applies. On Team/Enterprise,
   an admin must enable channels (and may restrict which plugins are allowed).
-* The session must be allowed to use the top-level user server
-  `ghostbus-channel`. It is added by activation (`claude mcp add --scope user`)
-  and backed by `ghostbus-channel.socket` / `ghostbus-channel@.service`; the
-  selector is `server:ghostbus-channel`. The plugin forms are not used
-  (`plugin:hm` is untagged; `plugin:hm@skills-dir` reports "plugin not
-  installed"). If the socket path changes, override the client via
-  `CLAUDE_CHANNEL_SELECTOR` and check `claude --debug mcp` for `Channel
-  notifications skipped` lines.
+* The session must be allowed to use the project server `ghostbus-channel`.
+  The Wiz `.mcp.json` declares it, `settings.enabledMcpjsonServers` enables it,
+  and `ghostbus-channel.socket` / `ghostbus-channel@.service` back it; the
+  selector is `server:ghostbus-channel`. `~/.claude.json` shadows project scope
+  and is untouched. The plugin forms are not used (`plugin:hm` is untagged;
+  `plugin:hm@skills-dir` reports "plugin not installed"). If the socket path
+  changes, override the client via `CLAUDE_CHANNEL_SELECTOR` and check
+  `claude --debug mcp` for `Channel notifications skipped` lines.
 * Notifications are queued and delivered together on the next turn if Claude is
   busy. There is no delivery acknowledgement; a session started without the flag
   silently drops them.
@@ -268,11 +271,12 @@ writes `~/.claude.json` or the shared bus.
 
 * Claude Code's allowlist/preview path cannot be exercised without an
   interactive TTY and human confirmation. The notification contract is tested
-  directly; the server is a top-level user MCP server added by activation and
-  backed by systemd, so 2.1.318 selects it as `server:ghostbus-channel`. The
-  plugin forms are deliberately not used (`plugin:hm` is untagged;
-  `plugin:hm@skills-dir` reports "plugin not installed"). The interactive
-  allowlist confirmation remains the runtime check.
+  directly; the server is a top-level project MCP server enabled by
+  `settings.enabledMcpjsonServers` and backed by systemd, so 2.1.318 selects it
+  as `server:ghostbus-channel`. The plugin forms are deliberately not used
+  (`plugin:hm` is untagged; `plugin:hm@skills-dir` reports "plugin not
+  installed"). The interactive approval/allowlist step remains the runtime
+  check.
 * OpenCode's `events/list`/`events/stream` are tested at the JSON-RPC level and
   against the 2.4 source contract. A full automation run needs a live model
   session; `opencode mcp list` is the cheap connection check after applying.

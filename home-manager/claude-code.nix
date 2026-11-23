@@ -80,6 +80,13 @@ in
       env = {
         MCP_TIMEOUT = "180000";
       };
+
+      # Claude Code reads MCP server definitions from the project `.mcp.json`
+      # (project scope), not from `settings.json`; `~/.claude.json` shadows that
+      # file with local/user scope, so it is left untouched. This Nix-valued
+      # setting auto-enables the channel entry declared in the Wiz project's
+      # `.mcp.json` (the systemd-hosted `ghostbus-channel`).
+      enabledMcpjsonServers = [ "ghostbus-channel" ];
     };
 
     # Mirror of the three non-playwright machine-wide servers in
@@ -234,15 +241,8 @@ in
     };
   };
 
-  # Add the top-level user MCP server once per generation. `claude mcp add`
-  # owns the merge into ~/.claude.json (the file also carries state); the
-  # remove-then-add makes it idempotent.
-  home.activation.claudeGhostbusChannel = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
-    set -eu
-    claude=${config.programs.claude-code.package}/bin/claude
-    $claude mcp remove --scope user ghostbus-channel >/dev/null 2>&1 || true
-    $claude mcp add --scope user ghostbus-channel -- ${homeDir}/.local/bin/ghostbus-channel-client
-  '';
+  # The channel entry lives in the managed settings (`settings.mcpServers`
+  # above); there is no activation that writes ~/.claude.json.
 
   # NOTE: the ghostbus store directory is created by the
   # home.file.".local/share/ghostbus/.keep" declaration in opencode.nix. Do not
