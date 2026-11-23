@@ -120,13 +120,14 @@ in
   ];
 
   # ---- Memory policy -----------------------------------------------------
-  # Cgroups, not overcommit, are the enforcement point: ../slurm.nix runs
-  # slurmd with Delegate=Yes and the controller's cgroup.conf sets
-  # ConstrainRAMSpace=yes, so a step's memory.max is what bounds it. Overcommit
-  # stays heuristic (0), as on the controller: mode 2 would reject the large
-  # address-space reservations Lean/Node/Nix make before the cgroup is reached.
-  # Stated explicitly so a node does not silently inherit a different mode.
-  boot.kernel.sysctl."vm.overcommit_memory" = 0;
+  # Overcommit must be heuristic (1), not 0: with 0, the large address-space
+  # reservations of Lean/Node/Nix and the self-hosted compiler failed execs
+  # with `resource exhausted (error code: 12)` at low cgroup peaks on win2 and
+  # win3. Mode 2 rejects those reservations outright. Cgroups remain the
+  # enforcement point: ../slurm.nix runs slurmd with Delegate=Yes and the
+  # controller's cgroup.conf sets ConstrainRAMSpace=yes, so mode 1 widens the
+  # reservation, not the memory a step may touch.
+  boot.kernel.sysctl."vm.overcommit_memory" = 1;
 
   # ---- /workspace --------------------------------------------------------
   # The mount is the supervised sshfs service in ../slurm.nix. Its mount point
