@@ -113,8 +113,9 @@ cat result-hm/home-files/.claude/skills/claude-code-home-manager/.mcp.json
 1. links `~/.claude/statusline-command.sh` and
    `~/.claude/skills/claude-code-home-manager` into the new generation;
 2. merges the declared keys into the existing writable
-   `~/.claude/settings.json` (mode 600), leaving `autoMode`, `modelSettings`
-   and any other undeclared keys intact;
+   `~/.claude/settings.json` (its current mode is preserved; a new file gets
+   mode 600), leaving `autoMode`, `modelSettings` and any other undeclared keys
+   intact;
 3. writes `~/.claude/CLAUDE.md` with the bus instructions;
 4. **does not** touch `~/.claude.json`.
 
