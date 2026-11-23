@@ -108,11 +108,11 @@ tag body. The server's `instructions` string repeats the same rule.
 * The `channelsEnabled` organization policy still applies. On Team/Enterprise,
   an admin must enable channels (and may restrict which plugins are allowed).
 * The session must be allowed to use the server from the generated `hm` plugin.
-  The selector is `plugin:hm` (the plugin that owns the server); the
-  `server:ghostbus-channel` form does not resolve and warns “no MCP server
-  configured with that name”. If the plugin selector changes, try
-  `plugin:hm@skills-dir` via `CLAUDE_CHANNEL_SELECTOR` and check
-  `claude --debug mcp` for `Channel notifications skipped` lines.
+  Plugin-provided channels must be tagged `plugin:<name>@<marketplace>`, so the
+  selector is `plugin:hm@skills-dir`; the short `plugin:hm` is rejected as
+  untagged, and `server:ghostbus-channel` only addresses top-level MCP servers.
+  If the marketplace tag changes, override it via `CLAUDE_CHANNEL_SELECTOR` and
+  check `claude --debug mcp` for `Channel notifications skipped` lines.
 * Notifications are queued and delivered together on the next turn if Claude is
   busy. There is no delivery acknowledgement; a session started without the flag
   silently drops them.
@@ -261,10 +261,10 @@ writes `~/.claude.json` or the shared bus.
 
 * Claude Code's allowlist/preview path cannot be exercised without an
   interactive TTY and human confirmation. The notification contract is tested
-  directly; the server lives in the generated `hm` plugin, so 2.1.318 selects
-  it as `plugin:hm`, not `server:ghostbus-channel` (the latter warns “no MCP
-  server configured with that name”). The interactive allowlist confirmation
-  remains the runtime check.
+  directly; the server lives in the generated `hm` skills-dir plugin, so
+  2.1.318 selects it as `plugin:hm@skills-dir`, not `plugin:hm` (untagged) or
+  `server:ghostbus-channel` (top-level only). The interactive allowlist
+  confirmation remains the runtime check.
 * OpenCode's `events/list`/`events/stream` are tested at the JSON-RPC level and
   against the 2.4 source contract. A full automation run needs a live model
   session; `opencode mcp list` is the cheap connection check after applying.

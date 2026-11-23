@@ -33,7 +33,7 @@ it.
 | `playwright` | `plugin:playwright:playwright` | `npx @playwright/mcp@latest` | Provided by the `playwright@claude-plugins-official` plugin already enabled in `settings.enabledPlugins`. Deliberately **not** duplicated in `mcpServers`. |
 | `github` | `plugin:hm:github` | `sh -c 'exec env GITHUB_TOKEN="$(gh auth token)" MCP_IDLE_TIMEOUT_MS=0 npx -y github-mcp-server-kosta'` | Token is read at runtime from `gh`; no secret is in the Nix store. |
 | `agent-bus` | `plugin:hm:agent-bus` | `/nix/store/...-ghostbus-wait/bin/ghostbus-wait` | Same wrapper and same file as every OpenCode session. The wrapper adds `bus_wait`; it still launches `npx -y ghostbus --store /home/reuben/.local/share/ghostbus/bus.json`. |
-| `ghostbus-channel` | `plugin:hm:ghostbus-channel` | `/nix/store/...-ghostbus-channel/bin/ghostbus-channel --mode claude --agent claude-code` | One-way push channel over the same store. Only active in a session started with `claude --dangerously-load-development-channels=plugin:hm` (wrapper `cuckcode`). The `server:ghostbus-channel` form does not resolve: the server lives inside the generated `hm` plugin, so the selector is the plugin. Declares `claude/channel`, never `claude/channel/permission`. |
+| `ghostbus-channel` | `plugin:hm:ghostbus-channel` | `/nix/store/...-ghostbus-channel/bin/ghostbus-channel --mode claude --agent claude-code` | One-way push channel over the same store. Only active in a session started with `claude --dangerously-load-development-channels=plugin:hm@skills-dir` (wrapper `cuckcode`). The `server:ghostbus-channel` form does not resolve: the server lives inside the generated `hm` plugin, so the selector is the plugin. Declares `claude/channel`, never `claude/channel/permission`. |
 | `nixos` | `plugin:hm:nixos` | `nix run github:utensils/mcp-nixos/v3.1.1 --` | Same pinned rev as OpenCode. |
 | `wiz`, `scry` | project/local scope in `/workspace` | `sh /workspace/wiz-tools/{wiz,scry}-mcp` | Workspace-specific; they stay out of the machine-wide config. |
 
@@ -139,10 +139,11 @@ Limits, from the Claude Code channels reference:
 
 The server deliberately omits `claude/channel/permission`: the local bus cannot
 authenticate a replier, so it must never relay tool approvals. The selector is
-`plugin:hm` because the server lives inside the generated `hm` plugin; the
-`server:ghostbus-channel` form warns “no MCP server configured with that name”.
-If the plugin selector changes, override it with
-`CLAUDE_CHANNEL_SELECTOR=plugin:hm@skills-dir cuckcode`. Full design:
+`plugin:hm@skills-dir` because the server lives inside the generated `hm`
+skills-dir plugin and plugin channels need their marketplace tag; both
+`plugin:hm` (missing the tag) and `server:ghostbus-channel` (only top-level
+servers) are rejected. If the plugin selector changes, override it with
+`CLAUDE_CHANNEL_SELECTOR=plugin:<name>@<marketplace> cuckcode`. Full design:
 `home-manager/agent-bus-channel/README.md`.
 
 ## Validate and apply

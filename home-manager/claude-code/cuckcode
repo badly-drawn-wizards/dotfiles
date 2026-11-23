@@ -1,18 +1,19 @@
 #!/usr/bin/env bash
 # cuckcode — Claude Code with the ghostbus push channel loaded.
 #
-# The channel server lives inside the generated `hm` plugin, not in a top-level
-# `mcpServers` entry, so the selector is the plugin (`plugin:hm`). The old
-# `--dangerously-load-development-channels server:ghostbus-channel` form warns
-# "no MCP server configured with that name" because `server:` only looks at
-# top-level MCP servers.
+# Plugin-provided channels must be tagged with their marketplace:
+#   plugin:<name>@<marketplace>
+# The generated channel lives in the `hm` skills-dir plugin, so the tagged
+# selector is `plugin:hm@skills-dir`. The short `plugin:hm` form is rejected
+# with "entries must be tagged"; `server:ghostbus-channel` is wrong because
+# `server:` only addresses top-level MCP servers, and this one is inside the
+# plugin.
 #
 # Bind the flag with `=` and put the user's arguments after it: the
 # space-separated spelling consumes following positional arguments as channel
 # selectors, so `/resume` or a prompt never reaches Claude Code.
 #
-# Override the selector for a different plugin form with
-# `CLAUDE_CHANNEL_SELECTOR=plugin:hm@skills-dir`.
+# Override the selector with `CLAUDE_CHANNEL_SELECTOR=...`.
 set -euo pipefail
-selector=${CLAUDE_CHANNEL_SELECTOR:-plugin:hm}
+selector=${CLAUDE_CHANNEL_SELECTOR:-plugin:hm@skills-dir}
 exec claude --dangerously-load-development-channels="$selector" "$@"
