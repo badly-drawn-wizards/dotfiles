@@ -235,8 +235,11 @@ in
     Unit.Description = "Ghostbus channel MCP server (per connection)";
     Service = {
       ExecStart = "${ghostbusChannel}/bin/ghostbus-channel --mode claude --agent claude-code";
+      # stdout is the MCP protocol stream; logs go to the journal, never into the
+      # socket's JSON-RPC stream.
       StandardInput = "socket";
       StandardOutput = "socket";
+      StandardError = "journal";
       Restart = "no";
     };
   };
