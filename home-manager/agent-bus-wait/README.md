@@ -102,7 +102,7 @@ progress cannot crash a waiter.
 ## Wiring
 
 - OpenCode: `home-manager/opencode.nix` declares
-  `~/.config/opencode/opencode.json` from `home-manager/opencode/opencode.json`.
+  `~/.config/opencode/opencode.json` from `home-manager/opencode/settings.nix`.
   `module.nix` forces only that file's `source` to a generated copy whose
   `mcp.servers.agent-bus.command` is
   `[ "/nix/store/...-ghostbus-wait/bin/ghostbus-wait" ]` and whose

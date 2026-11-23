@@ -1,0 +1,197 @@
+# OpenCode's client configuration as Nix values.
+#
+# `opencode.nix` renders these to ~/.config/opencode/{opencode,cli}.json; the
+# agent-bus module imports the same attrset to add the Nix store paths of the
+# ghostbus wrappers. Keep this the only source of the config: there is no
+# checked-in JSON copy to drift.
+let
+  unicorn = {
+    package = "@max10240/opencode-plugin-unicorn";
+    options = {
+      features = {
+        god = false;
+        imageGen = false;
+        showImg = false;
+        opencodeGoUsage = false;
+        notepad = false;
+        recommendedOpencodeConfig = false;
+        nonBlocking = true;
+        delayedQueue = true;
+        infiniteLoop = true;
+        retry = true;
+        promptSearch = true;
+        sessionSearch = true;
+        sendMessageAcrossSessions = true;
+        sensitiveEncrypt = true;
+        sensitiveProtection = true;
+      };
+      nonBlocking.thresholdMs = 10000;
+    };
+  };
+
+  tokenscope = {
+    package = "@ramtinj95/opencode-tokenscope@2.1.0";
+  };
+in
+{
+  opencode = {
+    "$schema" = "https://opencode.ai/config.json";
+
+    mcp.servers = {
+      playwright = {
+        type = "local";
+        command = [
+          "npx"
+          "-y"
+          "@playwright/mcp@0.0.86"
+          "--headless"
+          "--isolated"
+          "--browser"
+          "chromium"
+          "--allowed-origins"
+          "http://127.0.0.1:*;http://localhost:*"
+          "--idle-timeout"
+          "600000"
+          "--output-dir"
+          "/tmp/opencode/playwright"
+        ];
+        timeout = {
+          startup = 60000;
+          catalog = 30000;
+          execution = 120000;
+        };
+        codemode = true;
+      };
+
+      github = {
+        type = "local";
+        command = [
+          "sh"
+          "-c"
+          "exec env GITHUB_TOKEN=\"$(gh auth token)\" MCP_IDLE_TIMEOUT_MS=0 npx -y github-mcp-server-kosta"
+        ];
+        timeout = {
+          startup = 90000;
+          catalog = 30000;
+          execution = 120000;
+        };
+        codemode = true;
+      };
+
+      agent-bus = {
+        type = "local";
+        command = [ "ghostbus-wait" ];
+        timeout = {
+          startup = 90000;
+          catalog = 30000;
+          execution = 120000;
+        };
+        codemode = true;
+      };
+
+      ghostbus-channel = {
+        type = "local";
+        command = [
+          "ghostbus-channel"
+          "--mode"
+          "opencode"
+          "--agent"
+          "opencode"
+        ];
+        timeout = {
+          startup = 30000;
+          catalog = 30000;
+          execution = 120000;
+        };
+        codemode = false;
+        protocol = "2026-07-28";
+      };
+
+      nixos = {
+        type = "local";
+        command = [
+          "nix"
+          "run"
+          "github:utensils/mcp-nixos/v3.1.1"
+          "--"
+        ];
+        timeout = {
+          startup = 180000;
+          catalog = 30000;
+          execution = 60000;
+        };
+        codemode = true;
+      };
+    };
+
+    permissions = [
+      {
+        action = "playwright_browser_run_code_unsafe";
+        resource = "*";
+        effect = "deny";
+      }
+      {
+        action = "playwright_browser_file_upload";
+        resource = "*";
+        effect = "deny";
+      }
+      {
+        action = "github_merge_pull_request";
+        resource = "*";
+        effect = "deny";
+      }
+      {
+        action = "github_create_pull_request";
+        resource = "*";
+        effect = "deny";
+      }
+      {
+        action = "github_update_pull_request";
+        resource = "*";
+        effect = "deny";
+      }
+      {
+        action = "github_create_issue";
+        resource = "*";
+        effect = "deny";
+      }
+      {
+        action = "github_update_issue";
+        resource = "*";
+        effect = "deny";
+      }
+      {
+        action = "github_create_issue_comment";
+        resource = "*";
+        effect = "deny";
+      }
+      {
+        action = "github_create_repo";
+        resource = "*";
+        effect = "deny";
+      }
+      {
+        action = "github_fork_repo";
+        resource = "*";
+        effect = "deny";
+      }
+    ];
+
+    experimental.todo = true;
+
+    plugins = [
+      unicorn
+      tokenscope
+    ];
+  };
+
+  cli = {
+    "$schema" = "https://opencode.ai/v2/cli.json";
+    attention = {
+      notifications = true;
+      sound = true;
+      volume = 0.3;
+    };
+    plugins = [ unicorn ];
+  };
+}

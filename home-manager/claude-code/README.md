@@ -2,7 +2,7 @@
 
 This directory holds the non-Nix payload for `home-manager/claude-code.nix`:
 the status-line script. The module declares Claude Code's machine-wide config so
-it no longer drifts from `home-manager/opencode/opencode.json` by hand.
+it no longer drifts from the Nix values in `home-manager/opencode/settings.nix` by hand.
 
 The shared `agent-bus` server is now the wrapper in
 `home-manager/agent-bus-wait/`: the same ghostbus stdio server plus a local

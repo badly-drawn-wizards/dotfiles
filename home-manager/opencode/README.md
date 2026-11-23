@@ -1,19 +1,20 @@
 # OpenCode client config
 
-`home-manager/opencode.nix` links these files into `~/.config/opencode/`:
+`home-manager/opencode.nix` renders the Nix values in `settings.nix` into
+`~/.config/opencode/`:
 
 | File | Purpose |
 | --- | --- |
-| `opencode.json` | Machine-wide MCP servers, permissions, plugins. Workspace-specific servers stay in `/workspace/opencode.json`. |
-| `cli.json` | CLI attention/plugin settings. |
-| `../agent-bus-wait/module.nix` | Generates `opencode.json` with the `agent-bus` and `ghostbus-channel` commands replaced by the Nix store paths of the wrappers. |
+| `settings.nix` | The single source: machine-wide MCP servers, permissions, plugins, CLI attention. Workspace-specific servers stay in `/workspace/opencode.json`. |
+| `opencode.json` (rendered) | `settings.nix`'s `opencode` attrset, via `builtins.toJSON`. |
+| `cli.json` (rendered) | `settings.nix`'s `cli` attrset. |
+| `../agent-bus-wait/module.nix` | Imports `settings.nix` and replaces only the `agent-bus` and `ghostbus-channel` commands with the wrappers' Nix store paths. |
 
 ## `agent-bus`
 
-The checked-in `opencode.json` names the command `ghostbus-wait`. At build
-time, `home-manager/agent-bus-wait/module.nix` forces only the `source` of
-`~/.config/opencode/opencode.json` to a generated copy and replaces that one
-command with the wrapper's absolute Nix store path:
+The base config names the command `ghostbus-wait`. At build time,
+`home-manager/agent-bus-wait/module.nix` imports `settings.nix`, adds the Nix
+store paths, and writes the resulting `opencode.json`:
 
 ```json
 "agent-bus": {
@@ -25,7 +26,7 @@ command with the wrapper's absolute Nix store path:
 ```
 
 Every other field (permissions, plugins, github/nixos/playwright servers) comes
-from the checked-in JSON unchanged. The wrapper runs the same unmodified
+from the Nix settings unchanged. The wrapper runs the same unmodified
 ghostbus stdio server with the same `--store` as Claude Code's
 `plugin:hm:agent-bus` entry, and adds the local `bus_wait` tool. See
 `home-manager/agent-bus-wait/README.md` for the proxy design and cursors.

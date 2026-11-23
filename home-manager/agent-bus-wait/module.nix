@@ -6,11 +6,10 @@
 # Both clients must launch the wrappers (Nix store paths), not bare command
 # names, or they keep the pull-only server or miss the channel.
 #
-# OpenCode reads a static JSON file declared in ../opencode.nix. This module
-# overrides only that file's `source` with a generated copy whose agent-bus and
-# ghostbus-channel commands are the wrappers' store paths. The rest of the JSON
-# is read from ../opencode/opencode.json unchanged. One module owns this file:
-# two modules each forcing the same home.file target would conflict.
+# OpenCode's config is the Nix attrset in ../opencode/settings.nix. This module
+# imports the same attrset and overrides only the agent-bus and ghostbus-channel
+# commands with the wrappers' store paths. One module owns this file: two
+# modules each forcing the same home.file target would conflict.
 { config, lib, pkgs, ... }:
 let
   homeDir = config.home.homeDirectory;
@@ -18,7 +17,7 @@ let
   agentBusWait = pkgs.callPackage ./package.nix { store = ghostbusStore; };
   ghostbusChannel = pkgs.callPackage ../agent-bus-channel/package.nix { store = ghostbusStore; };
 
-  opencodeBase = builtins.fromJSON (builtins.readFile ../opencode/opencode.json);
+  opencodeBase = (import ../opencode/settings.nix).opencode;
   servers = opencodeBase.mcp.servers;
   channelBase = servers."ghostbus-channel" or {
     type = "local";

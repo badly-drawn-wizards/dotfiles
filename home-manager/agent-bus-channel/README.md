@@ -131,7 +131,7 @@ tag body. The server's `instructions` string repeats the same rule.
 
 OpenCode 2.4 (released 2026-11-23) negotiates MCP `2026-07-28` first and supports
 the MCP Events beta plus automations. The checked-in
-`home-manager/opencode/opencode.json` entry is:
+`home-manager/opencode/settings.nix` entry is:
 
 ```json
 "ghostbus-channel": {
