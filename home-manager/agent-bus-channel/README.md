@@ -108,8 +108,10 @@ tag body. The server's `instructions` string repeats the same rule.
 * The `channelsEnabled` organization policy still applies. On Team/Enterprise,
   an admin must enable channels (and may restrict which plugins are allowed).
 * The session must be allowed to use the server from the generated `hm` plugin.
-  If `server:ghostbus-channel` is not recognised in a future build, try
-  `plugin:hm` (the wrapper that owns the server) and check
+  The selector is `plugin:hm` (the plugin that owns the server); the
+  `server:ghostbus-channel` form does not resolve and warns “no MCP server
+  configured with that name”. If the plugin selector changes, try
+  `plugin:hm@skills-dir` via `CLAUDE_CHANNEL_SELECTOR` and check
   `claude --debug mcp` for `Channel notifications skipped` lines.
 * Notifications are queued and delivered together on the next turn if Claude is
   busy. There is no delivery acknowledgement; a session started without the flag
@@ -257,10 +259,12 @@ writes `~/.claude.json` or the shared bus.
 
 ## What remains unverified here
 
-* Claude Code's allowlist/preview path and the `server:` entry name cannot be
-  exercised without an interactive TTY and human confirmation. The notification
-  contract is tested directly; whether 2.1.318 registers a server that lives in
-  the generated `hm` plugin as `server:ghostbus-channel` is a runtime check.
+* Claude Code's allowlist/preview path cannot be exercised without an
+  interactive TTY and human confirmation. The notification contract is tested
+  directly; the server lives in the generated `hm` plugin, so 2.1.318 selects
+  it as `plugin:hm`, not `server:ghostbus-channel` (the latter warns “no MCP
+  server configured with that name”). The interactive allowlist confirmation
+  remains the runtime check.
 * OpenCode's `events/list`/`events/stream` are tested at the JSON-RPC level and
   against the 2.4 source contract. A full automation run needs a live model
   session; `opencode mcp list` is the cheap connection check after applying.
