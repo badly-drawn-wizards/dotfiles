@@ -18,10 +18,15 @@
 # supplies it. A second copy would give every session two browser-automation
 # servers. Keep the OpenCode/Claude Code parity table in ./claude-code/README.md
 # in sync when either side changes.
-{ config, ... }:
+{ config, pkgs, ... }:
 let
   homeDir = config.home.homeDirectory;
   ghostbusStore = "${homeDir}/.local/share/ghostbus/bus.json";
+  # The same wrapper OpenCode uses: ghostbus's 29 tools plus bus_wait. It is a
+  # Nix store path, not a copy of proxy.mjs under $HOME.
+  agentBusWait = pkgs.callPackage ./agent-bus-wait/package.nix {
+    store = ghostbusStore;
+  };
 in
 {
   programs.claude-code = {
@@ -76,13 +81,8 @@ in
     mcpServers = {
       agent-bus = {
         type = "stdio";
-        command = "npx";
-        args = [
-          "-y"
-          "ghostbus"
-          "--store"
-          ghostbusStore
-        ];
+        command = "${agentBusWait}/bin/ghostbus-wait";
+        args = [ ];
       };
 
       github = {
@@ -126,6 +126,9 @@ in
       - Post: `bus_send` to an agent, or to `"*"` only for a real handover or
         stop-work notice. Channels: `general` or `lane/<name>`.
       - Read once at the start and after a long task; do not poll in a loop.
+        `bus_wait` blocks for the next direct/broadcast message from another
+        agent (default 30 s) and returns it without marking it read; follow with
+        `bus_inbox` or pass `unreadOnly`.
       - Cross-lane work: `bus_create_task`, `bus_claim_task` (15-minute lease),
         `bus_complete_task`. Risky tasks are created with
         `needsApproval: true` and released with `bus_approve_task`.

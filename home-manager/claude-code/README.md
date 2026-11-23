@@ -4,6 +4,12 @@ This directory holds the non-Nix payload for `home-manager/claude-code.nix`:
 the status-line script. The module declares Claude Code's machine-wide config so
 it no longer drifts from `home-manager/opencode/opencode.json` by hand.
 
+The shared `agent-bus` server is now the wrapper in
+`home-manager/agent-bus-wait/`: the same ghostbus stdio server plus a local
+`bus_wait` tool, so both clients can block on the next inbox-relevant message
+instead of polling. See that directory's README for the proxy design, cursor
+semantics, and smoke test.
+
 ## What is declared where
 
 | What | Declared in | Rendered to |
@@ -12,6 +18,7 @@ it no longer drifts from `home-manager/opencode/opencode.json` by hand.
 | MCP servers (`agent-bus`, `github`, `nixos`) | `programs.claude-code.mcpServers` | `~/.claude/skills/claude-code-home-manager/.mcp.json` |
 | Global memory / bus instructions | `programs.claude-code.context` | `~/.claude/CLAUDE.md` |
 | Status-line script | `home.file.".claude/statusline-command.sh"` | `~/.claude/statusline-command.sh` |
+| `agent-bus` wrapper | `pkgs.callPackage ./agent-bus-wait/package.nix` | `/nix/store/...-ghostbus-wait/bin/ghostbus-wait` |
 | ghostbus store directory | `home.file.".local/share/ghostbus/.keep"` in `opencode.nix` | `~/.local/share/ghostbus/` |
 
 `~/.claude.json` is **not** managed. It holds application state (startup counts,
@@ -24,7 +31,7 @@ it.
 | --- | --- | --- | --- |
 | `playwright` | `plugin:playwright:playwright` | `npx @playwright/mcp@latest` | Provided by the `playwright@claude-plugins-official` plugin already enabled in `settings.enabledPlugins`. Deliberately **not** duplicated in `mcpServers`. |
 | `github` | `plugin:hm:github` | `sh -c 'exec env GITHUB_TOKEN="$(gh auth token)" MCP_IDLE_TIMEOUT_MS=0 npx -y github-mcp-server-kosta'` | Token is read at runtime from `gh`; no secret is in the Nix store. |
-| `agent-bus` | `plugin:hm:agent-bus` | `npx -y ghostbus --store /home/reuben/.local/share/ghostbus/bus.json` | Same file as every OpenCode session. |
+| `agent-bus` | `plugin:hm:agent-bus` | `/nix/store/...-ghostbus-wait/bin/ghostbus-wait` | Same wrapper and same file as every OpenCode session. The wrapper adds `bus_wait`; it still launches `npx -y ghostbus --store /home/reuben/.local/share/ghostbus/bus.json`. |
 | `nixos` | `plugin:hm:nixos` | `nix run github:utensils/mcp-nixos/v3.1.1 --` | Same pinned rev as OpenCode. |
 | `wiz`, `scry` | project/local scope in `/workspace` | `sh /workspace/wiz-tools/{wiz,scry}-mcp` | Workspace-specific; they stay out of the machine-wide config. |
 
@@ -60,9 +67,10 @@ There is exactly one bus, and it is a file:
 ```
 
 OpenCode's `agent-bus` server and Claude Code's `plugin:hm:agent-bus` server both
-open that path with `--store`. A message written by either client is visible to
-the other. Do not start a second bus, and do not use the bus as a build/test
-queue.
+launch the `ghostbus-wait` wrapper, which opens that path with `--store` and
+spawns the same unmodified ghostbus server. A message written by either client
+is visible to the other. Do not start a second bus, and do not use the bus as a
+build/test queue.
 
 ### Names
 
@@ -78,18 +86,24 @@ queue.
 2. **Heartbeat**: `bus_heartbeat({ agent })` at the start and after long tasks.
 3. **Read**: `bus_inbox({ agent, unreadOnly: true, limit: 50 })` at the start
    and after a long report. Do not loop/poll.
-4. **Post**: `bus_send({ agent, to, channel, body })`. Use `general` for
+4. **Wait**: `bus_wait({ agent, timeoutMs: 30000 })` blocks until the next
+   direct message or broadcast from another agent arrives, or returns
+   `timedOut: true`. It does **not** mark messages read; follow it with
+   `bus_inbox` or pass `unreadOnly`. Use `sinceSeq` (from `headSeq`) or
+   `afterId` to catch up. Prefer it over a polling loop.
+5. **Post**: `bus_send({ agent, to, channel, body })`. Use `general` for
    coordinator-visible announcements, `lane/<branch>` for lane-local chatter,
    and `to: "*"` only for a real handover or a stop-work notice.
-5. **Tasks**: `bus_create_task`, `bus_claim_task` (exclusive for 15 minutes),
+6. **Tasks**: `bus_create_task`, `bus_claim_task` (exclusive for 15 minutes),
    `bus_complete_task`. Risky work uses `needsApproval: true`; a coordinator (or
    another authorised agent) releases it with `bus_approve_task({ agent, id })`.
    Use `bus_list_tasks` / `workspace_board` to see state.
-6. **Handover**: `workspace_put_context` / `workspace_get_capsule` for durable
+7. **Handover**: `workspace_put_context` / `workspace_get_capsule` for durable
    shared state; `bus_events` is the provenance log.
 
 The full tool surface is the `agent-bus` MCP server; both clients expose the same
-29 tools. In Claude Code they are the `mcp__plugin_hm_agent-bus__*` namespace.
+30 tools: the 29 upstream ghostbus tools plus `bus_wait`. In Claude Code they are
+the `mcp__plugin_hm_agent-bus__*` namespace.
 
 ## Validate and apply
 
@@ -97,15 +111,21 @@ The full tool surface is the `agent-bus` MCP server; both clients expose the sam
 cd /etc/nixos
 
 # Evaluate and build the home-manager generation only (no switch):
-nix build -o result-hm \
+nix build -o /tmp/opencode/result-hm \
   .#nixosConfigurations.noobnoob.config.home-manager.users.reuben.home.activationPackage
 
 # Or the full system closure:
 sudo nixos-rebuild build --flake .#noobnoob
 
 # Inspect the generated plugin and settings before activating:
-find result-hm/home-files/.claude -maxdepth 4 \( -type f -o -type l \) -print
-cat result-hm/home-files/.claude/skills/claude-code-home-manager/.mcp.json
+find /tmp/opencode/result-hm/home-files/.claude -maxdepth 4 \( -type f -o -type l \) -print
+cat /tmp/opencode/result-hm/home-files/.claude/skills/claude-code-home-manager/.mcp.json
+
+# Both clients must point at the same wrapper store path:
+jq -r '.mcpServers["agent-bus"].command' \
+  /tmp/opencode/result-hm/home-files/.claude/skills/claude-code-home-manager/.mcp.json
+jq -r '.mcp.servers["agent-bus"].command[0]' \
+  /tmp/opencode/result-hm/home-files/.config/opencode/opencode.json
 ```
 
 `sudo nixos-rebuild switch --flake .#noobnoob` then:
@@ -139,8 +159,16 @@ bus_register({ agent: "claude-code-parity", role: "builder", capabilities: ["nix
 bus_send({ agent: "claude-code-parity", to: "claude-code-parity",
            channel: "lane/claude-code-parity", body: "parity check" })
 bus_inbox({ agent: "claude-code-parity", unreadOnly: true })
+
+// Blocking wait: another session sends while this call is outstanding.
+// Returns the message without marking it read; follow with bus_inbox.
+bus_wait({ agent: "claude-code-parity", timeoutMs: 30000 })
 ```
 
 A run on 2026-11-23 registered `claude-code-parity`, posted message id `375`, and
 read it back from the same store; the message remains visible to any later
 session that registers and reads `lane/claude-code-parity`.
+
+The proxy's own smoke test (initialize, 30 tools, a CLI-sent message waking
+`bus_wait`, timeout, broadcast, cursors, read-state preservation, malformed
+frames, child exit) is documented in `home-manager/agent-bus-wait/README.md`.

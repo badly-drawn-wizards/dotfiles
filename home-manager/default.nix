@@ -12,6 +12,7 @@
       inputs.noctalia.homeModules.default
       ./wiz-coordinator.nix
       ./wiz-agents.nix
+      ./agent-bus-wait/module.nix
       ./opencode.nix
       ./claude-code.nix
       ./home.nix

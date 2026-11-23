@@ -43,11 +43,7 @@
       "agent-bus": {
         "type": "local",
         "command": [
-          "npx",
-          "-y",
-          "ghostbus",
-          "--store",
-          "/home/reuben/.local/share/ghostbus/bus.json"
+          "ghostbus-wait"
         ],
         "timeout": {
           "startup": 90000,
