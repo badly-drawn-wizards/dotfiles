@@ -66,6 +66,14 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # The NixOS-WSL integration for the win2/win3 Slurm nodes. Pinned to the
+    # revision those nodes have been built with; `follows` keeps one nixpkgs so
+    # slurmd/munge and the store paths a job names match the controller.
+    nixos-wsl = {
+      url = "github:nix-community/NixOS-WSL/05721a428830972f025a8575b1a19c418d422d1b";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # Private config kept in a separate repo. Local path rather than a remote so the
     # working tree is picked up directly; no lock churn when it changes.
     dotfiles-private.url = "path:/workspace/dotfiles-private";
@@ -78,10 +86,12 @@
     , nixfs
     , vs-code-default-keybindings
     , nix-colors
+    , nixpkgs
     , nixpkgs-wayland
     , noctalia
     , nix-azurevpn-client
     , lanzaboote
+    , nixos-wsl
     , dotfiles-private
     , self
     , ...
@@ -109,44 +119,84 @@
         emacs = hm.programs.doom-emacs.package;
         epkgs = pkgs.emacsPackages;
       };
+
+      # The Slurm nodes. Their configuration is the same files the thin
+      # wsl-flake entry point imports (hosts/win2.nix, hosts/win3.nix,
+      # modules/slurm/node-common.nix), built from the plain nixpkgs input:
+      # the node closure must not pick up the controller's desktop overlays.
+      mkSlurmNode = name: nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          nixos-wsl.nixosModules.default
+          (./hosts + "/${name}.nix")
+        ];
+      };
+
+      deck = mkSlurmNode "deck";
+
+      base = utils.lib.mkFlake
+        {
+          inherit self inputs;
+
+          channelsConfig = {
+            allowUnfree = true;
+            android_sdk.accept_license = true;
+          };
+          channels.nixpkgs = {
+            patches = import ./patches;
+          };
+
+          sharedOverlays = [
+            (self: super: {
+              inherit os;
+              inherit (nix-index) nix-index nix-locate;
+              inherit vs-code-default-keybindings;
+              inherit nix-colors;
+            })
+            nixpkgs-wayland.overlay
+            nix-azurevpn-client.overlays.default
+          ] ++ import ./overlays;
+
+          hosts.noobnoob = {
+            modules = [
+              flake-plus-module
+              nixfs.nixosModules.nixfs
+              nix-azurevpn-client.nixosModules.azurevpnclient
+              lanzaboote.nixosModules.lanzaboote
+              dotfiles-private.nixosModules.default
+              ./hosts/noobnoob.nix
+            ];
+            specialArgs = { inherit inputs; };
+          };
+
+          outputsBuilder = channels: {
+            packages = channels.nixpkgs;
+          };
+        };
     in
-    utils.lib.mkFlake
-      {
-        inherit self inputs;
+    base
+    // {
+      inherit os;
 
-        channelsConfig = {
-          allowUnfree = true;
-          android_sdk.accept_license = true;
-        };
-        channels.nixpkgs = {
-          patches = import ./patches;
-        };
+      # win2/win3 are in the main flake so the controller (and CI) can evaluate
+      # and build the same node systems a node switches to. The wsl-flake
+      # wrapper is the on-node entry point; it imports these host files rather
+      # than redefining them.
+      nixosConfigurations = base.nixosConfigurations // {
+        win2 = mkSlurmNode "win2";
+        win3 = mkSlurmNode "win3";
+      };
 
-        sharedOverlays = [
-          (self: super: {
-            inherit os;
-            inherit (nix-index) nix-index nix-locate;
-            inherit vs-code-default-keybindings;
-            inherit nix-colors;
-          })
-          nixpkgs-wayland.overlay
-          nix-azurevpn-client.overlays.default
-        ] ++ import ./overlays;
+      # Not a nixosConfiguration on purpose: the Deck runs SteamOS and has no
+      # NixOS to switch. See hosts/deck.nix.
+      inertConfigurations.deck = deck;
 
-        hosts.noobnoob = {
-          modules = [
-            flake-plus-module
-            nixfs.nixosModules.nixfs
-            nix-azurevpn-client.nixosModules.azurevpnclient
-            lanzaboote.nixosModules.lanzaboote
-            dotfiles-private.nixosModules.default
-            ./configuration.nix
-          ];
-          specialArgs = { inherit inputs; };
-        };
-
-        outputsBuilder = channels: {
-          packages = channels.nixpkgs;
-        };
-      } // { inherit os; };
+      checks.x86_64-linux = {
+        # Force the inert deck description to evaluate without requiring a
+        # bootloader/filesystem layout for real SteamOS hardware.
+        deck-is-evaluable =
+          nixpkgs.legacyPackages.x86_64-linux.writeText "deck-node-entry"
+            deck.config.slurmCluster.nodeEntry;
+      };
+    };
 }
